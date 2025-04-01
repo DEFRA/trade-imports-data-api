@@ -1,0 +1,37 @@
+name: Publish Hot Fix
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+
+env:
+  AWS_REGION: eu-west-2
+  AWS_ACCOUNT_ID: "094954420758"
+
+jobs:
+  build:
+    if: github.run_number != 1
+    name: CDP-build-hotfix-workflow
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Depth 0 required for branch-based versioning
+      - name: Publish Hot Fix
+        uses: DEFRA/cdp-build-action/build-hotfix@main
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+    ## SonarCloud
+    ## Uncomment to unable SonarCloud scan
+    ## Requires project to be set up in SonarCloud
+    ## and the SonarCloud token to be set in the repository secrets
+#   sonarcloud-scan:
+#     name: CDP SonarCloud Scan
+#     uses: ./.github/workflows/sonarcloud.yml
+#     needs: build
+#     secrets: inherit

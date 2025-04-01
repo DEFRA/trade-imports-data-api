@@ -1,0 +1,35 @@
+name: Check Pull Request
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - edited
+      - reopened
+      - synchronize
+      - ready_for_review
+
+jobs:
+  pr-validator:
+    name: Run Pull Request Checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+      - name: Test
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: |
+            8.0
+      - run: dotnet test
+    ## SonarCloud
+    ## Uncomment to unable SonarCloud scan
+    ## Requires project to be set up in SonarCloud
+    ## and the SonarCloud token to be set in the repository secrets
+#   sonarcloud-scan:
+#     name: CDP SonarCloud Scan
+#     uses: ./.github/workflows/sonarcloud.yml
+#     needs: pr-validator
+#     secrets: inherit
