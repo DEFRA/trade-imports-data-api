@@ -19,10 +19,10 @@ COPY . .
 WORKDIR "/src"
 
 # unit test and code coverage
-RUN dotnet test Backend.Api.Test
+RUN dotnet test TradeImportsDataApi.Test
 
 FROM build AS publish
-RUN dotnet publish Backend.Api -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish TradeImportsDataApi -c Release -o /app/publish /p:UseAppHost=false
 
 
 ENV ASPNETCORE_FORWARDEDHEADERS_ENABLED=true
@@ -32,4 +32,4 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 EXPOSE 8085
-ENTRYPOINT ["dotnet", "Backend.Api.dll"]
+ENTRYPOINT ["dotnet", "TradeImportsDataApi.dll"]
