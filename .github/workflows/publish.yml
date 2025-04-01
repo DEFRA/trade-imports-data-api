@@ -16,22 +16,17 @@ env:
 
 jobs:
   build:
-    if: github.run_number != 1
     name: CDP-build-workflow
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Build and Publish
         uses: DEFRA/cdp-build-action/build@main
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-  ## SonarCloud
-  ## Uncomment to unable SonarCloud scan
-  ## Requires project to be set up in SonarCloud
-  ## and the SonarCloud token to be set in the repository secrets
-#   sonarcloud-scan:
-#     name: CDP SonarCloud Scan
-#     uses: ./.github/workflows/sonarcloud.yml
-#     needs: build
-#     secrets: inherit
+  sonarcloud-scan:
+    name: CDP SonarCloud Scan
+    uses: ./.github/workflows/sonarcloud.yml
+    needs: build
+    secrets: inherit

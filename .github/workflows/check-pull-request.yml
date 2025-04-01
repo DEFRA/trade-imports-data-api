@@ -17,19 +17,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Test
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
-            8.0
+            9.0
       - run: dotnet test
-    ## SonarCloud
-    ## Uncomment to unable SonarCloud scan
-    ## Requires project to be set up in SonarCloud
-    ## and the SonarCloud token to be set in the repository secrets
-#   sonarcloud-scan:
-#     name: CDP SonarCloud Scan
-#     uses: ./.github/workflows/sonarcloud.yml
-#     needs: pr-validator
-#     secrets: inherit
+      - name: Check Dockerfile Builds
+        uses: docker/build-push-action@0adf9959216b96bec444f325f1e493d4aa344497
+        with:
+          context: .
+          file: ./Dockerfile
+          push: false
+          tags: trade-imports-data-api:latest
+      - name: Check with Trivy
+        run: docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image trade-imports-data-api:latest --ignore-unfixed
+  sonarcloud-scan:
+    name: CDP SonarCloud Scan
+    uses: ./.github/workflows/sonarcloud.yml
+    needs: pr-validator
+    secrets: inherit
