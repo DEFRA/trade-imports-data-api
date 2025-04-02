@@ -1,0 +1,114 @@
+﻿{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Trade Imports Data API",
+    "description": "TBC",
+    "contact": {
+      "name": "DEFRA",
+      "url": "https://www.gov.uk/government/organisations/department-for-environment-food-rural-affairs",
+      "email": "tbc@defra.gov.uk"
+    },
+    "version": "v1"
+  },
+  "servers": [
+    {
+      "url": "https://localhost"
+    }
+  ],
+  "paths": {
+    "/gmrs/{gmrId}": {
+      "get": {
+        "tags": [
+          "Gmrs"
+        ],
+        "summary": "Get Gmr",
+        "description": "Get a GMR by GMR ID",
+        "operationId": "GmrsByGmrId",
+        "parameters": [
+          {
+            "name": "gmrId",
+            "in": "path",
+            "description": "GMR ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GmrResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "GmrResponse": {
+        "type": "object",
+        "properties": {
+          "gmrId": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
+      }
+    }
+  }
+}

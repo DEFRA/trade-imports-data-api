@@ -1,0 +1,17 @@
+extends: [[spectral:oas, recommended], [vacuum:owasp, all]]
+rules:
+  # We do not need to set an arbitrary limit for an array
+  # https://quobix.com/vacuum/rules/owasp/owasp-array-limit/
+  owasp-array-limit: false
+  # We will not know a format in all cases
+  # https://quobix.com/vacuum/rules/owasp/owasp-string-restricted/
+  owasp-string-restricted: false
+  # We ideally want string limits, but we depend on internal systems
+  # https://quobix.com/vacuum/rules/owasp/owasp-string-limit/
+  owasp-string-limit: false
+  # We ideally want integer limits
+  # https://quobix.com/vacuum/rules/owasp/owasp-integer-limit/
+  owasp-integer-limit: false
+  # We may implement rate limiting but currently do not have it
+  # https://quobix.com/vacuum/rules/owasp/owasp-rate-limit/
+  owasp-rate-limit: false
