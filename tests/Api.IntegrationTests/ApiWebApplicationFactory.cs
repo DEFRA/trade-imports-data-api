@@ -16,6 +16,7 @@ public class ApiWebApplicationFactory : TestWebApplicationFactory<Program>
         //
         // We can mitigate this issue from here by locking host creation so we
         // don't need to change host creation of the app itself.
+        builder.UseEnvironment("IntegrationTests");
         lock (s_lock)
             return base.CreateHost(builder);
     }
