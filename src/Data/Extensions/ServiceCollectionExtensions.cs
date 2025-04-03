@@ -10,10 +10,10 @@ namespace Defra.TradeImportsData.Data.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddDbContext(this IServiceCollection services,
-        IConfiguration configuration)
+    public static IServiceCollection AddDbContext(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddOptions<MongoDbOptions>()
+        services
+            .AddOptions<MongoDbOptions>()
             .Bind(configuration.GetSection(MongoDbOptions.SectionName))
             .ValidateDataAnnotations();
 
@@ -22,10 +22,12 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IDbContext, MongoDbContext>();
         services.AddSingleton(sp =>
         {
-
             var options = sp.GetService<IOptions<MongoDbOptions>>();
             var settings = MongoClientSettings.FromConnectionString(options?.Value.DatabaseUri);
-            settings.ClusterConfigurator = cb => cb.Subscribe(new DiagnosticsActivityEventSubscriber(new InstrumentationOptions { CaptureCommandText = true }));
+            settings.ClusterConfigurator = cb =>
+                cb.Subscribe(
+                    new DiagnosticsActivityEventSubscriber(new InstrumentationOptions { CaptureCommandText = true })
+                );
 
             var client = new MongoClient(settings);
 
