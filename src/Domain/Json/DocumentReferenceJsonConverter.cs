@@ -15,7 +15,11 @@ public class DocumentReferenceJsonConverterAttribute : JsonConverterAttribute
 
 public class DocumentReferenceJsonConverter : JsonConverter<DocumentReference?>
 {
-    public override DocumentReference? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override DocumentReference? Read(
+        ref Utf8JsonReader reader,
+        Type typeToConvert,
+        JsonSerializerOptions options
+    )
     {
         var value = reader.GetString();
 

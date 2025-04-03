@@ -1,5 +1,5 @@
-using Defra.TradeImportsData.Domain.Json;
 using System.Text.Json.Serialization;
+using Defra.TradeImportsData.Domain.Json;
 
 namespace Defra.TradeImportsData.Domain.CustomsDeclaration.ClearanceRequest;
 

@@ -14,7 +14,6 @@ namespace Defra.TradeImportsData.Data.Entities
         public DateTime Created { get; set; }
 
         public DateTime Updated { get; set; }
-        
 
         public required ImportNotification Data { get; set; }
 

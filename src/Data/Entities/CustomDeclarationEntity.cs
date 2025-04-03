@@ -25,14 +25,17 @@ namespace Defra.TradeImportsData.Data.Entities
         public void OnSave()
         {
             ImportNotificationIdentifiers.Clear();
-            if (ClearanceRequest?.Items == null) return;
- 
+            if (ClearanceRequest?.Items == null)
+                return;
+
             foreach (var documents in ClearanceRequest.Items.Select(item => item.Documents))
             {
-                if (documents == null) continue;
+                if (documents == null)
+                    continue;
                 foreach (var documentReference in documents.Select(doc => doc.DocumentReference))
                 {
-                    if (documentReference == null) continue;
+                    if (documentReference == null)
+                        continue;
                     if (documentReference.IsValid())
                     {
                         ImportNotificationIdentifiers.Add(documentReference.GetIdentifier());

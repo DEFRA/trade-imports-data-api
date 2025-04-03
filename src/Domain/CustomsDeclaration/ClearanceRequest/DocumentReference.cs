@@ -6,15 +6,18 @@ public class DocumentReference(string value)
 
     public bool IsValid()
     {
-        return DocumentReferenceRegularExpressions.IPaffsIdentifier().IsExactMatch(Value) ||
-               DocumentReferenceRegularExpressions.DocumentReferenceWithoutCountry().IsExactMatch(Value);
+        return DocumentReferenceRegularExpressions.IPaffsIdentifier().IsExactMatch(Value)
+            || DocumentReferenceRegularExpressions.DocumentReferenceWithoutCountry().IsExactMatch(Value);
     }
 
     public string GetIdentifier()
     {
         if (IsValid())
         {
-            var identifier = DocumentReferenceRegularExpressions.DocumentReferenceIdentifier().Match(Value).Value.Replace(".", "");
+            var identifier = DocumentReferenceRegularExpressions
+                .DocumentReferenceIdentifier()
+                .Match(Value)
+                .Value.Replace(".", "");
             if (identifier.Length == 9)
             {
                 identifier = $"20{identifier}";
