@@ -2,6 +2,7 @@ namespace Defra.TradeImportsData.Api.IntegrationTests.OpenApi;
 
 public class OpenApiTests(ApiWebApplicationFactory factory) : IClassFixture<ApiWebApplicationFactory>
 {
+
     [Fact]
     public async Task OpenApi_VerifyAsExpected()
     {
