@@ -20,5 +20,5 @@ public class Decision
     public int? DecisionNumber { get; set; }
 
     [JsonPropertyName("items")]
-    public required Item[] Items { get; set; }
+    public required DecisionItem[] Items { get; set; }
 }

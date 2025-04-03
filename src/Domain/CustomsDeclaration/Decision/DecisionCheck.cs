@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace Defra.TradeImportsData.Domain.CustomsDeclaration.Decision;
 
-public class Check
+public class DecisionCheck
 {
     [JsonPropertyName("checkCode")]
     public required string CheckCode { get; set; }

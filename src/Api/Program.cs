@@ -80,6 +80,7 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
             }
         );
         c.IncludeXmlComments(Assembly.GetExecutingAssembly());
+        c.CustomSchemaIds(x => x.FullName);
         c.UseAllOfToExtendReferenceSchemas();
         c.SwaggerDoc(
             "v1",

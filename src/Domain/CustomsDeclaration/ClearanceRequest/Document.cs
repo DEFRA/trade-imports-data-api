@@ -9,7 +9,7 @@ public class Document
     public string? DocumentCode { get; set; }
 
     [JsonPropertyName("documentReference")]
-    [JsonConverter(typeof(DocumentReferenceJsonConverterAttribute))]
+    [DocumentReferenceJsonConverter]
     public DocumentReference? DocumentReference { get; set; }
 
     [JsonPropertyName("documentStatus")]
