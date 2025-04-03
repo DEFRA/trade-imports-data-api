@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
-using Defra.TradeImportsData.Domain.Json;
+using Defra.TradeImportsDataApi.Domain.Json;
 
-namespace Defra.TradeImportsData.Domain.Gvms;
+namespace Defra.TradeImportsDataApi.Domain.Gvms;
 
 public class PlannedCrossing
 {

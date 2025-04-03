@@ -2,7 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using Elastic.Serilog.Enrichers.Web;
 using Serilog;
 
-namespace Defra.TradeImportsData.Api.Utils.Logging;
+namespace Defra.TradeImportsDataApi.Api.Utils.Logging;
 
 [ExcludeFromCodeCoverage]
 public static class CdpLogging

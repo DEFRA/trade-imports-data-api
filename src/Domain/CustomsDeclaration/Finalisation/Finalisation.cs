@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Defra.TradeImportsData.Domain.CustomsDeclaration.Finalisation;
+namespace Defra.TradeImportsDataApi.Domain.CustomsDeclaration.Finalisation;
 
 public class Finalisation
 {

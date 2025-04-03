@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Defra.TradeImportsData.Domain.Gvms;
+namespace Defra.TradeImportsDataApi.Domain.Gvms;
 
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum HaulierType

@@ -1,9 +1,9 @@
-using Defra.TradeImportsData.Api.Extensions;
-using Defra.TradeImportsData.Data;
-using Defra.TradeImportsData.Data.Entities;
+using Defra.TradeImportsDataApi.Api.Extensions;
+using Defra.TradeImportsDataApi.Data;
+using Defra.TradeImportsDataApi.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Defra.TradeImportsData.Api.Endpoints.CustomsDeclaration;
+namespace Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclaration;
 
 public static class EndpointRouteBuilderExtensions
 {

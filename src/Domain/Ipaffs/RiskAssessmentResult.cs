@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
-using Defra.TradeImportsData.Domain.Json;
+using Defra.TradeImportsDataApi.Domain.Json;
 
-namespace Defra.TradeImportsData.Domain.IPaffs;
+namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
 
 /// <summary>
 /// Result of risk assessment by the risk scorer

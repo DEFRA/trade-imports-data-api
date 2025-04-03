@@ -1,4 +1,4 @@
-namespace Defra.TradeImportsData.Domain.CustomsDeclaration
+namespace Defra.TradeImportsDataApi.Domain.CustomsDeclaration
 {
     public class CustomsDeclaration
     {

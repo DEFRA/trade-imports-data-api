@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
-namespace Defra.TradeImportsData.Api.IntegrationTests.Endpoints;
+namespace Defra.TradeImportsDataApi.Api.IntegrationTests.Endpoints;
 
 public class EndpointTestBase : IClassFixture<ApiWebApplicationFactory>
 {

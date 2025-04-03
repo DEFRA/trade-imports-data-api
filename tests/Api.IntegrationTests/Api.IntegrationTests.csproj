@@ -4,8 +4,8 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <IsTestProject>true</IsTestProject>
-    <AssemblyName>Defra.TradeImportsData.Api.IntegrationTests</AssemblyName>
-    <RootNamespace>Defra.TradeImportsData.Api.IntegrationTests</RootNamespace>
+    <AssemblyName>Defra.TradeImportsDataApi.Api.IntegrationTests</AssemblyName>
+    <RootNamespace>Defra.TradeImportsDataApi.Api.IntegrationTests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

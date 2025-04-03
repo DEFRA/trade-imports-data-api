@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Linq.Expressions;
-using Defra.TradeImportsData.Data.Entities;
+using Defra.TradeImportsDataApi.Data.Entities;
 using MongoDB.Bson.Serialization.IdGenerators;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 
-namespace Defra.TradeImportsData.Data.Mongo;
+namespace Defra.TradeImportsDataApi.Data.Mongo;
 
 public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionName = null!) : IMongoCollectionSet<T>
     where T : class, IDataEntity

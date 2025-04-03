@@ -1,7 +1,7 @@
-using Defra.TradeImportsData.Data.Entities;
+using Defra.TradeImportsDataApi.Data.Entities;
 using MongoDB.Driver;
 
-namespace Defra.TradeImportsData.Data.Mongo;
+namespace Defra.TradeImportsDataApi.Data.Mongo;
 
 public class MongoDbContext : IDbContext
 {

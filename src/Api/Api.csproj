@@ -4,8 +4,8 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <AssemblyName>Defra.TradeImportsData.Api</AssemblyName>
-    <RootNamespace>Defra.TradeImportsData.Api</RootNamespace>
+    <AssemblyName>Defra.TradeImportsDataApi.Api</AssemblyName>
+    <RootNamespace>Defra.TradeImportsDataApi.Api</RootNamespace>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>1591</NoWarn>

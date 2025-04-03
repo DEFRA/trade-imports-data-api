@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
-using Defra.TradeImportsData.Domain.Json;
+using Defra.TradeImportsDataApi.Domain.Json;
 
-namespace Defra.TradeImportsData.Domain.CustomsDeclaration.ClearanceRequest;
+namespace Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ClearanceRequest;
 
 public class Document
 {

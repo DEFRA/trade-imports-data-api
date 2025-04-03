@@ -1,4 +1,4 @@
-namespace Defra.TradeImportsData.Data;
+namespace Defra.TradeImportsDataApi.Data;
 
 public class ConcurrencyException(string entityId, string entityEtag)
     : Exception($"Failed up update {entityId} with etag {entityEtag}")

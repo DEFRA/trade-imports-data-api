@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Defra.TradeImportsData.Domain.Gvms;
+namespace Defra.TradeImportsDataApi.Domain.Gvms;
 
 /// <summary>
 /// Information about an inspection that is required

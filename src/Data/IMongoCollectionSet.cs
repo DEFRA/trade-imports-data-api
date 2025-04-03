@@ -1,7 +1,7 @@
 using System.Linq.Expressions;
-using Defra.TradeImportsData.Data.Entities;
+using Defra.TradeImportsDataApi.Data.Entities;
 
-namespace Defra.TradeImportsData.Data;
+namespace Defra.TradeImportsDataApi.Data;
 
 public interface IMongoCollectionSet<T> : IQueryable<T>
     where T : IDataEntity

@@ -2,7 +2,7 @@ using WireMock.Server;
 using WireMock.Settings;
 using WireMock.Types;
 
-namespace Defra.TradeImportsData.Api.Testing;
+namespace Defra.TradeImportsDataApi.Testing;
 
 #pragma warning disable S3881
 public class WireMockContext : IDisposable

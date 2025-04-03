@@ -1,6 +1,6 @@
 using MongoDB.Driver;
 
-namespace Defra.TradeImportsData.Data;
+namespace Defra.TradeImportsDataApi.Data;
 
 public interface IMongoDbTransaction : IDisposable
 {

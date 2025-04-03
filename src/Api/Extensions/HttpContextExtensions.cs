@@ -1,6 +1,6 @@
 using Microsoft.Net.Http.Headers;
 
-namespace Defra.TradeImportsData.Api.Extensions
+namespace Defra.TradeImportsDataApi.Api.Extensions
 {
     public static class HttpContextExtensions
     {

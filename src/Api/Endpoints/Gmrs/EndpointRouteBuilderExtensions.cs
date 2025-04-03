@@ -1,7 +1,7 @@
-using Defra.TradeImportsData.Api.Services;
+using Defra.TradeImportsDataApi.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Defra.TradeImportsData.Api.Endpoints.Gmrs;
+namespace Defra.TradeImportsDataApi.Api.Endpoints.Gmrs;
 
 public static class EndpointRouteBuilderExtensions
 {

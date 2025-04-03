@@ -1,6 +1,6 @@
 using MongoDB.Driver;
 
-namespace Defra.TradeImportsData.Data.Mongo;
+namespace Defra.TradeImportsDataApi.Data.Mongo;
 
 public class MongoDbTransaction(IClientSessionHandle session) : IMongoDbTransaction
 {

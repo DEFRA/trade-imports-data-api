@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Defra.TradeImportsData.Domain.IPaffs;
+namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
 
 /// <summary>
 /// Contains countries and transfer points that consignment is going through

@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Defra.TradeImportsData.Domain.IPaffs;
+namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
 
 /// <summary>
 /// Person to be contacted if there is an issue with the consignment

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Defra.TradeImportsData.Data;
+namespace Defra.TradeImportsDataApi.Data;
 
 public class MongoDbOptions
 {

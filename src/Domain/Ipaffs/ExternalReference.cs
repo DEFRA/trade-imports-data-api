@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Defra.TradeImportsData.Domain.IPaffs;
+namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
 
 /// <summary>
 /// Reference number from an external system which is related to this notification

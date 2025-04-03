@@ -1,8 +1,8 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Defra.TradeImportsData.Domain.CustomsDeclaration.ClearanceRequest;
+using Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ClearanceRequest;
 
-namespace Defra.TradeImportsData.Domain.Json;
+namespace Defra.TradeImportsDataApi.Domain.Json;
 
 [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
 public class DocumentReferenceJsonConverterAttribute : JsonConverterAttribute

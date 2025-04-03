@@ -1,6 +1,6 @@
-using Defra.TradeImportsData.Domain.CustomsDeclaration;
+using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 
-namespace Defra.TradeImportsData.Data.Entities
+namespace Defra.TradeImportsDataApi.Data.Entities
 {
     public class CustomsDeclarationEntity : IDataEntity
     {

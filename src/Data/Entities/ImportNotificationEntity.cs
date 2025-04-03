@@ -1,7 +1,7 @@
-using Defra.TradeImportsData.Domain.CustomsDeclaration.ClearanceRequest;
-using Defra.TradeImportsData.Domain.IPaffs;
+using Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ClearanceRequest;
+using Defra.TradeImportsDataApi.Domain.Ipaffs;
 
-namespace Defra.TradeImportsData.Data.Entities
+namespace Defra.TradeImportsDataApi.Data.Entities
 {
     public class ImportNotificationEntity : IDataEntity
     {

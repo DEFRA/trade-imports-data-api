@@ -1,4 +1,4 @@
-namespace Defra.TradeImportsData.Api.Testing;
+namespace Defra.TradeImportsDataApi.Testing;
 
 public static class Endpoints
 {
