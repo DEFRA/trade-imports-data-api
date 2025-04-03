@@ -1,4 +1,5 @@
 using System.Reflection;
+using Defra.TradeImportsData.Api.Endpoints.CustomsDeclaration;
 using Defra.TradeImportsData.Api.Endpoints.Gmrs;
 using Defra.TradeImportsData.Api.Endpoints.ImportNotifications;
 using Defra.TradeImportsData.Api.Services;
@@ -121,6 +122,7 @@ static WebApplication BuildWebApplication(WebApplicationBuilder builder)
     app.MapHealthChecks("/health");
     app.MapGmrEndpoints();
     app.MapImportNotificationEndpoints();
+    app.MapCustomsDeclarationEndpoints();
 
     app.UseSwagger(options =>
     {

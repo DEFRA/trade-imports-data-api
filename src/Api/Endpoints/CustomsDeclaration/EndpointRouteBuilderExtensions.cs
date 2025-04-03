@@ -1,16 +1,15 @@
 using Defra.TradeImportsData.Api.Extensions;
 using Defra.TradeImportsData.Data;
 using Defra.TradeImportsData.Data.Entities;
-using Defra.TradeImportsData.Domain.IPaffs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Defra.TradeImportsData.Api.Endpoints.CustomsDeclaration;
 
 public static class EndpointRouteBuilderExtensions
 {
-    public static void MapImportNotificationEndpoints(this IEndpointRouteBuilder app)
+    public static void MapCustomsDeclarationEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapGet("import-notifications/{chedId}/", Get)
+        app.MapGet("customs-declaration/{mrn}/", Get)
             .WithName("ImportNotificationsByChedId")
             .WithTags("ImportNotifications")
             .WithSummary("Get ImportNotification")
@@ -19,7 +18,7 @@ public static class EndpointRouteBuilderExtensions
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status500InternalServerError);
 
-        app.MapPut("import-notifications/{chedId}/", Put)
+        app.MapPut("customs-declaration/{mrn}/", Put)
             .WithName("PutImportNotification")
             .WithTags("ImportNotifications")
             .WithSummary("Put ImportNotifications")
