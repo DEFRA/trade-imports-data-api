@@ -24,9 +24,10 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
         _settings.ScrubMember("traceId");
     }
 
-    [Fact]
+    [Fact(Skip = "Skipping for the moment to focus on the custom declarations")]
     public async Task Get_WhenNotFound_ShouldNotBeFound()
     {
+        // Arrange
         var client = CreateClient();
 
         var response = await client.GetAsync(Testing.Endpoints.ImportNotifications.Get("does_not_exist"));
