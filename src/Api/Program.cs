@@ -1,11 +1,16 @@
 using System.Reflection;
 using Defra.TradeImportsData.Api.Endpoints.Gmrs;
+using Defra.TradeImportsData.Api.Endpoints.ImportNotifications;
 using Defra.TradeImportsData.Api.Services;
 using Defra.TradeImportsData.Api.Utils;
 using Defra.TradeImportsData.Api.Utils.Logging;
+using Defra.TradeImportsData.Data;
+using Defra.TradeImportsData.Data.Extensions;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using MongoDB.Driver;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateBootstrapLogger();
@@ -61,7 +66,8 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
     // This adds default rate limiter, total request timeout, retries, circuit breaker and timeout per attempt
     builder.Services.ConfigureHttpClientDefaults(options => options.AddStandardResilienceHandler());
     builder.Services.AddProblemDetails();
-    builder.Services.AddHealthChecks();
+    builder.Services.AddHealthChecks()
+       .AddMongoDb(provider => provider.GetRequiredService<IMongoDatabase>(), timeout: TimeSpan.FromSeconds(10));
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen(c =>
     {
@@ -102,6 +108,8 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
     });
 
     builder.Services.AddTransient<IGmrService, GmrService>();
+
+    builder.Services.AddDbContext(builder.Configuration);
 }
 
 static WebApplication BuildWebApplication(WebApplicationBuilder builder)
@@ -111,6 +119,7 @@ static WebApplication BuildWebApplication(WebApplicationBuilder builder)
     app.UseHeaderPropagation();
     app.MapHealthChecks("/health");
     app.MapGmrEndpoints();
+    app.MapImportNotificationEndpoints();
 
     app.UseSwagger(options =>
     {

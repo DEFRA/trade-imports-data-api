@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AspNetCore.HealthChecks.MongoDb" Version="9.0.0" />
     <PackageReference Include="Elastic.CommonSchema.Serilog" Version="8.12.3" />
     <PackageReference Include="Elastic.Serilog.Enrichers.Web" Version="8.12.3" />
     <PackageReference Include="Microsoft.AspNetCore.HeaderPropagation" Version="9.0.2" />

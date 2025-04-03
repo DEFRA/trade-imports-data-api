@@ -10,7 +10,7 @@ public static class EndpointRouteBuilderExtensions
 {
     public static void MapImportNotificationEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapGet("importnotifications/{chedId}/", Get)
+        app.MapGet("import-notifications/{chedId}/", Get)
             .WithName("ImportNotificationsByChedId")
             .WithTags("ImportNotifications")
             .WithSummary("Get ImportNotification")
@@ -19,7 +19,7 @@ public static class EndpointRouteBuilderExtensions
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status500InternalServerError);
 
-        app.MapPut("importnotifications/{chedId}/", Put)
+        app.MapPut("import-notifications/{chedId}/", Put)
             .WithName("PutImportNotification")
             .WithTags("ImportNotifications")
             .WithSummary("Put ImportNotifications")
