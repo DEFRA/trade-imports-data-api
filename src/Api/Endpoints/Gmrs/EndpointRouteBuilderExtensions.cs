@@ -29,6 +29,6 @@ public static class EndpointRouteBuilderExtensions
     {
         var gmr = await gmrService.GetGmr(gmrId);
 
-        return gmr is not null ? Results.Ok(new GmrResponse(gmr.GmrId)) : Results.NotFound();
+        return gmr is not null ? Results.Ok(new GmrResponse(gmr.Data, gmr.Created, gmr.Updated)) : Results.NotFound();
     }
 }

@@ -8,4 +8,11 @@ public static class Endpoints
 
         public static string Get(string gmrId) => $"{Root}/{gmrId}";
     }
+
+    public static class ImportNotifications
+    {
+        private const string Root = "/import-notifications";
+
+        public static string Get(string chedId) => $"{Root}/{chedId}";
+    }
 }

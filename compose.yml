@@ -30,6 +30,7 @@ services:
     restart: always
     networks:
       - cdp-tenant
+      
 
   mongodb:
     image: mongo:6.0.13
