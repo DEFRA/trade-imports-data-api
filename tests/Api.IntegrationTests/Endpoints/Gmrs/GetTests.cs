@@ -12,9 +12,7 @@ namespace Defra.TradeImportsDataApi.Api.IntegrationTests.Endpoints.Gmrs;
 public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
 {
     private IGmrService MockGmrService { get; } = Substitute.For<IGmrService>();
-
     private WireMockServer WireMock { get; }
-    private HttpClient HttpClient { get; }
     private const string GmrId = "gmrId";
     private readonly VerifySettings _settings;
 
@@ -23,7 +21,6 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
     {
         WireMock = context.Server;
         WireMock.Reset();
-        HttpClient = context.HttpClient;
 
         _settings = new VerifySettings();
         _settings.ScrubMember("traceId");

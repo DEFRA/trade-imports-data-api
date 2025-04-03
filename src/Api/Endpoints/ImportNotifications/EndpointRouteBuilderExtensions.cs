@@ -1,4 +1,5 @@
 using Defra.TradeImportsDataApi.Api.Extensions;
+using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
@@ -36,57 +37,60 @@ public static class EndpointRouteBuilderExtensions
     private static async Task<IResult> Get(
         [FromRoute] string chedId,
         HttpContext context,
-        [FromServices] IDbContext dbContext,
+        [FromServices] IImportNotificationService importNotificationService,
         CancellationToken cancellationToken
     )
     {
-        var dbNotification = await dbContext.Notifications.Find(chedId, cancellationToken);
-        if (dbNotification == null)
+        var importNotification = await importNotificationService.GetImportNotification(chedId, cancellationToken);
+        if (importNotification is null)
         {
             return Results.NotFound();
         }
 
-        context.SetResponseEtag(dbNotification.ETag);
-        var apiResponse = new ImportNotificationResponse(
-            dbNotification.Data,
-            dbNotification.Created,
-            dbNotification.Updated
-        );
-        return Results.Ok(apiResponse);
+        context.SetResponseEtag(importNotification.ETag);
+
+        return Results.Ok(ToResponse(importNotification));
     }
 
     [HttpPut]
     private static async Task<IResult> Put(
         [FromRoute] string chedId,
+        HttpContext context,
         [FromBody] ImportNotification data,
         [FromHeader(Name = "If-Match")] string? etag,
-        [FromServices] IDbContext dbContext,
+        [FromServices] IImportNotificationService importNotificationService,
         CancellationToken cancellationToken
     )
     {
-        var dbNotification = new ImportNotificationEntity()
+        var importNotificationEntity = new ImportNotificationEntity
         {
             Id = chedId,
             CustomDeclarationIdentifier = chedId,
             Data = data,
         };
-        if (string.IsNullOrEmpty(etag))
-        {
-            await dbContext.Notifications.Insert(dbNotification, cancellationToken);
-        }
-        else
-        {
-            await dbContext.Notifications.Update(dbNotification, etag, cancellationToken);
-        }
 
         try
         {
-            await dbContext.SaveChangesAsync(cancellationToken);
-            return Results.Ok();
+            importNotificationEntity = string.IsNullOrEmpty(etag)
+                ? await importNotificationService.Insert(importNotificationEntity, cancellationToken)
+                : await importNotificationService.Update(importNotificationEntity, etag, cancellationToken);
+
+            context.SetResponseEtag(importNotificationEntity.ETag);
+
+            return Results.Ok(ToResponse(importNotificationEntity));
         }
         catch (ConcurrencyException)
         {
             return Results.Conflict();
         }
+    }
+
+    private static ImportNotificationResponse ToResponse(ImportNotificationEntity importNotificationEntity)
+    {
+        return new ImportNotificationResponse(
+            importNotificationEntity.Data,
+            importNotificationEntity.Created,
+            importNotificationEntity.Updated
+        );
     }
 }

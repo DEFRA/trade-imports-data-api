@@ -1,4 +1,5 @@
 using Defra.TradeImportsDataApi.Api.Extensions;
+using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -35,48 +36,55 @@ public static class EndpointRouteBuilderExtensions
     private static async Task<IResult> Get(
         [FromRoute] string mrn,
         HttpContext context,
-        [FromServices] IDbContext dbContext,
+        [FromServices] ICustomsDeclarationService customsDeclarationService,
         CancellationToken cancellationToken
     )
     {
-        var dbEntity = await dbContext.CustomDeclarations.Find(mrn, cancellationToken);
-        if (dbEntity == null)
+        var customsDeclaration = await customsDeclarationService.GetCustomsDeclaration(mrn, cancellationToken);
+        if (customsDeclaration is null)
         {
             return Results.NotFound();
         }
 
-        context.SetResponseEtag(dbEntity.ETag);
-        var apiResponse = new CustomsDeclarationResponse(dbEntity.Data, dbEntity.Created, dbEntity.Updated);
-        return Results.Ok(apiResponse);
+        context.SetResponseEtag(customsDeclaration.ETag);
+
+        return Results.Ok(ToResponse(customsDeclaration));
     }
 
     [HttpPut]
     private static async Task<IResult> Put(
         [FromRoute] string mrn,
+        HttpContext context,
         [FromBody] Domain.CustomsDeclaration.CustomsDeclaration data,
         [FromHeader(Name = "If-Match")] string? etag,
-        [FromServices] IDbContext dbContext,
+        [FromServices] ICustomsDeclarationService customsDeclarationService,
         CancellationToken cancellationToken
     )
     {
-        var dbEntity = new CustomsDeclarationEntity() { Id = mrn, Data = data };
-        if (string.IsNullOrEmpty(etag))
-        {
-            await dbContext.CustomDeclarations.Insert(dbEntity, cancellationToken);
-        }
-        else
-        {
-            await dbContext.CustomDeclarations.Update(dbEntity, etag, cancellationToken);
-        }
+        var customsDeclarationEntity = new CustomsDeclarationEntity { Id = mrn, Data = data };
 
         try
         {
-            await dbContext.SaveChangesAsync(cancellationToken);
-            return Results.Ok();
+            customsDeclarationEntity = string.IsNullOrEmpty(etag)
+                ? await customsDeclarationService.Insert(customsDeclarationEntity, cancellationToken)
+                : await customsDeclarationService.Update(customsDeclarationEntity, etag, cancellationToken);
+
+            context.SetResponseEtag(customsDeclarationEntity.ETag);
+
+            return Results.Ok(ToResponse(customsDeclarationEntity));
         }
         catch (ConcurrencyException)
         {
             return Results.Conflict();
         }
+    }
+
+    private static CustomsDeclarationResponse ToResponse(CustomsDeclarationEntity customsDeclarationEntity)
+    {
+        return new CustomsDeclarationResponse(
+            customsDeclarationEntity.Data,
+            customsDeclarationEntity.Created,
+            customsDeclarationEntity.Updated
+        );
     }
 }

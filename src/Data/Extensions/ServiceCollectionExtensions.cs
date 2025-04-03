@@ -18,27 +18,27 @@ public static class ServiceCollectionExtensions
             .Bind(configuration.GetSection(MongoDbOptions.SectionName))
             .ValidateDataAnnotations();
 
-        ////services.AddHostedService<MongoIndexService>();
+        //// services.AddHostedService<MongoIndexService>();
 
         services.AddScoped<IDbContext, MongoDbContext>();
         services.AddSingleton(sp =>
         {
             var options = sp.GetService<IOptions<MongoDbOptions>>();
             var settings = MongoClientSettings.FromConnectionString(options?.Value.DatabaseUri);
+
             settings.ClusterConfigurator = cb =>
                 cb.Subscribe(
                     new DiagnosticsActivityEventSubscriber(new InstrumentationOptions { CaptureCommandText = true })
                 );
 
             var client = new MongoClient(settings);
-
-            var camelCaseConvention = new ConventionPack
+            var conventionPack = new ConventionPack
             {
                 new CamelCaseElementNameConvention(),
                 new EnumRepresentationConvention(BsonType.String),
             };
-            // convention must be registered before initialising collection
-            ConventionRegistry.Register("CamelCase", camelCaseConvention, _ => true);
+
+            ConventionRegistry.Register(nameof(conventionPack), conventionPack, _ => true);
 
             return client.GetDatabase(options?.Value.DatabaseName);
         });
