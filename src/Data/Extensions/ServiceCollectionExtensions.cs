@@ -2,6 +2,7 @@ using Defra.TradeImportsData.Data.Mongo;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
 using MongoDB.Driver.Core.Extensions.DiagnosticSources;
@@ -31,7 +32,11 @@ public static class ServiceCollectionExtensions
 
             var client = new MongoClient(settings);
 
-            var camelCaseConvention = new ConventionPack { new CamelCaseElementNameConvention() };
+            var camelCaseConvention = new ConventionPack
+            {
+                new CamelCaseElementNameConvention(),
+                new EnumRepresentationConvention(BsonType.String),
+            };
             // convention must be registered before initialising collection
             ConventionRegistry.Register("CamelCase", camelCaseConvention, _ => true);
 

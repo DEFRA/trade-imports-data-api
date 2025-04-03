@@ -13,7 +13,6 @@ public class FeedbackInformation
 
     [JsonPropertyName("authorityType")]
     [System.ComponentModel.Description("Type of authority")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public FeedbackInformationAuthorityType? AuthorityType { get; set; }
 
     /// <summary>

@@ -1,8 +1,9 @@
-using Defra.TradeImportsData.Api.Domain;
+using Defra.TradeImportsData.Data;
+using Defra.TradeImportsData.Data.Entities;
 
 namespace Defra.TradeImportsData.Api.Services;
 
-public class GmrService : IGmrService
+public class GmrService(IDbContext dbContext) : IGmrService
 {
-    public Task<Gmr?> GetGmr(string gmrId) => Task.FromResult<Gmr?>(null);
+    public Task<GmrEntity?> GetGmr(string gmrId) => dbContext.Gmrs.Find(gmrId);
 }

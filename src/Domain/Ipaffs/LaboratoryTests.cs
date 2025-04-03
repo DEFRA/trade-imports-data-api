@@ -26,7 +26,6 @@ public class LaboratoryTests
 
     [JsonPropertyName("testReason")]
     [System.ComponentModel.Description("Reason for test")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public LaboratoryTestsTestReason? TestReason { get; set; }
 
     /// <summary>

@@ -13,7 +13,6 @@ public class PartThree
 
     [JsonPropertyName("controlStatus")]
     [System.ComponentModel.Description("Control status enum")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public PartThreeControlStatus? ControlStatus { get; set; }
 
     /// <summary>

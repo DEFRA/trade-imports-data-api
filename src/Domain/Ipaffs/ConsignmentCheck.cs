@@ -53,7 +53,6 @@ public class ConsignmentCheck
 
     [JsonPropertyName("identityCheckType")]
     [System.ComponentModel.Description("Type of identity check performed")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public ConsignmentCheckIdentityCheckType? IdentityCheckType { get; set; }
 
     /// <summary>
@@ -70,7 +69,6 @@ public class ConsignmentCheck
 
     [JsonPropertyName("identityCheckNotDoneReason")]
     [System.ComponentModel.Description("What was the reason for skipping identity check")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public ConsignmentCheckIdentityCheckNotDoneReason? IdentityCheckNotDoneReason { get; set; }
 
     /// <summary>
@@ -95,7 +93,6 @@ public class ConsignmentCheck
 
     [JsonPropertyName("physicalCheckNotDoneReason")]
     [System.ComponentModel.Description("What was the reason for skipping physical check")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public ConsignmentCheckPhysicalCheckNotDoneReason? PhysicalCheckNotDoneReason { get; set; }
 
     /// <summary>

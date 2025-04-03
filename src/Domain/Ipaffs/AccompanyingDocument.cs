@@ -13,7 +13,6 @@ public class AccompanyingDocument
 
     [JsonPropertyName("documentType")]
     [System.ComponentModel.Description("Additional document type")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public AccompanyingDocumentDocumentType? DocumentType { get; set; }
 
     /// <summary>

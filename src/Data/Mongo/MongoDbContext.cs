@@ -10,6 +10,7 @@ public class MongoDbContext : IDbContext
         Database = database;
         Notifications = new MongoCollectionSet<ImportNotificationEntity>(this);
         CustomDeclarations = new MongoCollectionSet<CustomsDeclarationEntity>(this);
+        Gmrs = new MongoCollectionSet<GmrEntity>(this);
     }
 
     internal IMongoDatabase Database { get; }
@@ -17,6 +18,7 @@ public class MongoDbContext : IDbContext
 
     public IMongoCollectionSet<ImportNotificationEntity> Notifications { get; }
     public IMongoCollectionSet<CustomsDeclarationEntity> CustomDeclarations { get; }
+    public IMongoCollectionSet<GmrEntity> Gmrs { get; }
 
     public async Task<IMongoDbTransaction> StartTransaction(CancellationToken cancellationToken = default)
     {

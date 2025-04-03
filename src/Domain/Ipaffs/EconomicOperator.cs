@@ -21,7 +21,6 @@ public class EconomicOperator
 
     [JsonPropertyName("type")]
     [System.ComponentModel.Description("Type of organisation")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public EconomicOperatorType? Type { get; set; }
 
     /// <summary>
@@ -30,7 +29,6 @@ public class EconomicOperator
 
     [JsonPropertyName("status")]
     [System.ComponentModel.Description("Status of organisation")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public EconomicOperatorStatus? Status { get; set; }
 
     /// <summary>

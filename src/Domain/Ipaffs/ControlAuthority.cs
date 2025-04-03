@@ -61,6 +61,5 @@ public class ControlAuthority
 
     [JsonPropertyName("iuuOption")]
     [System.ComponentModel.Description("Result of Illegal, Unreported and Unregulated (IUU) check")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public ControlAuthorityIuuOption? IuuOption { get; set; }
 }

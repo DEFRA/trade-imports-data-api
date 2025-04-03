@@ -13,7 +13,6 @@ public class ExternalReference
 
     [JsonPropertyName("system")]
     [System.ComponentModel.Description("Identifier of the external system to which the reference relates")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public ExternalReferenceSystem? System { get; set; }
 
     /// <summary>

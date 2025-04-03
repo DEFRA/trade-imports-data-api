@@ -142,6 +142,5 @@ public class Commodities
 
     [JsonPropertyName("commodityIntendedFor")]
     [System.ComponentModel.Description("What the commodity is intended for")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public CommoditiesCommodityIntendedFor? CommodityIntendedFor { get; set; }
 }

@@ -21,7 +21,6 @@ public class Decision
 
     [JsonPropertyName("notAcceptableAction")]
     [System.ComponentModel.Description("Filled if consignmentAcceptable is set to false")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public DecisionNotAcceptableAction? NotAcceptableAction { get; set; }
 
     /// <summary>
@@ -30,7 +29,6 @@ public class Decision
 
     [JsonPropertyName("notAcceptableActionDestructionReason")]
     [System.ComponentModel.Description("Filled if not acceptable action is set to destruction")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public DecisionNotAcceptableActionDestructionReason? NotAcceptableActionDestructionReason { get; set; }
 
     /// <summary>
@@ -39,7 +37,6 @@ public class Decision
 
     [JsonPropertyName("notAcceptableActionEntryRefusalReason")]
     [System.ComponentModel.Description("Filled if not acceptable action is set to entry refusal")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public DecisionNotAcceptableActionEntryRefusalReason? NotAcceptableActionEntryRefusalReason { get; set; }
 
     /// <summary>
@@ -48,7 +45,6 @@ public class Decision
 
     [JsonPropertyName("notAcceptableActionQuarantineImposedReason")]
     [System.ComponentModel.Description("Filled if not acceptable action is set to quarantine imposed")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public DecisionNotAcceptableActionQuarantineImposedReason? NotAcceptableActionQuarantineImposedReason { get; set; }
 
     /// <summary>
@@ -57,7 +53,6 @@ public class Decision
 
     [JsonPropertyName("notAcceptableActionSpecialTreatmentReason")]
     [System.ComponentModel.Description("Filled if not acceptable action is set to special treatment")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public DecisionNotAcceptableActionSpecialTreatmentReason? NotAcceptableActionSpecialTreatmentReason { get; set; }
 
     /// <summary>
@@ -66,7 +61,6 @@ public class Decision
 
     [JsonPropertyName("notAcceptableActionIndustrialProcessingReason")]
     [System.ComponentModel.Description("Filled if not acceptable action is set to industrial processing")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public DecisionNotAcceptableActionIndustrialProcessingReason? NotAcceptableActionIndustrialProcessingReason { get; set; }
 
     /// <summary>
@@ -75,7 +69,6 @@ public class Decision
 
     [JsonPropertyName("notAcceptableActionReDispatchReason")]
     [System.ComponentModel.Description("Filled if not acceptable action is set to re-dispatch")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public DecisionNotAcceptableActionReDispatchReason? NotAcceptableActionReDispatchReason { get; set; }
 
     /// <summary>
@@ -84,7 +77,6 @@ public class Decision
 
     [JsonPropertyName("notAcceptableActionUseForOtherPurposesReason")]
     [System.ComponentModel.Description("Filled if not acceptable action is set to use for other purposes")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public DecisionNotAcceptableActionUseForOtherPurposesReason? NotAcceptableActionUseForOtherPurposesReason { get; set; }
 
     /// <summary>
@@ -167,7 +159,6 @@ public class Decision
     [System.ComponentModel.Description(
         "Filled if consignment is set to acceptable and decision type is Specific Warehouse"
     )]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public DecisionSpecificWarehouseNonConformingConsignment? SpecificWarehouseNonConformingConsignment { get; set; }
 
     /// <summary>
@@ -184,7 +175,6 @@ public class Decision
 
     [JsonPropertyName("decision")]
     [System.ComponentModel.Description("Detailed decision for consignment")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public ConsignmentDecision? ConsignmentDecision { get; set; }
 
     /// <summary>
@@ -193,7 +183,6 @@ public class Decision
 
     [JsonPropertyName("freeCirculationPurpose")]
     [System.ComponentModel.Description("Decision over purpose of free circulation in country")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public DecisionFreeCirculationPurpose? FreeCirculationPurpose { get; set; }
 
     /// <summary>
@@ -202,7 +191,6 @@ public class Decision
 
     [JsonPropertyName("definitiveImportPurpose")]
     [System.ComponentModel.Description("Decision over purpose of definitive import")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public DecisionDefinitiveImportPurpose? DefinitiveImportPurpose { get; set; }
 
     /// <summary>
@@ -211,7 +199,6 @@ public class Decision
 
     [JsonPropertyName("ifChanneledOption")]
     [System.ComponentModel.Description("Decision channeled option based on (article8, article15)")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public DecisionIfChanneledOption? IfChanneledOption { get; set; }
 
     /// <summary>

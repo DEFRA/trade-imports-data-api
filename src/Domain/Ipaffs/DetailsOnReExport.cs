@@ -29,7 +29,6 @@ public class DetailsOnReExport
 
     [JsonPropertyName("transportType")]
     [System.ComponentModel.Description("Type of transport to be used")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public DetailsOnReExportTransportType? TransportType { get; set; }
 
     /// <summary>

@@ -1,6 +1,6 @@
 namespace Defra.TradeImportsData.Domain.CustomsDeclaration
 {
-    public class CustomsDeclaration 
+    public class CustomsDeclaration
     {
         public ClearanceRequest.ClearanceRequest? ClearanceRequest { get; set; }
 

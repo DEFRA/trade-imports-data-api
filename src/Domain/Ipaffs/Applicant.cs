@@ -62,7 +62,6 @@ public class Applicant
 
     [JsonPropertyName("analysisType")]
     [System.ComponentModel.Description("Type of analysis")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public ApplicantAnalysisType? AnalysisType { get; set; }
 
     /// <summary>
@@ -87,7 +86,6 @@ public class Applicant
 
     [JsonPropertyName("conservationOfSample")]
     [System.ComponentModel.Description("Conservation of sample")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public ApplicantConservationOfSample? ConservationOfSample { get; set; }
 
     /// <summary>

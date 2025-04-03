@@ -46,11 +46,7 @@ public static class EndpointRouteBuilderExtensions
         }
 
         context.SetResponseEtag(dbEntity.ETag);
-        var apiResponse = new CustomsDeclarationResponse(
-            dbEntity.Data,
-            dbEntity.Created,
-            dbEntity.Updated
-        );
+        var apiResponse = new CustomsDeclarationResponse(dbEntity.Data, dbEntity.Created, dbEntity.Updated);
         return Results.Ok(apiResponse);
     }
 
@@ -63,11 +59,7 @@ public static class EndpointRouteBuilderExtensions
         CancellationToken cancellationToken
     )
     {
-        var dbEntity = new CustomsDeclarationEntity()
-        {
-            Id = chedId,
-            Data = data
-        };
+        var dbEntity = new CustomsDeclarationEntity() { Id = chedId, Data = data };
         if (string.IsNullOrEmpty(etag))
         {
             await dbContext.CustomDeclarations.Insert(dbEntity, cancellationToken);

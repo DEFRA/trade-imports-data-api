@@ -10,7 +10,6 @@ public class InspectionCheck
 
     [JsonPropertyName("type")]
     [System.ComponentModel.Description("Type of check")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public InspectionCheckType? Type { get; set; }
 
     /// <summary>
@@ -19,7 +18,6 @@ public class InspectionCheck
 
     [JsonPropertyName("status")]
     [System.ComponentModel.Description("Status of the check")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public InspectionCheckStatus? Status { get; set; }
 
     /// <summary>

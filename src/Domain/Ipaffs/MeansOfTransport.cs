@@ -13,7 +13,6 @@ public class MeansOfTransport
 
     [JsonPropertyName("type")]
     [System.ComponentModel.Description("Type of transport")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public MeansOfTransportType? Type { get; set; }
 
     /// <summary>

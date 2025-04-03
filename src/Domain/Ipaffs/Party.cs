@@ -101,7 +101,6 @@ public class Party
 
     [JsonPropertyName("type")]
     [System.ComponentModel.Description("Type of party")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public PartyType? Type { get; set; }
 
     /// <summary>

@@ -21,7 +21,6 @@ public class Purpose
 
     [JsonPropertyName("internalMarketPurpose")]
     [System.ComponentModel.Description("Detailed purpose of internal market purpose group")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public PurposeInternalMarketPurpose? InternalMarketPurpose { get; set; }
 
     /// <summary>
@@ -38,7 +37,6 @@ public class Purpose
 
     [JsonPropertyName("forNonConforming")]
     [System.ComponentModel.Description("Detailed purpose for non conforming purpose group")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public PurposeForNonConforming? ForNonConforming { get; set; }
 
     /// <summary>
@@ -97,7 +95,6 @@ public class Purpose
 
     [JsonPropertyName("forImportOrAdmission")]
     [System.ComponentModel.Description("Specification of Import or admission purpose")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public PurposeForImportOrAdmission? ForImportOrAdmission { get; set; }
 
     /// <summary>
@@ -122,7 +119,6 @@ public class Purpose
 
     [JsonPropertyName("purposeGroup")]
     [System.ComponentModel.Description("Purpose group of consignment (general purpose)")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public PurposePurposeGroup? PurposeGroup { get; set; }
 
     /// <summary>

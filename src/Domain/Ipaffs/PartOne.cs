@@ -13,7 +13,6 @@ public class PartOne
     [System.ComponentModel.Description(
         "Used to indicate what type of EU Import the notification is - Live Animals, Product Of Animal Origin or High Risk Food Not Of Animal Origin"
     )]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public PartOneTypeOfImp? TypeOfImp { get; set; }
 
     /// <summary>
@@ -380,7 +379,6 @@ public class PartOne
 
     [JsonPropertyName("provideCtcMrn")]
     [System.ComponentModel.Description("When the NCTS MRN will be added for the Common Transit Convention (CTC)")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public PartOneProvideCtcMrn? ProvideCtcMrn { get; set; }
 
     /// <summary>

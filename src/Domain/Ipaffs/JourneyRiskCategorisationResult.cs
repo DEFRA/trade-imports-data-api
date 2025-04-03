@@ -14,7 +14,6 @@ public class JourneyRiskCategorisationResult
 
     [JsonPropertyName("riskLevel")]
     [System.ComponentModel.Description("Risk Level is defined using enum values High,Medium,Low")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public JourneyRiskCategorisationResultRiskLevel? RiskLevel { get; set; }
 
     /// <summary>
@@ -25,7 +24,6 @@ public class JourneyRiskCategorisationResult
     [System.ComponentModel.Description(
         "Indicator of whether the risk level was determined by the system or by the user"
     )]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public JourneyRiskCategorisationResultRiskLevelMethod? RiskLevelMethod { get; set; }
 
     /// <summary>

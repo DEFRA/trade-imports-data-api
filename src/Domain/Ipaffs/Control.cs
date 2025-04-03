@@ -37,6 +37,5 @@ public class Control
 
     [JsonPropertyName("consignmentLeave")]
     [System.ComponentModel.Description("Is the consignment leaving UK borders?")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public ControlConsignmentLeave? ConsignmentLeave { get; set; }
 }

@@ -45,7 +45,6 @@ public class LaboratoryTestResult
 
     [JsonPropertyName("conclusion")]
     [System.ComponentModel.Description("Conclusion of laboratory test")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public LaboratoryTestResultConclusion? Conclusion { get; set; }
 
     /// <summary>

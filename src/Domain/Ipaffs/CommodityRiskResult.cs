@@ -13,7 +13,6 @@ public class CommodityRiskResult
 
     [JsonPropertyName("riskDecision")]
     [System.ComponentModel.Description("CHED-A, CHED-D, CHED-P - what is the commodity complement risk decision")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public CommodityRiskResultRiskDecision? RiskDecision { get; set; }
 
     /// <summary>
@@ -22,7 +21,6 @@ public class CommodityRiskResult
 
     [JsonPropertyName("exitRiskDecision")]
     [System.ComponentModel.Description("Transit CHED - what is the commodity complement exit risk decision")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public CommodityRiskResultExitRiskDecision? ExitRiskDecision { get; set; }
 
     /// <summary>
@@ -31,7 +29,6 @@ public class CommodityRiskResult
 
     [JsonPropertyName("hmiDecision")]
     [System.ComponentModel.Description("HMI decision required")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public CommodityRiskResultHmiDecision? HmiDecision { get; set; }
 
     /// <summary>
@@ -40,7 +37,6 @@ public class CommodityRiskResult
 
     [JsonPropertyName("phsiDecision")]
     [System.ComponentModel.Description("PHSI decision required")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public CommodityRiskResultPhsiDecision? PhsiDecision { get; set; }
 
     /// <summary>
@@ -49,7 +45,6 @@ public class CommodityRiskResult
 
     [JsonPropertyName("phsiClassification")]
     [System.ComponentModel.Description("PHSI classification")]
-    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public CommodityRiskResultPhsiClassification? PhsiClassification { get; set; }
 
     /// <summary>
