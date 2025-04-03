@@ -32,6 +32,8 @@ COPY .vacuum.yml .vacuum.yml
 RUN dotnet tool restore
 
 COPY src/Api/Api.csproj src/Api/Api.csproj
+COPY src/Domain/Domain.csproj src/Domain/Domain.csproj
+COPY src/Data/Data.csproj src/Data/Data.csproj
 COPY tests/Testing/Testing.csproj tests/Testing/Testing.csproj
 COPY tests/Api.Tests/Api.Tests.csproj tests/Api.Tests/Api.Tests.csproj
 COPY tests/Api.IntegrationTests/Api.IntegrationTests.csproj tests/Api.IntegrationTests/Api.IntegrationTests.csproj
@@ -41,6 +43,8 @@ COPY Directory.Build.props Directory.Build.props
 RUN dotnet restore
 
 COPY src/Api src/Api
+COPY src/Domain src/Domain
+COPY src/Data src/Data
 COPY tests/Testing tests/Testing
 COPY tests/Api.Tests tests/Api.Tests
 COPY tests/Api.IntegrationTests tests/Api.IntegrationTests

@@ -5,7 +5,6 @@ using System.Text.Json.Serialization;
 
 namespace Defra.TradeImportsData.Domain.Json;
 
-
 [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
 public class EpochDateTimeJsonConverterAttribute : JsonConverterAttribute
 {

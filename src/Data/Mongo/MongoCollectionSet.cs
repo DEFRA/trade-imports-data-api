@@ -7,8 +7,8 @@ using MongoDB.Driver.Linq;
 
 namespace Defra.TradeImportsData.Data.Mongo;
 
-public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionName = null!)
-    : IMongoCollectionSet<T> where T : class, IDataEntity
+public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionName = null!) : IMongoCollectionSet<T>
+    where T : class, IDataEntity
 {
     private readonly IMongoCollection<T> _collection = string.IsNullOrEmpty(collectionName)
         ? dbContext.Database.GetCollection<T>(typeof(T).Name)
@@ -67,10 +67,13 @@ public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionNa
 
                 var session = dbContext.ActiveTransaction?.Session;
                 var updateResult = session is not null
-                    ? await _collection.ReplaceOneAsync(session, filter, item.Item,
-                        cancellationToken: cancellationToken)
-                    : await _collection.ReplaceOneAsync(filter, item.Item,
-                        cancellationToken: cancellationToken);
+                    ? await _collection.ReplaceOneAsync(
+                        session,
+                        filter,
+                        item.Item,
+                        cancellationToken: cancellationToken
+                    )
+                    : await _collection.ReplaceOneAsync(filter, item.Item, cancellationToken: cancellationToken);
 
                 if (updateResult.ModifiedCount == 0)
                 {

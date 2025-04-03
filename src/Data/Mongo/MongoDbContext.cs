@@ -24,8 +24,6 @@ public class MongoDbContext : IDbContext
         return ActiveTransaction;
     }
 
-    
-
     public async Task SaveChangesAsync(CancellationToken cancellation = default)
     {
         if (GetChangedRecordsCount() == 0)

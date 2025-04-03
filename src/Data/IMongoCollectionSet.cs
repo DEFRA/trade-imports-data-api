@@ -3,7 +3,8 @@ using Defra.TradeImportsData.Data.Entities;
 
 namespace Defra.TradeImportsData.Data;
 
-public interface IMongoCollectionSet<T> : IQueryable<T> where T : IDataEntity
+public interface IMongoCollectionSet<T> : IQueryable<T>
+    where T : IDataEntity
 {
     int PendingChanges { get; }
     Task<T?> Find(string id, CancellationToken cancellationToken = default);

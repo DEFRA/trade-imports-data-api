@@ -32,7 +32,6 @@ public static class EndpointRouteBuilderExtensions
             .ProducesProblem(StatusCodes.Status500InternalServerError);
     }
 
-    
     [HttpGet]
     private static async Task<IResult> Get(
         [FromRoute] string chedId,
@@ -48,7 +47,11 @@ public static class EndpointRouteBuilderExtensions
         }
 
         context.SetResponseEtag(dbNotification.ETag);
-        var apiResponse = new ImportNotificationResponse(dbNotification.Data, dbNotification.Created, dbNotification.Updated);
+        var apiResponse = new ImportNotificationResponse(
+            dbNotification.Data,
+            dbNotification.Created,
+            dbNotification.Updated
+        );
         return Results.Ok(apiResponse);
     }
 
@@ -63,7 +66,9 @@ public static class EndpointRouteBuilderExtensions
     {
         var dbNotification = new ImportNotificationEntity()
         {
-            Id = chedId, CustomDeclarationIdentifier = chedId, Data = data
+            Id = chedId,
+            CustomDeclarationIdentifier = chedId,
+            Data = data,
         };
         if (string.IsNullOrEmpty(etag))
         {
