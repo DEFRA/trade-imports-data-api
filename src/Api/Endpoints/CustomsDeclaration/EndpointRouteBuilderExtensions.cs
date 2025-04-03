@@ -52,14 +52,14 @@ public static class EndpointRouteBuilderExtensions
 
     [HttpPut]
     private static async Task<IResult> Put(
-        [FromRoute] string chedId,
-        [FromBody] TradeImportsData.Domain.CustomsDeclaration.CustomsDeclaration data,
+        [FromRoute] string mrn,
+        [FromBody] Domain.CustomsDeclaration.CustomsDeclaration data,
         [FromHeader(Name = "If-Match")] string? etag,
         [FromServices] IDbContext dbContext,
         CancellationToken cancellationToken
     )
     {
-        var dbEntity = new CustomsDeclarationEntity() { Id = chedId, Data = data };
+        var dbEntity = new CustomsDeclarationEntity() { Id = mrn, Data = data };
         if (string.IsNullOrEmpty(etag))
         {
             await dbContext.CustomDeclarations.Insert(dbEntity, cancellationToken);
