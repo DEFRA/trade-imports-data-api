@@ -1,10 +1,8 @@
-using Defra.TradeImportsData.Domain.CustomsDeclaration.ClearanceRequest;
-using Defra.TradeImportsData.Domain.CustomsDeclaration.Finalisation;
-using Decision = Defra.TradeImportsData.Domain.CustomsDeclaration.Decision.Decision;
+using Defra.TradeImportsData.Domain.CustomsDeclaration;
 
 namespace Defra.TradeImportsData.Data.Entities
 {
-    public class CustomDeclarationEntity : IDataEntity
+    public class CustomsDeclarationEntity : IDataEntity
     {
         public required string Id { get; set; }
 
@@ -16,19 +14,16 @@ namespace Defra.TradeImportsData.Data.Entities
 
         public DateTime Updated { get; set; }
 
-        public ClearanceRequest? ClearanceRequest { get; set; }
-
-        public Decision? Decision { get; set; }
-
-        public Finalisation? Finalisation { get; set; }
+        public required CustomsDeclaration Data { get; set; }
 
         public void OnSave()
         {
             ImportNotificationIdentifiers.Clear();
-            if (ClearanceRequest?.Items == null)
+            var items = Data?.ClearanceRequest?.Items;
+            if (items == null)
                 return;
 
-            foreach (var documents in ClearanceRequest.Items.Select(item => item.Documents))
+            foreach (var documents in items.Select(item => item.Documents))
             {
                 if (documents == null)
                     continue;

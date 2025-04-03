@@ -6,6 +6,6 @@ public interface IDbContext
 {
     IMongoCollectionSet<ImportNotificationEntity> Notifications { get; }
 
-    IMongoCollectionSet<CustomDeclarationEntity> CustomDeclarations { get; }
+    IMongoCollectionSet<CustomsDeclarationEntity> CustomDeclarations { get; }
     Task SaveChangesAsync(CancellationToken cancellation = default);
 }

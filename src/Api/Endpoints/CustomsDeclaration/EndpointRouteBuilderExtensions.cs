@@ -4,7 +4,7 @@ using Defra.TradeImportsData.Data.Entities;
 using Defra.TradeImportsData.Domain.IPaffs;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Defra.TradeImportsData.Api.Endpoints.ImportNotifications;
+namespace Defra.TradeImportsData.Api.Endpoints.CustomsDeclaration;
 
 public static class EndpointRouteBuilderExtensions
 {
@@ -15,7 +15,7 @@ public static class EndpointRouteBuilderExtensions
             .WithTags("ImportNotifications")
             .WithSummary("Get ImportNotification")
             .WithDescription("Get an ImportNotifications by CHED ID")
-            .Produces<ImportNotificationResponse>()
+            .Produces<CustomsDeclarationResponse>()
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status500InternalServerError);
 
@@ -24,7 +24,7 @@ public static class EndpointRouteBuilderExtensions
             .WithTags("ImportNotifications")
             .WithSummary("Put ImportNotifications")
             .WithDescription("Put an ImportNotifications")
-            .Produces<ImportNotificationResponse>()
+            .Produces<CustomsDeclarationResponse>()
             .ProducesProblem(StatusCodes.Status201Created)
             .ProducesProblem(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status400BadRequest)
@@ -34,23 +34,23 @@ public static class EndpointRouteBuilderExtensions
 
     [HttpGet]
     private static async Task<IResult> Get(
-        [FromRoute] string chedId,
+        [FromRoute] string mrn,
         HttpContext context,
         [FromServices] IDbContext dbContext,
         CancellationToken cancellationToken
     )
     {
-        var dbNotification = await dbContext.Notifications.Find(chedId, cancellationToken);
-        if (dbNotification == null)
+        var dbEntity = await dbContext.CustomDeclarations.Find(mrn, cancellationToken);
+        if (dbEntity == null)
         {
             return Results.NotFound();
         }
 
-        context.SetResponseEtag(dbNotification.ETag);
-        var apiResponse = new ImportNotificationResponse(
-            dbNotification.Data,
-            dbNotification.Created,
-            dbNotification.Updated
+        context.SetResponseEtag(dbEntity.ETag);
+        var apiResponse = new CustomsDeclarationResponse(
+            dbEntity.Data,
+            dbEntity.Created,
+            dbEntity.Updated
         );
         return Results.Ok(apiResponse);
     }
@@ -58,25 +58,24 @@ public static class EndpointRouteBuilderExtensions
     [HttpPut]
     private static async Task<IResult> Put(
         [FromRoute] string chedId,
-        [FromBody] ImportNotification data,
+        [FromBody] TradeImportsData.Domain.CustomsDeclaration.CustomsDeclaration data,
         [FromHeader(Name = "If-Match")] string? etag,
         [FromServices] IDbContext dbContext,
         CancellationToken cancellationToken
     )
     {
-        var dbNotification = new ImportNotificationEntity()
+        var dbEntity = new CustomsDeclarationEntity()
         {
             Id = chedId,
-            CustomDeclarationIdentifier = chedId,
-            Data = data,
+            Data = data
         };
         if (string.IsNullOrEmpty(etag))
         {
-            await dbContext.Notifications.Insert(dbNotification, cancellationToken);
+            await dbContext.CustomDeclarations.Insert(dbEntity, cancellationToken);
         }
         else
         {
-            await dbContext.Notifications.Update(dbNotification, etag, cancellationToken);
+            await dbContext.CustomDeclarations.Update(dbEntity, etag, cancellationToken);
         }
 
         try
