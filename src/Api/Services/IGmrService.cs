@@ -1,6 +1,6 @@
-using Defra.TradeImportsData.Data.Entities;
+using Defra.TradeImportsDataApi.Data.Entities;
 
-namespace Defra.TradeImportsData.Api.Services;
+namespace Defra.TradeImportsDataApi.Api.Services;
 
 public interface IGmrService
 {

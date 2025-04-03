@@ -1,5 +1,5 @@
-using Defra.TradeImportsData.Api.Services;
-using Defra.TradeImportsData.Api.Testing;
+using Defra.TradeImportsDataApi.Api.Services;
+using Defra.TradeImportsDataApi.Testing;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
@@ -7,7 +7,7 @@ using NSubstitute.ExceptionExtensions;
 using WireMock.Server;
 using Xunit.Abstractions;
 
-namespace Defra.TradeImportsData.Api.IntegrationTests.Endpoints.Gmrs;
+namespace Defra.TradeImportsDataApi.Api.IntegrationTests.Endpoints.Gmrs;
 
 public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
 {
@@ -41,7 +41,7 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
     {
         var client = CreateClient();
 
-        var response = await client.GetAsync(Testing.Endpoints.Gmrs.Get(GmrId));
+        var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.Gmrs.Get(GmrId));
 
         await VerifyJson(await response.Content.ReadAsStringAsync(), _settings);
     }
@@ -52,7 +52,7 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
         var client = CreateClient();
         MockGmrService.GetGmr(GmrId).Throws(new Exception("BOOM!"));
 
-        var response = await client.GetAsync(Testing.Endpoints.Gmrs.Get(GmrId));
+        var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.Gmrs.Get(GmrId));
 
         await VerifyJson(await response.Content.ReadAsStringAsync(), _settings);
     }
@@ -63,7 +63,7 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
         var client = CreateClient();
         MockGmrService.GetGmr(GmrId).Throws(new BadHttpRequestException("Bad Request Detail"));
 
-        var response = await client.GetAsync(Testing.Endpoints.Gmrs.Get(GmrId));
+        var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.Gmrs.Get(GmrId));
 
         await VerifyJson(await response.Content.ReadAsStringAsync(), _settings);
     }

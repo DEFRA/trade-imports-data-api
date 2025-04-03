@@ -1,13 +1,8 @@
-using Defra.TradeImportsData.Api.Services;
-using Defra.TradeImportsData.Api.Testing;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using NSubstitute;
-using NSubstitute.ExceptionExtensions;
+using Defra.TradeImportsDataApi.Testing;
 using WireMock.Server;
 using Xunit.Abstractions;
 
-namespace Defra.TradeImportsData.Api.IntegrationTests.Endpoints.ImportNotifications;
+namespace Defra.TradeImportsDataApi.Api.IntegrationTests.Endpoints.ImportNotifications;
 
 public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
 {
@@ -30,7 +25,9 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
         // Arrange
         var client = CreateClient();
 
-        var response = await client.GetAsync(Testing.Endpoints.ImportNotifications.Get("does_not_exist"));
+        var response = await client.GetAsync(
+            TradeImportsDataApi.Testing.Endpoints.ImportNotifications.Get("does_not_exist")
+        );
 
         await VerifyJson(await response.Content.ReadAsStringAsync(), _settings);
     }

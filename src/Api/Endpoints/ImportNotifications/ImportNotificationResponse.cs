@@ -1,5 +1,5 @@
-using Defra.TradeImportsData.Domain.IPaffs;
+using Defra.TradeImportsDataApi.Domain.Ipaffs;
 
-namespace Defra.TradeImportsData.Api.Endpoints.ImportNotifications;
+namespace Defra.TradeImportsDataApi.Api.Endpoints.ImportNotifications;
 
 public record ImportNotificationResponse(ImportNotification Data, DateTime Created, DateTime Updated);

@@ -1,6 +1,6 @@
-using Defra.TradeImportsData.Domain.Gvms;
+using Defra.TradeImportsDataApi.Domain.Gvms;
 
-namespace Defra.TradeImportsData.Data.Entities;
+namespace Defra.TradeImportsDataApi.Data.Entities;
 
 public class GmrEntity : IDataEntity
 {

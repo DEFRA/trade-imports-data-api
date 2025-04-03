@@ -5,8 +5,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
-    <AssemblyName>Defra.TradeImportsData.Api.Tests</AssemblyName>
-    <RootNamespace>Defra.TradeImportsData.Api.Tests</RootNamespace>
+    <AssemblyName>Defra.TradeImportsDataApi.Api.Tests</AssemblyName>
+    <RootNamespace>Defra.TradeImportsDataApi.Api.Tests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

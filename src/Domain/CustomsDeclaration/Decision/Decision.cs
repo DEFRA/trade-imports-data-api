@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Defra.TradeImportsData.Domain.CustomsDeclaration.Decision;
+namespace Defra.TradeImportsDataApi.Domain.CustomsDeclaration.Decision;
 
 public class Decision
 {

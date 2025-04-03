@@ -2,7 +2,7 @@ using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Defra.TradeImportsData.Domain.Json;
+namespace Defra.TradeImportsDataApi.Domain.Json;
 
 [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
 public class FlexibleDateOnlyJsonConverterAttribute : JsonConverterAttribute

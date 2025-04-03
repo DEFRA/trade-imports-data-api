@@ -1,15 +1,12 @@
 using System.Reflection;
-using Defra.TradeImportsData.Api.Endpoints.CustomsDeclaration;
-using Defra.TradeImportsData.Api.Endpoints.Gmrs;
-using Defra.TradeImportsData.Api.Endpoints.ImportNotifications;
-using Defra.TradeImportsData.Api.Services;
-using Defra.TradeImportsData.Api.Utils;
-using Defra.TradeImportsData.Api.Utils.Logging;
-using Defra.TradeImportsData.Data;
-using Defra.TradeImportsData.Data.Extensions;
+using Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclaration;
+using Defra.TradeImportsDataApi.Api.Endpoints.Gmrs;
+using Defra.TradeImportsDataApi.Api.Endpoints.ImportNotifications;
+using Defra.TradeImportsDataApi.Api.Services;
+using Defra.TradeImportsDataApi.Api.Utils;
+using Defra.TradeImportsDataApi.Api.Utils.Logging;
+using Defra.TradeImportsDataApi.Data.Extensions;
 using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using MongoDB.Driver;
 using Serilog;
@@ -172,7 +169,7 @@ static WebApplication BuildWebApplication(WebApplicationBuilder builder)
 }
 
 #pragma warning disable S2094
-namespace Defra.TradeImportsData.Api
+namespace Defra.TradeImportsDataApi.Api
 {
     // ReSharper disable once ClassNeverInstantiated.Global
     public class Program;

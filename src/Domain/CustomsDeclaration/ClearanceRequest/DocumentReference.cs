@@ -1,4 +1,4 @@
-namespace Defra.TradeImportsData.Domain.CustomsDeclaration.ClearanceRequest;
+namespace Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ClearanceRequest;
 
 public class DocumentReference(string value)
 {

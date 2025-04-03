@@ -3,8 +3,8 @@
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <AssemblyName>Defra.TradeImportsData.Data</AssemblyName>
-    <RootNamespace>Defra.TradeImportsData.Data</RootNamespace>
+    <AssemblyName>Defra.TradeImportsDataApi.Data</AssemblyName>
+    <RootNamespace>Defra.TradeImportsDataApi.Data</RootNamespace>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 

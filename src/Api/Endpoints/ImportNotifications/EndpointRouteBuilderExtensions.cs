@@ -1,10 +1,10 @@
-using Defra.TradeImportsData.Api.Extensions;
-using Defra.TradeImportsData.Data;
-using Defra.TradeImportsData.Data.Entities;
-using Defra.TradeImportsData.Domain.IPaffs;
+using Defra.TradeImportsDataApi.Api.Extensions;
+using Defra.TradeImportsDataApi.Data;
+using Defra.TradeImportsDataApi.Data.Entities;
+using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Defra.TradeImportsData.Api.Endpoints.ImportNotifications;
+namespace Defra.TradeImportsDataApi.Api.Endpoints.ImportNotifications;
 
 public static class EndpointRouteBuilderExtensions
 {

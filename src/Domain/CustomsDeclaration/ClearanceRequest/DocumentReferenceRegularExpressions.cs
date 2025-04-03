@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace Defra.TradeImportsData.Domain.CustomsDeclaration.ClearanceRequest;
+namespace Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ClearanceRequest;
 
 public static partial class DocumentReferenceRegularExpressions
 {

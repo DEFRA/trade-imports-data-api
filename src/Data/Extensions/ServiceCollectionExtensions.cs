@@ -1,4 +1,4 @@
-using Defra.TradeImportsData.Data.Mongo;
+using Defra.TradeImportsDataApi.Data.Mongo;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -7,7 +7,7 @@ using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
 using MongoDB.Driver.Core.Extensions.DiagnosticSources;
 
-namespace Defra.TradeImportsData.Data.Extensions;
+namespace Defra.TradeImportsDataApi.Data.Extensions;
 
 public static class ServiceCollectionExtensions
 {

@@ -1,6 +1,6 @@
-using Defra.TradeImportsData.Data.Entities;
+using Defra.TradeImportsDataApi.Data.Entities;
 
-namespace Defra.TradeImportsData.Data;
+namespace Defra.TradeImportsDataApi.Data;
 
 public interface IDbContext
 {

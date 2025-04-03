@@ -1,9 +1,7 @@
-using Defra.TradeImportsData.Domain.CustomsDeclaration;
-
-namespace Defra.TradeImportsData.Api.Endpoints.CustomsDeclaration;
+namespace Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclaration;
 
 public record CustomsDeclarationResponse(
-    TradeImportsData.Domain.CustomsDeclaration.CustomsDeclaration Data,
+    Domain.CustomsDeclaration.CustomsDeclaration Data,
     DateTime Created,
     DateTime Updated
 );

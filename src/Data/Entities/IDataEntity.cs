@@ -1,4 +1,4 @@
-namespace Defra.TradeImportsData.Data.Entities;
+namespace Defra.TradeImportsDataApi.Data.Entities;
 
 public interface IDataEntity
 {

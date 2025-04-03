@@ -34,7 +34,7 @@ COPY src/Data/Data.csproj src/Data/Data.csproj
 COPY tests/Testing/Testing.csproj tests/Testing/Testing.csproj
 COPY tests/Api.Tests/Api.Tests.csproj tests/Api.Tests/Api.Tests.csproj
 COPY tests/Api.IntegrationTests/Api.IntegrationTests.csproj tests/Api.IntegrationTests/Api.IntegrationTests.csproj
-COPY Defra.TradeImportsData.Api.sln Defra.TradeImportsData.Api.sln
+COPY Defra.TradeImportsDataApi.sln Defra.TradeImportsDataApi.sln
 COPY Directory.Build.props Directory.Build.props
 
 RUN dotnet restore
@@ -49,7 +49,7 @@ COPY tests/Api.IntegrationTests tests/Api.IntegrationTests
 RUN dotnet csharpier --check .
 
 RUN dotnet build src/Api/Api.csproj --no-restore -c Release
-RUN dotnet swagger tofile --output openapi.json ./src/Api/bin/Release/net9.0/Defra.TradeImportsData.Api.dll v1
+RUN dotnet swagger tofile --output openapi.json ./src/Api/bin/Release/net9.0/Defra.TradeImportsDataApi.Api.dll v1
 #RUN vacuum lint -d -r .vacuum.yml openapi.json
 
 RUN dotnet test --no-restore tests/Api.Tests
@@ -68,4 +68,4 @@ WORKDIR /app
 COPY --from=publish /app/publish .
 
 EXPOSE 8085
-ENTRYPOINT ["dotnet", "Defra.TradeImportsData.Api.dll"]
+ENTRYPOINT ["dotnet", "Defra.TradeImportsDataApi.Api.dll"]

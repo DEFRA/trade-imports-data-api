@@ -1,4 +1,4 @@
-namespace Defra.TradeImportsData.Api.IntegrationTests.OpenApi;
+namespace Defra.TradeImportsDataApi.Api.IntegrationTests.OpenApi;
 
 public class OpenApiTests(ApiWebApplicationFactory factory) : IClassFixture<ApiWebApplicationFactory>
 {

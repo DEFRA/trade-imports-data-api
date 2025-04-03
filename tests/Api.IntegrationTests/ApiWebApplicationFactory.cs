@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Hosting;
 
-namespace Defra.TradeImportsData.Api.IntegrationTests;
+namespace Defra.TradeImportsDataApi.Api.IntegrationTests;
 
 // ReSharper disable once ClassNeverInstantiated.Global
 public class ApiWebApplicationFactory : TestWebApplicationFactory<Program>

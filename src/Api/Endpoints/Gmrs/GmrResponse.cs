@@ -1,5 +1,5 @@
-using Defra.TradeImportsData.Domain.Gvms;
+using Defra.TradeImportsDataApi.Domain.Gvms;
 
-namespace Defra.TradeImportsData.Api.Endpoints.Gmrs;
+namespace Defra.TradeImportsDataApi.Api.Endpoints.Gmrs;
 
 public record GmrResponse(Gmr Data, DateTime Created, DateTime Updated);
