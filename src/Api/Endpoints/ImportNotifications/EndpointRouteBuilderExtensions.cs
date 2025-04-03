@@ -41,15 +41,15 @@ public static class EndpointRouteBuilderExtensions
         CancellationToken cancellationToken
     )
     {
-        var importNotification = await importNotificationService.GetImportNotification(chedId, cancellationToken);
-        if (importNotification is null)
+        var importNotificationEntity = await importNotificationService.GetImportNotification(chedId, cancellationToken);
+        if (importNotificationEntity is null)
         {
             return Results.NotFound();
         }
 
-        context.SetResponseEtag(importNotification.ETag);
+        context.SetResponseEtag(importNotificationEntity.ETag);
 
-        return Results.Ok(ToResponse(importNotification));
+        return Results.Ok(ToResponse(importNotificationEntity));
     }
 
     [HttpPut]

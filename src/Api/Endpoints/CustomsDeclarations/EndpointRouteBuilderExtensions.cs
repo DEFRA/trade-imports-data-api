@@ -40,15 +40,15 @@ public static class EndpointRouteBuilderExtensions
         CancellationToken cancellationToken
     )
     {
-        var customsDeclaration = await customsDeclarationService.GetCustomsDeclaration(mrn, cancellationToken);
-        if (customsDeclaration is null)
+        var customsDeclarationEntity = await customsDeclarationService.GetCustomsDeclaration(mrn, cancellationToken);
+        if (customsDeclarationEntity is null)
         {
             return Results.NotFound();
         }
 
-        context.SetResponseEtag(customsDeclaration.ETag);
+        context.SetResponseEtag(customsDeclarationEntity.ETag);
 
-        return Results.Ok(ToResponse(customsDeclaration));
+        return Results.Ok(ToResponse(customsDeclarationEntity));
     }
 
     [HttpPut]
