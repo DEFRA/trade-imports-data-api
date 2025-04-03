@@ -64,6 +64,7 @@ public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionNa
 
                 item.Item.ETag = BsonObjectIdGenerator.Instance.GenerateId(null, null).ToString()!;
                 item.Item.Updated = DateTime.UtcNow;
+                item.Item.OnSave();
 
                 var session = dbContext.ActiveTransaction?.Session;
                 var updateResult = session is not null
@@ -93,6 +94,7 @@ public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionNa
             {
                 item.ETag = BsonObjectIdGenerator.Instance.GenerateId(null, null).ToString()!;
                 item.Created = item.Updated = DateTime.UtcNow;
+                item.OnSave();
 
                 var session = dbContext.ActiveTransaction?.Session;
                 if (session is not null)

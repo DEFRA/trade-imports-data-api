@@ -9,12 +9,14 @@ public class MongoDbContext : IDbContext
     {
         Database = database;
         Notifications = new MongoCollectionSet<ImportNotificationEntity>(this);
+        CustomDeclarations = new MongoCollectionSet<CustomDeclarationEntity>(this);
     }
 
     internal IMongoDatabase Database { get; }
     internal MongoDbTransaction? ActiveTransaction { get; private set; }
 
     public IMongoCollectionSet<ImportNotificationEntity> Notifications { get; }
+    public IMongoCollectionSet<CustomDeclarationEntity> CustomDeclarations { get; }
 
     public async Task<IMongoDbTransaction> StartTransaction(CancellationToken cancellationToken = default)
     {

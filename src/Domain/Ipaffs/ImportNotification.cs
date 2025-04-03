@@ -249,23 +249,9 @@ public class ImportNotification
     [System.ComponentModel.Description("Indicates whether a CHED has been matched with a GVMS GMR via DMP")]
     public bool? IsGMRMatched { get; set; }
 
+    [JsonPropertyName("commoditiesSummary")]
     public Commodities CommoditiesSummary { get; set; } = default!;
 
+    [JsonPropertyName("commodities")]
     public CommodityComplement[] Commodities { get; set; } = default!;
 }
-
-////public class ImportNotificationStatus
-////{
-////    public static ImportNotificationStatus Default()
-////    {
-////        return new ImportNotificationStatus() { LinkStatus = LinkStatus.NotLinked };
-////    }
-
-////    [System.ComponentModel.Description("")]
-////    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
-////    public TypeAndLinkStatus? TypeAndLinkStatus { get; set; }
-
-////    [System.ComponentModel.Description("")]
-////    [MongoDB.Bson.Serialization.Attributes.BsonRepresentation(MongoDB.Bson.BsonType.String)]
-////    public required LinkStatus LinkStatus { get; set; }
-////}

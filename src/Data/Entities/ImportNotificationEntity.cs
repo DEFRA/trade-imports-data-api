@@ -1,3 +1,4 @@
+using Defra.TradeImportsData.Domain.CustomsDeclaration.ClearanceRequest;
 using Defra.TradeImportsData.Domain.IPaffs;
 
 namespace Defra.TradeImportsData.Data.Entities
@@ -13,7 +14,13 @@ namespace Defra.TradeImportsData.Data.Entities
         public DateTime Created { get; set; }
 
         public DateTime Updated { get; set; }
+        
 
         public required ImportNotification Data { get; set; }
+
+        public void OnSave()
+        {
+            CustomDeclarationIdentifier = new DocumentReference(Id).GetIdentifier();
+        }
     }
 }

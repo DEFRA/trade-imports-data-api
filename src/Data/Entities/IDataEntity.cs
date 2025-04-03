@@ -1,4 +1,4 @@
-﻿namespace Defra.TradeImportsData.Data.Entities;
+namespace Defra.TradeImportsData.Data.Entities;
 
 public interface IDataEntity
 {
@@ -10,4 +10,6 @@ public interface IDataEntity
     public DateTime Created { get; set; }
 
     public DateTime Updated { get; set; }
+
+    void OnSave();
 }
