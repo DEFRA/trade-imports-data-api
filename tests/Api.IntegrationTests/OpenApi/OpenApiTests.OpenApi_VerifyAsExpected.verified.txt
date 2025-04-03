@@ -28,6 +28,7 @@
           {
             "name": "mrn",
             "in": "path",
+            "description": "MRN",
             "required": true,
             "schema": {
               "type": "string"
@@ -171,6 +172,7 @@
           {
             "name": "gmrId",
             "in": "path",
+            "description": "GMR ID",
             "required": true,
             "schema": {
               "type": "string"
@@ -314,10 +316,12 @@
           {
             "name": "chedId",
             "in": "path",
+            "description": "CHED ID",
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "CHEDA.GB.2024.1020304"
           }
         ],
         "responses": {

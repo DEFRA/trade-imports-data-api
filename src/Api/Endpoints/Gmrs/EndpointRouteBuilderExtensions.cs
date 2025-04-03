@@ -32,6 +32,11 @@ public static class EndpointRouteBuilderExtensions
             .ProducesProblem(StatusCodes.Status500InternalServerError);
     }
 
+    /// <param name="gmrId">GMR ID</param>
+    /// <param name="context"></param>
+    /// <param name="gmrService"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [HttpGet]
     private static async Task<IResult> Get(
         [FromRoute] string gmrId,

@@ -33,6 +33,11 @@ public static class EndpointRouteBuilderExtensions
             .ProducesProblem(StatusCodes.Status500InternalServerError);
     }
 
+    /// <param name="chedId" example="CHEDA.GB.2024.1020304">CHED ID</param>
+    /// <param name="context"></param>
+    /// <param name="importNotificationService"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [HttpGet]
     private static async Task<IResult> Get(
         [FromRoute] string chedId,
