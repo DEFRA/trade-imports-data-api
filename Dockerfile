@@ -22,9 +22,6 @@ RUN wget --secure-protocol=TLSv1_2 "https://github.com/daveshanley/vacuum/releas
 
 WORKDIR /src
 
-ENV PATH="$PATH:/root/.dotnet/tools"
-RUN dotnet tool install -g --allow-roll-forward csharpier
-
 COPY .config/dotnet-tools.json .config/dotnet-tools.json
 COPY .csharpierrc .csharpierrc
 COPY .vacuum.yml .vacuum.yml
