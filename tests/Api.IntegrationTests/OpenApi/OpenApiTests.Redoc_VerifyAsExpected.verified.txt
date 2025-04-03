@@ -11,7 +11,18 @@
   },
   StatusCode: OK,
   ReasonPhrase: OK,
-  Headers: [],
+  Headers: [
+    {
+      Cache-Control: [
+        max-age=604800, private
+      ]
+    },
+    {
+      ETag: [
+        W/"s/7yFJ69eDl0FoFWeOg6AUJVF24="
+      ]
+    }
+  ],
   TrailingHeaders: [],
   RequestMessage: {
     Version: 1.1,
