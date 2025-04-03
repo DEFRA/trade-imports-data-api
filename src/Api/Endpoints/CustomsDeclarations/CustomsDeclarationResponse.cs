@@ -1,4 +1,4 @@
-namespace Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclaration;
+namespace Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations;
 
 public record CustomsDeclarationResponse(
     Domain.CustomsDeclaration.CustomsDeclaration Data,

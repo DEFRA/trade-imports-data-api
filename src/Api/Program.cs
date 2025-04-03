@@ -1,5 +1,5 @@
 using System.Reflection;
-using Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclaration;
+using Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations;
 using Defra.TradeImportsDataApi.Api.Endpoints.Gmrs;
 using Defra.TradeImportsDataApi.Api.Endpoints.ImportNotifications;
 using Defra.TradeImportsDataApi.Api.Services;

@@ -3,26 +3,26 @@ using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclaration;
+namespace Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations;
 
 public static class EndpointRouteBuilderExtensions
 {
     public static void MapCustomsDeclarationEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapGet("customs-declaration/{mrn}/", Get)
+        app.MapGet("customs-declarations/{mrn}/", Get)
             .WithName("CustomsDeclarationByMrn")
-            .WithTags("CustomsDeclaration")
+            .WithTags("CustomsDeclarations")
             .WithSummary("Get CustomsDeclaration")
-            .WithDescription("Get a CustomsDeclaration by CHED ID")
+            .WithDescription("Get a Customs Declaration by MRN")
             .Produces<CustomsDeclarationResponse>()
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status500InternalServerError);
 
-        app.MapPut("customs-declaration/{mrn}/", Put)
+        app.MapPut("customs-declarations/{mrn}/", Put)
             .WithName("PutCustomsDeclaration")
-            .WithTags("CustomsDeclaration")
+            .WithTags("CustomsDeclarations")
             .WithSummary("Put CustomsDeclaration")
-            .WithDescription("Put a CustomsDeclaration")
+            .WithDescription("Put a Customs Declaration")
             .Produces<CustomsDeclarationResponse>()
             .ProducesProblem(StatusCodes.Status201Created)
             .ProducesProblem(StatusCodes.Status200OK)

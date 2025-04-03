@@ -16,13 +16,13 @@
     }
   ],
   "paths": {
-    "/customs-declaration/{mrn}": {
+    "/customs-declarations/{mrn}": {
       "get": {
         "tags": [
-          "CustomsDeclaration"
+          "CustomsDeclarations"
         ],
         "summary": "Get CustomsDeclaration",
-        "description": "Get a CustomsDeclaration by CHED ID",
+        "description": "Get a Customs Declaration by MRN",
         "operationId": "CustomsDeclarationByMrn",
         "parameters": [
           {
@@ -40,7 +40,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclaration.CustomsDeclarationResponse"
+                  "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations.CustomsDeclarationResponse"
                 }
               }
             }
@@ -69,10 +69,10 @@
       },
       "put": {
         "tags": [
-          "CustomsDeclaration"
+          "CustomsDeclarations"
         ],
         "summary": "Put CustomsDeclaration",
-        "description": "Put a CustomsDeclaration",
+        "description": "Put a Customs Declaration",
         "operationId": "PutCustomsDeclaration",
         "parameters": [
           {
@@ -218,8 +218,8 @@
           "ImportNotifications"
         ],
         "summary": "Get ImportNotification",
-        "description": "Get an ImportNotifications by CHED ID",
-        "operationId": "ImportNotificationsByChedId",
+        "description": "Get an Import Notifications by CHED ID",
+        "operationId": "ImportNotificationByChedId",
         "parameters": [
           {
             "name": "chedId",
@@ -267,8 +267,8 @@
         "tags": [
           "ImportNotifications"
         ],
-        "summary": "Put ImportNotifications",
-        "description": "Put an ImportNotifications",
+        "summary": "Put ImportNotification",
+        "description": "Put an Import Notification",
         "operationId": "PutImportNotification",
         "parameters": [
           {
@@ -358,7 +358,7 @@
   },
   "components": {
     "schemas": {
-      "Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclaration.CustomsDeclarationResponse": {
+      "Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations.CustomsDeclarationResponse": {
         "type": "object",
         "properties": {
           "data": {
