@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Defra.TradeImportsDataApi.Api.Authentication;
 using Defra.TradeImportsDataApi.Api.Extensions;
 using Defra.TradeImportsDataApi.Api.Services;
@@ -10,9 +11,9 @@ namespace Defra.TradeImportsDataApi.Api.Endpoints.ImportNotifications;
 
 public static class EndpointRouteBuilderExtensions
 {
-    public static void MapImportNotificationEndpoints(this IEndpointRouteBuilder app)
+    public static void MapImportNotificationEndpoints(this IEndpointRouteBuilder app, bool isDevelopment)
     {
-        app.MapGet("import-notifications/{chedId}/", Get)
+        var route = app.MapGet("import-notifications/{chedId}/", Get)
             .WithName("ImportNotificationByChedId")
             .WithTags("ImportNotifications")
             .WithSummary("Get ImportNotification")
@@ -22,7 +23,9 @@ public static class EndpointRouteBuilderExtensions
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .RequireAuthorization(PolicyNames.Read);
 
-        app.MapPut("import-notifications/{chedId}/", Put)
+        AllowAnonymousForDevelopment(isDevelopment, route);
+
+        route = app.MapPut("import-notifications/{chedId}/", Put)
             .WithName("PutImportNotification")
             .WithTags("ImportNotifications")
             .WithSummary("Put ImportNotification")
@@ -32,6 +35,15 @@ public static class EndpointRouteBuilderExtensions
             .ProducesProblem(StatusCodes.Status409Conflict)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .RequireAuthorization(PolicyNames.Write);
+
+        AllowAnonymousForDevelopment(isDevelopment, route);
+    }
+
+    [ExcludeFromCodeCoverage]
+    private static void AllowAnonymousForDevelopment(bool isDevelopment, RouteHandlerBuilder route)
+    {
+        if (isDevelopment)
+            route.AllowAnonymous();
     }
 
     /// <param name="chedId" example="CHEDA.GB.2024.1020304">CHED ID</param>

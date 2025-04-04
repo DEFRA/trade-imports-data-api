@@ -4,7 +4,6 @@ namespace Defra.TradeImportsDataApi.Api.Configuration;
 
 public class AclOptions
 {
-    public bool Enabled { get; init; } = true;
     public Dictionary<string, Client> Clients { get; init; } = new();
 
     public class Client

@@ -142,14 +142,15 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
 static WebApplication BuildWebApplication(WebApplicationBuilder builder)
 {
     var app = builder.Build();
+    var isDevelopment = app.Environment.IsDevelopment();
 
     app.UseHeaderPropagation();
     app.UseAuthentication();
     app.UseAuthorization();
     app.MapHealth();
-    app.MapGmrEndpoints();
-    app.MapImportNotificationEndpoints();
-    app.MapCustomsDeclarationEndpoints();
+    app.MapGmrEndpoints(isDevelopment);
+    app.MapImportNotificationEndpoints(isDevelopment);
+    app.MapCustomsDeclarationEndpoints(isDevelopment);
 
     app.UseSwagger(options =>
     {
