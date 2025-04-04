@@ -1,3 +1,4 @@
+using Defra.TradeImportsDataApi.Api.Authentication;
 using Defra.TradeImportsDataApi.Api.Extensions;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Data;
@@ -18,7 +19,8 @@ public static class EndpointRouteBuilderExtensions
             .WithDescription("Get an Import Notifications by CHED ID")
             .Produces<ImportNotificationResponse>()
             .ProducesProblem(StatusCodes.Status400BadRequest)
-            .ProducesProblem(StatusCodes.Status500InternalServerError);
+            .ProducesProblem(StatusCodes.Status500InternalServerError)
+            .RequireAuthorization(PolicyNames.Read);
 
         app.MapPut("import-notifications/{chedId}/", Put)
             .WithName("PutImportNotification")
@@ -28,7 +30,8 @@ public static class EndpointRouteBuilderExtensions
             .Produces<ImportNotificationResponse>()
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status409Conflict)
-            .ProducesProblem(StatusCodes.Status500InternalServerError);
+            .ProducesProblem(StatusCodes.Status500InternalServerError)
+            .RequireAuthorization(PolicyNames.Write);
     }
 
     /// <param name="chedId" example="CHEDA.GB.2024.1020304">CHED ID</param>

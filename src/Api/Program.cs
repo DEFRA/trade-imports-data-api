@@ -1,7 +1,9 @@
 using System.Reflection;
+using Defra.TradeImportsDataApi.Api.Authentication;
 using Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations;
 using Defra.TradeImportsDataApi.Api.Endpoints.Gmrs;
 using Defra.TradeImportsDataApi.Api.Endpoints.ImportNotifications;
+using Defra.TradeImportsDataApi.Api.Health;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Api.Utils;
 using Defra.TradeImportsDataApi.Api.Utils.Logging;
@@ -64,9 +66,7 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
     // This adds default rate limiter, total request timeout, retries, circuit breaker and timeout per attempt
     builder.Services.ConfigureHttpClientDefaults(options => options.AddStandardResilienceHandler());
     builder.Services.AddProblemDetails();
-    builder
-        .Services.AddHealthChecks()
-        .AddMongoDb(provider => provider.GetRequiredService<IMongoDatabase>(), timeout: TimeSpan.FromSeconds(10));
+    builder.Services.AddHealth();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen(c =>
     {
@@ -112,6 +112,8 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
     builder.Services.AddTransient<ICustomsDeclarationService, CustomsDeclarationService>();
 
     builder.Services.AddDbContext(builder.Configuration);
+
+    builder.Services.AddAuthenticationAuthorization();
 }
 
 static WebApplication BuildWebApplication(WebApplicationBuilder builder)
@@ -119,7 +121,9 @@ static WebApplication BuildWebApplication(WebApplicationBuilder builder)
     var app = builder.Build();
 
     app.UseHeaderPropagation();
-    app.MapHealthChecks("/health");
+    app.UseAuthentication();
+    app.UseAuthorization();
+    app.MapHealth();
     app.MapGmrEndpoints();
     app.MapImportNotificationEndpoints();
     app.MapCustomsDeclarationEndpoints();

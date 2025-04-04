@@ -1,3 +1,4 @@
+using Defra.TradeImportsDataApi.Api.Authentication;
 using Defra.TradeImportsDataApi.Api.Extensions;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Data;
@@ -17,7 +18,8 @@ public static class EndpointRouteBuilderExtensions
             .WithDescription("Get a Customs Declaration by MRN")
             .Produces<CustomsDeclarationResponse>()
             .ProducesProblem(StatusCodes.Status400BadRequest)
-            .ProducesProblem(StatusCodes.Status500InternalServerError);
+            .ProducesProblem(StatusCodes.Status500InternalServerError)
+            .RequireAuthorization(PolicyNames.Read);
 
         app.MapPut("customs-declarations/{mrn}/", Put)
             .WithName("PutCustomsDeclaration")
@@ -27,7 +29,8 @@ public static class EndpointRouteBuilderExtensions
             .Produces<CustomsDeclarationResponse>()
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status409Conflict)
-            .ProducesProblem(StatusCodes.Status500InternalServerError);
+            .ProducesProblem(StatusCodes.Status500InternalServerError)
+            .RequireAuthorization(PolicyNames.Write);
     }
 
     /// <param name="mrn">MRN</param>

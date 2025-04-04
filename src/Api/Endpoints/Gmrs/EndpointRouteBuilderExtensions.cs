@@ -1,3 +1,4 @@
+using Defra.TradeImportsDataApi.Api.Authentication;
 using Defra.TradeImportsDataApi.Api.Extensions;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Data;
@@ -17,7 +18,8 @@ public static class EndpointRouteBuilderExtensions
             .WithDescription("Get a GMR by GMR ID")
             .Produces<GmrResponse>()
             .ProducesProblem(StatusCodes.Status400BadRequest)
-            .ProducesProblem(StatusCodes.Status500InternalServerError);
+            .ProducesProblem(StatusCodes.Status500InternalServerError)
+            .RequireAuthorization(PolicyNames.Read);
 
         app.MapPut("gmrs/{gmrId}/", Put)
             .WithName("PutGmr")
@@ -27,7 +29,8 @@ public static class EndpointRouteBuilderExtensions
             .Produces<GmrResponse>()
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status409Conflict)
-            .ProducesProblem(StatusCodes.Status500InternalServerError);
+            .ProducesProblem(StatusCodes.Status500InternalServerError)
+            .RequireAuthorization(PolicyNames.Write);
     }
 
     /// <param name="gmrId">GMR ID</param>
