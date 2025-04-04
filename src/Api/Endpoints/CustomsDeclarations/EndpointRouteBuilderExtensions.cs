@@ -25,8 +25,6 @@ public static class EndpointRouteBuilderExtensions
             .WithSummary("Put CustomsDeclaration")
             .WithDescription("Put a Customs Declaration")
             .Produces<CustomsDeclarationResponse>()
-            .ProducesProblem(StatusCodes.Status201Created)
-            .ProducesProblem(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status409Conflict)
             .ProducesProblem(StatusCodes.Status500InternalServerError);

@@ -110,19 +110,9 @@
           "200": {
             "description": "OK",
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
-                }
-              }
-            }
-          },
-          "201": {
-            "description": "Created",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                  "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations.CustomsDeclarationResponse"
                 }
               }
             }
@@ -254,19 +244,9 @@
           "200": {
             "description": "OK",
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
-                }
-              }
-            }
-          },
-          "201": {
-            "description": "Created",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                  "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Api.Endpoints.Gmrs.GmrResponse"
                 }
               }
             }
@@ -399,19 +379,9 @@
           "200": {
             "description": "OK",
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
-                }
-              }
-            }
-          },
-          "201": {
-            "description": "Created",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                  "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Api.Endpoints.ImportNotifications.ImportNotificationResponse"
                 }
               }
             }

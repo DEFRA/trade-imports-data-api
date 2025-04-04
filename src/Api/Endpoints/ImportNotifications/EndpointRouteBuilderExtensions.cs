@@ -26,8 +26,6 @@ public static class EndpointRouteBuilderExtensions
             .WithSummary("Put ImportNotification")
             .WithDescription("Put an Import Notification")
             .Produces<ImportNotificationResponse>()
-            .ProducesProblem(StatusCodes.Status201Created)
-            .ProducesProblem(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status409Conflict)
             .ProducesProblem(StatusCodes.Status500InternalServerError);
