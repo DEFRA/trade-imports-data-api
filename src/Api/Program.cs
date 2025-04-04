@@ -1,7 +1,9 @@
 using System.Reflection;
+using Defra.TradeImportsDataApi.Api.Authentication;
 using Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations;
 using Defra.TradeImportsDataApi.Api.Endpoints.Gmrs;
 using Defra.TradeImportsDataApi.Api.Endpoints.ImportNotifications;
+using Defra.TradeImportsDataApi.Api.Health;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Api.Utils;
 using Defra.TradeImportsDataApi.Api.Utils.Logging;
@@ -64,9 +66,7 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
     // This adds default rate limiter, total request timeout, retries, circuit breaker and timeout per attempt
     builder.Services.ConfigureHttpClientDefaults(options => options.AddStandardResilienceHandler());
     builder.Services.AddProblemDetails();
-    builder
-        .Services.AddHealthChecks()
-        .AddMongoDb(provider => provider.GetRequiredService<IMongoDatabase>(), timeout: TimeSpan.FromSeconds(10));
+    builder.Services.AddHealth();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen(c =>
     {
@@ -74,6 +74,29 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
             new OpenApiServer
             {
                 Url = "https://" + (builder.Configuration.GetValue<string>("OpenApi:Host") ?? "localhost"),
+            }
+        );
+        c.AddSecurityDefinition(
+            "Basic",
+            new OpenApiSecurityScheme
+            {
+                Description = "RFC8725 Compliant JWT",
+                In = ParameterLocation.Header,
+                Name = "Authorization",
+                Scheme = "Basic",
+                Type = SecuritySchemeType.Http,
+            }
+        );
+        c.AddSecurityRequirement(
+            new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Basic" },
+                    },
+                    []
+                },
             }
         );
         c.IncludeXmlComments(Assembly.GetExecutingAssembly());
@@ -112,17 +135,22 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
     builder.Services.AddTransient<ICustomsDeclarationService, CustomsDeclarationService>();
 
     builder.Services.AddDbContext(builder.Configuration);
+
+    builder.Services.AddAuthenticationAuthorization();
 }
 
 static WebApplication BuildWebApplication(WebApplicationBuilder builder)
 {
     var app = builder.Build();
+    var isDevelopment = app.Environment.IsDevelopment();
 
     app.UseHeaderPropagation();
-    app.MapHealthChecks("/health");
-    app.MapGmrEndpoints();
-    app.MapImportNotificationEndpoints();
-    app.MapCustomsDeclarationEndpoints();
+    app.UseAuthentication();
+    app.UseAuthorization();
+    app.MapHealth();
+    app.MapGmrEndpoints(isDevelopment);
+    app.MapImportNotificationEndpoints(isDevelopment);
+    app.MapCustomsDeclarationEndpoints(isDevelopment);
 
     app.UseSwagger(options =>
     {

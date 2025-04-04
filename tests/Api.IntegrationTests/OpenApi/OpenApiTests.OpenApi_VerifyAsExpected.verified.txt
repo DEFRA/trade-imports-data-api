@@ -4712,6 +4712,18 @@
         },
         "additionalProperties": { }
       }
+    },
+    "securitySchemes": {
+      "Basic": {
+        "type": "http",
+        "description": "RFC8725 Compliant JWT",
+        "scheme": "Basic"
+      }
     }
-  }
+  },
+  "security": [
+    {
+      "Basic": [ ]
+    }
+  ]
 }

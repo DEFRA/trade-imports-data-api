@@ -1,7 +1,9 @@
+using System.Net;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 using Defra.TradeImportsDataApi.Testing;
+using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using WireMock.Server;
@@ -64,5 +66,25 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
         var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.CustomsDeclarations.Get(Mrn));
 
         await VerifyJson(await response.Content.ReadAsStringAsync(), _settings);
+    }
+
+    [Fact]
+    public async Task Get_WhenUnauthorized_ShouldBeUnauthorized()
+    {
+        var client = CreateClient(addDefaultAuthorizationHeader: false);
+
+        var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.CustomsDeclarations.Get(Mrn));
+
+        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+    }
+
+    [Fact]
+    public async Task Get_WhenWriteOnly_ShouldBeForbidden()
+    {
+        var client = CreateClient(testUser: TestUser.WriteOnly);
+
+        var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.CustomsDeclarations.Get(Mrn));
+
+        response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
     }
 }
