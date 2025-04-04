@@ -15,4 +15,11 @@ public static class Endpoints
 
         public static string Get(string chedId) => $"{Root}/{chedId}";
     }
+
+    public static class CustomsDeclarations
+    {
+        private const string Root = "/customs-declarations";
+
+        public static string Get(string mrn) => $"{Root}/{mrn}";
+    }
 }

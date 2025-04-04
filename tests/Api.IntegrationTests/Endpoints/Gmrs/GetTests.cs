@@ -1,4 +1,6 @@
 using Defra.TradeImportsDataApi.Api.Services;
+using Defra.TradeImportsDataApi.Data.Entities;
+using Defra.TradeImportsDataApi.Domain.Gvms;
 using Defra.TradeImportsDataApi.Testing;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,9 +14,7 @@ namespace Defra.TradeImportsDataApi.Api.IntegrationTests.Endpoints.Gmrs;
 public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
 {
     private IGmrService MockGmrService { get; } = Substitute.For<IGmrService>();
-
     private WireMockServer WireMock { get; }
-    private HttpClient HttpClient { get; }
     private const string GmrId = "gmrId";
     private readonly VerifySettings _settings;
 
@@ -23,10 +23,10 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
     {
         WireMock = context.Server;
         WireMock.Reset();
-        HttpClient = context.HttpClient;
 
         _settings = new VerifySettings();
         _settings.ScrubMember("traceId");
+        _settings.DontScrubDateTimes();
     }
 
     protected override void ConfigureTestServices(IServiceCollection services)
@@ -50,7 +50,7 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
     public async Task Get_WhenException_ShouldBeInternalServerError()
     {
         var client = CreateClient();
-        MockGmrService.GetGmr(GmrId).Throws(new Exception("BOOM!"));
+        MockGmrService.GetGmr(GmrId, Arg.Any<CancellationToken>()).Throws(new Exception("BOOM!"));
 
         var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.Gmrs.Get(GmrId));
 
@@ -61,7 +61,30 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
     public async Task Get_WhenBadRequest_ShouldBeBadRequest()
     {
         var client = CreateClient();
-        MockGmrService.GetGmr(GmrId).Throws(new BadHttpRequestException("Bad Request Detail"));
+        MockGmrService
+            .GetGmr(GmrId, Arg.Any<CancellationToken>())
+            .Throws(new BadHttpRequestException("Bad Request Detail"));
+
+        var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.Gmrs.Get(GmrId));
+
+        await VerifyJson(await response.Content.ReadAsStringAsync(), _settings);
+    }
+
+    [Fact]
+    public async Task Get_WhenFound_ShouldReturnContent()
+    {
+        var client = CreateClient();
+        MockGmrService
+            .GetGmr(GmrId, Arg.Any<CancellationToken>())
+            .Returns(
+                new GmrEntity
+                {
+                    Id = GmrId,
+                    Data = new Gmr(),
+                    Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                    Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+                }
+            );
 
         var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.Gmrs.Get(GmrId));
 

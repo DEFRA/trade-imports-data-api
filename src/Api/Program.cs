@@ -1,5 +1,5 @@
 using System.Reflection;
-using Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclaration;
+using Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations;
 using Defra.TradeImportsDataApi.Api.Endpoints.Gmrs;
 using Defra.TradeImportsDataApi.Api.Endpoints.ImportNotifications;
 using Defra.TradeImportsDataApi.Api.Services;
@@ -108,6 +108,8 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
     });
 
     builder.Services.AddTransient<IGmrService, GmrService>();
+    builder.Services.AddTransient<IImportNotificationService, ImportNotificationService>();
+    builder.Services.AddTransient<ICustomsDeclarationService, CustomsDeclarationService>();
 
     builder.Services.AddDbContext(builder.Configuration);
 }

@@ -16,18 +16,19 @@
     }
   ],
   "paths": {
-    "/customs-declaration/{mrn}": {
+    "/customs-declarations/{mrn}": {
       "get": {
         "tags": [
-          "CustomsDeclaration"
+          "CustomsDeclarations"
         ],
         "summary": "Get CustomsDeclaration",
-        "description": "Get a CustomsDeclaration by CHED ID",
+        "description": "Get a Customs Declaration by MRN",
         "operationId": "CustomsDeclarationByMrn",
         "parameters": [
           {
             "name": "mrn",
             "in": "path",
+            "description": "MRN",
             "required": true,
             "schema": {
               "type": "string"
@@ -40,7 +41,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclaration.CustomsDeclarationResponse"
+                  "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations.CustomsDeclarationResponse"
                 }
               }
             }
@@ -69,10 +70,10 @@
       },
       "put": {
         "tags": [
-          "CustomsDeclaration"
+          "CustomsDeclarations"
         ],
         "summary": "Put CustomsDeclaration",
-        "description": "Put a CustomsDeclaration",
+        "description": "Put a Customs Declaration",
         "operationId": "PutCustomsDeclaration",
         "parameters": [
           {
@@ -109,19 +110,9 @@
           "200": {
             "description": "OK",
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
-                }
-              }
-            }
-          },
-          "201": {
-            "description": "Created",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                  "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations.CustomsDeclarationResponse"
                 }
               }
             }
@@ -210,6 +201,87 @@
             }
           }
         }
+      },
+      "put": {
+        "tags": [
+          "Gmrs"
+        ],
+        "summary": "Put Gmr",
+        "description": "Put a GMR",
+        "operationId": "PutGmr",
+        "parameters": [
+          {
+            "name": "gmrId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Gvms.Gmr"
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Api.Endpoints.Gmrs.GmrResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/import-notifications/{chedId}": {
@@ -218,16 +290,18 @@
           "ImportNotifications"
         ],
         "summary": "Get ImportNotification",
-        "description": "Get an ImportNotifications by CHED ID",
-        "operationId": "ImportNotificationsByChedId",
+        "description": "Get an Import Notifications by CHED ID",
+        "operationId": "ImportNotificationByChedId",
         "parameters": [
           {
             "name": "chedId",
             "in": "path",
+            "description": "CHED ID",
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "CHEDA.GB.2024.1020304"
           }
         ],
         "responses": {
@@ -267,8 +341,8 @@
         "tags": [
           "ImportNotifications"
         ],
-        "summary": "Put ImportNotifications",
-        "description": "Put an ImportNotifications",
+        "summary": "Put ImportNotification",
+        "description": "Put an Import Notification",
         "operationId": "PutImportNotification",
         "parameters": [
           {
@@ -305,19 +379,9 @@
           "200": {
             "description": "OK",
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
-                }
-              }
-            }
-          },
-          "201": {
-            "description": "Created",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                  "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Api.Endpoints.ImportNotifications.ImportNotificationResponse"
                 }
               }
             }
@@ -358,7 +422,7 @@
   },
   "components": {
     "schemas": {
-      "Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclaration.CustomsDeclarationResponse": {
+      "Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations.CustomsDeclarationResponse": {
         "type": "object",
         "properties": {
           "data": {

@@ -1,20 +1,20 @@
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Data.Entities;
-using Defra.TradeImportsDataApi.Domain.Ipaffs;
+using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 using Defra.TradeImportsDataApi.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using WireMock.Server;
 using Xunit.Abstractions;
 
-namespace Defra.TradeImportsDataApi.Api.IntegrationTests.Endpoints.ImportNotifications;
+namespace Defra.TradeImportsDataApi.Api.IntegrationTests.Endpoints.CustomsDeclarations;
 
 public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
 {
-    private IImportNotificationService MockImportNotificationService { get; } =
-        Substitute.For<IImportNotificationService>();
+    private ICustomsDeclarationService MockCustomsDeclarationService { get; } =
+        Substitute.For<ICustomsDeclarationService>();
     private WireMockServer WireMock { get; }
-    private const string ChedId = "chedId";
+    private const string Mrn = "mrn";
     private readonly VerifySettings _settings;
 
     public GetTests(ApiWebApplicationFactory factory, ITestOutputHelper outputHelper, WireMockContext context)
@@ -32,7 +32,7 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
     {
         base.ConfigureTestServices(services);
 
-        services.AddTransient<IImportNotificationService>(_ => MockImportNotificationService);
+        services.AddTransient<ICustomsDeclarationService>(_ => MockCustomsDeclarationService);
     }
 
     [Fact]
@@ -40,7 +40,7 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
     {
         var client = CreateClient();
 
-        var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.ImportNotifications.Get(ChedId));
+        var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.CustomsDeclarations.Get(Mrn));
 
         await VerifyJson(await response.Content.ReadAsStringAsync(), _settings);
     }
@@ -49,20 +49,19 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
     public async Task Get_WhenFound_ShouldReturnContent()
     {
         var client = CreateClient();
-        MockImportNotificationService
-            .GetImportNotification(ChedId, Arg.Any<CancellationToken>())
+        MockCustomsDeclarationService
+            .GetCustomsDeclaration(Mrn, Arg.Any<CancellationToken>())
             .Returns(
-                new ImportNotificationEntity
+                new CustomsDeclarationEntity
                 {
-                    Id = ChedId,
-                    CustomDeclarationIdentifier = ChedId,
-                    Data = new ImportNotification(),
+                    Id = Mrn,
+                    Data = new CustomsDeclaration(),
                     Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
                     Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
                 }
             );
 
-        var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.ImportNotifications.Get(ChedId));
+        var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.CustomsDeclarations.Get(Mrn));
 
         await VerifyJson(await response.Content.ReadAsStringAsync(), _settings);
     }
