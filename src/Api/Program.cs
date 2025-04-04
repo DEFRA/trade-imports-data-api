@@ -76,6 +76,29 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
                 Url = "https://" + (builder.Configuration.GetValue<string>("OpenApi:Host") ?? "localhost"),
             }
         );
+        c.AddSecurityDefinition(
+            "Basic",
+            new OpenApiSecurityScheme
+            {
+                Description = "RFC8725 Compliant JWT",
+                In = ParameterLocation.Header,
+                Name = "Authorization",
+                Scheme = "Basic",
+                Type = SecuritySchemeType.Http,
+            }
+        );
+        c.AddSecurityRequirement(
+            new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Basic" },
+                    },
+                    []
+                },
+            }
+        );
         c.IncludeXmlComments(Assembly.GetExecutingAssembly());
         c.CustomSchemaIds(x => x.FullName);
         c.UseAllOfToExtendReferenceSchemas();

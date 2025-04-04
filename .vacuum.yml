@@ -15,3 +15,6 @@ rules:
   # We may implement rate limiting but currently do not have it
   # https://quobix.com/vacuum/rules/owasp/owasp-rate-limit/
   owasp-rate-limit: false
+  # We are implementing basic auth
+  # https://quobix.com/vacuum/rules/owasp/owasp-no-http-basic/
+  owasp-no-http-basic: false
