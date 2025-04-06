@@ -8,6 +8,10 @@ namespace Defra.TradeImportsDataApi.Domain.MongoDB.Tests;
 
 public class BsonDateTimeSerializationTests
 {
+    /// <summary>
+    /// Given an Unspecified DateTime Kind, serialize to BSON and then round trip back to the original type,
+    /// ensuring the Unspecified DateTime Kind is not lost.
+    /// </summary>
     [Fact]
     public void DomainTypesWithUnspecifiedDateTimeKind_RoundTripAsExpected()
     {
@@ -16,25 +20,25 @@ public class BsonDateTimeSerializationTests
         var dateTime = new DateTime(2025, 4, 6, 18, 0, 0, DateTimeKind.Unspecified);
 
         // Gvms
-        ActAndAssertRoundTrip(new PlannedCrossing { DepartsAt = dateTime }, x => x.DepartsAt);
-        ActAndAssertRoundTrip(new ActualCrossing { ArrivesAt = dateTime }, x => x.ArrivesAt);
-        ActAndAssertRoundTrip(new CheckedInCrossing { ArrivesAt = dateTime }, x => x.ArrivesAt);
+        SerializeThenDeserializeAndAssertKind(new PlannedCrossing { DepartsAt = dateTime }, x => x.DepartsAt);
+        SerializeThenDeserializeAndAssertKind(new ActualCrossing { ArrivesAt = dateTime }, x => x.ArrivesAt);
+        SerializeThenDeserializeAndAssertKind(new CheckedInCrossing { ArrivesAt = dateTime }, x => x.ArrivesAt);
 
         // Ipaffs
-        ActAndAssertRoundTrip(new Applicant { SampledOn = dateTime }, x => x.SampledOn);
-        ActAndAssertRoundTrip(
+        SerializeThenDeserializeAndAssertKind(new Applicant { SampledOn = dateTime }, x => x.SampledOn);
+        SerializeThenDeserializeAndAssertKind(
             new JourneyRiskCategorisationResult { RiskLevelSetFor = dateTime },
             x => x.RiskLevelSetFor
         );
-        ActAndAssertRoundTrip(new LaboratoryTests { TestedOn = dateTime }, x => x.TestedOn);
-        ActAndAssertRoundTrip(new PartOne { ExitedPortOfOn = dateTime }, x => x.ExitedPortOfOn);
-        ActAndAssertRoundTrip(new PartOne { ArrivesAt = dateTime }, x => x.ArrivesAt);
-        ActAndAssertRoundTrip(new PartOne { DepartedOn = dateTime }, x => x.DepartedOn);
-        ActAndAssertRoundTrip(new RiskAssessmentResult { AssessedOn = dateTime }, x => x.AssessedOn);
-        ActAndAssertRoundTrip(new SealCheck { CheckedOn = dateTime }, x => x.CheckedOn);
+        SerializeThenDeserializeAndAssertKind(new LaboratoryTests { TestedOn = dateTime }, x => x.TestedOn);
+        SerializeThenDeserializeAndAssertKind(new PartOne { ExitedPortOfOn = dateTime }, x => x.ExitedPortOfOn);
+        SerializeThenDeserializeAndAssertKind(new PartOne { ArrivesAt = dateTime }, x => x.ArrivesAt);
+        SerializeThenDeserializeAndAssertKind(new PartOne { DepartedOn = dateTime }, x => x.DepartedOn);
+        SerializeThenDeserializeAndAssertKind(new RiskAssessmentResult { AssessedOn = dateTime }, x => x.AssessedOn);
+        SerializeThenDeserializeAndAssertKind(new SealCheck { CheckedOn = dateTime }, x => x.CheckedOn);
     }
 
-    private static void ActAndAssertRoundTrip<T>(T subject, Func<T, DateTime?> resolveDateTime)
+    private static void SerializeThenDeserializeAndAssertKind<T>(T subject, Func<T, DateTime?> resolveDateTime)
     {
         var bsonDocument = subject.ToBsonDocument();
 
