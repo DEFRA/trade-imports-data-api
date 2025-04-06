@@ -9,13 +9,12 @@ public static class ClassMapConfiguration
 {
     public static void Register()
     {
-        BsonClassMap.RegisterClassMap<PlannedCrossing>(cm =>
-        {
-            cm.AutoMap();
-            cm.GetMemberMap(c => c.DepartsAt)
-                .SetSerializer(new NullableSerializer<DateTime>(new DateTimeSerializer(DateTimeKind.Unspecified)));
-        });
+        RegisterGvms();
+        RegisterIpaffs();
+    }
 
+    private static void RegisterIpaffs()
+    {
         BsonClassMap.RegisterClassMap<Applicant>(cm =>
         {
             cm.AutoMap();
@@ -55,6 +54,23 @@ public static class ClassMapConfiguration
                 .SetSerializer(new NullableSerializer<DateTime>(new DateTimeSerializer(DateTimeKind.Unspecified)));
         });
 
+        BsonClassMap.RegisterClassMap<SealCheck>(cm =>
+        {
+            cm.AutoMap();
+            cm.GetMemberMap(c => c.CheckedOn)
+                .SetSerializer(new NullableSerializer<DateTime>(new DateTimeSerializer(DateTimeKind.Unspecified)));
+        });
+    }
+
+    private static void RegisterGvms()
+    {
+        BsonClassMap.RegisterClassMap<PlannedCrossing>(cm =>
+        {
+            cm.AutoMap();
+            cm.GetMemberMap(c => c.DepartsAt)
+                .SetSerializer(new NullableSerializer<DateTime>(new DateTimeSerializer(DateTimeKind.Unspecified)));
+        });
+
         BsonClassMap.RegisterClassMap<ActualCrossing>(cm =>
         {
             cm.AutoMap();
@@ -66,13 +82,6 @@ public static class ClassMapConfiguration
         {
             cm.AutoMap();
             cm.GetMemberMap(c => c.ArrivesAt)
-                .SetSerializer(new NullableSerializer<DateTime>(new DateTimeSerializer(DateTimeKind.Unspecified)));
-        });
-
-        BsonClassMap.RegisterClassMap<SealCheck>(cm =>
-        {
-            cm.AutoMap();
-            cm.GetMemberMap(c => c.CheckedOn)
                 .SetSerializer(new NullableSerializer<DateTime>(new DateTimeSerializer(DateTimeKind.Unspecified)));
         });
     }
