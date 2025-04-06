@@ -6,6 +6,12 @@
     <AssemblyName>Defra.TradeImportsDataApi.Domain</AssemblyName>
     <RootNamespace>Defra.TradeImportsDataApi.Domain</RootNamespace>
     <Nullable>enable</Nullable>
+    <IsPackable>true</IsPackable>
+    <PackageId>Defra.TradeImportsDataApi.Domain</PackageId>
+    <VersionPrefix>0.1.0</VersionPrefix>
+    <PackageDescription>Defra Trade Imports Data Api Domain</PackageDescription>
+    <Company>DEFRA</Company>
+    <RepositoryUrl>https://github.com/DEFRA/trade-imports-data-api</RepositoryUrl>
   </PropertyGroup>
 
 </Project>

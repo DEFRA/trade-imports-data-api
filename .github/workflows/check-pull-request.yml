@@ -33,6 +33,26 @@ jobs:
           tags: trade-imports-data-api:latest
       - name: Check with Trivy
         run: docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image trade-imports-data-api:latest --ignore-unfixed
+      - name: Pack NuGets
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number || '' }}
+          BUILD_NUMBER: ${{ github.run_number }}
+        run: |
+          if [ "$PR_NUMBER" != "" ]; then
+            echo "Building a pre-release package for PR #$PR_NUMBER"
+            dotnet pack --no-restore --configuration Release -o ./nupkg \
+              /p:VersionSuffix="pr-$PR_NUMBER.$BUILD_NUMBER"
+          else
+            echo "Building a stable release package"
+            dotnet pack --no-restore --configuration Release -o ./nupkg
+          fi
+      - name: Publish NuGets
+        env:
+          NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          dotnet nuget push ./nupkg/*.nupkg \
+            --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
+            --api-key $NUGET_AUTH_TOKEN
   sonarcloud-scan:
     name: CDP SonarCloud Scan
     uses: ./.github/workflows/sonarcloud.yml
