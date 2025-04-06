@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+using Defra.TradeImportsDataApi.Api.Authentication;
 using Defra.TradeImportsDataApi.Api.Extensions;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Data;
@@ -8,18 +10,21 @@ namespace Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations;
 
 public static class EndpointRouteBuilderExtensions
 {
-    public static void MapCustomsDeclarationEndpoints(this IEndpointRouteBuilder app)
+    public static void MapCustomsDeclarationEndpoints(this IEndpointRouteBuilder app, bool isDevelopment)
     {
-        app.MapGet("customs-declarations/{mrn}/", Get)
+        var route = app.MapGet("customs-declarations/{mrn}/", Get)
             .WithName("CustomsDeclarationByMrn")
             .WithTags("CustomsDeclarations")
             .WithSummary("Get CustomsDeclaration")
             .WithDescription("Get a Customs Declaration by MRN")
             .Produces<CustomsDeclarationResponse>()
             .ProducesProblem(StatusCodes.Status400BadRequest)
-            .ProducesProblem(StatusCodes.Status500InternalServerError);
+            .ProducesProblem(StatusCodes.Status500InternalServerError)
+            .RequireAuthorization(PolicyNames.Read);
 
-        app.MapPut("customs-declarations/{mrn}/", Put)
+        AllowAnonymousForDevelopment(isDevelopment, route);
+
+        route = app.MapPut("customs-declarations/{mrn}/", Put)
             .WithName("PutCustomsDeclaration")
             .WithTags("CustomsDeclarations")
             .WithSummary("Put CustomsDeclaration")
@@ -27,7 +32,17 @@ public static class EndpointRouteBuilderExtensions
             .Produces<CustomsDeclarationResponse>()
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status409Conflict)
-            .ProducesProblem(StatusCodes.Status500InternalServerError);
+            .ProducesProblem(StatusCodes.Status500InternalServerError)
+            .RequireAuthorization(PolicyNames.Write);
+
+        AllowAnonymousForDevelopment(isDevelopment, route);
+    }
+
+    [ExcludeFromCodeCoverage]
+    private static void AllowAnonymousForDevelopment(bool isDevelopment, RouteHandlerBuilder route)
+    {
+        if (isDevelopment)
+            route.AllowAnonymous();
     }
 
     /// <param name="mrn">MRN</param>

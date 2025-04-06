@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+using Defra.TradeImportsDataApi.Api.Authentication;
 using Defra.TradeImportsDataApi.Api.Extensions;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Data;
@@ -9,18 +11,21 @@ namespace Defra.TradeImportsDataApi.Api.Endpoints.ImportNotifications;
 
 public static class EndpointRouteBuilderExtensions
 {
-    public static void MapImportNotificationEndpoints(this IEndpointRouteBuilder app)
+    public static void MapImportNotificationEndpoints(this IEndpointRouteBuilder app, bool isDevelopment)
     {
-        app.MapGet("import-notifications/{chedId}/", Get)
+        var route = app.MapGet("import-notifications/{chedId}/", Get)
             .WithName("ImportNotificationByChedId")
             .WithTags("ImportNotifications")
             .WithSummary("Get ImportNotification")
             .WithDescription("Get an Import Notifications by CHED ID")
             .Produces<ImportNotificationResponse>()
             .ProducesProblem(StatusCodes.Status400BadRequest)
-            .ProducesProblem(StatusCodes.Status500InternalServerError);
+            .ProducesProblem(StatusCodes.Status500InternalServerError)
+            .RequireAuthorization(PolicyNames.Read);
 
-        app.MapPut("import-notifications/{chedId}/", Put)
+        AllowAnonymousForDevelopment(isDevelopment, route);
+
+        route = app.MapPut("import-notifications/{chedId}/", Put)
             .WithName("PutImportNotification")
             .WithTags("ImportNotifications")
             .WithSummary("Put ImportNotification")
@@ -28,7 +33,17 @@ public static class EndpointRouteBuilderExtensions
             .Produces<ImportNotificationResponse>()
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status409Conflict)
-            .ProducesProblem(StatusCodes.Status500InternalServerError);
+            .ProducesProblem(StatusCodes.Status500InternalServerError)
+            .RequireAuthorization(PolicyNames.Write);
+
+        AllowAnonymousForDevelopment(isDevelopment, route);
+    }
+
+    [ExcludeFromCodeCoverage]
+    private static void AllowAnonymousForDevelopment(bool isDevelopment, RouteHandlerBuilder route)
+    {
+        if (isDevelopment)
+            route.AllowAnonymous();
     }
 
     /// <param name="chedId" example="CHEDA.GB.2024.1020304">CHED ID</param>

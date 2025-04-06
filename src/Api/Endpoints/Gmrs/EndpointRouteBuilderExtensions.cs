@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+using Defra.TradeImportsDataApi.Api.Authentication;
 using Defra.TradeImportsDataApi.Api.Extensions;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Data;
@@ -8,18 +10,21 @@ namespace Defra.TradeImportsDataApi.Api.Endpoints.Gmrs;
 
 public static class EndpointRouteBuilderExtensions
 {
-    public static void MapGmrEndpoints(this IEndpointRouteBuilder app)
+    public static void MapGmrEndpoints(this IEndpointRouteBuilder app, bool isDevelopment)
     {
-        app.MapGet("gmrs/{gmrId}/", Get)
+        var route = app.MapGet("gmrs/{gmrId}/", Get)
             .WithName("GmrsByGmrId")
             .WithTags("Gmrs")
             .WithSummary("Get Gmr")
             .WithDescription("Get a GMR by GMR ID")
             .Produces<GmrResponse>()
             .ProducesProblem(StatusCodes.Status400BadRequest)
-            .ProducesProblem(StatusCodes.Status500InternalServerError);
+            .ProducesProblem(StatusCodes.Status500InternalServerError)
+            .RequireAuthorization(PolicyNames.Read);
 
-        app.MapPut("gmrs/{gmrId}/", Put)
+        AllowAnonymousForDevelopment(isDevelopment, route);
+
+        route = app.MapPut("gmrs/{gmrId}/", Put)
             .WithName("PutGmr")
             .WithTags("Gmrs")
             .WithSummary("Put Gmr")
@@ -27,7 +32,17 @@ public static class EndpointRouteBuilderExtensions
             .Produces<GmrResponse>()
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status409Conflict)
-            .ProducesProblem(StatusCodes.Status500InternalServerError);
+            .ProducesProblem(StatusCodes.Status500InternalServerError)
+            .RequireAuthorization(PolicyNames.Write);
+
+        AllowAnonymousForDevelopment(isDevelopment, route);
+    }
+
+    [ExcludeFromCodeCoverage]
+    private static void AllowAnonymousForDevelopment(bool isDevelopment, RouteHandlerBuilder route)
+    {
+        if (isDevelopment)
+            route.AllowAnonymous();
     }
 
     /// <param name="gmrId">GMR ID</param>

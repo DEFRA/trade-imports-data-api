@@ -1,0 +1,41 @@
+﻿{
+  Version: 1.1,
+  Content: {
+    Headers: [
+      {
+        Expires: [
+          Thu, 01 Jan 1970 00:00:00 GMT
+        ]
+      },
+      {
+        Content-Type: [
+          text/plain
+        ]
+      }
+    ]
+  },
+  StatusCode: OK,
+  ReasonPhrase: OK,
+  Headers: [
+    {
+      Cache-Control: [
+        no-store, no-cache
+      ]
+    },
+    {
+      Pragma: [
+        no-cache
+      ]
+    }
+  ],
+  TrailingHeaders: [],
+  RequestMessage: {
+    Version: 1.1,
+    Method: {
+      Method: GET
+    },
+    RequestUri: http://localhost/health,
+    Headers: []
+  },
+  IsSuccessStatusCode: true
+}

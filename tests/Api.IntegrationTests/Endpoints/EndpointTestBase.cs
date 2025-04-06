@@ -1,3 +1,6 @@
+using System.Net.Http.Headers;
+using System.Text;
+using Defra.TradeImportsDataApi.Api.Authentication;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,7 +31,7 @@ public class EndpointTestBase : IClassFixture<ApiWebApplicationFactory>
     /// <param name="services"></param>
     protected virtual void ConfigureTestServices(IServiceCollection services) { }
 
-    protected HttpClient CreateClient()
+    protected HttpClient CreateClient(bool addDefaultAuthorizationHeader = true, TestUser testUser = TestUser.ReadWrite)
     {
         var builder = _factory.WithWebHostBuilder(builder =>
         {
@@ -37,6 +40,26 @@ public class EndpointTestBase : IClassFixture<ApiWebApplicationFactory>
 
         var client = builder.CreateClient();
 
+        if (addDefaultAuthorizationHeader)
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+                BasicAuthenticationHandler.SchemeName,
+                Convert.ToBase64String(
+                    testUser switch
+                    {
+                        TestUser.ReadOnly => "IntegrationTest-Read:integration-test-read"u8.ToArray(),
+                        TestUser.WriteOnly => "IntegrationTest-Write:integration-test-write"u8.ToArray(),
+                        _ => "IntegrationTest-ReadWrite:integration-test-readwrite"u8.ToArray(),
+                    }
+                )
+            );
+
         return client;
+    }
+
+    protected enum TestUser
+    {
+        ReadWrite,
+        ReadOnly,
+        WriteOnly,
     }
 }
