@@ -14,10 +14,7 @@ public class LaboratoryTests
 
     [JsonPropertyName("testedOn")]
     [System.ComponentModel.Description("Date of tests")]
-    [
-        UnknownTimeZoneDateTimeJsonConverter(nameof(TestedOn)),
-        MongoDB.Bson.Serialization.Attributes.BsonDateTimeOptions(Kind = DateTimeKind.Unspecified)
-    ]
+    [UnknownTimeZoneDateTimeJsonConverter(nameof(TestedOn))]
     public DateTime? TestedOn { get; set; }
 
     /// <summary>

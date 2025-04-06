@@ -102,9 +102,6 @@ public class Applicant
 
     [JsonPropertyName("sampledOn")]
     [System.ComponentModel.Description("DateTime")]
-    [
-        UnknownTimeZoneDateTimeJsonConverter(nameof(SampledOn)),
-        MongoDB.Bson.Serialization.Attributes.BsonDateTimeOptions(Kind = DateTimeKind.Unspecified)
-    ]
+    [UnknownTimeZoneDateTimeJsonConverter(nameof(SampledOn))]
     public DateTime? SampledOn { get; set; }
 }

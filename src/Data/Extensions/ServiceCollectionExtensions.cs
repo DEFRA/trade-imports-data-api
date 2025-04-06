@@ -1,4 +1,5 @@
 using Defra.TradeImportsDataApi.Data.Mongo;
+using Defra.TradeImportsDataApi.Domain.MongoDB;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -39,6 +40,7 @@ public static class ServiceCollectionExtensions
             };
 
             ConventionRegistry.Register(nameof(conventionPack), conventionPack, _ => true);
+            ClassMapConfiguration.Register();
 
             return client.GetDatabase(options?.Value.DatabaseName);
         });

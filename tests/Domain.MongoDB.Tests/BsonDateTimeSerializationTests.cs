@@ -11,6 +11,8 @@ public class BsonDateTimeSerializationTests
     [Fact]
     public void DomainTypesWithUnspecifiedDateTimeKind_RoundTripAsExpected()
     {
+        ClassMapConfiguration.Register();
+
         var dateTime = new DateTime(2025, 4, 6, 18, 0, 0, DateTimeKind.Unspecified);
 
         ActAndAssertRoundTrip(new PlannedCrossing { DepartsAt = dateTime }, x => x.DepartsAt);
