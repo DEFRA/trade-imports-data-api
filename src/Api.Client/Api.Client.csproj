@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>Defra.TradeImportsDataApi.Api.Client</AssemblyName>
+    <RootNamespace>Defra.TradeImportsDataApi.Api.Client</RootNamespace>
+    <Nullable>enable</Nullable>
+    <IsPackable>true</IsPackable>
+    <PackageId>Defra.TradeImportsDataApi.Api.Client</PackageId>
+    <VersionPrefix>0.1.0</VersionPrefix>
+    <PackageDescription>Defra Trade Imports Data Api Client</PackageDescription>
+    <Company>DEFRA</Company>
+    <RepositoryUrl>https://github.com/DEFRA/trade-imports-data-api</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\Domain.csproj" />
+  </ItemGroup>
+
+</Project>
