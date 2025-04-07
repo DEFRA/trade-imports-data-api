@@ -35,6 +35,7 @@ jobs:
       - name: Check with Trivy
         run: docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image trade-imports-data-api:latest --ignore-unfixed
       - name: Pack NuGets
+        if: github.actor != 'dependabot[bot]'
         env:
           PR_NUMBER: ${{ github.event.pull_request.number || '' }}
           BUILD_NUMBER: ${{ github.run_number }}
@@ -43,6 +44,7 @@ jobs:
           dotnet pack --no-restore --configuration Release -o ./nupkg \
             /p:VersionSuffix="pr-$PR_NUMBER.$BUILD_NUMBER"
       - name: Publish NuGets
+        if: github.actor != 'dependabot[bot]'
         run: |
           dotnet nuget push ./nupkg/*.nupkg \
             --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
