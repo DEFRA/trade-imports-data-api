@@ -31,18 +31,9 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Pack NuGets
-        env:
-          PR_NUMBER: ${{ github.event.pull_request.number || '' }}
-          BUILD_NUMBER: ${{ github.run_number }}
         run: |
-          if [ "$PR_NUMBER" != "" ]; then
-            echo "Building a pre-release package for PR #$PR_NUMBER"
-            dotnet pack --configuration Release -o ./nupkg \
-              /p:VersionSuffix="pr-$PR_NUMBER.$BUILD_NUMBER"
-          else
-            echo "Building a stable release package"
-            dotnet pack --configuration Release -o ./nupkg
-          fi
+          echo "Building a stable release package"
+          dotnet pack --configuration Release -o ./nupkg
       - name: Publish NuGets
         run: |
           dotnet nuget push ./nupkg/*.nupkg \

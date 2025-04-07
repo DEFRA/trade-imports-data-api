@@ -39,14 +39,9 @@ jobs:
           PR_NUMBER: ${{ github.event.pull_request.number || '' }}
           BUILD_NUMBER: ${{ github.run_number }}
         run: |
-          if [ "$PR_NUMBER" != "" ]; then
-            echo "Building a pre-release package for PR #$PR_NUMBER"
-            dotnet pack --no-restore --configuration Release -o ./nupkg \
-              /p:VersionSuffix="pr-$PR_NUMBER.$BUILD_NUMBER"
-          else
-            echo "Building a stable release package"
-            dotnet pack --no-restore --configuration Release -o ./nupkg
-          fi
+          echo "Building a pre-release package for PR #$PR_NUMBER"
+          dotnet pack --no-restore --configuration Release -o ./nupkg \
+            /p:VersionSuffix="pr-$PR_NUMBER.$BUILD_NUMBER"
       - name: Publish NuGets
         run: |
           dotnet nuget push ./nupkg/*.nupkg \
