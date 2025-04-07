@@ -11,6 +11,9 @@ on:
       - synchronize
       - ready_for_review
 
+permissions:
+  packages: write
+
 jobs:
   pr-validator:
     name: Run Pull Request Checks
