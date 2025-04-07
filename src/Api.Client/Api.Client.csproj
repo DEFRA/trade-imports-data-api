@@ -13,10 +13,15 @@
     <PackageDescription>Defra Trade Imports Data Api Client</PackageDescription>
     <Company>DEFRA</Company>
     <RepositoryUrl>https://github.com/DEFRA/trade-imports-data-api</RepositoryUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
 </Project>
