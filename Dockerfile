@@ -29,6 +29,7 @@ COPY .vacuum.yml .vacuum.yml
 RUN dotnet tool restore
 
 COPY src/Api/Api.csproj src/Api/Api.csproj
+COPY src/Api.Client/Api.Client.csproj src/Api.Client/Api.Client.csproj
 COPY src/Domain/Domain.csproj src/Domain/Domain.csproj
 COPY src/Domain.MongoDB/Domain.MongoDB.csproj src/Domain.MongoDB/Domain.MongoDB.csproj
 COPY src/Data/Data.csproj src/Data/Data.csproj
@@ -42,6 +43,7 @@ COPY Directory.Build.props Directory.Build.props
 RUN dotnet restore
 
 COPY src/Api src/Api
+COPY src/Api.Client src/Api.Client
 COPY src/Domain src/Domain
 COPY src/Domain.MongoDB src/Domain.MongoDB
 COPY src/Data src/Data

@@ -18,12 +18,13 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-      - name: Test
+      - name: Setup dotnet
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
             9.0
-      - run: dotnet test
+      - name: Test
+        run: dotnet test
       - name: Check Dockerfile Builds
         uses: docker/build-push-action@471d1dc4e07e5cdedd4c2171150001c434f0b7a4
         with:
@@ -33,6 +34,20 @@ jobs:
           tags: trade-imports-data-api:latest
       - name: Check with Trivy
         run: docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image trade-imports-data-api:latest --ignore-unfixed
+      - name: Pack NuGets
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number || '' }}
+          BUILD_NUMBER: ${{ github.run_number }}
+        run: |
+          echo "Building a pre-release package for PR #$PR_NUMBER"
+          dotnet pack --no-restore --configuration Release -o ./nupkg \
+            /p:VersionSuffix="pr-$PR_NUMBER.$BUILD_NUMBER"
+      - name: Publish NuGets
+        run: |
+          dotnet nuget push ./nupkg/*.nupkg \
+            --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
+            --api-key ${{ secrets.GITHUB_TOKEN }} \
+            --skip-duplicate
   sonarcloud-scan:
     name: CDP SonarCloud Scan
     uses: ./.github/workflows/sonarcloud.yml
