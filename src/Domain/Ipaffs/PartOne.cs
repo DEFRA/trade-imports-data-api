@@ -321,10 +321,7 @@ public class PartOne
 
     [JsonPropertyName("exitedPortOfOn")]
     [System.ComponentModel.Description("Date of Port Exit for EU Import Notification.")]
-    [
-        UnknownTimeZoneDateTimeJsonConverter(nameof(ExitedPortOfOn)),
-        MongoDB.Bson.Serialization.Attributes.BsonDateTimeOptions(Kind = DateTimeKind.Unspecified)
-    ]
+    [UnknownTimeZoneDateTimeJsonConverter(nameof(ExitedPortOfOn))]
     public DateTime? ExitedPortOfOn { get; set; }
 
     /// <summary>
@@ -387,10 +384,7 @@ public class PartOne
 
     [JsonPropertyName("arrivesAt")]
     [System.ComponentModel.Description("DateTime")]
-    [
-        UnknownTimeZoneDateTimeJsonConverter(nameof(ArrivesAt)),
-        MongoDB.Bson.Serialization.Attributes.BsonDateTimeOptions(Kind = DateTimeKind.Unspecified)
-    ]
+    [UnknownTimeZoneDateTimeJsonConverter(nameof(ArrivesAt))]
     public DateTime? ArrivesAt { get; set; }
 
     /// <summary>
@@ -399,9 +393,6 @@ public class PartOne
 
     [JsonPropertyName("departedOn")]
     [System.ComponentModel.Description("DateTime")]
-    [
-        UnknownTimeZoneDateTimeJsonConverter(nameof(DepartedOn)),
-        MongoDB.Bson.Serialization.Attributes.BsonDateTimeOptions(Kind = DateTimeKind.Unspecified)
-    ]
+    [UnknownTimeZoneDateTimeJsonConverter(nameof(DepartedOn))]
     public DateTime? DepartedOn { get; set; }
 }

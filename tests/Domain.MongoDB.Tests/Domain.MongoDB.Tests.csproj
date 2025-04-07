@@ -1,11 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <IsTestProject>true</IsTestProject>
-    <AssemblyName>Defra.TradeImportsDataApi.Api.IntegrationTests</AssemblyName>
-    <RootNamespace>Defra.TradeImportsDataApi.Api.IntegrationTests</RootNamespace>
+    <AssemblyName>Defra.TradeImportsDataApi.Domain.MongoDB.Tests</AssemblyName>
+    <RootNamespace>Defra.TradeImportsDataApi.Domain.MongoDB.Tests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Api\Api.csproj" />
+    <ProjectReference Include="..\..\src\Domain.MongoDB\Domain.MongoDB.csproj"/>
     <ProjectReference Include="..\Testing\Testing.csproj" />
   </ItemGroup>
 

@@ -38,9 +38,6 @@ public class SealCheck
 
     [JsonPropertyName("checkedOn")]
     [System.ComponentModel.Description("date and time of seal check")]
-    [
-        UnknownTimeZoneDateTimeJsonConverter(nameof(CheckedOn)),
-        MongoDB.Bson.Serialization.Attributes.BsonDateTimeOptions(Kind = DateTimeKind.Unspecified)
-    ]
+    [UnknownTimeZoneDateTimeJsonConverter(nameof(CheckedOn))]
     public DateTime? CheckedOn { get; set; }
 }

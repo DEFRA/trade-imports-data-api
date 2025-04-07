@@ -21,9 +21,6 @@ public class ActualCrossing
     [System.ComponentModel.Description(
         "The planned date and time of arrival, in local time of the arrival port. Must not include seconds, time zone or UTC marker"
     )]
-    [
-        UnknownTimeZoneDateTimeJsonConverter(nameof(ArrivesAt)),
-        MongoDB.Bson.Serialization.Attributes.BsonDateTimeOptions(Kind = DateTimeKind.Unspecified)
-    ]
+    [UnknownTimeZoneDateTimeJsonConverter(nameof(ArrivesAt))]
     public DateTime? ArrivesAt { get; set; }
 }
