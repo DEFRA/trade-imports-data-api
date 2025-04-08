@@ -28,7 +28,7 @@ public class PutTests : WireMockTestBase<WireMockContext>
     }
 
     [Fact]
-    public async Task PutImportNotification_NoEtag_ShouldNotBeNull()
+    public async Task PutImportNotification_WhenNoEtag_ShouldNotBeNull()
     {
         const string chedId = "CHED";
         var created = new DateTime(2025, 4, 7, 11, 0, 0, DateTimeKind.Utc);
@@ -66,7 +66,7 @@ public class PutTests : WireMockTestBase<WireMockContext>
     }
 
     [Fact]
-    public async Task PutImportNotification_WithEtag_ShouldNotBeNull()
+    public async Task PutImportNotification_WhenHasEtag_ShouldNotBeNull()
     {
         const string chedId = "CHED";
         var created = new DateTime(2025, 4, 7, 11, 0, 0, DateTimeKind.Utc);
@@ -101,5 +101,25 @@ public class PutTests : WireMockTestBase<WireMockContext>
 
         result.Should().NotBeNull();
         await Verify(result, _settings);
+    }
+
+    [Fact]
+    public async Task PutImportNotification_WhenBadRequest_ShouldThrow()
+    {
+        const string chedId = "CHED";
+        var data = new Domain.Ipaffs.ImportNotification { ReferenceNumber = chedId };
+        WireMock
+            .Given(
+                Request
+                    .Create()
+                    .WithPath($"/import-notifications/{chedId}")
+                    .WithBody(JsonSerializer.Serialize(data))
+                    .UsingPut()
+            )
+            .RespondWith(Response.Create().WithStatusCode(StatusCodes.Status400BadRequest));
+
+        var act = async () => await Subject.PutImportNotification(chedId, data, etag: null, CancellationToken.None);
+
+        await act.Should().ThrowAsync<HttpRequestException>();
     }
 }

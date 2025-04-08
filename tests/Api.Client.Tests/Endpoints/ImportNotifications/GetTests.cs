@@ -27,7 +27,7 @@ public class GetTests : WireMockTestBase<WireMockContext>
     }
 
     [Fact]
-    public async Task GetImportNotification_NotFound_ShouldBeNull()
+    public async Task GetImportNotification_WhenNotFound_ShouldBeNull()
     {
         var result = await Subject.GetImportNotification("unknown", CancellationToken.None);
 
@@ -35,7 +35,7 @@ public class GetTests : WireMockTestBase<WireMockContext>
     }
 
     [Fact]
-    public async Task GetImportNotification_Found_ShouldNotBeNull()
+    public async Task GetImportNotification_WhenFound_ShouldNotBeNull()
     {
         const string chedId = "CHED";
         var created = new DateTime(2025, 4, 7, 11, 0, 0, DateTimeKind.Utc);
