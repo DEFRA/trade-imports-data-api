@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using Defra.TradeImportsDataApi.Api.Authentication;
 using Defra.TradeImportsDataApi.Api.Extensions;
 using Defra.TradeImportsDataApi.Api.Services;
+using Defra.TradeImportsDataApi.Api.Utils;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -74,12 +75,14 @@ public static class EndpointRouteBuilderExtensions
         [FromRoute] string gmrId,
         HttpContext context,
         [FromBody] Domain.Gvms.Gmr data,
-        [FromHeader(Name = "If-Match")] string? etag,
+        [FromHeader(Name = "If-Match")] string? ifMatch,
         [FromServices] IGmrService gmrService,
         CancellationToken cancellationToken
     )
     {
         var gmrEntity = new GmrEntity { Id = gmrId, Data = data };
+
+        var etag = ETags.ValidateAndParseFirst(ifMatch);
 
         try
         {

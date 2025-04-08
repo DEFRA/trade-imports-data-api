@@ -60,12 +60,15 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
                     Data = new CustomsDeclaration(),
                     Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
                     Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+                    ETag = "etag",
                 }
             );
 
         var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.CustomsDeclarations.Get(Mrn));
 
-        await VerifyJson(await response.Content.ReadAsStringAsync(), _settings);
+        await VerifyJson(await response.Content.ReadAsStringAsync(), _settings)
+            .UseMethodName(nameof(Get_WhenFound_ShouldReturnContent));
+        await Verify(response, _settings).UseMethodName($"{nameof(Get_WhenFound_ShouldReturnContent)}_response");
     }
 
     [Fact]

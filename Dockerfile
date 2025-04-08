@@ -32,6 +32,7 @@ COPY src/Api/Api.csproj src/Api/Api.csproj
 COPY src/Api.Client/Api.Client.csproj src/Api.Client/Api.Client.csproj
 COPY src/Domain/Domain.csproj src/Domain/Domain.csproj
 COPY src/Data/Data.csproj src/Data/Data.csproj
+COPY tests/Api.Client.Tests/Api.Client.Tests.csproj tests/Api.Client.Tests/Api.Client.Tests.csproj
 COPY tests/Testing/Testing.csproj tests/Testing/Testing.csproj
 COPY tests/Api.Tests/Api.Tests.csproj tests/Api.Tests/Api.Tests.csproj
 COPY tests/Api.IntegrationTests/Api.IntegrationTests.csproj tests/Api.IntegrationTests/Api.IntegrationTests.csproj
@@ -45,6 +46,7 @@ COPY src/Api src/Api
 COPY src/Api.Client src/Api.Client
 COPY src/Domain src/Domain
 COPY src/Data src/Data
+COPY tests/Api.Client.Tests tests/Api.Client.Tests
 COPY tests/Testing tests/Testing
 COPY tests/Api.Tests tests/Api.Tests
 COPY tests/Api.IntegrationTests tests/Api.IntegrationTests
@@ -59,6 +61,7 @@ RUN vacuum lint -d -r .vacuum.yml openapi.json
 RUN dotnet test --no-restore tests/Api.Tests
 RUN dotnet test --no-restore tests/Api.IntegrationTests
 RUN dotnet test --no-restore tests/Data.Tests
+RUN dotnet test --no-restore tests/Api.Client.Tests
 
 FROM build AS publish
 

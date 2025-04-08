@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using Defra.TradeImportsDataApi.Api.Authentication;
 using Defra.TradeImportsDataApi.Api.Extensions;
 using Defra.TradeImportsDataApi.Api.Services;
+using Defra.TradeImportsDataApi.Api.Utils;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
@@ -75,7 +76,7 @@ public static class EndpointRouteBuilderExtensions
         [FromRoute] string chedId,
         HttpContext context,
         [FromBody] ImportNotification data,
-        [FromHeader(Name = "If-Match")] string? etag,
+        [FromHeader(Name = "If-Match")] string? ifMatch,
         [FromServices] IImportNotificationService importNotificationService,
         CancellationToken cancellationToken
     )
@@ -86,6 +87,8 @@ public static class EndpointRouteBuilderExtensions
             CustomDeclarationIdentifier = chedId,
             Data = data,
         };
+
+        var etag = ETags.ValidateAndParseFirst(ifMatch);
 
         try
         {
