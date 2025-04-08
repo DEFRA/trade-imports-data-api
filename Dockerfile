@@ -31,12 +31,11 @@ RUN dotnet tool restore
 COPY src/Api/Api.csproj src/Api/Api.csproj
 COPY src/Api.Client/Api.Client.csproj src/Api.Client/Api.Client.csproj
 COPY src/Domain/Domain.csproj src/Domain/Domain.csproj
-COPY src/Domain.MongoDB/Domain.MongoDB.csproj src/Domain.MongoDB/Domain.MongoDB.csproj
 COPY src/Data/Data.csproj src/Data/Data.csproj
 COPY tests/Testing/Testing.csproj tests/Testing/Testing.csproj
 COPY tests/Api.Tests/Api.Tests.csproj tests/Api.Tests/Api.Tests.csproj
 COPY tests/Api.IntegrationTests/Api.IntegrationTests.csproj tests/Api.IntegrationTests/Api.IntegrationTests.csproj
-COPY tests/Domain.MongoDB.Tests/Domain.MongoDB.Tests.csproj tests/Domain.MongoDB.Tests/Domain.MongoDB.Tests.csproj
+COPY tests/Data.Tests/Data.Tests.csproj tests/Data.Tests/Data.Tests.csproj
 COPY Defra.TradeImportsDataApi.sln Defra.TradeImportsDataApi.sln
 COPY Directory.Build.props Directory.Build.props
 
@@ -45,12 +44,11 @@ RUN dotnet restore
 COPY src/Api src/Api
 COPY src/Api.Client src/Api.Client
 COPY src/Domain src/Domain
-COPY src/Domain.MongoDB src/Domain.MongoDB
 COPY src/Data src/Data
 COPY tests/Testing tests/Testing
 COPY tests/Api.Tests tests/Api.Tests
 COPY tests/Api.IntegrationTests tests/Api.IntegrationTests
-COPY tests/Domain.MongoDB.Tests tests/Domain.MongoDB.Tests
+COPY tests/Data.Tests tests/Data.Tests
 
 RUN dotnet csharpier --check .
 
@@ -60,7 +58,7 @@ RUN vacuum lint -d -r .vacuum.yml openapi.json
 
 RUN dotnet test --no-restore tests/Api.Tests
 RUN dotnet test --no-restore tests/Api.IntegrationTests
-RUN dotnet test --no-restore tests/Domain.MongoDB.Tests
+RUN dotnet test --no-restore tests/Data.Tests
 
 FROM build AS publish
 

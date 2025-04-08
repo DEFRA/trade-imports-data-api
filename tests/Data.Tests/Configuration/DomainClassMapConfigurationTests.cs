@@ -1,12 +1,13 @@
+using Defra.TradeImportsDataApi.Data.Configuration;
 using Defra.TradeImportsDataApi.Domain.Gvms;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using FluentAssertions;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 
-namespace Defra.TradeImportsDataApi.Domain.MongoDB.Tests;
+namespace Defra.TradeImportsDataApi.Domain.MongoDB.Tests.Configuration;
 
-public class BsonDateTimeSerializationTests
+public class DomainClassMapConfigurationTests
 {
     /// <summary>
     /// Given an Unspecified DateTime Kind, serialize to BSON and then round trip back to the original type,
@@ -15,7 +16,7 @@ public class BsonDateTimeSerializationTests
     [Fact]
     public void DomainTypesWithUnspecifiedDateTimeKind_RoundTripAsExpected()
     {
-        ClassMapConfiguration.Register();
+        DomainClassMapConfiguration.Register();
 
         var dateTime = new DateTime(2025, 4, 6, 18, 0, 0, DateTimeKind.Unspecified);
 

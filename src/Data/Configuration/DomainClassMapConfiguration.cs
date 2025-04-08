@@ -3,9 +3,9 @@ using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 
-namespace Defra.TradeImportsDataApi.Domain.MongoDB;
+namespace Defra.TradeImportsDataApi.Data.Configuration;
 
-public static class ClassMapConfiguration
+public static class DomainClassMapConfiguration
 {
     public static void Register()
     {

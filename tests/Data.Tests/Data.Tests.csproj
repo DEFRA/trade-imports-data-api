@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Domain.MongoDB\Domain.MongoDB.csproj"/>
+    <ProjectReference Include="..\..\src\Data\Data.csproj" />
     <ProjectReference Include="..\Testing\Testing.csproj" />
   </ItemGroup>
 
