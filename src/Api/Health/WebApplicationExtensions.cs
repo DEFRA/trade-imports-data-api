@@ -23,7 +23,7 @@ public static class WebApplicationExtensions
                 "/health/all",
                 new HealthCheckOptions
                 {
-                    Predicate = _ => false,
+                    Predicate = _ => true,
                     ResponseWriter = (context, report) =>
                     {
                         context.Response.ContentType = "application/json; charset=utf-8";
