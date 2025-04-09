@@ -57,7 +57,7 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
                 new CustomsDeclarationEntity
                 {
                     Id = Mrn,
-                    Data = new CustomsDeclaration(),
+                    ClearanceRequest = new ClearanceRequest(),
                     Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
                     Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
                     ETag = "etag",

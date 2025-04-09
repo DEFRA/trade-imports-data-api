@@ -1,8 +1,9 @@
 using System.Text.RegularExpressions;
 
-namespace Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ClearanceRequest;
+namespace Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 
-public static partial class DocumentReferenceRegularExpressions
+// <summary> Common Health Entry Document reference regular expressions. </summary>
+public static partial class ChedReferenceRegexes
 {
     [GeneratedRegex(
         "(CHEDD|CHEDA|CHEDP|CHEDPP)\\.?GB\\.?(20|21)\\d{2}\\.?\\d{7}[rv]?",

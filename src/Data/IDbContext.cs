@@ -4,7 +4,7 @@ namespace Defra.TradeImportsDataApi.Data;
 
 public interface IDbContext
 {
-    IMongoCollectionSet<ImportNotificationEntity> Notifications { get; }
+    IMongoCollectionSet<ImportPreNotificationEntity> Notifications { get; }
 
     IMongoCollectionSet<CustomsDeclarationEntity> CustomDeclarations { get; }
 

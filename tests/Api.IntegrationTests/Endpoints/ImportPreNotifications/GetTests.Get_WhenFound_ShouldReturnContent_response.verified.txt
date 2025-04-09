@@ -24,7 +24,7 @@
     Method: {
       Method: GET
     },
-    RequestUri: http://localhost/import-notifications/chedId,
+    RequestUri: http://localhost/import-pre-notifications/chedId,
     Headers: [
       {
         Authorization: [

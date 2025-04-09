@@ -46,8 +46,8 @@ public class GetTests : WireMockTestBase<WireMockContext>
                     .Create()
                     .WithBody(
                         JsonSerializer.Serialize(
-                            new Defra.TradeImportsDataApi.Api.Endpoints.ImportNotifications.ImportNotificationResponse(
-                                new Domain.Ipaffs.ImportNotification { ReferenceNumber = chedId },
+                            new Defra.TradeImportsDataApi.Api.Endpoints.ImportPreNotifications.ImportPreNotificationResponse(
+                                new Domain.Ipaffs.ImportPreNotification { ReferenceNumber = chedId },
                                 created,
                                 updated
                             )

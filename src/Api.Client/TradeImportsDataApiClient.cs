@@ -42,7 +42,7 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
 
     public async Task PutImportNotification(
         string chedId,
-        Domain.Ipaffs.ImportNotification data,
+        Domain.Ipaffs.ImportPreNotification data,
         string? etag,
         CancellationToken cancellationToken
     )

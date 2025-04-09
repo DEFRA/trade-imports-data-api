@@ -1,5 +1,5 @@
 ﻿{
-  data: {
+  importPreNotification: {
     ipaffsId: null,
     etag: null,
     externalReferences: null,

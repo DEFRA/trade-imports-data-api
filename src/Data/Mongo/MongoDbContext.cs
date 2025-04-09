@@ -8,7 +8,7 @@ public class MongoDbContext : IDbContext
     public MongoDbContext(IMongoDatabase database)
     {
         Database = database;
-        Notifications = new MongoCollectionSet<ImportNotificationEntity>(this);
+        Notifications = new MongoCollectionSet<ImportPreNotificationEntity>(this);
         CustomDeclarations = new MongoCollectionSet<CustomsDeclarationEntity>(this);
         Gmrs = new MongoCollectionSet<GmrEntity>(this);
     }
@@ -16,7 +16,7 @@ public class MongoDbContext : IDbContext
     internal IMongoDatabase Database { get; }
     internal MongoDbTransaction? ActiveTransaction { get; private set; }
 
-    public IMongoCollectionSet<ImportNotificationEntity> Notifications { get; }
+    public IMongoCollectionSet<ImportPreNotificationEntity> Notifications { get; }
     public IMongoCollectionSet<CustomsDeclarationEntity> CustomDeclarations { get; }
     public IMongoCollectionSet<GmrEntity> Gmrs { get; }
 

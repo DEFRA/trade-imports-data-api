@@ -6,7 +6,7 @@ public interface ITradeImportsDataApiClient
 
     Task PutImportNotification(
         string chedId,
-        Domain.Ipaffs.ImportNotification data,
+        Domain.Ipaffs.ImportPreNotification data,
         string? etag,
         CancellationToken cancellationToken
     );

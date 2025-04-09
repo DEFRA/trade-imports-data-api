@@ -1,4 +1,4 @@
-namespace Defra.TradeImportsDataApi.Domain.CustomsDeclaration.Finalisation;
+namespace Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 
 public enum FinalState
 {

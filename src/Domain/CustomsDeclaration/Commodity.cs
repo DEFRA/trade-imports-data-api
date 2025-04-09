@@ -1,8 +1,8 @@
 using System.Text.Json.Serialization;
 
-namespace Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ClearanceRequest;
+namespace Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 
-public class Item
+public class Commodity
 {
     [JsonPropertyName("itemNumber")]
     public int? ItemNumber { get; set; }
@@ -22,21 +22,21 @@ public class Item
     [JsonPropertyName("consigneeName")]
     public string? ConsigneeName { get; set; }
 
-    [JsonPropertyName("itemNetMass")]
-    public decimal? ItemNetMass { get; set; }
+    [JsonPropertyName("netMass")]
+    public decimal? NetMass { get; set; }
 
-    [JsonPropertyName("itemSupplementaryUnits")]
-    public decimal? ItemSupplementaryUnits { get; set; }
+    [JsonPropertyName("supplementaryUnits")]
+    public decimal? SupplementaryUnits { get; set; }
 
-    [JsonPropertyName("itemThirdQuantity")]
-    public decimal? ItemThirdQuantity { get; set; }
+    [JsonPropertyName("thirdQuantity")]
+    public decimal? ThirdQuantity { get; set; }
 
-    [JsonPropertyName("itemOriginCountryCode")]
-    public string? ItemOriginCountryCode { get; set; }
+    [JsonPropertyName("originCountryCode")]
+    public string? OriginCountryCode { get; set; }
 
     [JsonPropertyName("documents")]
-    public Document[]? Documents { get; set; }
+    public ImportDocument[]? Documents { get; set; }
 
     [JsonPropertyName("checks")]
-    public Check[]? Checks { get; set; }
+    public CommodityCheck[]? Checks { get; set; }
 }

@@ -9,12 +9,12 @@ using NSubstitute;
 using WireMock.Server;
 using Xunit.Abstractions;
 
-namespace Defra.TradeImportsDataApi.Api.IntegrationTests.Endpoints.ImportNotifications;
+namespace Defra.TradeImportsDataApi.Api.IntegrationTests.Endpoints.ImportPreNotifications;
 
 public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
 {
-    private IImportNotificationService MockImportNotificationService { get; } =
-        Substitute.For<IImportNotificationService>();
+    private IImportPreNotificationService MockImportNotificationService { get; } =
+        Substitute.For<IImportPreNotificationService>();
     private WireMockServer WireMock { get; }
     private const string ChedId = "chedId";
     private readonly VerifySettings _settings;
@@ -34,7 +34,7 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
     {
         base.ConfigureTestServices(services);
 
-        services.AddTransient<IImportNotificationService>(_ => MockImportNotificationService);
+        services.AddTransient<IImportPreNotificationService>(_ => MockImportNotificationService);
     }
 
     [Fact]
@@ -42,7 +42,7 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
     {
         var client = CreateClient();
 
-        var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.ImportNotifications.Get(ChedId));
+        var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.ImportPreNotifications.Get(ChedId));
 
         await VerifyJson(await response.Content.ReadAsStringAsync(), _settings);
     }
@@ -52,20 +52,20 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
     {
         var client = CreateClient();
         MockImportNotificationService
-            .GetImportNotification(ChedId, Arg.Any<CancellationToken>())
+            .GetImportPreNotification(ChedId, Arg.Any<CancellationToken>())
             .Returns(
-                new ImportNotificationEntity
+                new ImportPreNotificationEntity
                 {
                     Id = ChedId,
-                    CustomDeclarationIdentifier = ChedId,
-                    Data = new ImportNotification(),
+                    CustomsDeclarationIdentifier = ChedId,
+                    ImportPreNotification = new ImportPreNotification(),
                     Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
                     Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
                     ETag = "etag",
                 }
             );
 
-        var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.ImportNotifications.Get(ChedId));
+        var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.ImportPreNotifications.Get(ChedId));
 
         await VerifyJson(await response.Content.ReadAsStringAsync(), _settings)
             .UseMethodName(nameof(Get_WhenFound_ShouldReturnContent));
@@ -77,7 +77,7 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
     {
         var client = CreateClient(addDefaultAuthorizationHeader: false);
 
-        var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.ImportNotifications.Get(ChedId));
+        var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.ImportPreNotifications.Get(ChedId));
 
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
@@ -87,7 +87,7 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
     {
         var client = CreateClient(testUser: TestUser.WriteOnly);
 
-        var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.ImportNotifications.Get(ChedId));
+        var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.ImportPreNotifications.Get(ChedId));
 
         response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
     }

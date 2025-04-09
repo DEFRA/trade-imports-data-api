@@ -11,7 +11,7 @@ public class MongoIndexService(IMongoDatabase database, ILogger<MongoIndexServic
     {
         return CreateIndex(
             "CustomDeclarationIdentifierIdx",
-            Builders<ImportNotificationEntity>.IndexKeys.Ascending(n => n.CustomDeclarationIdentifier),
+            Builders<ImportPreNotificationEntity>.IndexKeys.Ascending(n => n.CustomsDeclarationIdentifier),
             cancellationToken: cancellationToken
         );
     }

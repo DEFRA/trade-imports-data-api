@@ -16,7 +16,7 @@ public class PutTests(WireMockContext context) : WireMockTestBase<WireMockContex
     public async Task PutImportNotification_WhenNoEtag_ShouldNotBeNull()
     {
         const string chedId = "CHED";
-        var data = new Domain.Ipaffs.ImportNotification { ReferenceNumber = chedId };
+        var data = new Domain.Ipaffs.ImportPreNotification() { ReferenceNumber = chedId };
         WireMock
             .Given(
                 Request
@@ -37,7 +37,7 @@ public class PutTests(WireMockContext context) : WireMockTestBase<WireMockContex
     public async Task PutImportNotification_WhenHasEtag_ShouldNotBeNull()
     {
         const string chedId = "CHED";
-        var data = new Domain.Ipaffs.ImportNotification { ReferenceNumber = chedId };
+        var data = new Domain.Ipaffs.ImportPreNotification { ReferenceNumber = chedId };
         WireMock
             .Given(
                 Request
@@ -59,7 +59,7 @@ public class PutTests(WireMockContext context) : WireMockTestBase<WireMockContex
     public async Task PutImportNotification_WhenBadRequest_ShouldThrow()
     {
         const string chedId = "CHED";
-        var data = new Domain.Ipaffs.ImportNotification { ReferenceNumber = chedId };
+        var data = new Domain.Ipaffs.ImportPreNotification { ReferenceNumber = chedId };
         WireMock
             .Given(
                 Request

@@ -82,7 +82,7 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
                 new GmrEntity
                 {
                     Id = GmrId,
-                    Data = new Gmr(),
+                    Gmr = new Gmr(),
                     Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
                     Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
                     ETag = "etag",

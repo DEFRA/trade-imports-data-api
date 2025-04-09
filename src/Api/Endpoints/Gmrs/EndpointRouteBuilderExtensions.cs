@@ -74,13 +74,13 @@ public static class EndpointRouteBuilderExtensions
     private static async Task<IResult> Put(
         [FromRoute] string gmrId,
         HttpContext context,
-        [FromBody] Domain.Gvms.Gmr data,
+        [FromBody] Domain.Gvms.Gmr gmr,
         [FromHeader(Name = "If-Match")] string? ifMatch,
         [FromServices] IGmrService gmrService,
         CancellationToken cancellationToken
     )
     {
-        var gmrEntity = new GmrEntity { Id = gmrId, Data = data };
+        var gmrEntity = new GmrEntity { Id = gmrId, Gmr = gmr };
 
         var etag = ETags.ValidateAndParseFirst(ifMatch);
 
@@ -102,6 +102,6 @@ public static class EndpointRouteBuilderExtensions
 
     private static GmrResponse ToResponse(GmrEntity gmrEntity)
     {
-        return new GmrResponse(gmrEntity.Data, gmrEntity.Created, gmrEntity.Updated);
+        return new GmrResponse(gmrEntity.Gmr, gmrEntity.Created, gmrEntity.Updated);
     }
 }
