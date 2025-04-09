@@ -11,7 +11,7 @@ public class TradeImportsDataApiClient(HttpClient httpClient, ILogger<TradeImpor
 {
     private static readonly JsonSerializerOptions s_options = new();
 
-    public async Task<ClientResponse<ImportNotification>?> GetImportNotification(
+    public async Task<ImportNotificationResponse?> GetImportNotification(
         string chedId,
         CancellationToken cancellationToken
     )
@@ -33,13 +33,16 @@ public class TradeImportsDataApiClient(HttpClient httpClient, ILogger<TradeImpor
         await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
 
         var result =
-            await JsonSerializer.DeserializeAsync<ImportNotification>(stream, s_options, cancellationToken)
+            await JsonSerializer.DeserializeAsync<ImportNotificationResponse>(stream, s_options, cancellationToken)
             ?? throw new InvalidOperationException("Deserialized null");
 
-        return new ClientResponse<ImportNotification>(result, response.Headers.ETag?.Tag);
+        return result with
+        {
+            ETag = response.Headers.ETag?.Tag,
+        };
     }
 
-    public async Task<ClientResponse<ImportNotification>?> PutImportNotification(
+    public async Task<ImportNotificationResponse> PutImportNotification(
         string chedId,
         Domain.Ipaffs.ImportNotification data,
         string? etag,
@@ -66,10 +69,13 @@ public class TradeImportsDataApiClient(HttpClient httpClient, ILogger<TradeImpor
         await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
 
         var result =
-            await JsonSerializer.DeserializeAsync<ImportNotification>(stream, s_options, cancellationToken)
+            await JsonSerializer.DeserializeAsync<ImportNotificationResponse>(stream, s_options, cancellationToken)
             ?? throw new InvalidOperationException("Deserialized null");
 
-        return new ClientResponse<ImportNotification>(result, response.Headers.ETag?.Tag);
+        return result with
+        {
+            ETag = response.Headers.ETag?.Tag,
+        };
     }
 
     private async Task LogResponseForBadRequest(

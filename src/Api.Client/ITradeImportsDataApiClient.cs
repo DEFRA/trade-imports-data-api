@@ -2,9 +2,9 @@ namespace Defra.TradeImportsDataApi.Api.Client;
 
 public interface ITradeImportsDataApiClient
 {
-    Task<ClientResponse<ImportNotification>?> GetImportNotification(string chedId, CancellationToken cancellationToken);
+    Task<ImportNotificationResponse?> GetImportNotification(string chedId, CancellationToken cancellationToken);
 
-    Task<ClientResponse<ImportNotification>?> PutImportNotification(
+    Task<ImportNotificationResponse> PutImportNotification(
         string chedId,
         Domain.Ipaffs.ImportNotification data,
         string? etag,
