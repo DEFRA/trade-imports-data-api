@@ -110,11 +110,7 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
 
     private async Task<HttpResponseMessage> Get(string requestUri, CancellationToken cancellationToken)
     {
-        var message = new HttpRequestMessage(HttpMethod.Get, new Uri(requestUri, UriKind.RelativeOrAbsolute))
-        {
-            Version = httpClient.DefaultRequestVersion,
-            VersionPolicy = HttpVersionPolicy.RequestVersionOrLower,
-        };
+        var message = CreateMessage(HttpMethod.Get, requestUri);
 
         return await httpClient.SendAsync(message, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
     }
@@ -126,16 +122,19 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
         CancellationToken cancellationToken
     )
     {
-        var message = new HttpRequestMessage(HttpMethod.Put, new Uri(requestUri, UriKind.RelativeOrAbsolute))
-        {
-            Version = httpClient.DefaultRequestVersion,
-            VersionPolicy = HttpVersionPolicy.RequestVersionOrLower,
-            Content = JsonContent.Create(data, options: s_options),
-        };
+        var message = CreateMessage(HttpMethod.Put, requestUri);
+        message.Content = JsonContent.Create(data, options: s_options);
 
         if (!string.IsNullOrEmpty(etag))
             message.Headers.IfMatch.Add(new EntityTagHeaderValue(etag));
 
         return await httpClient.SendAsync(message, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
     }
+
+    private HttpRequestMessage CreateMessage(HttpMethod method, string requestUri) =>
+        new(method, new Uri(requestUri, UriKind.RelativeOrAbsolute))
+        {
+            Version = httpClient.DefaultRequestVersion,
+            VersionPolicy = HttpVersionPolicy.RequestVersionOrLower,
+        };
 }
