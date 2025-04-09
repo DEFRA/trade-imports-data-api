@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
+using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 using Defra.TradeImportsDataApi.Domain.Gvms;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
 
@@ -62,6 +63,38 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
     public async Task PutGmr(string gmrId, Gmr data, string? etag, CancellationToken cancellationToken)
     {
         var requestUri = Endpoints.Gmrs(gmrId);
+        var response = await Put(data, etag, requestUri, cancellationToken);
+
+        response.EnsureSuccessStatusCode();
+    }
+
+    public async Task<CustomsDeclarationResponse?> GetCustomsDeclaration(
+        string mrn,
+        CancellationToken cancellationToken
+    )
+    {
+        var response = await Get(Endpoints.CustomsDeclarations(mrn), cancellationToken);
+        if (response.StatusCode == HttpStatusCode.NotFound)
+            return null;
+
+        response.EnsureSuccessStatusCode();
+
+        var result = await Deserialize<CustomsDeclarationResponse>(response, cancellationToken);
+
+        return result with
+        {
+            ETag = response.Headers.ETag?.Tag,
+        };
+    }
+
+    public async Task PutCustomsDeclaration(
+        string mrn,
+        CustomsDeclaration data,
+        string? etag,
+        CancellationToken cancellationToken
+    )
+    {
+        var requestUri = Endpoints.CustomsDeclarations(mrn);
         var response = await Put(data, etag, requestUri, cancellationToken);
 
         response.EnsureSuccessStatusCode();

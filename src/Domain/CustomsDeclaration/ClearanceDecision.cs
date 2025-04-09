@@ -17,5 +17,5 @@ public class ClearanceDecision
     public int? DecisionNumber { get; set; }
 
     [JsonPropertyName("items")]
-    public required ClearanceDecisionItem[] Items { get; set; }
+    public required ClearanceDecisionItem[] Items { get; set; } = [];
 }
