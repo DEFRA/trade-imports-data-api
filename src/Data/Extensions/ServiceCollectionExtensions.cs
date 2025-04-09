@@ -28,7 +28,7 @@ public static class ServiceCollectionExtensions
             MongoClientSettings.Extensions.AddAWSAuthentication();
             var options = sp.GetService<IOptions<MongoDbOptions>>();
             var settings = MongoClientSettings.FromConnectionString(options?.Value.DatabaseUri);
-                
+
             settings.ClusterConfigurator = cb =>
                 cb.Subscribe(
                     new DiagnosticsActivityEventSubscriber(new InstrumentationOptions { CaptureCommandText = true })
