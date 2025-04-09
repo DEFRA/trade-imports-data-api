@@ -1,15 +1,18 @@
+using Defra.TradeImportsDataApi.Api.Utils.Logging;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
 
 namespace Defra.TradeImportsDataApi.Api.Services;
 
-public class ImportNotificationService(IDbContext dbContext) : IImportNotificationService
+public class ImportNotificationService(IDbContext dbContext, ILogger<ImportNotificationService> logger)
+    : IImportNotificationService
 {
     public async Task<ImportNotificationEntity?> GetImportNotification(
         string chedId,
         CancellationToken cancellationToken
     )
     {
+        logger.LogInformationWithPrefix($"Looking for {chedId}");
         return await dbContext.Notifications.Find(chedId, cancellationToken);
     }
 

@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using Defra.TradeImportsDataApi.Api.Authentication;
 using Defra.TradeImportsDataApi.Api.Extensions;
 using Defra.TradeImportsDataApi.Api.Services;
+using Defra.TradeImportsDataApi.Api.Utils.Logging;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
@@ -49,6 +50,7 @@ public static class EndpointRouteBuilderExtensions
     /// <param name="chedId" example="CHEDA.GB.2024.1020304">CHED ID</param>
     /// <param name="context"></param>
     /// <param name="importNotificationService"></param>
+    /// <param name="loggerFactory"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpGet]
@@ -56,18 +58,29 @@ public static class EndpointRouteBuilderExtensions
         [FromRoute] string chedId,
         HttpContext context,
         [FromServices] IImportNotificationService importNotificationService,
+        [FromServices] ILoggerFactory loggerFactory,
         CancellationToken cancellationToken
     )
     {
-        var importNotificationEntity = await importNotificationService.GetImportNotification(chedId, cancellationToken);
-        if (importNotificationEntity is null)
+        var logger = loggerFactory.CreateLogger(nameof(Get));
+
+        using (logger.BeginScope("{Prefix}", chedId))
         {
-            return Results.NotFound();
+            logger.LogInformationWithPrefix("Getting Import Notification");
+
+            var importNotificationEntity = await importNotificationService.GetImportNotification(
+                chedId,
+                cancellationToken
+            );
+            if (importNotificationEntity is null)
+            {
+                return Results.NotFound();
+            }
+
+            context.SetResponseEtag(importNotificationEntity.ETag);
+
+            return Results.Ok(ToResponse(importNotificationEntity));
         }
-
-        context.SetResponseEtag(importNotificationEntity.ETag);
-
-        return Results.Ok(ToResponse(importNotificationEntity));
     }
 
     [HttpPut]
