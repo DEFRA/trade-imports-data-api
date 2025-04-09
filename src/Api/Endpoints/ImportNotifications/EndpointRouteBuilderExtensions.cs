@@ -66,7 +66,7 @@ public static class EndpointRouteBuilderExtensions
 
         using (logger.BeginScope("{Prefix}", chedId))
         {
-            logger.LogInformationWithPrefix("Getting Import Notification");
+            logger.LogInformation("Getting Import Notification");
 
             var importNotificationEntity = await importNotificationService.GetImportNotification(
                 chedId,

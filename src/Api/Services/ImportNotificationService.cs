@@ -1,4 +1,3 @@
-using Defra.TradeImportsDataApi.Api.Utils.Logging;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
 
@@ -12,7 +11,7 @@ public class ImportNotificationService(IDbContext dbContext, ILogger<ImportNotif
         CancellationToken cancellationToken
     )
     {
-        logger.LogInformationWithPrefix($"Looking for {chedId}");
+        logger.LogInformation("Looking for {ChedId}", chedId);
         return await dbContext.Notifications.Find(chedId, cancellationToken);
     }
 
