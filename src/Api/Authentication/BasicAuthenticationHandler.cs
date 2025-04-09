@@ -30,12 +30,13 @@ public class BasicAuthenticationHandler(
         var credentialBytes = Convert.FromBase64String(authenticationHeaderValue.Parameter ?? string.Empty);
         var credentials = Encoding.UTF8.GetString(credentialBytes).Split(':', 2);
         var clientId = credentials[0];
+        var secret = credentials.Length > 1 ? credentials[1] : string.Empty;
 
-        aclOptions.Value.Clients.TryGetValue(clientId, out var client);
-        if (client == null)
+        if (string.IsNullOrEmpty(clientId) || string.IsNullOrEmpty(secret))
             return Fail();
 
-        if (client.Secret != credentials[1])
+        aclOptions.Value.Clients.TryGetValue(clientId, out var client);
+        if (client == null || client.Secret != secret)
             return Fail();
 
         var claims = new List<Claim> { new(ClaimTypes.Name, clientId) };
