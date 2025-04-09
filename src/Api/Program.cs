@@ -133,6 +133,7 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
     builder.Services.AddTransient<IGmrService, GmrService>();
     builder.Services.AddTransient<IImportNotificationService, ImportNotificationService>();
     builder.Services.AddTransient<ICustomsDeclarationService, CustomsDeclarationService>();
+    builder.Services.AddSingleton<IEventPublisher, EventPublisher>();
 
     builder.Services.AddDbContext(builder.Configuration);
 
