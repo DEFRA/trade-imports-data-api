@@ -1,4 +1,3 @@
-using Argon;
 using Defra.TradeImportsDataApi.Testing;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
@@ -10,29 +9,15 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Defra.TradeImportsDataApi.Api.Client.Tests.Endpoints.ImportNotifications;
 
-public class PutTests : WireMockTestBase<WireMockContext>
+public class PutTests(WireMockContext context) : WireMockTestBase<WireMockContext>(context)
 {
-    private TradeImportsDataApiClient Subject { get; }
-
-    private readonly VerifySettings _settings;
-
-    public PutTests(WireMockContext context)
-        : base(context)
-    {
-        Subject = new TradeImportsDataApiClient(context.HttpClient, NullLogger<TradeImportsDataApiClient>.Instance);
-
-        _settings = new VerifySettings();
-        _settings.DontScrubGuids();
-        _settings.DontScrubDateTimes();
-        _settings.AddExtraSettings(settings => settings.DefaultValueHandling = DefaultValueHandling.Include);
-    }
+    private TradeImportsDataApiClient Subject { get; } =
+        new(context.HttpClient, NullLogger<TradeImportsDataApiClient>.Instance);
 
     [Fact]
     public async Task PutImportNotification_WhenNoEtag_ShouldNotBeNull()
     {
         const string chedId = "CHED";
-        var created = new DateTime(2025, 4, 7, 11, 0, 0, DateTimeKind.Utc);
-        var updated = created.AddMinutes(15);
         var data = new Domain.Ipaffs.ImportNotification { ReferenceNumber = chedId };
         WireMock
             .Given(
@@ -43,34 +28,17 @@ public class PutTests : WireMockTestBase<WireMockContext>
                     .WithHeader("If-Match", "", MatchBehaviour.RejectOnMatch)
                     .UsingPut()
             )
-            .RespondWith(
-                Response
-                    .Create()
-                    .WithBody(
-                        JsonSerializer.Serialize(
-                            new Defra.TradeImportsDataApi.Api.Endpoints.ImportNotifications.ImportNotificationResponse(
-                                data,
-                                created,
-                                updated
-                            )
-                        )
-                    )
-                    .WithStatusCode(StatusCodes.Status200OK)
-                    .WithHeader("ETag", "\"etag\"")
-            );
+            .RespondWith(Response.Create().WithStatusCode(StatusCodes.Status201Created));
 
-        var result = await Subject.PutImportNotification(chedId, data, etag: null, CancellationToken.None);
+        var act = async () => await Subject.PutImportNotification(chedId, data, etag: null, CancellationToken.None);
 
-        result.Should().NotBeNull();
-        await Verify(result, _settings);
+        await act.Should().NotThrowAsync();
     }
 
     [Fact]
     public async Task PutImportNotification_WhenHasEtag_ShouldNotBeNull()
     {
         const string chedId = "CHED";
-        var created = new DateTime(2025, 4, 7, 11, 0, 0, DateTimeKind.Utc);
-        var updated = created.AddMinutes(15);
         var data = new Domain.Ipaffs.ImportNotification { ReferenceNumber = chedId };
         WireMock
             .Given(
@@ -81,26 +49,12 @@ public class PutTests : WireMockTestBase<WireMockContext>
                     .WithHeader("If-Match", "\"etag\"")
                     .UsingPut()
             )
-            .RespondWith(
-                Response
-                    .Create()
-                    .WithBody(
-                        JsonSerializer.Serialize(
-                            new Defra.TradeImportsDataApi.Api.Endpoints.ImportNotifications.ImportNotificationResponse(
-                                data,
-                                created,
-                                updated
-                            )
-                        )
-                    )
-                    .WithStatusCode(StatusCodes.Status200OK)
-                    .WithHeader("ETag", "\"etag\"")
-            );
+            .RespondWith(Response.Create().WithStatusCode(StatusCodes.Status204NoContent));
 
-        var result = await Subject.PutImportNotification(chedId, data, etag: "\"etag\"", CancellationToken.None);
+        var act = async () =>
+            await Subject.PutImportNotification(chedId, data, etag: "\"etag\"", CancellationToken.None);
 
-        result.Should().NotBeNull();
-        await Verify(result, _settings);
+        await act.Should().NotThrowAsync();
     }
 
     [Fact]

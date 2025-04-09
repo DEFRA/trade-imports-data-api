@@ -31,7 +31,8 @@ public static class EndpointRouteBuilderExtensions
             .WithTags("ImportNotifications")
             .WithSummary("Put ImportNotification")
             .WithDescription("Put an Import Notification")
-            .Produces<ImportNotificationResponse>()
+            .Produces(StatusCodes.Status201Created)
+            .Produces(StatusCodes.Status204NoContent)
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status409Conflict)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
@@ -68,7 +69,13 @@ public static class EndpointRouteBuilderExtensions
 
         context.SetResponseEtag(importNotificationEntity.ETag);
 
-        return Results.Ok(ToResponse(importNotificationEntity));
+        return Results.Ok(
+            new ImportNotificationResponse(
+                importNotificationEntity.Data,
+                importNotificationEntity.Created,
+                importNotificationEntity.Updated
+            )
+        );
     }
 
     [HttpPut]
@@ -92,26 +99,20 @@ public static class EndpointRouteBuilderExtensions
 
         try
         {
-            importNotificationEntity = string.IsNullOrEmpty(etag)
-                ? await importNotificationService.Insert(importNotificationEntity, cancellationToken)
-                : await importNotificationService.Update(importNotificationEntity, etag, cancellationToken);
+            if (string.IsNullOrEmpty(etag))
+            {
+                await importNotificationService.Insert(importNotificationEntity, cancellationToken);
 
-            context.SetResponseEtag(importNotificationEntity.ETag);
+                return Results.Created();
+            }
 
-            return Results.Ok(ToResponse(importNotificationEntity));
+            await importNotificationService.Update(importNotificationEntity, etag, cancellationToken);
+
+            return Results.NoContent();
         }
         catch (ConcurrencyException)
         {
             return Results.Conflict();
         }
-    }
-
-    private static ImportNotificationResponse ToResponse(ImportNotificationEntity importNotificationEntity)
-    {
-        return new ImportNotificationResponse(
-            importNotificationEntity.Data,
-            importNotificationEntity.Created,
-            importNotificationEntity.Updated
-        );
     }
 }

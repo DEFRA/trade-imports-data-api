@@ -4,7 +4,7 @@ public interface ITradeImportsDataApiClient
 {
     Task<ImportNotificationResponse?> GetImportNotification(string chedId, CancellationToken cancellationToken);
 
-    Task<ImportNotificationResponse> PutImportNotification(
+    Task PutImportNotification(
         string chedId,
         Domain.Ipaffs.ImportNotification data,
         string? etag,

@@ -42,7 +42,7 @@ public class TradeImportsDataApiClient(HttpClient httpClient, ILogger<TradeImpor
         };
     }
 
-    public async Task<ImportNotificationResponse> PutImportNotification(
+    public async Task PutImportNotification(
         string chedId,
         Domain.Ipaffs.ImportNotification data,
         string? etag,
@@ -65,17 +65,6 @@ public class TradeImportsDataApiClient(HttpClient httpClient, ILogger<TradeImpor
         await LogResponseForBadRequest(requestUri, response, cancellationToken);
 
         response.EnsureSuccessStatusCode();
-
-        await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
-
-        var result =
-            await JsonSerializer.DeserializeAsync<ImportNotificationResponse>(stream, s_options, cancellationToken)
-            ?? throw new InvalidOperationException("Deserialized null");
-
-        return result with
-        {
-            ETag = response.Headers.ETag?.Tag,
-        };
     }
 
     private async Task LogResponseForBadRequest(
