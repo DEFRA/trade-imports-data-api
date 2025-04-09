@@ -241,15 +241,11 @@
           "required": true
         },
         "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Api.Endpoints.Gmrs.GmrResponse"
-                }
-              }
-            }
+          "201": {
+            "description": "Created"
+          },
+          "204": {
+            "description": "No Content"
           },
           "400": {
             "description": "Bad Request",
