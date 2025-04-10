@@ -1,22 +1,25 @@
 using System.Net;
 using System.Net.Http.Json;
-using Defra.TradeImportsDataApi.Domain.Gvms;
+using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using FluentAssertions;
 using Xunit.Abstractions;
 
-namespace Defra.TradeImportsDataApi.Api.IntegrationTests.Endpoints.Gmrs;
+namespace Defra.TradeImportsDataApi.Api.Tests.Endpoints.ImportPreNotifications;
 
 public class PutTests(ApiWebApplicationFactory factory, ITestOutputHelper outputHelper)
     : EndpointTestBase(factory, outputHelper)
 {
-    private const string GmrId = "gmrId";
+    private const string ChedId = "chedId";
 
     [Fact]
     public async Task Put_WhenUnauthorized_ShouldBeUnauthorized()
     {
         var client = CreateClient(addDefaultAuthorizationHeader: false);
 
-        var response = await client.PutAsJsonAsync(Testing.Endpoints.Gmrs.Put(GmrId), new Gmr());
+        var response = await client.PutAsJsonAsync(
+            Testing.Endpoints.ImportPreNotifications.Put(ChedId),
+            new ImportPreNotification()
+        );
 
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
@@ -26,7 +29,10 @@ public class PutTests(ApiWebApplicationFactory factory, ITestOutputHelper output
     {
         var client = CreateClient(testUser: TestUser.ReadOnly);
 
-        var response = await client.PutAsJsonAsync(Testing.Endpoints.Gmrs.Put(GmrId), new Gmr());
+        var response = await client.PutAsJsonAsync(
+            Testing.Endpoints.ImportPreNotifications.Put(ChedId),
+            new ImportPreNotification()
+        );
 
         response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
     }

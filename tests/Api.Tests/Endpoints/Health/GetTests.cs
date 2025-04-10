@@ -1,3 +1,5 @@
+using Defra.TradeImportsDataApi.Api.Tests;
+using Defra.TradeImportsDataApi.Api.Tests.Endpoints;
 using Xunit.Abstractions;
 
 namespace Defra.TradeImportsDataApi.Api.IntegrationTests.Endpoints.Health;
