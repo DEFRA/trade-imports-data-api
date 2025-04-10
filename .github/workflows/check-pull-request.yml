@@ -23,8 +23,15 @@ jobs:
         with:
           dotnet-version: |
             9.0
-      - name: Test
-        run: dotnet test
+      - name: Run unit tests
+        run: |
+          dotnet test tests/Api.Client.Tests
+          dotnet test tests/Api.Tests
+          dotnet test tests/Data.Tests
+      - name: Run integration tests
+        run: |
+          docker compose up -d
+          dotnet test tests/Api.IntegrationTests
       - name: Check Dockerfile Builds
         uses: docker/build-push-action@471d1dc4e07e5cdedd4c2171150001c434f0b7a4
         with:

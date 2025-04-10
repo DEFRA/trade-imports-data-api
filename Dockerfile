@@ -58,10 +58,9 @@ RUN dotnet build src/Api/Api.csproj --no-restore -c Release
 RUN dotnet swagger tofile --output openapi.json ./src/Api/bin/Release/net9.0/Defra.TradeImportsDataApi.Api.dll v1
 RUN vacuum lint -d -r .vacuum.yml openapi.json
 
-RUN dotnet test --no-restore tests/Api.Tests
-RUN dotnet test --no-restore tests/Api.IntegrationTests
-RUN dotnet test --no-restore tests/Data.Tests
 RUN dotnet test --no-restore tests/Api.Client.Tests
+RUN dotnet test --no-restore tests/Api.Tests
+RUN dotnet test --no-restore tests/Data.Tests
 
 FROM build AS publish
 

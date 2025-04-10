@@ -27,6 +27,15 @@ jobs:
         with:
           dotnet-version: |
             9.0
+      - name: Run unit tests
+        run: |
+          dotnet test tests/Api.Client.Tests
+          dotnet test tests/Api.Tests
+          dotnet test tests/Data.Tests
+      - name: Run integration tests
+        run: |
+          docker compose up -d
+          dotnet test tests/Api.IntegrationTests
       - name: Build and Publish
         uses: DEFRA/cdp-build-action/build@main
         with:
