@@ -9,7 +9,7 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
 {
     private static readonly JsonSerializerOptions s_options = new();
 
-    public async Task<ImportNotificationResponse?> GetImportNotification(
+    public async Task<ImportPreNotificationResponse?> GetImportNotification(
         string chedId,
         CancellationToken cancellationToken
     )
@@ -31,7 +31,7 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
         await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
 
         var result =
-            await JsonSerializer.DeserializeAsync<ImportNotificationResponse>(stream, s_options, cancellationToken)
+            await JsonSerializer.DeserializeAsync<ImportPreNotificationResponse>(stream, s_options, cancellationToken)
             ?? throw new InvalidOperationException("Deserialized null");
 
         return result with

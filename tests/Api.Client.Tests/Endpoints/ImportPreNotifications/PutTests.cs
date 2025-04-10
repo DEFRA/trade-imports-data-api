@@ -21,7 +21,7 @@ public class PutTests(WireMockContext context) : WireMockTestBase<WireMockContex
             .Given(
                 Request
                     .Create()
-                    .WithPath($"/import-notifications/{chedId}")
+                    .WithPath($"/import-pre-notifications/{chedId}")
                     .WithBody(JsonSerializer.Serialize(data))
                     .WithHeader("If-Match", "", MatchBehaviour.RejectOnMatch)
                     .UsingPut()
@@ -42,7 +42,7 @@ public class PutTests(WireMockContext context) : WireMockTestBase<WireMockContex
             .Given(
                 Request
                     .Create()
-                    .WithPath($"/import-notifications/{chedId}")
+                    .WithPath($"/import-pre-notifications/{chedId}")
                     .WithBody(JsonSerializer.Serialize(data))
                     .WithHeader("If-Match", "\"etag\"")
                     .UsingPut()
@@ -64,7 +64,7 @@ public class PutTests(WireMockContext context) : WireMockTestBase<WireMockContex
             .Given(
                 Request
                     .Create()
-                    .WithPath($"/import-notifications/{chedId}")
+                    .WithPath($"/import-pre-notifications/{chedId}")
                     .WithBody(JsonSerializer.Serialize(data))
                     .UsingPut()
             )

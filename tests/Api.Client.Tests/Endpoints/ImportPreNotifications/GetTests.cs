@@ -39,8 +39,9 @@ public class GetTests : WireMockTestBase<WireMockContext>
         const string chedId = "CHED";
         var created = new DateTime(2025, 4, 7, 11, 0, 0, DateTimeKind.Utc);
         var updated = created.AddMinutes(15);
+
         WireMock
-            .Given(Request.Create().WithPath($"/import-notifications/{chedId}").UsingGet())
+            .Given(Request.Create().WithPath($"/import-pre-notifications/{chedId}").UsingGet())
             .RespondWith(
                 Response
                     .Create()
