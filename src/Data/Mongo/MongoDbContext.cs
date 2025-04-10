@@ -8,16 +8,16 @@ public class MongoDbContext : IDbContext
     public MongoDbContext(IMongoDatabase database)
     {
         Database = database;
-        Notifications = new MongoCollectionSet<ImportPreNotificationEntity>(this);
-        CustomDeclarations = new MongoCollectionSet<CustomsDeclarationEntity>(this);
+        ImportPreNotifications = new MongoCollectionSet<ImportPreNotificationEntity>(this);
+        CustomsDeclarations = new MongoCollectionSet<CustomsDeclarationEntity>(this);
         Gmrs = new MongoCollectionSet<GmrEntity>(this);
     }
 
     internal IMongoDatabase Database { get; }
     internal MongoDbTransaction? ActiveTransaction { get; private set; }
 
-    public IMongoCollectionSet<ImportPreNotificationEntity> Notifications { get; }
-    public IMongoCollectionSet<CustomsDeclarationEntity> CustomDeclarations { get; }
+    public IMongoCollectionSet<ImportPreNotificationEntity> ImportPreNotifications { get; }
+    public IMongoCollectionSet<CustomsDeclarationEntity> CustomsDeclarations { get; }
     public IMongoCollectionSet<GmrEntity> Gmrs { get; }
 
     public async Task<IMongoDbTransaction> StartTransaction(CancellationToken cancellationToken = default)
@@ -56,11 +56,11 @@ public class MongoDbContext : IDbContext
 
     private int GetChangedRecordsCount()
     {
-        return Notifications.PendingChanges;
+        return ImportPreNotifications.PendingChanges;
     }
 
     private async Task InternalSaveChangesAsync(CancellationToken cancellation = default)
     {
-        await Notifications.PersistAsync(cancellation);
+        await ImportPreNotifications.PersistAsync(cancellation);
     }
 }

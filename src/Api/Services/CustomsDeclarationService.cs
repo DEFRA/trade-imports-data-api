@@ -7,7 +7,7 @@ public class CustomsDeclarationService(IDbContext dbContext) : ICustomsDeclarati
 {
     public async Task<CustomsDeclarationEntity?> GetCustomsDeclaration(string mrn, CancellationToken cancellationToken)
     {
-        return await dbContext.CustomDeclarations.Find(mrn, cancellationToken);
+        return await dbContext.CustomsDeclarations.Find(mrn, cancellationToken);
     }
 
     public async Task<CustomsDeclarationEntity> Insert(
@@ -15,7 +15,7 @@ public class CustomsDeclarationService(IDbContext dbContext) : ICustomsDeclarati
         CancellationToken cancellationToken
     )
     {
-        await dbContext.CustomDeclarations.Insert(customsDeclarationEntity, cancellationToken);
+        await dbContext.CustomsDeclarations.Insert(customsDeclarationEntity, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return customsDeclarationEntity;
@@ -27,7 +27,7 @@ public class CustomsDeclarationService(IDbContext dbContext) : ICustomsDeclarati
         CancellationToken cancellationToken
     )
     {
-        await dbContext.CustomDeclarations.Update(customsDeclarationEntity, etag, cancellationToken);
+        await dbContext.CustomsDeclarations.Update(customsDeclarationEntity, etag, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return customsDeclarationEntity;

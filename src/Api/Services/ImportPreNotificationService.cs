@@ -10,7 +10,7 @@ public class ImportPreNotificationService(IDbContext dbContext) : IImportPreNoti
         CancellationToken cancellationToken
     )
     {
-        return await dbContext.Notifications.Find(chedId, cancellationToken);
+        return await dbContext.ImportPreNotifications.Find(chedId, cancellationToken);
     }
 
     public async Task<ImportPreNotificationEntity> Insert(
@@ -18,7 +18,7 @@ public class ImportPreNotificationService(IDbContext dbContext) : IImportPreNoti
         CancellationToken cancellationToken
     )
     {
-        await dbContext.Notifications.Insert(importPreNotificationEntity, cancellationToken);
+        await dbContext.ImportPreNotifications.Insert(importPreNotificationEntity, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return importPreNotificationEntity;
@@ -30,7 +30,7 @@ public class ImportPreNotificationService(IDbContext dbContext) : IImportPreNoti
         CancellationToken cancellationToken
     )
     {
-        await dbContext.Notifications.Update(importPreNotificationEntity, etag, cancellationToken);
+        await dbContext.ImportPreNotifications.Update(importPreNotificationEntity, etag, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return importPreNotificationEntity;

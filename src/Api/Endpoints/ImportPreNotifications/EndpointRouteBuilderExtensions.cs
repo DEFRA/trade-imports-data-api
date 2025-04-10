@@ -61,58 +61,61 @@ public static class EndpointRouteBuilderExtensions
         CancellationToken cancellationToken
     )
     {
-        var importNotificationEntity = await importPreNotificationService.GetImportPreNotification(
+        var importPreNotificationEntity = await importPreNotificationService.GetImportPreNotification(
             chedId,
             cancellationToken
         );
-        if (importNotificationEntity is null)
+        if (importPreNotificationEntity is null)
         {
             return Results.NotFound();
         }
 
-        context.SetResponseEtag(importNotificationEntity.ETag);
+        context.SetResponseEtag(importPreNotificationEntity.ETag);
 
         return Results.Ok(
             new ImportPreNotificationResponse(
-                importNotificationEntity.ImportPreNotification,
-                importNotificationEntity.Created,
-                importNotificationEntity.Updated
+                importPreNotificationEntity.ImportPreNotification,
+                importPreNotificationEntity.Created,
+                importPreNotificationEntity.Updated
             )
         );
     }
 
+    /// <param name="chedId" example="CHEDA.GB.2024.1020304">CHED ID</param>
+    /// <param name="context"></param>
+    /// <param name="importPreNotification"></param>
+    /// <param name="ifMatch"></param>
+    /// <param name="importPreNotificationService"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [HttpPut]
     private static async Task<IResult> Put(
         [FromRoute] string chedId,
         HttpContext context,
-        [FromBody] ImportPreNotification data,
+        [FromBody] ImportPreNotification importPreNotification,
         [FromHeader(Name = "If-Match")] string? ifMatch,
         [FromServices] IImportPreNotificationService importPreNotificationService,
         CancellationToken cancellationToken
     )
     {
-        var importNotificationEntity = new ImportPreNotificationEntity
+        var importPreNotificationEntity = new ImportPreNotificationEntity
         {
             Id = chedId,
-            CustomsDeclarationIdentifier = chedId,
-            ImportPreNotification = data,
+            ImportPreNotification = importPreNotification,
         };
 
         var etag = ETags.ValidateAndParseFirst(ifMatch);
 
         try
         {
-            importNotificationEntity = string.IsNullOrEmpty(etag)
-                ? await importPreNotificationService.Insert(importNotificationEntity, cancellationToken)
-                : await importPreNotificationService.Update(importNotificationEntity, etag, cancellationToken);
             if (string.IsNullOrEmpty(etag))
             {
-                await importPreNotificationService.Insert(importNotificationEntity, cancellationToken);
+                await importPreNotificationService.Insert(importPreNotificationEntity, cancellationToken);
 
                 return Results.Created();
             }
 
-            await importPreNotificationService.Update(importNotificationEntity, etag, cancellationToken);
+            await importPreNotificationService.Update(importPreNotificationEntity, etag, cancellationToken);
 
             return Results.NoContent();
         }

@@ -348,20 +348,24 @@
           {
             "name": "chedId",
             "in": "path",
+            "description": "CHED ID",
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "CHEDA.GB.2024.1020304"
           },
           {
             "name": "If-Match",
             "in": "header",
+            "description": "",
             "schema": {
               "type": "string"
             }
           }
         ],
         "requestBody": {
+          "description": "",
           "content": {
             "application/json": {
               "schema": {

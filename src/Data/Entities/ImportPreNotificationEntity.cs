@@ -7,7 +7,7 @@ namespace Defra.TradeImportsDataApi.Data.Entities
     {
         public required string Id { get; set; }
 
-        public required string CustomsDeclarationIdentifier { get; set; }
+        public string CustomsDeclarationIdentifier { get; set; } = null!;
 
         public string ETag { get; set; } = null!;
 

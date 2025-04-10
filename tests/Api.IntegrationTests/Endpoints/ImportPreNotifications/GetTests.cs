@@ -13,7 +13,7 @@ namespace Defra.TradeImportsDataApi.Api.IntegrationTests.Endpoints.ImportPreNoti
 
 public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
 {
-    private IImportPreNotificationService MockImportNotificationService { get; } =
+    private IImportPreNotificationService MockImportPreNotificationService { get; } =
         Substitute.For<IImportPreNotificationService>();
     private WireMockServer WireMock { get; }
     private const string ChedId = "chedId";
@@ -34,7 +34,7 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
     {
         base.ConfigureTestServices(services);
 
-        services.AddTransient<IImportPreNotificationService>(_ => MockImportNotificationService);
+        services.AddTransient<IImportPreNotificationService>(_ => MockImportPreNotificationService);
     }
 
     [Fact]
@@ -51,7 +51,7 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
     public async Task Get_WhenFound_ShouldReturnContent()
     {
         var client = CreateClient();
-        MockImportNotificationService
+        MockImportPreNotificationService
             .GetImportPreNotification(ChedId, Arg.Any<CancellationToken>())
             .Returns(
                 new ImportPreNotificationEntity
