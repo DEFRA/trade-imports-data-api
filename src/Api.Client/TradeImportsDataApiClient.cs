@@ -2,12 +2,10 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
-using Microsoft.Extensions.Logging;
 
 namespace Defra.TradeImportsDataApi.Api.Client;
 
-public class TradeImportsDataApiClient(HttpClient httpClient, ILogger<TradeImportsDataApiClient> logger)
-    : ITradeImportsDataApiClient
+public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDataApiClient
 {
     private static readonly JsonSerializerOptions s_options = new();
 
@@ -62,24 +60,6 @@ public class TradeImportsDataApiClient(HttpClient httpClient, ILogger<TradeImpor
 
         var response = await httpClient.SendAsync(message, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
 
-        await LogResponseForBadRequest(requestUri, response, cancellationToken);
-
         response.EnsureSuccessStatusCode();
-    }
-
-    private async Task LogResponseForBadRequest(
-        string requestUri,
-        HttpResponseMessage response,
-        CancellationToken cancellationToken
-    )
-    {
-        if (response.StatusCode == HttpStatusCode.BadRequest)
-        {
-            await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
-            using var streamReader = new StreamReader(stream);
-            var content = await streamReader.ReadToEndAsync(cancellationToken);
-
-            logger.LogWarning("BadRequest {RequestUri} {Content}", requestUri, content);
-        }
     }
 }

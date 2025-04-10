@@ -2,7 +2,6 @@ using Argon;
 using Defra.TradeImportsDataApi.Testing;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging.Abstractions;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
 using JsonSerializer = System.Text.Json.JsonSerializer;
@@ -18,7 +17,7 @@ public class GetTests : WireMockTestBase<WireMockContext>
     public GetTests(WireMockContext context)
         : base(context)
     {
-        Subject = new TradeImportsDataApiClient(context.HttpClient, NullLogger<TradeImportsDataApiClient>.Instance);
+        Subject = new TradeImportsDataApiClient(context.HttpClient);
 
         _settings = new VerifySettings();
         _settings.DontScrubGuids();

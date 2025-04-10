@@ -1,7 +1,6 @@
 using Defra.TradeImportsDataApi.Testing;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging.Abstractions;
 using WireMock.Matchers;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
@@ -11,8 +10,7 @@ namespace Defra.TradeImportsDataApi.Api.Client.Tests.Endpoints.ImportNotificatio
 
 public class PutTests(WireMockContext context) : WireMockTestBase<WireMockContext>(context)
 {
-    private TradeImportsDataApiClient Subject { get; } =
-        new(context.HttpClient, NullLogger<TradeImportsDataApiClient>.Instance);
+    private TradeImportsDataApiClient Subject { get; } = new(context.HttpClient);
 
     [Fact]
     public async Task PutImportNotification_WhenNoEtag_ShouldNotBeNull()
