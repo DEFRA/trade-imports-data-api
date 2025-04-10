@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using Defra.TradeImportsDataApi.Api.Authentication;
 using Defra.TradeImportsDataApi.Api.Extensions;
 using Defra.TradeImportsDataApi.Api.Services;
+using Defra.TradeImportsDataApi.Api.Utils;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
@@ -30,7 +31,8 @@ public static class EndpointRouteBuilderExtensions
             .WithTags("ImportNotifications")
             .WithSummary("Put ImportNotification")
             .WithDescription("Put an Import Notification")
-            .Produces<ImportNotificationResponse>()
+            .Produces(StatusCodes.Status201Created)
+            .Produces(StatusCodes.Status204NoContent)
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status409Conflict)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
@@ -67,7 +69,13 @@ public static class EndpointRouteBuilderExtensions
 
         context.SetResponseEtag(importNotificationEntity.ETag);
 
-        return Results.Ok(ToResponse(importNotificationEntity));
+        return Results.Ok(
+            new ImportNotificationResponse(
+                importNotificationEntity.Data,
+                importNotificationEntity.Created,
+                importNotificationEntity.Updated
+            )
+        );
     }
 
     [HttpPut]
@@ -75,7 +83,7 @@ public static class EndpointRouteBuilderExtensions
         [FromRoute] string chedId,
         HttpContext context,
         [FromBody] ImportNotification data,
-        [FromHeader(Name = "If-Match")] string? etag,
+        [FromHeader(Name = "If-Match")] string? ifMatch,
         [FromServices] IImportNotificationService importNotificationService,
         CancellationToken cancellationToken
     )
@@ -87,28 +95,24 @@ public static class EndpointRouteBuilderExtensions
             Data = data,
         };
 
+        var etag = ETags.ValidateAndParseFirst(ifMatch);
+
         try
         {
-            importNotificationEntity = string.IsNullOrEmpty(etag)
-                ? await importNotificationService.Insert(importNotificationEntity, cancellationToken)
-                : await importNotificationService.Update(importNotificationEntity, etag, cancellationToken);
+            if (string.IsNullOrEmpty(etag))
+            {
+                await importNotificationService.Insert(importNotificationEntity, cancellationToken);
 
-            context.SetResponseEtag(importNotificationEntity.ETag);
+                return Results.Created();
+            }
 
-            return Results.Ok(ToResponse(importNotificationEntity));
+            await importNotificationService.Update(importNotificationEntity, etag, cancellationToken);
+
+            return Results.NoContent();
         }
         catch (ConcurrencyException)
         {
             return Results.Conflict();
         }
-    }
-
-    private static ImportNotificationResponse ToResponse(ImportNotificationEntity importNotificationEntity)
-    {
-        return new ImportNotificationResponse(
-            importNotificationEntity.Data,
-            importNotificationEntity.Created,
-            importNotificationEntity.Updated
-        );
     }
 }
