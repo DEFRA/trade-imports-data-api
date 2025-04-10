@@ -30,7 +30,8 @@ public static class EndpointRouteBuilderExtensions
             .WithTags("CustomsDeclarations")
             .WithSummary("Put CustomsDeclaration")
             .WithDescription("Put a Customs Declaration")
-            .Produces<CustomsDeclarationResponse>()
+            .Produces(StatusCodes.Status201Created)
+            .Produces(StatusCodes.Status204NoContent)
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status409Conflict)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
@@ -67,7 +68,16 @@ public static class EndpointRouteBuilderExtensions
 
         context.SetResponseEtag(customsDeclarationEntity.ETag);
 
-        return Results.Ok(ToResponse(customsDeclarationEntity));
+        return Results.Ok(
+            new CustomsDeclarationResponse(
+                customsDeclarationEntity.Id,
+                customsDeclarationEntity.ClearanceRequest,
+                customsDeclarationEntity.ClearanceDecision,
+                customsDeclarationEntity.Finalisation,
+                customsDeclarationEntity.Created,
+                customsDeclarationEntity.Updated
+            )
+        );
     }
 
     [HttpPut]
@@ -92,29 +102,20 @@ public static class EndpointRouteBuilderExtensions
 
         try
         {
-            customsDeclarationEntity = string.IsNullOrEmpty(etag)
-                ? await customsDeclarationService.Insert(customsDeclarationEntity, cancellationToken)
-                : await customsDeclarationService.Update(customsDeclarationEntity, etag, cancellationToken);
+            if (string.IsNullOrEmpty(etag))
+            {
+                await customsDeclarationService.Insert(customsDeclarationEntity, cancellationToken);
 
-            context.SetResponseEtag(customsDeclarationEntity.ETag);
+                return Results.Created();
+            }
 
-            return Results.Ok(ToResponse(customsDeclarationEntity));
+            await customsDeclarationService.Update(customsDeclarationEntity, etag, cancellationToken);
+
+            return Results.NoContent();
         }
         catch (ConcurrencyException)
         {
             return Results.Conflict();
         }
-    }
-
-    private static CustomsDeclarationResponse ToResponse(CustomsDeclarationEntity customsDeclarationEntity)
-    {
-        return new CustomsDeclarationResponse(
-            customsDeclarationEntity.Id,
-            customsDeclarationEntity.ClearanceRequest,
-            customsDeclarationEntity.ClearanceDecision,
-            customsDeclarationEntity.Finalisation,
-            customsDeclarationEntity.Created,
-            customsDeclarationEntity.Updated
-        );
     }
 }

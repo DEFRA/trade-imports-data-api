@@ -2,6 +2,9 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
+using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
+using Defra.TradeImportsDataApi.Domain.Gvms;
+using Defra.TradeImportsDataApi.Domain.Ipaffs;
 
 namespace Defra.TradeImportsDataApi.Api.Client;
 
@@ -14,25 +17,13 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
         CancellationToken cancellationToken
     )
     {
-        var requestUri = Endpoints.ImportPreNotifications(chedId);
-        var message = new HttpRequestMessage(HttpMethod.Get, new Uri(requestUri, UriKind.RelativeOrAbsolute))
-        {
-            Version = httpClient.DefaultRequestVersion,
-            VersionPolicy = HttpVersionPolicy.RequestVersionOrLower,
-        };
-
-        var response = await httpClient.SendAsync(message, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
-
+        var response = await Get(Endpoints.ImportPreNotifications(chedId), cancellationToken);
         if (response.StatusCode == HttpStatusCode.NotFound)
             return null;
 
         response.EnsureSuccessStatusCode();
 
-        await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
-
-        var result =
-            await JsonSerializer.DeserializeAsync<ImportPreNotificationResponse>(stream, s_options, cancellationToken)
-            ?? throw new InvalidOperationException("Deserialized null");
+        var result = await Deserialize<ImportPreNotificationResponse>(response, cancellationToken);
 
         return result with
         {
@@ -42,24 +33,108 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
 
     public async Task PutImportPreNotification(
         string chedId,
-        Domain.Ipaffs.ImportPreNotification data,
+        ImportPreNotification data,
         string? etag,
         CancellationToken cancellationToken
     )
     {
         var requestUri = Endpoints.ImportPreNotifications(chedId);
-        var message = new HttpRequestMessage(HttpMethod.Put, new Uri(requestUri, UriKind.RelativeOrAbsolute))
+        var response = await Put(data, etag, requestUri, cancellationToken);
+
+        response.EnsureSuccessStatusCode();
+    }
+
+    public async Task<GmrResponse?> GetGmr(string gmrId, CancellationToken cancellationToken)
+    {
+        var response = await Get(Endpoints.Gmrs(gmrId), cancellationToken);
+        if (response.StatusCode == HttpStatusCode.NotFound)
+            return null;
+
+        response.EnsureSuccessStatusCode();
+
+        var result = await Deserialize<GmrResponse>(response, cancellationToken);
+
+        return result with
         {
-            Version = httpClient.DefaultRequestVersion,
-            VersionPolicy = HttpVersionPolicy.RequestVersionOrLower,
-            Content = JsonContent.Create(data, options: s_options),
+            ETag = response.Headers.ETag?.Tag,
         };
+    }
+
+    public async Task PutGmr(string gmrId, Gmr data, string? etag, CancellationToken cancellationToken)
+    {
+        var requestUri = Endpoints.Gmrs(gmrId);
+        var response = await Put(data, etag, requestUri, cancellationToken);
+
+        response.EnsureSuccessStatusCode();
+    }
+
+    public async Task<CustomsDeclarationResponse?> GetCustomsDeclaration(
+        string mrn,
+        CancellationToken cancellationToken
+    )
+    {
+        var response = await Get(Endpoints.CustomsDeclarations(mrn), cancellationToken);
+        if (response.StatusCode == HttpStatusCode.NotFound)
+            return null;
+
+        response.EnsureSuccessStatusCode();
+
+        var result = await Deserialize<CustomsDeclarationResponse>(response, cancellationToken);
+
+        return result with
+        {
+            ETag = response.Headers.ETag?.Tag,
+        };
+    }
+
+    public async Task PutCustomsDeclaration(
+        string mrn,
+        CustomsDeclaration data,
+        string? etag,
+        CancellationToken cancellationToken
+    )
+    {
+        var requestUri = Endpoints.CustomsDeclarations(mrn);
+        var response = await Put(data, etag, requestUri, cancellationToken);
+
+        response.EnsureSuccessStatusCode();
+    }
+
+    private static async Task<T> Deserialize<T>(HttpResponseMessage response, CancellationToken cancellationToken)
+    {
+        await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
+
+        return await JsonSerializer.DeserializeAsync<T>(stream, s_options, cancellationToken)
+            ?? throw new InvalidOperationException("Deserialized null");
+    }
+
+    private async Task<HttpResponseMessage> Get(string requestUri, CancellationToken cancellationToken)
+    {
+        var message = CreateMessage(HttpMethod.Get, requestUri);
+
+        return await httpClient.SendAsync(message, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+    }
+
+    private async Task<HttpResponseMessage> Put<T>(
+        T data,
+        string? etag,
+        string requestUri,
+        CancellationToken cancellationToken
+    )
+    {
+        var message = CreateMessage(HttpMethod.Put, requestUri);
+        message.Content = JsonContent.Create(data, options: s_options);
 
         if (!string.IsNullOrEmpty(etag))
             message.Headers.IfMatch.Add(new EntityTagHeaderValue(etag));
 
-        var response = await httpClient.SendAsync(message, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
-
-        response.EnsureSuccessStatusCode();
+        return await httpClient.SendAsync(message, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
     }
+
+    private HttpRequestMessage CreateMessage(HttpMethod method, string requestUri) =>
+        new(method, new Uri(requestUri, UriKind.RelativeOrAbsolute))
+        {
+            Version = httpClient.DefaultRequestVersion,
+            VersionPolicy = HttpVersionPolicy.RequestVersionOrLower,
+        };
 }

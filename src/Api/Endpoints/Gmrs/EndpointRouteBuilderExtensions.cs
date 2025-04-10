@@ -30,7 +30,8 @@ public static class EndpointRouteBuilderExtensions
             .WithTags("Gmrs")
             .WithSummary("Put Gmr")
             .WithDescription("Put a GMR")
-            .Produces<GmrResponse>()
+            .Produces(StatusCodes.Status201Created)
+            .Produces(StatusCodes.Status204NoContent)
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status409Conflict)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
@@ -67,7 +68,7 @@ public static class EndpointRouteBuilderExtensions
 
         context.SetResponseEtag(gmrEntity.ETag);
 
-        return Results.Ok(ToResponse(gmrEntity));
+        return Results.Ok(new GmrResponse(gmrEntity.Gmr, gmrEntity.Created, gmrEntity.Updated));
     }
 
     [HttpPut]
@@ -86,22 +87,20 @@ public static class EndpointRouteBuilderExtensions
 
         try
         {
-            gmrEntity = string.IsNullOrEmpty(etag)
-                ? await gmrService.Insert(gmrEntity, cancellationToken)
-                : await gmrService.Update(gmrEntity, etag, cancellationToken);
+            if (string.IsNullOrEmpty(etag))
+            {
+                await gmrService.Insert(gmrEntity, cancellationToken);
 
-            context.SetResponseEtag(gmrEntity.ETag);
+                return Results.Created();
+            }
 
-            return Results.Ok(ToResponse(gmrEntity));
+            await gmrService.Update(gmrEntity, etag, cancellationToken);
+
+            return Results.NoContent();
         }
         catch (ConcurrencyException)
         {
             return Results.Conflict();
         }
-    }
-
-    private static GmrResponse ToResponse(GmrEntity gmrEntity)
-    {
-        return new GmrResponse(gmrEntity.Gmr, gmrEntity.Created, gmrEntity.Updated);
     }
 }

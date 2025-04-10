@@ -39,7 +39,7 @@ public class UnknownTimeZoneDateTimeJsonConverter(string propertyName) : JsonCon
         if (value.Kind != DateTimeKind.Unspecified)
         {
             throw new FormatException(
-                $"Invalid Value in {propertyName}, value={value.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}. Unknown Timezone dates must be DateTimeKind.Unspecified, not {value.Kind}"
+                $"Invalid Value in {propertyName}, value={value.ToString("s", CultureInfo.InvariantCulture)}. Unknown Timezone dates must be DateTimeKind.Unspecified, not {value.Kind}"
             );
         }
         writer.WriteStringValue(value.ToString(JsonFormat, CultureInfo.InvariantCulture));
