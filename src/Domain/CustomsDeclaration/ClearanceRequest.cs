@@ -1,23 +1,20 @@
 using System.Text.Json.Serialization;
 
-namespace Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ClearanceRequest;
+namespace Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 
 public class ClearanceRequest
 {
-    [JsonPropertyName("correlationId")]
-    public string? CorrelationId { get; set; }
+    [JsonPropertyName("externalCorrelationId")]
+    public string? ExternalCorrelationId { get; set; }
 
-    [JsonPropertyName("timestamp")]
-    public DateTime Timestamp { get; set; }
+    [JsonPropertyName("messageSentAt")]
+    public DateTime MessageSentAt { get; set; }
 
-    [JsonPropertyName("entryReference")]
-    public string? EntryReference { get; set; }
+    [JsonPropertyName("externalVersion")]
+    public int? ExternalVersion { get; set; }
 
-    [JsonPropertyName("entryVersionNumber")]
-    public int? EntryVersionNumber { get; set; }
-
-    [JsonPropertyName("previousVersionNumber")]
-    public int? PreviousVersionNumber { get; set; }
+    [JsonPropertyName("previousExternalVersion")]
+    public int? PreviousExternalVersion { get; set; }
 
     [JsonPropertyName("declarationUcr")]
     public string? DeclarationUcr { get; set; }
@@ -49,6 +46,6 @@ public class ClearanceRequest
     [JsonPropertyName("masterUcr")]
     public string? MasterUcr { get; set; }
 
-    [JsonPropertyName("items")]
-    public Item[]? Items { get; set; }
+    [JsonPropertyName("commodities")]
+    public Commodity[]? Commodities { get; set; }
 }

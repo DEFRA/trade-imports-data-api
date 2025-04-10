@@ -1,16 +1,16 @@
 using System.Text.Json.Serialization;
 using Defra.TradeImportsDataApi.Domain.Json;
 
-namespace Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ClearanceRequest;
+namespace Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 
-public class Document
+public class ImportDocument
 {
     [JsonPropertyName("documentCode")]
     public string? DocumentCode { get; set; }
 
     [JsonPropertyName("documentReference")]
     [DocumentReferenceJsonConverter]
-    public DocumentReference? DocumentReference { get; set; }
+    public ImportDocumentReference? DocumentReference { get; set; }
 
     [JsonPropertyName("documentStatus")]
     public string? DocumentStatus { get; set; }

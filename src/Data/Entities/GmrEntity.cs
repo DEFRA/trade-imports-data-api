@@ -12,7 +12,7 @@ public class GmrEntity : IDataEntity
 
     public DateTime Updated { get; set; }
 
-    public required Gmr Data { get; set; }
+    public required Gmr Gmr { get; set; }
 
     public void OnSave() { }
 }

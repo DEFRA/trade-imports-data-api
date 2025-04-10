@@ -80,7 +80,13 @@ public static class EndpointRouteBuilderExtensions
         CancellationToken cancellationToken
     )
     {
-        var customsDeclarationEntity = new CustomsDeclarationEntity { Id = mrn, Data = data };
+        var customsDeclarationEntity = new CustomsDeclarationEntity
+        {
+            Id = mrn,
+            ClearanceRequest = data.ClearanceRequest,
+            ClearanceDecision = data.ClearanceDecision,
+            Finalisation = data.Finalisation,
+        };
 
         var etag = ETags.ValidateAndParseFirst(ifMatch);
 
@@ -103,7 +109,10 @@ public static class EndpointRouteBuilderExtensions
     private static CustomsDeclarationResponse ToResponse(CustomsDeclarationEntity customsDeclarationEntity)
     {
         return new CustomsDeclarationResponse(
-            customsDeclarationEntity.Data,
+            customsDeclarationEntity.Id,
+            customsDeclarationEntity.ClearanceRequest,
+            customsDeclarationEntity.ClearanceDecision,
+            customsDeclarationEntity.Finalisation,
             customsDeclarationEntity.Created,
             customsDeclarationEntity.Updated
         );

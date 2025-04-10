@@ -8,29 +8,29 @@ using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Defra.TradeImportsDataApi.Api.Endpoints.ImportNotifications;
+namespace Defra.TradeImportsDataApi.Api.Endpoints.ImportPreNotifications;
 
 public static class EndpointRouteBuilderExtensions
 {
-    public static void MapImportNotificationEndpoints(this IEndpointRouteBuilder app, bool isDevelopment)
+    public static void MapImportPreNotificationEndpoints(this IEndpointRouteBuilder app, bool isDevelopment)
     {
-        var route = app.MapGet("import-notifications/{chedId}/", Get)
-            .WithName("ImportNotificationByChedId")
-            .WithTags("ImportNotifications")
-            .WithSummary("Get ImportNotification")
-            .WithDescription("Get an Import Notifications by CHED ID")
-            .Produces<ImportNotificationResponse>()
+        var route = app.MapGet("import-pre-notifications/{chedId}/", Get)
+            .WithName("GetImportPreNotificationByChedId")
+            .WithTags("ImportPreNotifications")
+            .WithSummary("Get ImportPreNotification")
+            .WithDescription("Get an import pre-notification by CHED ID")
+            .Produces<ImportPreNotificationResponse>()
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .RequireAuthorization(PolicyNames.Read);
 
         AllowAnonymousForDevelopment(isDevelopment, route);
 
-        route = app.MapPut("import-notifications/{chedId}/", Put)
-            .WithName("PutImportNotification")
-            .WithTags("ImportNotifications")
-            .WithSummary("Put ImportNotification")
-            .WithDescription("Put an Import Notification")
+        route = app.MapPut("import-pre-notifications/{chedId}/", Put)
+            .WithName("PutImportPreNotification")
+            .WithTags("ImportPreNotifications")
+            .WithSummary("Put ImportPreNotification")
+            .WithDescription("Put an import pre-notification")
             .Produces(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status204NoContent)
             .ProducesProblem(StatusCodes.Status400BadRequest)
@@ -50,49 +50,58 @@ public static class EndpointRouteBuilderExtensions
 
     /// <param name="chedId" example="CHEDA.GB.2024.1020304">CHED ID</param>
     /// <param name="context"></param>
-    /// <param name="importNotificationService"></param>
+    /// <param name="importPreNotificationService"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpGet]
     private static async Task<IResult> Get(
         [FromRoute] string chedId,
         HttpContext context,
-        [FromServices] IImportNotificationService importNotificationService,
+        [FromServices] IImportPreNotificationService importPreNotificationService,
         CancellationToken cancellationToken
     )
     {
-        var importNotificationEntity = await importNotificationService.GetImportNotification(chedId, cancellationToken);
-        if (importNotificationEntity is null)
+        var importPreNotificationEntity = await importPreNotificationService.GetImportPreNotification(
+            chedId,
+            cancellationToken
+        );
+        if (importPreNotificationEntity is null)
         {
             return Results.NotFound();
         }
 
-        context.SetResponseEtag(importNotificationEntity.ETag);
+        context.SetResponseEtag(importPreNotificationEntity.ETag);
 
         return Results.Ok(
-            new ImportNotificationResponse(
-                importNotificationEntity.Data,
-                importNotificationEntity.Created,
-                importNotificationEntity.Updated
+            new ImportPreNotificationResponse(
+                importPreNotificationEntity.ImportPreNotification,
+                importPreNotificationEntity.Created,
+                importPreNotificationEntity.Updated
             )
         );
     }
 
+    /// <param name="chedId" example="CHEDA.GB.2024.1020304">CHED ID</param>
+    /// <param name="context"></param>
+    /// <param name="importPreNotification"></param>
+    /// <param name="ifMatch"></param>
+    /// <param name="importPreNotificationService"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [HttpPut]
     private static async Task<IResult> Put(
         [FromRoute] string chedId,
         HttpContext context,
-        [FromBody] ImportNotification data,
+        [FromBody] ImportPreNotification importPreNotification,
         [FromHeader(Name = "If-Match")] string? ifMatch,
-        [FromServices] IImportNotificationService importNotificationService,
+        [FromServices] IImportPreNotificationService importPreNotificationService,
         CancellationToken cancellationToken
     )
     {
-        var importNotificationEntity = new ImportNotificationEntity
+        var importPreNotificationEntity = new ImportPreNotificationEntity
         {
             Id = chedId,
-            CustomDeclarationIdentifier = chedId,
-            Data = data,
+            ImportPreNotification = importPreNotification,
         };
 
         var etag = ETags.ValidateAndParseFirst(ifMatch);
@@ -101,12 +110,12 @@ public static class EndpointRouteBuilderExtensions
         {
             if (string.IsNullOrEmpty(etag))
             {
-                await importNotificationService.Insert(importNotificationEntity, cancellationToken);
+                await importPreNotificationService.Insert(importPreNotificationEntity, cancellationToken);
 
                 return Results.Created();
             }
 
-            await importNotificationService.Update(importNotificationEntity, etag, cancellationToken);
+            await importPreNotificationService.Update(importPreNotificationEntity, etag, cancellationToken);
 
             return Results.NoContent();
         }

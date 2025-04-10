@@ -1,9 +1,24 @@
 ﻿{
-  data: {
-    clearanceRequest: null,
-    decision: null,
-    finalisation: null
+  movementReferenceNumber: mrn,
+  clearanceRequest: {
+    externalCorrelationId: null,
+    messageSentAt: 0001-01-01T00:00:00,
+    externalVersion: null,
+    previousExternalVersion: null,
+    declarationUcr: null,
+    declarationPartNumber: null,
+    declarationType: null,
+    arrivesAt: null,
+    submitterTurn: null,
+    declarantId: null,
+    declarantName: null,
+    dispatchCountryCode: null,
+    goodsLocationCode: null,
+    masterUcr: null,
+    commodities: null
   },
+  clearanceDecision: null,
+  finalisation: null,
   created: 2025-04-03T10:00:00Z,
   updated: 2025-04-03T10:15:00Z
 }

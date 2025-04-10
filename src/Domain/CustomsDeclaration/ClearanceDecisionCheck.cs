@@ -1,8 +1,8 @@
 using System.Text.Json.Serialization;
 
-namespace Defra.TradeImportsDataApi.Domain.CustomsDeclaration.Decision;
+namespace Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 
-public class DecisionCheck
+public class ClearanceDecisionCheck
 {
     [JsonPropertyName("checkCode")]
     public required string CheckCode { get; set; }

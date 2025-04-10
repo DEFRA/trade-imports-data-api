@@ -4,7 +4,7 @@ using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using FluentAssertions;
 using Xunit.Abstractions;
 
-namespace Defra.TradeImportsDataApi.Api.IntegrationTests.Endpoints.ImportNotifications;
+namespace Defra.TradeImportsDataApi.Api.IntegrationTests.Endpoints.ImportPreNotifications;
 
 public class PutTests(ApiWebApplicationFactory factory, ITestOutputHelper outputHelper)
     : EndpointTestBase(factory, outputHelper)
@@ -17,8 +17,8 @@ public class PutTests(ApiWebApplicationFactory factory, ITestOutputHelper output
         var client = CreateClient(addDefaultAuthorizationHeader: false);
 
         var response = await client.PutAsJsonAsync(
-            Testing.Endpoints.ImportNotifications.Put(ChedId),
-            new ImportNotification()
+            Testing.Endpoints.ImportPreNotifications.Put(ChedId),
+            new ImportPreNotification()
         );
 
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
@@ -30,8 +30,8 @@ public class PutTests(ApiWebApplicationFactory factory, ITestOutputHelper output
         var client = CreateClient(testUser: TestUser.ReadOnly);
 
         var response = await client.PutAsJsonAsync(
-            Testing.Endpoints.ImportNotifications.Put(ChedId),
-            new ImportNotification()
+            Testing.Endpoints.ImportPreNotifications.Put(ChedId),
+            new ImportPreNotification()
         );
 
         response.StatusCode.Should().Be(HttpStatusCode.Forbidden);

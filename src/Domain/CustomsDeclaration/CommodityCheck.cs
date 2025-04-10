@@ -1,8 +1,8 @@
 using System.Text.Json.Serialization;
 
-namespace Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ClearanceRequest;
+namespace Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 
-public class Check
+public class CommodityCheck
 {
     [JsonPropertyName("checkCode")]
     public string? CheckCode { get; set; }

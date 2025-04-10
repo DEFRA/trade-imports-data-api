@@ -1,5 +1,5 @@
 ﻿{
-  Data: {
+  ImportPreNotification: {
     IpaffsId: null,
     Etag: null,
     ExternalReferences: null,

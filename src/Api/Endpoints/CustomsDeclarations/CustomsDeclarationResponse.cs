@@ -1,7 +1,12 @@
+using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
+
 namespace Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations;
 
 public record CustomsDeclarationResponse(
-    Domain.CustomsDeclaration.CustomsDeclaration Data,
+    string MovementReferenceNumber,
+    ClearanceRequest? ClearanceRequest,
+    ClearanceDecision? ClearanceDecision,
+    Finalisation? Finalisation,
     DateTime Created,
     DateTime Updated
 );

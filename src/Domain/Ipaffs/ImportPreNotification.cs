@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
 
-public class ImportNotification
+public class ImportPreNotification
 {
     /// <summary>
     /// The IPAFFS ID number for this notification.

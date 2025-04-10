@@ -9,12 +9,12 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
 {
     private static readonly JsonSerializerOptions s_options = new();
 
-    public async Task<ImportNotificationResponse?> GetImportNotification(
+    public async Task<ImportPreNotificationResponse?> GetImportPreNotification(
         string chedId,
         CancellationToken cancellationToken
     )
     {
-        var requestUri = Endpoints.ImportNotifications(chedId);
+        var requestUri = Endpoints.ImportPreNotifications(chedId);
         var message = new HttpRequestMessage(HttpMethod.Get, new Uri(requestUri, UriKind.RelativeOrAbsolute))
         {
             Version = httpClient.DefaultRequestVersion,
@@ -31,7 +31,7 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
         await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
 
         var result =
-            await JsonSerializer.DeserializeAsync<ImportNotificationResponse>(stream, s_options, cancellationToken)
+            await JsonSerializer.DeserializeAsync<ImportPreNotificationResponse>(stream, s_options, cancellationToken)
             ?? throw new InvalidOperationException("Deserialized null");
 
         return result with
@@ -40,14 +40,14 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
         };
     }
 
-    public async Task PutImportNotification(
+    public async Task PutImportPreNotification(
         string chedId,
-        Domain.Ipaffs.ImportNotification data,
+        Domain.Ipaffs.ImportPreNotification data,
         string? etag,
         CancellationToken cancellationToken
     )
     {
-        var requestUri = Endpoints.ImportNotifications(chedId);
+        var requestUri = Endpoints.ImportPreNotifications(chedId);
         var message = new HttpRequestMessage(HttpMethod.Put, new Uri(requestUri, UriKind.RelativeOrAbsolute))
         {
             Version = httpClient.DefaultRequestVersion,

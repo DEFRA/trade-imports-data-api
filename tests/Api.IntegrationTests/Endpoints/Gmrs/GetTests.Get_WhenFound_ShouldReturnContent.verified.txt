@@ -1,5 +1,5 @@
 ﻿{
-  data: {
+  gmr: {
     id: null,
     haulierEori: null,
     state: null,

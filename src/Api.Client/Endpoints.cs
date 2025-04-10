@@ -2,5 +2,5 @@ namespace Defra.TradeImportsDataApi.Api.Client;
 
 internal static class Endpoints
 {
-    public static string ImportNotifications(string chedId) => $"/import-notifications/{chedId}";
+    public static string ImportPreNotifications(string chedId) => $"/import-pre-notifications/{chedId}";
 }

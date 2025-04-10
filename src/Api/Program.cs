@@ -2,7 +2,7 @@ using System.Reflection;
 using Defra.TradeImportsDataApi.Api.Authentication;
 using Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations;
 using Defra.TradeImportsDataApi.Api.Endpoints.Gmrs;
-using Defra.TradeImportsDataApi.Api.Endpoints.ImportNotifications;
+using Defra.TradeImportsDataApi.Api.Endpoints.ImportPreNotifications;
 using Defra.TradeImportsDataApi.Api.Health;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Api.Utils;
@@ -130,7 +130,7 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
     });
 
     builder.Services.AddTransient<IGmrService, GmrService>();
-    builder.Services.AddTransient<IImportNotificationService, ImportNotificationService>();
+    builder.Services.AddTransient<IImportPreNotificationService, ImportPreNotificationService>();
     builder.Services.AddTransient<ICustomsDeclarationService, CustomsDeclarationService>();
 
     builder.Services.AddDbContext(builder.Configuration);
@@ -148,7 +148,7 @@ static WebApplication BuildWebApplication(WebApplicationBuilder builder)
     app.UseAuthorization();
     app.MapHealth();
     app.MapGmrEndpoints(isDevelopment);
-    app.MapImportNotificationEndpoints(isDevelopment);
+    app.MapImportPreNotificationEndpoints(isDevelopment);
     app.MapCustomsDeclarationEndpoints(isDevelopment);
 
     app.UseSwagger(options =>

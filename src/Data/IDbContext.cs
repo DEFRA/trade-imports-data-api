@@ -4,10 +4,11 @@ namespace Defra.TradeImportsDataApi.Data;
 
 public interface IDbContext
 {
-    IMongoCollectionSet<ImportNotificationEntity> Notifications { get; }
+    IMongoCollectionSet<ImportPreNotificationEntity> ImportPreNotifications { get; }
 
-    IMongoCollectionSet<CustomsDeclarationEntity> CustomDeclarations { get; }
+    IMongoCollectionSet<CustomsDeclarationEntity> CustomsDeclarations { get; }
 
     IMongoCollectionSet<GmrEntity> Gmrs { get; }
+
     Task SaveChangesAsync(CancellationToken cancellation = default);
 }
