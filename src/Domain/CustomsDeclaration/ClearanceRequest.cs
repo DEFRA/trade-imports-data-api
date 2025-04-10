@@ -7,8 +7,8 @@ public class ClearanceRequest
     [JsonPropertyName("externalCorrelationId")]
     public string? ExternalCorrelationId { get; set; }
 
-    [JsonPropertyName("timestamp")]
-    public DateTime Timestamp { get; set; }
+    [JsonPropertyName("messageSentAt")]
+    public DateTime MessageSentAt { get; set; }
 
     [JsonPropertyName("externalVersion")]
     public int? ExternalVersion { get; set; }

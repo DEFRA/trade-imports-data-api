@@ -463,7 +463,7 @@
       "Defra.TradeImportsDataApi.Api.Endpoints.Gmrs.GmrResponse": {
         "type": "object",
         "properties": {
-          "data": {
+          "gmr": {
             "allOf": [
               {
                 "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Gvms.Gmr"
@@ -606,7 +606,7 @@
             "type": "string",
             "nullable": true
           },
-          "timestamp": {
+          "messageSentAt": {
             "type": "string",
             "format": "date-time"
           },
@@ -804,7 +804,7 @@
             "type": "string",
             "nullable": true
           },
-          "timestamp": {
+          "messageSentAt": {
             "type": "string",
             "format": "date-time"
           },
