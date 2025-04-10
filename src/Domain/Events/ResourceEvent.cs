@@ -4,17 +4,17 @@ namespace Defra.TradeImportsDataApi.Domain.Events;
 
 public class ResourceEvent<T>
 {
-    [JsonPropertyName("entityId")]
-    public required string EntityId { get; set; }
+    [JsonPropertyName("resourceId")]
+    public required string ResourceId { get; set; }
 
-    [JsonPropertyName("entityType")]
-    public required string EntityType { get; set; }
+    [JsonPropertyName("resourceType")]
+    public required string ResourceType { get; set; }
 
     [JsonPropertyName("operation")]
     public required string Operation { get; set; }
 
-    [JsonPropertyName("body")]
-    public required T Body { get; set; }
+    [JsonPropertyName("resource")]
+    public required T Resource { get; set; }
 
     [JsonPropertyName("timestamp")]
     public DateTime Timestamp { get; set; } = DateTime.UtcNow;
