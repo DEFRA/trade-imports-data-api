@@ -107,15 +107,11 @@
           "required": true
         },
         "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations.CustomsDeclarationResponse"
-                }
-              }
-            }
+          "201": {
+            "description": "Created"
+          },
+          "204": {
+            "description": "No Content"
           },
           "400": {
             "description": "Bad Request",
@@ -241,15 +237,11 @@
           "required": true
         },
         "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Api.Endpoints.Gmrs.GmrResponse"
-                }
-              }
-            }
+          "201": {
+            "description": "Created"
+          },
+          "204": {
+            "description": "No Content"
           },
           "400": {
             "description": "Bad Request",
@@ -284,14 +276,14 @@
         }
       }
     },
-    "/import-notifications/{chedId}": {
+    "/import-pre-notifications/{chedId}": {
       "get": {
         "tags": [
-          "ImportNotifications"
+          "ImportPreNotifications"
         ],
-        "summary": "Get ImportNotification",
-        "description": "Get an Import Notifications by CHED ID",
-        "operationId": "ImportNotificationByChedId",
+        "summary": "Get ImportPreNotification",
+        "description": "Get an import pre-notification by CHED ID",
+        "operationId": "GetImportPreNotificationByChedId",
         "parameters": [
           {
             "name": "chedId",
@@ -310,7 +302,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Api.Endpoints.ImportNotifications.ImportNotificationResponse"
+                  "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Api.Endpoints.ImportPreNotifications.ImportPreNotificationResponse"
                 }
               }
             }
@@ -339,35 +331,39 @@
       },
       "put": {
         "tags": [
-          "ImportNotifications"
+          "ImportPreNotifications"
         ],
-        "summary": "Put ImportNotification",
-        "description": "Put an Import Notification",
-        "operationId": "PutImportNotification",
+        "summary": "Put ImportPreNotification",
+        "description": "Put an import pre-notification",
+        "operationId": "PutImportPreNotification",
         "parameters": [
           {
             "name": "chedId",
             "in": "path",
+            "description": "CHED ID",
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "CHEDA.GB.2024.1020304"
           },
           {
             "name": "If-Match",
             "in": "header",
+            "description": "",
             "schema": {
               "type": "string"
             }
           }
         ],
         "requestBody": {
+          "description": "",
           "content": {
             "application/json": {
               "schema": {
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.ImportNotification"
+                    "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.ImportPreNotification"
                   }
                 ]
               }
@@ -376,15 +372,11 @@
           "required": true
         },
         "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Api.Endpoints.ImportNotifications.ImportNotificationResponse"
-                }
-              }
-            }
+          "201": {
+            "description": "Created"
+          },
+          "204": {
+            "description": "No Content"
           },
           "400": {
             "description": "Bad Request",
@@ -425,10 +417,30 @@
       "Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations.CustomsDeclarationResponse": {
         "type": "object",
         "properties": {
-          "data": {
+          "movementReferenceNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "clearanceRequest": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.CustomsDeclaration.CustomsDeclaration"
+                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ClearanceRequest"
+              }
+            ],
+            "nullable": true
+          },
+          "clearanceDecision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ClearanceDecision"
+              }
+            ],
+            "nullable": true
+          },
+          "finalisation": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.CustomsDeclaration.Finalisation"
               }
             ],
             "nullable": true
@@ -447,7 +459,7 @@
       "Defra.TradeImportsDataApi.Api.Endpoints.Gmrs.GmrResponse": {
         "type": "object",
         "properties": {
-          "data": {
+          "gmr": {
             "allOf": [
               {
                 "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Gvms.Gmr"
@@ -466,13 +478,13 @@
         },
         "additionalProperties": false
       },
-      "Defra.TradeImportsDataApi.Api.Endpoints.ImportNotifications.ImportNotificationResponse": {
+      "Defra.TradeImportsDataApi.Api.Endpoints.ImportPreNotifications.ImportPreNotificationResponse": {
         "type": "object",
         "properties": {
-          "data": {
+          "importPreNotification": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.ImportNotification"
+                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.ImportPreNotification"
               }
             ],
             "nullable": true
@@ -488,7 +500,45 @@
         },
         "additionalProperties": false
       },
-      "Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ClearanceRequest.Check": {
+      "Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ClearanceDecision": {
+        "required": [
+          "items"
+        ],
+        "type": "object",
+        "properties": {
+          "externalCorrelationId": {
+            "type": "string",
+            "nullable": true
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "externalVersionNumber": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "decisionNumber": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ClearanceDecisionItem"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ClearanceDecisionCheck": {
+        "required": [
+          "checkCode",
+          "decisionCode"
+        ],
         "type": "object",
         "properties": {
           "checkCode": {
@@ -498,31 +548,70 @@
           "departmentCode": {
             "type": "string",
             "nullable": true
+          },
+          "decisionCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "decisionsValidUntil": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "decisionReasons": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "decisionInternalFurtherDetail": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
       },
-      "Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ClearanceRequest.ClearanceRequest": {
+      "Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ClearanceDecisionItem": {
+        "required": [
+          "checks"
+        ],
         "type": "object",
         "properties": {
-          "correlationId": {
+          "itemNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "checks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ClearanceDecisionCheck"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ClearanceRequest": {
+        "type": "object",
+        "properties": {
+          "externalCorrelationId": {
             "type": "string",
             "nullable": true
           },
-          "timestamp": {
+          "messageSentAt": {
             "type": "string",
             "format": "date-time"
           },
-          "entryReference": {
-            "type": "string",
-            "nullable": true
-          },
-          "entryVersionNumber": {
+          "externalVersion": {
             "type": "integer",
             "format": "int32",
             "nullable": true
           },
-          "previousVersionNumber": {
+          "previousExternalVersion": {
             "type": "integer",
             "format": "int32",
             "nullable": true
@@ -568,58 +657,17 @@
             "type": "string",
             "nullable": true
           },
-          "items": {
+          "commodities": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ClearanceRequest.Item"
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.CustomsDeclaration.Commodity"
             },
             "nullable": true
           }
         },
         "additionalProperties": false
       },
-      "Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ClearanceRequest.Document": {
-        "type": "object",
-        "properties": {
-          "documentCode": {
-            "type": "string",
-            "nullable": true
-          },
-          "documentReference": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ClearanceRequest.DocumentReference"
-              }
-            ],
-            "nullable": true
-          },
-          "documentStatus": {
-            "type": "string",
-            "nullable": true
-          },
-          "documentControl": {
-            "type": "string",
-            "nullable": true
-          },
-          "documentQuantity": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ClearanceRequest.DocumentReference": {
-        "type": "object",
-        "properties": {
-          "value": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ClearanceRequest.Item": {
+      "Defra.TradeImportsDataApi.Domain.CustomsDeclaration.Commodity": {
         "type": "object",
         "properties": {
           "itemNumber": {
@@ -647,37 +695,51 @@
             "type": "string",
             "nullable": true
           },
-          "itemNetMass": {
+          "netMass": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "itemSupplementaryUnits": {
+          "supplementaryUnits": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "itemThirdQuantity": {
+          "thirdQuantity": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "itemOriginCountryCode": {
+          "originCountryCode": {
             "type": "string",
             "nullable": true
           },
           "documents": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ClearanceRequest.Document"
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ImportDocument"
             },
             "nullable": true
           },
           "checks": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ClearanceRequest.Check"
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.CustomsDeclaration.CommodityCheck"
             },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Defra.TradeImportsDataApi.Domain.CustomsDeclaration.CommodityCheck": {
+        "type": "object",
+        "properties": {
+          "checkCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "departmentCode": {
+            "type": "string",
             "nullable": true
           }
         },
@@ -689,15 +751,15 @@
           "clearanceRequest": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ClearanceRequest.ClearanceRequest"
+                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ClearanceRequest"
               }
             ],
             "nullable": true
           },
-          "decision": {
+          "clearanceDecision": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.CustomsDeclaration.Decision.Decision"
+                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ClearanceDecision"
               }
             ],
             "nullable": true
@@ -705,7 +767,7 @@
           "finalisation": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.CustomsDeclaration.Finalisation.Finalisation"
+                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.CustomsDeclaration.Finalisation"
               }
             ],
             "nullable": true
@@ -713,106 +775,7 @@
         },
         "additionalProperties": false
       },
-      "Defra.TradeImportsDataApi.Domain.CustomsDeclaration.Decision.Decision": {
-        "required": [
-          "items"
-        ],
-        "type": "object",
-        "properties": {
-          "correlationId": {
-            "type": "string",
-            "nullable": true
-          },
-          "timestamp": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "entryReference": {
-            "type": "string",
-            "nullable": true
-          },
-          "entryVersionNumber": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "decisionNumber": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "items": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.CustomsDeclaration.Decision.DecisionItem"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "Defra.TradeImportsDataApi.Domain.CustomsDeclaration.Decision.DecisionCheck": {
-        "required": [
-          "checkCode",
-          "decisionCode"
-        ],
-        "type": "object",
-        "properties": {
-          "checkCode": {
-            "type": "string",
-            "nullable": true
-          },
-          "departmentCode": {
-            "type": "string",
-            "nullable": true
-          },
-          "decisionCode": {
-            "type": "string",
-            "nullable": true
-          },
-          "decisionsValidUntil": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "decisionReasons": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          },
-          "decisionInternalFurtherDetail": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "Defra.TradeImportsDataApi.Domain.CustomsDeclaration.Decision.DecisionItem": {
-        "required": [
-          "checks"
-        ],
-        "type": "object",
-        "properties": {
-          "itemNumber": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "checks": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.CustomsDeclaration.Decision.DecisionCheck"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "Defra.TradeImportsDataApi.Domain.CustomsDeclaration.Finalisation.FinalState": {
+      "Defra.TradeImportsDataApi.Domain.CustomsDeclaration.FinalState": {
         "enum": [
           0,
           1,
@@ -825,28 +788,23 @@
         "type": "integer",
         "format": "int32"
       },
-      "Defra.TradeImportsDataApi.Domain.CustomsDeclaration.Finalisation.Finalisation": {
+      "Defra.TradeImportsDataApi.Domain.CustomsDeclaration.Finalisation": {
         "required": [
-          "entryReference",
-          "entryVersionNumber",
+          "externalVersion",
           "finalState",
-          "manualAction"
+          "isManualRelease"
         ],
         "type": "object",
         "properties": {
-          "correlationId": {
+          "externalCorrelationId": {
             "type": "string",
             "nullable": true
           },
-          "timestamp": {
+          "messageSentAt": {
             "type": "string",
             "format": "date-time"
           },
-          "entryReference": {
-            "type": "string",
-            "nullable": true
-          },
-          "entryVersionNumber": {
+          "externalVersion": {
             "type": "integer",
             "format": "int32"
           },
@@ -858,12 +816,53 @@
           "finalState": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.CustomsDeclaration.Finalisation.FinalState"
+                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.CustomsDeclaration.FinalState"
               }
             ]
           },
-          "manualAction": {
+          "isManualRelease": {
             "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ImportDocument": {
+        "type": "object",
+        "properties": {
+          "documentCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "documentReference": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ImportDocumentReference"
+              }
+            ],
+            "nullable": true
+          },
+          "documentStatus": {
+            "type": "string",
+            "nullable": true
+          },
+          "documentControl": {
+            "type": "string",
+            "nullable": true
+          },
+          "documentQuantity": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ImportDocumentReference": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -2893,7 +2892,34 @@
         },
         "additionalProperties": false
       },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.ImportNotification": {
+      "Defra.TradeImportsDataApi.Domain.Ipaffs.ImportNotificationStatus": {
+        "enum": [
+          "Draft",
+          "Submitted",
+          "Validated",
+          "Rejected",
+          "InProgress",
+          "Amend",
+          "Modify",
+          "Replaced",
+          "Cancelled",
+          "Deleted",
+          "PartiallyRejected",
+          "SplitConsignment"
+        ],
+        "type": "string"
+      },
+      "Defra.TradeImportsDataApi.Domain.Ipaffs.ImportNotificationType": {
+        "enum": [
+          "Cveda",
+          "Cvedp",
+          "Chedpp",
+          "Ced",
+          "Imp"
+        ],
+        "type": "string"
+      },
+      "Defra.TradeImportsDataApi.Domain.Ipaffs.ImportPreNotification": {
         "type": "object",
         "properties": {
           "ipaffsId": {
@@ -3109,33 +3135,6 @@
           }
         },
         "additionalProperties": false
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.ImportNotificationStatus": {
-        "enum": [
-          "Draft",
-          "Submitted",
-          "Validated",
-          "Rejected",
-          "InProgress",
-          "Amend",
-          "Modify",
-          "Replaced",
-          "Cancelled",
-          "Deleted",
-          "PartiallyRejected",
-          "SplitConsignment"
-        ],
-        "type": "string"
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.ImportNotificationType": {
-        "enum": [
-          "Cveda",
-          "Cvedp",
-          "Chedpp",
-          "Ced",
-          "Imp"
-        ],
-        "type": "string"
       },
       "Defra.TradeImportsDataApi.Domain.Ipaffs.InspectionCheck": {
         "type": "object",

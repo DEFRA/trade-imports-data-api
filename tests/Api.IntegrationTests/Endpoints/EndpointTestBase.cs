@@ -1,5 +1,4 @@
 using System.Net.Http.Headers;
-using System.Text;
 using Defra.TradeImportsDataApi.Api.Authentication;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;

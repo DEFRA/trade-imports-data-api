@@ -11,9 +11,9 @@ public static class Endpoints
         public static string Put(string gmrId) => $"{Root}/{gmrId}";
     }
 
-    public static class ImportNotifications
+    public static class ImportPreNotifications
     {
-        private const string Root = "/import-notifications";
+        private const string Root = "/import-pre-notifications";
 
         public static string Get(string chedId) => $"{Root}/{chedId}";
 

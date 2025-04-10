@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using Defra.TradeImportsDataApi.Api.Authentication;
 using Defra.TradeImportsDataApi.Api.Extensions;
 using Defra.TradeImportsDataApi.Api.Services;
+using Defra.TradeImportsDataApi.Api.Utils;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +30,8 @@ public static class EndpointRouteBuilderExtensions
             .WithTags("Gmrs")
             .WithSummary("Put Gmr")
             .WithDescription("Put a GMR")
-            .Produces<GmrResponse>()
+            .Produces(StatusCodes.Status201Created)
+            .Produces(StatusCodes.Status204NoContent)
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status409Conflict)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
@@ -66,39 +68,39 @@ public static class EndpointRouteBuilderExtensions
 
         context.SetResponseEtag(gmrEntity.ETag);
 
-        return Results.Ok(ToResponse(gmrEntity));
+        return Results.Ok(new GmrResponse(gmrEntity.Gmr, gmrEntity.Created, gmrEntity.Updated));
     }
 
     [HttpPut]
     private static async Task<IResult> Put(
         [FromRoute] string gmrId,
         HttpContext context,
-        [FromBody] Domain.Gvms.Gmr data,
-        [FromHeader(Name = "If-Match")] string? etag,
+        [FromBody] Domain.Gvms.Gmr gmr,
+        [FromHeader(Name = "If-Match")] string? ifMatch,
         [FromServices] IGmrService gmrService,
         CancellationToken cancellationToken
     )
     {
-        var gmrEntity = new GmrEntity { Id = gmrId, Data = data };
+        var gmrEntity = new GmrEntity { Id = gmrId, Gmr = gmr };
+
+        var etag = ETags.ValidateAndParseFirst(ifMatch);
 
         try
         {
-            gmrEntity = string.IsNullOrEmpty(etag)
-                ? await gmrService.Insert(gmrEntity, cancellationToken)
-                : await gmrService.Update(gmrEntity, etag, cancellationToken);
+            if (string.IsNullOrEmpty(etag))
+            {
+                await gmrService.Insert(gmrEntity, cancellationToken);
 
-            context.SetResponseEtag(gmrEntity.ETag);
+                return Results.Created();
+            }
 
-            return Results.Ok(ToResponse(gmrEntity));
+            await gmrService.Update(gmrEntity, etag, cancellationToken);
+
+            return Results.NoContent();
         }
         catch (ConcurrencyException)
         {
             return Results.Conflict();
         }
-    }
-
-    private static GmrResponse ToResponse(GmrEntity gmrEntity)
-    {
-        return new GmrResponse(gmrEntity.Data, gmrEntity.Created, gmrEntity.Updated);
     }
 }

@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using Defra.TradeImportsDataApi.Api.Authentication;
 using Defra.TradeImportsDataApi.Api.Extensions;
 using Defra.TradeImportsDataApi.Api.Services;
+using Defra.TradeImportsDataApi.Api.Utils;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +30,8 @@ public static class EndpointRouteBuilderExtensions
             .WithTags("CustomsDeclarations")
             .WithSummary("Put CustomsDeclaration")
             .WithDescription("Put a Customs Declaration")
-            .Produces<CustomsDeclarationResponse>()
+            .Produces(StatusCodes.Status201Created)
+            .Produces(StatusCodes.Status204NoContent)
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status409Conflict)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
@@ -66,7 +68,16 @@ public static class EndpointRouteBuilderExtensions
 
         context.SetResponseEtag(customsDeclarationEntity.ETag);
 
-        return Results.Ok(ToResponse(customsDeclarationEntity));
+        return Results.Ok(
+            new CustomsDeclarationResponse(
+                customsDeclarationEntity.Id,
+                customsDeclarationEntity.ClearanceRequest,
+                customsDeclarationEntity.ClearanceDecision,
+                customsDeclarationEntity.Finalisation,
+                customsDeclarationEntity.Created,
+                customsDeclarationEntity.Updated
+            )
+        );
     }
 
     [HttpPut]
@@ -74,35 +85,37 @@ public static class EndpointRouteBuilderExtensions
         [FromRoute] string mrn,
         HttpContext context,
         [FromBody] Domain.CustomsDeclaration.CustomsDeclaration data,
-        [FromHeader(Name = "If-Match")] string? etag,
+        [FromHeader(Name = "If-Match")] string? ifMatch,
         [FromServices] ICustomsDeclarationService customsDeclarationService,
         CancellationToken cancellationToken
     )
     {
-        var customsDeclarationEntity = new CustomsDeclarationEntity { Id = mrn, Data = data };
+        var customsDeclarationEntity = new CustomsDeclarationEntity
+        {
+            Id = mrn,
+            ClearanceRequest = data.ClearanceRequest,
+            ClearanceDecision = data.ClearanceDecision,
+            Finalisation = data.Finalisation,
+        };
+
+        var etag = ETags.ValidateAndParseFirst(ifMatch);
 
         try
         {
-            customsDeclarationEntity = string.IsNullOrEmpty(etag)
-                ? await customsDeclarationService.Insert(customsDeclarationEntity, cancellationToken)
-                : await customsDeclarationService.Update(customsDeclarationEntity, etag, cancellationToken);
+            if (string.IsNullOrEmpty(etag))
+            {
+                await customsDeclarationService.Insert(customsDeclarationEntity, cancellationToken);
 
-            context.SetResponseEtag(customsDeclarationEntity.ETag);
+                return Results.Created();
+            }
 
-            return Results.Ok(ToResponse(customsDeclarationEntity));
+            await customsDeclarationService.Update(customsDeclarationEntity, etag, cancellationToken);
+
+            return Results.NoContent();
         }
         catch (ConcurrencyException)
         {
             return Results.Conflict();
         }
-    }
-
-    private static CustomsDeclarationResponse ToResponse(CustomsDeclarationEntity customsDeclarationEntity)
-    {
-        return new CustomsDeclarationResponse(
-            customsDeclarationEntity.Data,
-            customsDeclarationEntity.Created,
-            customsDeclarationEntity.Updated
-        );
     }
 }

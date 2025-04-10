@@ -6,7 +6,7 @@ namespace Defra.TradeImportsDataApi.Data.Entities
     {
         public required string Id { get; set; }
 
-        public List<string> ImportNotificationIdentifiers { get; set; } = new();
+        public List<string> ImportPreNotificationIdentifiers { get; set; } = new();
 
         public string ETag { get; set; } = null!;
 
@@ -14,12 +14,16 @@ namespace Defra.TradeImportsDataApi.Data.Entities
 
         public DateTime Updated { get; set; }
 
-        public required CustomsDeclaration Data { get; set; }
+        public ClearanceRequest? ClearanceRequest { get; set; }
+
+        public ClearanceDecision? ClearanceDecision { get; set; }
+
+        public Finalisation? Finalisation { get; set; }
 
         public void OnSave()
         {
-            ImportNotificationIdentifiers.Clear();
-            var items = Data?.ClearanceRequest?.Items;
+            ImportPreNotificationIdentifiers.Clear();
+            var items = ClearanceRequest?.Commodities;
             if (items == null)
                 return;
 
@@ -33,7 +37,7 @@ namespace Defra.TradeImportsDataApi.Data.Entities
                         continue;
                     if (documentReference.IsValid())
                     {
-                        ImportNotificationIdentifiers.Add(documentReference.GetIdentifier());
+                        ImportPreNotificationIdentifiers.Add(documentReference.GetIdentifier());
                     }
                 }
             }

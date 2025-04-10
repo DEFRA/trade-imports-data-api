@@ -1,0 +1,23 @@
+﻿{
+  Gmr: {
+    Id: ID,
+    HaulierEori: null,
+    State: null,
+    InspectionRequired: null,
+    ReportToLocations: null,
+    UpdatedSource: null,
+    Direction: null,
+    HaulierType: null,
+    IsUnaccompanied: null,
+    VehicleRegistrationNumber: null,
+    TrailerRegistrationNums: null,
+    ContainerReferenceNums: null,
+    PlannedCrossing: null,
+    CheckedInCrossing: null,
+    ActualCrossing: null,
+    Declarations: null
+  },
+  Created: 2025-04-07 11:00 Utc,
+  Updated: 2025-04-07 11:15 Utc,
+  ETag: "etag"
+}

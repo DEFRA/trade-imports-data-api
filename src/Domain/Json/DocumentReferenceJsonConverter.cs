@@ -1,6 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ClearanceRequest;
+using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 
 namespace Defra.TradeImportsDataApi.Domain.Json;
 
@@ -13,9 +13,9 @@ public class DocumentReferenceJsonConverterAttribute : JsonConverterAttribute
     }
 }
 
-public class DocumentReferenceJsonConverter : JsonConverter<DocumentReference?>
+public class DocumentReferenceJsonConverter : JsonConverter<ImportDocumentReference?>
 {
-    public override DocumentReference? Read(
+    public override ImportDocumentReference? Read(
         ref Utf8JsonReader reader,
         Type typeToConvert,
         JsonSerializerOptions options
@@ -27,10 +27,10 @@ public class DocumentReferenceJsonConverter : JsonConverter<DocumentReference?>
         {
             return null;
         }
-        return new DocumentReference(value);
+        return new ImportDocumentReference(value);
     }
 
-    public override void Write(Utf8JsonWriter writer, DocumentReference? value, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter writer, ImportDocumentReference? value, JsonSerializerOptions options)
     {
         if (value is not null)
         {

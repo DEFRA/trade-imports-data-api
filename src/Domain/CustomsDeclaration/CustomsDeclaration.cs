@@ -1,11 +1,10 @@
-namespace Defra.TradeImportsDataApi.Domain.CustomsDeclaration
+namespace Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
+
+public class CustomsDeclaration
 {
-    public class CustomsDeclaration
-    {
-        public ClearanceRequest.ClearanceRequest? ClearanceRequest { get; set; }
+    public ClearanceRequest? ClearanceRequest { get; set; }
 
-        public Decision.Decision? Decision { get; set; }
+    public ClearanceDecision? ClearanceDecision { get; set; }
 
-        public Finalisation.Finalisation? Finalisation { get; set; }
-    }
+    public Finalisation? Finalisation { get; set; }
 }
