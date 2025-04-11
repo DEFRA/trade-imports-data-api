@@ -1,4 +1,3 @@
-using Defra.TradeImportsDataApi.Api.Client;
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 using FluentAssertions;
 
@@ -9,7 +8,7 @@ public class CustomsDeclarationTests : IntegrationTestBase
     [Fact]
     public async Task WhenDoesNotExist_ShouldCreateAndRead()
     {
-        var client = new TradeImportsDataApiClient(new HttpClient { BaseAddress = new Uri("http://localhost:8080") });
+        var client = CreateDataApiClient();
         var mrn = Guid.NewGuid().ToString("N");
 
         var result = await client.GetCustomsDeclaration(mrn, CancellationToken.None);
@@ -29,7 +28,7 @@ public class CustomsDeclarationTests : IntegrationTestBase
     [Fact]
     public async Task WhenExists_ShouldUpdate()
     {
-        var client = new TradeImportsDataApiClient(new HttpClient { BaseAddress = new Uri("http://localhost:8080") });
+        var client = CreateDataApiClient();
         var mrn = Guid.NewGuid().ToString("N");
 
         var result = await client.GetCustomsDeclaration(mrn, CancellationToken.None);
