@@ -1,11 +1,10 @@
 using Defra.TradeImportsDataApi.Api.Client;
 using Defra.TradeImportsDataApi.Domain.Gvms;
-using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using FluentAssertions;
 
 namespace Defra.TradeImportsDataApi.Api.IntegrationTests.Endpoints;
 
-public class GmrTests
+public class GmrTests : IntegrationTestBase
 {
     [Fact]
     public async Task WhenDoesNotExist_ShouldCreateAndRead()

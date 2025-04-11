@@ -4,7 +4,7 @@ using FluentAssertions;
 
 namespace Defra.TradeImportsDataApi.Api.IntegrationTests.Endpoints;
 
-public class ImportPreNotificationTests
+public class ImportPreNotificationTests : IntegrationTestBase
 {
     [Fact]
     public async Task WhenDoesNotExist_ShouldCreateAndRead()
