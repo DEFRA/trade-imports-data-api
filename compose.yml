@@ -13,7 +13,7 @@ services:
     ports:
       - "27017:27017"
     healthcheck:
-      test: echo "try { rs.status() } catch (err) { rs.initiate({_id:'rs0',members:[{_id:0,host:'host.docker.internal:27017'}]}) }" | mongosh --port 27017 --quiet
+      test: mongosh --eval --quiet "db.adminCommand('ping')"
       interval: 5s
       timeout: 30s
       start_period: 0s
