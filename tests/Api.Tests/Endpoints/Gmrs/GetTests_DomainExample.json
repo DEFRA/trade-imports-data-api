@@ -1,0 +1,83 @@
+{
+  "id": "Id7ccf424c-ce0a-4752-908f-d68640f86909",
+  "haulierEori": "HaulierEori58d6a127-1030-4eeb-9bea-71c6bafa039d",
+  "state": "NotFinalisable",
+  "inspectionRequired": true,
+  "reportToLocations": [
+    {
+      "inspectionTypeId": "InspectionTypeId56570cf0-8162-4d6e-8b77-79e59d12f85f",
+      "locationIds": [
+        "a86fc12d-4b41-49f4-aef7-644c43731c8a",
+        "dbb519ed-4389-468d-a705-766cbd89bf5c",
+        "05481411-fc6d-43bb-b33c-3175f72106df"
+      ]
+    },
+    {
+      "inspectionTypeId": "InspectionTypeId05a279ca-b653-4510-87c2-06212b76516e",
+      "locationIds": [
+        "094827c6-e7c4-4c69-bdfe-9209537a9828",
+        "ead5bcbb-9167-4352-adc2-c1d490bfa2fe",
+        "c4455800-3b72-47ad-b097-f3c1d348248d"
+      ]
+    },
+    {
+      "inspectionTypeId": "InspectionTypeId23cdcb45-5b5a-4d93-8022-a6ae05ff6b55",
+      "locationIds": [
+        "d5f8e56b-95da-48d9-bc1e-d179d97695ef",
+        "115dd1d8-073e-4da1-ae63-1ab7804ed9f3",
+        "55cf0965-4990-45d4-a45e-db2af6f9ed3c"
+      ]
+    }
+  ],
+  "updatedSource": "2023-06-07T04:59:57.4173156",
+  "direction": "UkInbound",
+  "haulierType": "Standard",
+  "isUnaccompanied": false,
+  "vehicleRegistrationNumber": "VehicleRegistrationNumbera309eb1f-be21-41cd-921c-b5687a7800ad",
+  "trailerRegistrationNums": [
+    "c23e1f34-a510-4815-b40b-322c2b7aa639",
+    "72423121-dc0c-4497-b62f-e2bed05dc8df",
+    "5bec7787-dbdb-428a-a437-829d138f4304"
+  ],
+  "containerReferenceNums": [
+    "ad1beeae-b795-461b-beb9-7914f78c1e94",
+    "d7edf7f4-477b-449e-806d-a47a692619d9",
+    "891981f9-ba8e-4053-8f2d-569ce1e7b19e"
+  ],
+  "plannedCrossing": {
+    "routeId": "RouteId313cd8d5-1490-4552-9147-8991a9727cb5",
+    "departsAt": "2026-01-13T14:04:20"
+  },
+  "checkedInCrossing": {
+    "routeId": "RouteId5f3bfc6e-1d81-4d13-83d1-99088478b210",
+    "arrivesAt": "2025-03-01T11:49:32"
+  },
+  "actualCrossing": {
+    "routeId": "RouteIde82cce01-0f82-4c4c-a3aa-a1352cd5a0e1",
+    "arrivesAt": "2026-10-16T22:56:29"
+  },
+  "declarations": {
+    "transits": [
+      {
+        "id": "Id2cf9fd8b-7881-41d0-9fef-828778e5c103"
+      },
+      {
+        "id": "Ideb39e2db-f2d6-4145-b895-8b836285058b"
+      },
+      {
+        "id": "Idb733cf57-9ef4-4f23-9e6d-e844a2b6c3dd"
+      }
+    ],
+    "customs": [
+      {
+        "id": "Id5b833d58-4574-4c77-8a8a-b0f341ad00ef"
+      },
+      {
+        "id": "Id2ea29259-48c7-4074-8793-58a3ca10f60e"
+      },
+      {
+        "id": "Id39c3480c-e6c9-4421-8791-9c940b1a33dd"
+      }
+    ]
+  }
+}
