@@ -32,6 +32,10 @@ jobs:
         run: |
           docker compose up -d
           dotnet test tests/Api.IntegrationTests
+      - name: Docker Compose Logs
+        if: always()
+        run: |
+          docker compose logs
       - name: Check Dockerfile Builds
         uses: docker/build-push-action@471d1dc4e07e5cdedd4c2171150001c434f0b7a4
         with:
