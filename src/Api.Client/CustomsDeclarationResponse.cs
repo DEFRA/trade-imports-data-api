@@ -1,13 +1,14 @@
+using System.Text.Json.Serialization;
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 
 namespace Defra.TradeImportsDataApi.Api.Client;
 
 public record CustomsDeclarationResponse(
-    string MovementReferenceNumber,
-    ClearanceRequest? ClearanceRequest,
-    ClearanceDecision? ClearanceDecision,
-    Finalisation? Finalisation,
-    DateTime Created,
-    DateTime Updated,
+    [property: JsonPropertyName("movementReferenceNumber")] string MovementReferenceNumber,
+    [property: JsonPropertyName("clearanceRequest")] ClearanceRequest? ClearanceRequest,
+    [property: JsonPropertyName("clearanceDecision")] ClearanceDecision? ClearanceDecision,
+    [property: JsonPropertyName("finalisation")] Finalisation? Finalisation,
+    [property: JsonPropertyName("created")] DateTime Created,
+    [property: JsonPropertyName("updated")] DateTime Updated,
     string? ETag = null
 );
