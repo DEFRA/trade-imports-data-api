@@ -27,4 +27,8 @@
     <ProjectReference Include="..\Testing\Testing.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="Endpoints\*\*.json" />
+  </ItemGroup>
+
 </Project>

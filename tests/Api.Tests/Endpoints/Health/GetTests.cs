@@ -1,8 +1,6 @@
-using Defra.TradeImportsDataApi.Api.Tests;
-using Defra.TradeImportsDataApi.Api.Tests.Endpoints;
 using Xunit.Abstractions;
 
-namespace Defra.TradeImportsDataApi.Api.IntegrationTests.Endpoints.Health;
+namespace Defra.TradeImportsDataApi.Api.Tests.Endpoints.Health;
 
 public class GetTests(ApiWebApplicationFactory factory, ITestOutputHelper outputHelper)
     : EndpointTestBase(factory, outputHelper)

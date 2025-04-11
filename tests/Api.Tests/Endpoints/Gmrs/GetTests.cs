@@ -1,7 +1,5 @@
 using System.Net;
 using Defra.TradeImportsDataApi.Api.Services;
-using Defra.TradeImportsDataApi.Api.Tests;
-using Defra.TradeImportsDataApi.Api.Tests.Endpoints;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.Gvms;
 using Defra.TradeImportsDataApi.Testing;
@@ -13,7 +11,7 @@ using NSubstitute.ExceptionExtensions;
 using WireMock.Server;
 using Xunit.Abstractions;
 
-namespace Defra.TradeImportsDataApi.Api.IntegrationTests.Endpoints.Gmrs;
+namespace Defra.TradeImportsDataApi.Api.Tests.Endpoints.Gmrs;
 
 public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
 {
