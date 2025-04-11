@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using Defra.TradeImportsDataApi.Api.Authentication;
+using Defra.TradeImportsDataApi.Api.Exceptions;
 using Defra.TradeImportsDataApi.Api.Extensions;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Api.Utils;
@@ -116,6 +117,10 @@ public static class EndpointRouteBuilderExtensions
         catch (ConcurrencyException)
         {
             return Results.Conflict();
+        }
+        catch (EntityNotFoundException)
+        {
+            return Results.NoContent();
         }
     }
 }

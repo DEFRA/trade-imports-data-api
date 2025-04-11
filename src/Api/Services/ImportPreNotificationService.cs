@@ -1,3 +1,4 @@
+using Defra.TradeImportsDataApi.Api.Exceptions;
 using Defra.TradeImportsDataApi.Api.Utils;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
@@ -39,6 +40,12 @@ public class ImportPreNotificationService(IDbContext dbContext, IEventPublisher 
     )
     {
         var existing = await dbContext.ImportPreNotifications.Find(importPreNotificationEntity.Id, cancellationToken);
+
+        if (existing == null)
+        {
+            throw new EntityNotFoundException(nameof(ImportPreNotificationEntity), importPreNotificationEntity.Id);
+        }
+
         var @event = CreateEvent(
             importPreNotificationEntity.Id,
             ResourceEventOperations.Updated,
@@ -46,7 +53,7 @@ public class ImportPreNotificationService(IDbContext dbContext, IEventPublisher 
         );
         @event.ChangeSet = DiffExtensions.CreateDiff(
             importPreNotificationEntity.ImportPreNotification,
-            existing?.ImportPreNotification
+            existing.ImportPreNotification
         );
         await dbContext.ImportPreNotifications.Update(importPreNotificationEntity, etag, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);

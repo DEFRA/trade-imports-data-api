@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
@@ -15,10 +16,16 @@ public static class DiffExtensions
         Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) },
     };
 
-    public static List<Diff> CreateDiff<T>(T current, T previous)
+    public static List<Diff> CreateDiff<T>([DisallowNull] T current, [DisallowNull] T previous)
+        where T : class
     {
-        var previousNode = JsonNode.Parse(ToJsonString(previous, _jsonOptions));
-        var currentNode = JsonNode.Parse(ToJsonString(current, _jsonOptions));
+        if (current == null)
+            throw new ArgumentNullException(nameof(current));
+        if (previous == null)
+            throw new ArgumentNullException(nameof(previous));
+
+        var previousNode = JsonNode.Parse(ToJsonString(previous));
+        var currentNode = JsonNode.Parse(ToJsonString(current));
         var diff = previousNode.CreatePatch(currentNode);
 
         return diff
@@ -31,11 +38,11 @@ public static class DiffExtensions
             .ToList();
     }
 
-    public static string ToJsonString<T>(T value, JsonSerializerOptions options)
+    private static string ToJsonString<T>(T value)
     {
         if (value is string s)
             return s;
 
-        return JsonSerializer.Serialize(value, options);
+        return JsonSerializer.Serialize(value, _jsonOptions);
     }
 }
