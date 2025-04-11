@@ -56,11 +56,15 @@ public class MongoDbContext : IDbContext
 
     private int GetChangedRecordsCount()
     {
-        return ImportPreNotifications.PendingChanges;
+        // This logic needs to be reviewed as it's easy to forget to include any new collection sets
+        return ImportPreNotifications.PendingChanges + CustomsDeclarations.PendingChanges + Gmrs.PendingChanges;
     }
 
     private async Task InternalSaveChangesAsync(CancellationToken cancellation = default)
     {
+        // This logic needs to be reviewed as it's easy to forget to include any new collection sets
         await ImportPreNotifications.PersistAsync(cancellation);
+        await CustomsDeclarations.PersistAsync(cancellation);
+        await Gmrs.PersistAsync(cancellation);
     }
 }
