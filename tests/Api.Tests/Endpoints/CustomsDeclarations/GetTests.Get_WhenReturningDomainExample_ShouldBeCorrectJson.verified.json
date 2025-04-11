@@ -1,0 +1,345 @@
+﻿{
+  "movementReferenceNumber": "mrn",
+  "clearanceRequest": {
+    "externalCorrelationId": "ExternalCorrelationId44a57b73-a965-4011-8caf-8a0e177fa5de",
+    "messageSentAt": "2025-08-04T21:33:35.7405487",
+    "externalVersion": 97,
+    "previousExternalVersion": 174,
+    "declarationUcr": "DeclarationUcr2268028d-b604-4155-8249-6e3db9386465",
+    "declarationPartNumber": "DeclarationPartNumber5802dfb4-6843-4ce7-b10e-144607a848e2",
+    "declarationType": "DeclarationTypeb7903d14-1c17-44fd-a136-261f55ff8ce8",
+    "arrivesAt": "2023-08-21T15:54:08.3307806",
+    "submitterTurn": "SubmitterTurnf4d78847-594d-4425-a40a-391a60b77d48",
+    "declarantId": "DeclarantId3245ac02-eb23-4a20-9965-74b459d2fb7a",
+    "declarantName": "DeclarantName6e2bd45d-4090-487b-aff1-0375fddbba75",
+    "dispatchCountryCode": "DispatchCountryCode6d163e7c-c5c6-4cf1-a19b-0c6fbb5134d0",
+    "goodsLocationCode": "GoodsLocationCode640e9dee-6a98-4808-b386-d60484bb9ecf",
+    "masterUcr": "MasterUcrb397ab41-5029-484f-965d-fdecb60db04b",
+    "commodities": [
+      {
+        "itemNumber": 185,
+        "customsProcedureCode": "CustomsProcedureCode5197e68a-cab6-4e5e-ae89-4d539015cd37",
+        "taricCommodityCode": "TaricCommodityCode2e98d56e-ec33-46d8-8f24-7f2a65f0bcf3",
+        "goodsDescription": "GoodsDescription2cdf7ba8-8320-423f-9661-52fbbb8caf4f",
+        "consigneeId": "ConsigneeIdea17f7d3-f7a6-42fd-ba59-e893cbead592",
+        "consigneeName": "ConsigneeName496428dd-42e5-498d-9412-140e48ee1c6e",
+        "netMass": 150,
+        "supplementaryUnits": 83,
+        "thirdQuantity": 57,
+        "originCountryCode": "OriginCountryCode17995157-e5c9-43b4-9241-729d8c755917",
+        "documents": [
+          {
+            "documentCode": "DocumentCode606de214-3711-404a-90b3-287decfbd892",
+            "documentReference": "Valuee065c836-68f5-4c96-a974-f41d8c1a82e7",
+            "documentStatus": "DocumentStatuscaa18eb6-1f61-4005-b1d4-0455cef1a09e",
+            "documentControl": "DocumentControl2971ed2c-a492-4fc1-ba58-ba8a53f5b6f3",
+            "documentQuantity": 14
+          },
+          {
+            "documentCode": "DocumentCode43143d3f-10ee-4bad-8807-78e05473c013",
+            "documentReference": "Value2f194dda-df95-4796-8db2-2b61fc9bf2c6",
+            "documentStatus": "DocumentStatus4f2e0a4d-a875-41f7-8bf2-db28d8df14d1",
+            "documentControl": "DocumentControl006a863b-83cd-430d-a3c4-51c1921db150",
+            "documentQuantity": 16
+          },
+          {
+            "documentCode": "DocumentCodee05d5d2a-617d-45db-99b9-fef059b3a6f8",
+            "documentReference": "Value3811bb3b-4b70-4ec0-b6a4-66ca725c20af",
+            "documentStatus": "DocumentStatus2ff2c8f3-7801-4236-a892-012685ba17a9",
+            "documentControl": "DocumentControl5648b0b7-7be7-4e37-8e00-3aa101fe221c",
+            "documentQuantity": 80
+          }
+        ],
+        "checks": [
+          {
+            "checkCode": "CheckCoded32dc558-c8b9-45cc-a425-649bd8dc8237",
+            "departmentCode": "DepartmentCodebc1b568d-b4e3-429f-ac6d-22714107df5d"
+          },
+          {
+            "checkCode": "CheckCoded6530aa6-1275-448a-ad43-fd19ec5f04cc",
+            "departmentCode": "DepartmentCode9c93b29d-9332-4ee4-9330-84388cd46ce1"
+          },
+          {
+            "checkCode": "CheckCode07a77910-7576-4daf-936d-621c5b682d75",
+            "departmentCode": "DepartmentCode08ac0600-ca6e-4c8a-8257-5ad24784399b"
+          }
+        ]
+      },
+      {
+        "itemNumber": 20,
+        "customsProcedureCode": "CustomsProcedureCodebdee1c3f-b839-47e2-a91f-92fe63043a23",
+        "taricCommodityCode": "TaricCommodityCode762bdbe1-5bab-4d12-971f-55eb57b32666",
+        "goodsDescription": "GoodsDescription5e7e6e55-7ce4-4d9e-8cd3-a3cf0a8cb44a",
+        "consigneeId": "ConsigneeId1473f8cf-5527-4232-88f8-6a34b719c27c",
+        "consigneeName": "ConsigneeName11cd2c3b-ad54-4596-8ef5-e77591253036",
+        "netMass": 188,
+        "supplementaryUnits": 118,
+        "thirdQuantity": 12,
+        "originCountryCode": "OriginCountryCodea6bdd2bf-d18d-4559-a7fc-aa471bea8927",
+        "documents": [
+          {
+            "documentCode": "DocumentCode04b349b1-17f1-4e41-bdfe-86c2c84346f9",
+            "documentReference": "Value7fe16c00-c8f6-425e-beb3-b98f3a6b9b56",
+            "documentStatus": "DocumentStatus4b113202-15e6-489c-a5e5-296f8a88369e",
+            "documentControl": "DocumentControl30e14066-8774-45ad-a4fa-790074130460",
+            "documentQuantity": 23
+          },
+          {
+            "documentCode": "DocumentCode6d16a34c-6334-4135-8894-63d197c4402d",
+            "documentReference": "Value90832278-4f76-49bf-ba39-a38754c3b041",
+            "documentStatus": "DocumentStatus7690555b-6d99-4e7a-8329-2b3cfbdd2358",
+            "documentControl": "DocumentControl0281c6c3-90d1-48d1-a01e-7c069c71ab5c",
+            "documentQuantity": 204
+          },
+          {
+            "documentCode": "DocumentCode4a012573-1965-4454-aa69-84069c21f098",
+            "documentReference": "Value8e6f30ce-ca92-4936-b0e4-f3301503125c",
+            "documentStatus": "DocumentStatusdd5c4f12-a661-4218-873a-c13a56986f06",
+            "documentControl": "DocumentControl5330550a-f790-4bd9-9347-628fa7780d0a",
+            "documentQuantity": 149
+          }
+        ],
+        "checks": [
+          {
+            "checkCode": "CheckCode1081fb5f-850f-4656-8106-f082b8bb200b",
+            "departmentCode": "DepartmentCodeea01cc44-5b5b-4414-9442-e686f14acd8d"
+          },
+          {
+            "checkCode": "CheckCodebcdf4c23-0048-4863-a644-097d97398fcb",
+            "departmentCode": "DepartmentCode57c48147-a51a-43f7-a9cd-93ec4d735fb4"
+          },
+          {
+            "checkCode": "CheckCode11f6cad3-209d-467d-8ddc-14fe7257b59b",
+            "departmentCode": "DepartmentCode9547d3c0-7ddc-4df4-b52b-73e6e3f1a126"
+          }
+        ]
+      },
+      {
+        "itemNumber": 91,
+        "customsProcedureCode": "CustomsProcedureCode0600d0c2-3ca3-4a15-a70b-4a1621cb2088",
+        "taricCommodityCode": "TaricCommodityCodeb137558b-aa07-4f75-a51e-1b5cb8337c99",
+        "goodsDescription": "GoodsDescription5db5322a-a4a4-41b9-b639-485ffbafe001",
+        "consigneeId": "ConsigneeIdad50153c-bc1b-4350-86e9-32963956cf85",
+        "consigneeName": "ConsigneeName81993889-0929-4fd4-af27-ca5671cc7ce4",
+        "netMass": 192,
+        "supplementaryUnits": 36,
+        "thirdQuantity": 254,
+        "originCountryCode": "OriginCountryCodee4c154ad-ba15-4189-8c72-90bbff607301",
+        "documents": [
+          {
+            "documentCode": "DocumentCodeea5cbbd9-a32e-4c68-b6fa-7bc2a51d03c8",
+            "documentReference": "Value6d1c5c09-09c4-414c-bc7f-1d840e624454",
+            "documentStatus": "DocumentStatus7fda2a6e-6647-4534-9b9c-030644254be9",
+            "documentControl": "DocumentControl1d4c7a50-403f-4241-8454-0803a5efd0e0",
+            "documentQuantity": 30
+          },
+          {
+            "documentCode": "DocumentCodef87aca10-c4d3-438a-a7cc-163b8da448e1",
+            "documentReference": "Value628bbfcf-2c33-4fa2-a1b3-be0f86d44a08",
+            "documentStatus": "DocumentStatusdc3edd89-4485-4d48-b4f9-3c0008413071",
+            "documentControl": "DocumentControl2bddc6b7-68cd-4a99-982e-64bebb8f70b0",
+            "documentQuantity": 152
+          },
+          {
+            "documentCode": "DocumentCodec23f1da8-7c27-4100-b671-f8af03f8ae1f",
+            "documentReference": "Value615c8463-f099-4532-b10d-adaa21f3ab96",
+            "documentStatus": "DocumentStatuscc63e9ae-e03b-40ae-8524-cf1aa3ebdf0a",
+            "documentControl": "DocumentControld8e383bd-92f1-44b7-ac39-f0207370a528",
+            "documentQuantity": 52
+          }
+        ],
+        "checks": [
+          {
+            "checkCode": "CheckCodeb45ed1ea-09ec-472b-a1e2-df53c68a17cc",
+            "departmentCode": "DepartmentCode9f00587b-2b67-4889-b51e-5330342e98c9"
+          },
+          {
+            "checkCode": "CheckCode795ea10f-e5d8-4b06-a914-8b52529f1d73",
+            "departmentCode": "DepartmentCode6e011098-8daa-483d-9e6a-d8fca13c298e"
+          },
+          {
+            "checkCode": "CheckCode450d7487-05bf-45c5-96c2-c072a25938a9",
+            "departmentCode": "DepartmentCode433171c1-050e-4377-908c-fb020ed47386"
+          }
+        ]
+      }
+    ]
+  },
+  "clearanceDecision": {
+    "externalCorrelationId": "ExternalCorrelationIde459a47f-bd3d-4663-b49f-24dc1338840f",
+    "timestamp": "2024-01-09T04:51:43.0248311",
+    "externalVersionNumber": 200,
+    "decisionNumber": 116,
+    "items": [
+      {
+        "itemNumber": 58,
+        "checks": [
+          {
+            "checkCode": "CheckCode14e03aeb-2bb2-490a-a962-c447092051c8",
+            "departmentCode": "DepartmentCode49f0ac0d-c7d3-43ec-acdd-cb2241eaf925",
+            "decisionCode": "DecisionCode8f0722c4-0964-4f8f-b661-5427eb90874e",
+            "decisionsValidUntil": "2023-07-06T19:44:32.7295726",
+            "decisionReasons": [
+              "70f3e787-a137-4e6c-8447-1bf0aaae33ab",
+              "a4476940-7553-4294-9882-20f9b178be03",
+              "82d70017-4033-4e5d-b155-07efc2f34196"
+            ],
+            "decisionInternalFurtherDetail": [
+              "49b6be56-f027-45f8-a8ca-8a3a843ec2fa",
+              "abd54578-602b-43c3-8477-ebc6ce94dbc9",
+              "5926ba26-d60d-4ccd-81da-28ebd6ebdb72"
+            ]
+          },
+          {
+            "checkCode": "CheckCode7913123f-c2c2-4c4e-a601-d7d3c280573f",
+            "departmentCode": "DepartmentCode67d8f12a-e3d1-4beb-b458-1b2fe12459a9",
+            "decisionCode": "DecisionCode58868db0-fb05-4ef5-ac98-20da42a96776",
+            "decisionsValidUntil": "2025-09-02T13:18:59.6140076",
+            "decisionReasons": [
+              "8835270e-cea4-4be0-bb76-a57cbc862d9b",
+              "0f601ec3-b5c4-4064-9b07-8bf047c1fe0a",
+              "a617b5a9-7bd0-4dc0-a952-e6a895028172"
+            ],
+            "decisionInternalFurtherDetail": [
+              "32ae9f64-cc48-4f57-b9bd-dc7030022d6d",
+              "5a3ebb45-41ee-4146-8249-b3ac8b695cdf",
+              "d195630d-5b08-415c-b24b-c0d8400b6f2f"
+            ]
+          },
+          {
+            "checkCode": "CheckCodefd32a2c5-0c46-48fe-99fc-80b1f53558a2",
+            "departmentCode": "DepartmentCodebe076291-69b6-46ad-9b0b-f60f995ed6c0",
+            "decisionCode": "DecisionCoded1f8a0df-7249-4388-a607-756dc4e254e0",
+            "decisionsValidUntil": "2025-05-04T22:00:49.2034485",
+            "decisionReasons": [
+              "8b868663-3b94-49b6-8170-737cf82159db",
+              "827c04c7-0ceb-4efb-b2b0-652d797f2dd9",
+              "457edee9-563f-4b2e-9e50-76441fbcb5e8"
+            ],
+            "decisionInternalFurtherDetail": [
+              "492dc4fb-536f-4acc-a066-7222613e6ace",
+              "922cceca-d22b-424b-a137-9f86247fc1ac",
+              "339babd0-3f30-443f-86a0-bf8d456c816c"
+            ]
+          }
+        ]
+      },
+      {
+        "itemNumber": 93,
+        "checks": [
+          {
+            "checkCode": "CheckCodec6d705be-b2e9-42e9-b5d1-26992d363a40",
+            "departmentCode": "DepartmentCodec4678ef6-d1a1-4f2e-a734-183dc1fbe344",
+            "decisionCode": "DecisionCodec36c3e55-f950-42dd-859e-b0dea64cbaca",
+            "decisionsValidUntil": "2023-12-25T19:46:48.7660994",
+            "decisionReasons": [
+              "fc5cf41d-f63b-4c19-95d5-4c634400f900",
+              "1983f4b7-a37f-4f4e-b513-5fce9da9ab71",
+              "a932d25c-b07e-466f-a4e7-b8211904dd70"
+            ],
+            "decisionInternalFurtherDetail": [
+              "b90228ea-596f-4fd4-b8e7-12d7b89c63fd",
+              "7597f8a7-c9a7-4f7d-83f0-7324cd4b9f9d",
+              "632efb36-ff22-462e-8644-3cd708825518"
+            ]
+          },
+          {
+            "checkCode": "CheckCodefb5bf492-d8c8-42c5-8343-a0789eb8ed5e",
+            "departmentCode": "DepartmentCodeef366ada-bfec-48e3-8feb-33a928c0f3a9",
+            "decisionCode": "DecisionCode7c7c5712-1361-41c5-827e-e369f0d4c138",
+            "decisionsValidUntil": "2024-01-05T20:53:30.5420778",
+            "decisionReasons": [
+              "b90c60b2-a53a-4f68-aa01-ebc576647f4e",
+              "72134b16-5115-4b0b-b057-cb43e15e6a10",
+              "a23a5dfe-0c61-497a-96a3-8e34880ca0a6"
+            ],
+            "decisionInternalFurtherDetail": [
+              "0dbe9709-bea0-4e00-8ff7-793ef4e5fe04",
+              "6fbde43d-94e1-47d9-8001-904b8b47cec8",
+              "28e88b59-0dc4-43b9-99a0-4e50d8a84de3"
+            ]
+          },
+          {
+            "checkCode": "CheckCode91d6d02b-fbb7-46d5-858f-e3c2e2741da4",
+            "departmentCode": "DepartmentCode405b3f07-23ed-4bce-b9b6-fe98b9a754f2",
+            "decisionCode": "DecisionCode4c6303a2-ac09-41f1-b765-d6024236da75",
+            "decisionsValidUntil": "2023-05-12T16:26:31.7814659",
+            "decisionReasons": [
+              "fe9287b1-12a1-4dd4-b550-dac17cf8dc76",
+              "d02c645c-1d92-48fa-a6e7-b85d04d87a8f",
+              "d2c3db31-e1a4-4bff-a9d7-2075e3cdbad3"
+            ],
+            "decisionInternalFurtherDetail": [
+              "100b293c-e295-45d9-8ed3-bbd44162a95e",
+              "a0c421d4-20f9-455a-864c-6df8ddb4187d",
+              "8999f1e9-ac28-4ee9-ac29-8f24aabcdbf1"
+            ]
+          }
+        ]
+      },
+      {
+        "itemNumber": 247,
+        "checks": [
+          {
+            "checkCode": "CheckCodeb1f4e0e2-3674-4e2c-b1cf-758dee4c600a",
+            "departmentCode": "DepartmentCodedb778116-2b43-45d5-9e52-e053eb040138",
+            "decisionCode": "DecisionCodeaceb8bf4-3a04-446e-9ac3-d02f5fcf2d04",
+            "decisionsValidUntil": "2027-01-20T23:11:33.9465323",
+            "decisionReasons": [
+              "d039024f-79ef-456a-9545-c39069ec6d2d",
+              "5b95859a-558f-4dc2-b7b7-bdca088a3610",
+              "29d3851a-1901-4bf6-b6a9-7b2769721a4c"
+            ],
+            "decisionInternalFurtherDetail": [
+              "1ecb3fbb-c175-4915-8aa3-57b5127d94eb",
+              "c0ef8fc6-7b2f-4127-a161-dd524577106c",
+              "4569fe52-b206-4400-97bc-bd6d2815e80f"
+            ]
+          },
+          {
+            "checkCode": "CheckCode489a05f6-8966-4cef-af60-62d453fa8f8e",
+            "departmentCode": "DepartmentCode7d931579-b9e6-4857-a39c-aa0f9951d221",
+            "decisionCode": "DecisionCode29f543e1-c7f3-4020-a3f5-ebadde55e4e3",
+            "decisionsValidUntil": "2024-04-09T02:11:24.6713708",
+            "decisionReasons": [
+              "caa0d2e0-4ea3-44f9-8dcc-c483caa94d2f",
+              "fdd87e47-1b16-4ce4-b4a2-ace70ace765c",
+              "874344e0-ce0b-4ea2-bdeb-11caa4a3dcb3"
+            ],
+            "decisionInternalFurtherDetail": [
+              "697fda32-772d-404c-9962-56c1a8f4ea85",
+              "98c24efe-821d-4df1-b062-fd7d4c07a11a",
+              "ec2f0caf-0ece-41c1-aa67-f72d0535ffb3"
+            ]
+          },
+          {
+            "checkCode": "CheckCode65f3bf5a-eebe-4f89-97c6-dc885babe5ac",
+            "departmentCode": "DepartmentCode85818cef-0bf4-4acd-8ae1-68396418aaa5",
+            "decisionCode": "DecisionCode94ac08d5-8ef6-4812-96d5-3678c6840f03",
+            "decisionsValidUntil": "2026-07-13T10:21:54.2220684",
+            "decisionReasons": [
+              "f668f1a5-c945-4b10-9dd6-8b56f9a95d95",
+              "b5232b72-878e-4841-ad1d-a40b765aee20",
+              "d0cd9167-ecc1-4a46-9b31-e3cde1a2d668"
+            ],
+            "decisionInternalFurtherDetail": [
+              "71a95aa0-1816-450f-a315-1cc4f3b02635",
+              "ed25cc33-d75e-4035-996b-2c5fd47f57f0",
+              "e41ea5a8-c390-49e9-8a66-8b9f9d7f371e"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "finalisation": {
+    "externalCorrelationId": "ExternalCorrelationId2b548e50-9bee-4c8b-9650-002751c8789d",
+    "messageSentAt": "2024-02-17T21:10:57.6342229",
+    "externalVersion": 232,
+    "decisionNumber": 231,
+    "finalState": 0,
+    "isManualRelease": true
+  },
+  "created": "2025-04-03T10:00:00Z",
+  "updated": "2025-04-03T10:15:00Z"
+}

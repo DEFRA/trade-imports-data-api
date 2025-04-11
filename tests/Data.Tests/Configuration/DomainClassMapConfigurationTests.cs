@@ -5,7 +5,7 @@ using FluentAssertions;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 
-namespace Defra.TradeImportsDataApi.Domain.MongoDB.Tests.Configuration;
+namespace Defra.TradeImportsDataApi.Data.Tests.Configuration;
 
 public class DomainClassMapConfigurationTests
 {

@@ -4,7 +4,7 @@ using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 using FluentAssertions;
 using Xunit.Abstractions;
 
-namespace Defra.TradeImportsDataApi.Api.IntegrationTests.Endpoints.CustomsDeclarations;
+namespace Defra.TradeImportsDataApi.Api.Tests.Endpoints.CustomsDeclarations;
 
 public class PutTests(ApiWebApplicationFactory factory, ITestOutputHelper outputHelper)
     : EndpointTestBase(factory, outputHelper)

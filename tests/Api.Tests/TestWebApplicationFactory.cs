@@ -6,7 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Xunit.Abstractions;
 
-namespace Defra.TradeImportsDataApi.Api.IntegrationTests;
+namespace Defra.TradeImportsDataApi.Api.Tests;
 
 public class TestWebApplicationFactory<T> : WebApplicationFactory<T>, ITestOutputHelperAccessor
     where T : class

@@ -1,4 +1,6 @@
 using System.Net;
+using System.Text.Json;
+using AutoFixture;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
@@ -9,7 +11,7 @@ using NSubstitute;
 using WireMock.Server;
 using Xunit.Abstractions;
 
-namespace Defra.TradeImportsDataApi.Api.IntegrationTests.Endpoints.CustomsDeclarations;
+namespace Defra.TradeImportsDataApi.Api.Tests.Endpoints.CustomsDeclarations;
 
 public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
 {
@@ -18,6 +20,7 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
     private WireMockServer WireMock { get; }
     private const string Mrn = "mrn";
     private readonly VerifySettings _settings;
+    private static readonly JsonSerializerOptions s_jsonOptions = new() { WriteIndented = true };
 
     public GetTests(ApiWebApplicationFactory factory, ITestOutputHelper outputHelper, WireMockContext context)
         : base(factory, outputHelper)
@@ -28,6 +31,7 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
         _settings = new VerifySettings();
         _settings.ScrubMember("traceId");
         _settings.DontScrubDateTimes();
+        _settings.DontScrubGuids();
     }
 
     protected override void ConfigureTestServices(IServiceCollection services)
@@ -89,5 +93,50 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
         var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.CustomsDeclarations.Get(Mrn));
 
         response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+    }
+
+    [Fact]
+    public async Task Get_WhenGenerating_GetTests_DomainExample_ShouldSerialize()
+    {
+        var fixture = new Fixture();
+        var customsDeclaration = fixture.Create<CustomsDeclaration>();
+        var serialized = JsonSerializer.Serialize(customsDeclaration, s_jsonOptions);
+
+        // Take this file and replace GetTests_DomainExample.json when needed
+        await File.WriteAllTextAsync(
+            $"{nameof(Get_WhenGenerating_GetTests_DomainExample_ShouldSerialize)}_CustomsDeclaration.json",
+            serialized
+        );
+
+        serialized.Should().NotBeNull();
+    }
+
+    [Fact]
+    public async Task Get_WhenReturningDomainExample_ShouldBeCorrectJson()
+    {
+        // See test above for generation of new content
+        var body = EmbeddedResource.GetBody(GetType(), "GetTests_DomainExample.json");
+        var customsDeclaration =
+            JsonSerializer.Deserialize<CustomsDeclaration>(body, s_jsonOptions)
+            ?? throw new InvalidOperationException();
+        var client = CreateClient();
+        MockCustomsDeclarationService
+            .GetCustomsDeclaration(Mrn, Arg.Any<CancellationToken>())
+            .Returns(
+                new CustomsDeclarationEntity
+                {
+                    Id = Mrn,
+                    ClearanceRequest = customsDeclaration.ClearanceRequest,
+                    ClearanceDecision = customsDeclaration.ClearanceDecision,
+                    Finalisation = customsDeclaration.Finalisation,
+                    Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                    Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+                    ETag = "etag",
+                }
+            );
+
+        var response = await client.GetStringAsync(TradeImportsDataApi.Testing.Endpoints.CustomsDeclarations.Get(Mrn));
+
+        await VerifyJson(response, _settings).UseStrictJson();
     }
 }

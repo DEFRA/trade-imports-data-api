@@ -4,8 +4,8 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <IsTestProject>true</IsTestProject>
-    <AssemblyName>Defra.TradeImportsDataApi.Domain.MongoDB.Tests</AssemblyName>
-    <RootNamespace>Defra.TradeImportsDataApi.Domain.MongoDB.Tests</RootNamespace>
+    <AssemblyName>Defra.TradeImportsDataApi.Data.Tests</AssemblyName>
+    <RootNamespace>Defra.TradeImportsDataApi.Data.Tests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
