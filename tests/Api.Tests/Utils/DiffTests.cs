@@ -18,7 +18,6 @@ public class DiffTests
         var act = () => DiffExtensions.CreateDiff(null!, entity);
 
         act.Should().Throw<ArgumentNullException>();
-        
     }
 
     [Fact]
@@ -29,7 +28,6 @@ public class DiffTests
         var act = () => DiffExtensions.CreateDiff(entity, null!);
 
         act.Should().Throw<ArgumentNullException>();
-
     }
 
     [Fact]
@@ -44,6 +42,5 @@ public class DiffTests
         result[0].Operation.Should().Be("Replace");
         result[0].Path.Should().Be("/Name");
         result[0].Value.Should().Be("Test");
-
     }
 }
