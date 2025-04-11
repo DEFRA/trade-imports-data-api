@@ -1,9 +1,13 @@
+using Defra.TradeImportsDataApi.Api.Exceptions;
+using Defra.TradeImportsDataApi.Api.Utils;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
+using Defra.TradeImportsDataApi.Domain.Events;
 
 namespace Defra.TradeImportsDataApi.Api.Services;
 
-public class ImportPreNotificationService(IDbContext dbContext) : IImportPreNotificationService
+public class ImportPreNotificationService(IDbContext dbContext, IEventPublisher eventPublisher)
+    : IImportPreNotificationService
 {
     public async Task<ImportPreNotificationEntity?> GetImportPreNotification(
         string chedId,
@@ -18,9 +22,14 @@ public class ImportPreNotificationService(IDbContext dbContext) : IImportPreNoti
         CancellationToken cancellationToken
     )
     {
+        var @event = CreateEvent(
+            importPreNotificationEntity.Id,
+            ResourceEventOperations.Created,
+            importPreNotificationEntity.ImportPreNotification
+        );
         await dbContext.ImportPreNotifications.Insert(importPreNotificationEntity, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
-
+        await eventPublisher.Publish(@event, cancellationToken);
         return importPreNotificationEntity;
     }
 
@@ -30,9 +39,36 @@ public class ImportPreNotificationService(IDbContext dbContext) : IImportPreNoti
         CancellationToken cancellationToken
     )
     {
+        var existing = await dbContext.ImportPreNotifications.Find(importPreNotificationEntity.Id, cancellationToken);
+
+        if (existing == null)
+        {
+            throw new EntityNotFoundException(nameof(ImportPreNotificationEntity), importPreNotificationEntity.Id);
+        }
+
+        var @event = CreateEvent(
+            importPreNotificationEntity.Id,
+            ResourceEventOperations.Updated,
+            importPreNotificationEntity.ImportPreNotification
+        );
+        @event.ChangeSet = DiffExtensions.CreateDiff(
+            importPreNotificationEntity.ImportPreNotification,
+            existing.ImportPreNotification
+        );
         await dbContext.ImportPreNotifications.Update(importPreNotificationEntity, etag, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
-
+        await eventPublisher.Publish(@event, cancellationToken);
         return importPreNotificationEntity;
+    }
+
+    private ResourceEvent<T> CreateEvent<T>(string id, string operation, T body)
+    {
+        return new ResourceEvent<T>()
+        {
+            ResourceId = id,
+            ResourceType = typeof(T).Name,
+            Operation = operation,
+            Resource = body,
+        };
     }
 }
