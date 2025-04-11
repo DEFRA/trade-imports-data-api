@@ -1,8 +1,10 @@
+using System.Diagnostics.CodeAnalysis;
 using Defra.TradeImportsDataApi.Data.Entities;
 using MongoDB.Driver;
 
 namespace Defra.TradeImportsDataApi.Data.Mongo;
 
+[ExcludeFromCodeCoverage]
 public class MongoDbContext : IDbContext
 {
     public MongoDbContext(IMongoDatabase database)
