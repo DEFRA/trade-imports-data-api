@@ -120,7 +120,7 @@ public static class EndpointRouteBuilderExtensions
         }
         catch (EntityNotFoundException)
         {
-            return Results.NoContent();
+            return Results.NotFound();
         }
     }
 }
