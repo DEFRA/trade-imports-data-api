@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using Defra.TradeImportsDataApi.Api.Authentication;
+using Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations;
 using Defra.TradeImportsDataApi.Api.Extensions;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Api.Utils;
@@ -20,6 +21,18 @@ public static class EndpointRouteBuilderExtensions
             .WithSummary("Get ImportPreNotification")
             .WithDescription("Get an import pre-notification by CHED ID")
             .Produces<ImportPreNotificationResponse>()
+            .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesProblem(StatusCodes.Status500InternalServerError)
+            .RequireAuthorization(PolicyNames.Read);
+
+        AllowAnonymousForDevelopment(isDevelopment, route); 
+        
+        route = app.MapGet("import-pre-notifications/{chedId}/customs-declarations", GetWithCustomsDeclarations)
+            .WithName("GetImportPreNotificationAndCustomsDeclarationsByChedId")
+            .WithTags("ImportPreNotificationsWithCustomsDeclarations")
+            .WithSummary("Get ImportPreNotification with CustomsDeclarations")
+            .WithDescription("Get an import pre-notification by CHED ID along with the associated customs-declarations")
+            .Produces<ImportPreNotificationWithCustomDeclarationsResponse>()
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .RequireAuthorization(PolicyNames.Read);
@@ -75,6 +88,50 @@ public static class EndpointRouteBuilderExtensions
         return Results.Ok(
             new ImportPreNotificationResponse(
                 importPreNotificationEntity.ImportPreNotification,
+                importPreNotificationEntity.Created,
+                importPreNotificationEntity.Updated
+            )
+        );
+    }
+
+    /// <param name="chedId" example="CHEDA.GB.2024.1020304">CHED ID</param>
+    /// <param name="context"></param>
+    /// <param name="importPreNotificationService"></param>
+    /// <param name="customsDeclarationService"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpGet]
+    private static async Task<IResult> GetWithCustomsDeclarations(
+        [FromRoute] string chedId,
+        HttpContext context,
+        [FromServices] IImportPreNotificationService importPreNotificationService,
+        [FromServices] ICustomsDeclarationService customsDeclarationService,
+        CancellationToken cancellationToken
+    )
+    {
+        var importPreNotificationEntity = await importPreNotificationService.GetImportPreNotification(
+            chedId,
+            cancellationToken
+        );
+        if (importPreNotificationEntity is null)
+        {
+            return Results.NotFound();
+        }
+
+        context.SetResponseEtag(importPreNotificationEntity.ETag);
+
+        var customsDeclarations = await customsDeclarationService.GetCustomsDeclarationsByChedId(chedId, cancellationToken);
+
+        return Results.Ok(
+            new ImportPreNotificationWithCustomDeclarationsResponse(
+                importPreNotificationEntity.ImportPreNotification,
+                customsDeclarations.Select(customsDeclarationEntity => new CustomsDeclarationResponse(
+                    customsDeclarationEntity.Id,
+                    customsDeclarationEntity.ClearanceRequest,
+                    customsDeclarationEntity.ClearanceDecision,
+                    customsDeclarationEntity.Finalisation,
+                    customsDeclarationEntity.Created,
+                    customsDeclarationEntity.Updated)).ToList(),
                 importPreNotificationEntity.Created,
                 importPreNotificationEntity.Updated
             )

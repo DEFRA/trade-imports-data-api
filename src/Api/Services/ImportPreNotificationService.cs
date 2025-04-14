@@ -3,6 +3,8 @@ using Defra.TradeImportsDataApi.Api.Utils;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.Events;
+using Defra.TradeImportsDataApi.Domain.Ipaffs;
+using MongoDB.Driver.Linq;
 
 namespace Defra.TradeImportsDataApi.Api.Services;
 
@@ -15,6 +17,16 @@ public class ImportPreNotificationService(IDbContext dbContext, IEventPublisher 
     )
     {
         return await dbContext.ImportPreNotifications.Find(chedId, cancellationToken);
+    }
+
+    public async Task<List<ImportPreNotificationEntity>> GetImportPreNotificationsByMrn(string mrn, CancellationToken cancellationToken)
+    {
+        var identifiers = await dbContext.CustomsDeclarations.Where(x => x.Id == mrn)
+            .SelectMany(x => x.ImportPreNotificationIdentifiers)
+            .ToListAsync(cancellationToken);
+
+        return await dbContext.ImportPreNotifications.Where(x => identifiers.Contains(x.CustomsDeclarationIdentifier))
+            .ToListAsync(cancellationToken: cancellationToken);
     }
 
     public async Task<ImportPreNotificationEntity> Insert(
