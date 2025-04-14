@@ -1,0 +1,25 @@
+﻿{
+  MovementReferenceNumber: mrn,
+  ClearanceRequest: {
+    ExternalCorrelationId: null,
+    MessageSentAt: 0001-01-01,
+    ExternalVersion: null,
+    PreviousExternalVersion: null,
+    DeclarationUcr: null,
+    DeclarationPartNumber: null,
+    DeclarationType: null,
+    ArrivesAt: null,
+    SubmitterTurn: null,
+    DeclarantId: null,
+    DeclarantName: null,
+    DispatchCountryCode: null,
+    GoodsLocationCode: null,
+    MasterUcr: null,
+    Commodities: null
+  },
+  ClearanceDecision: null,
+  Finalisation: null,
+  Created: 2025-04-07 11:00 Utc,
+  Updated: 2025-04-07 11:15 Utc,
+  ETag: "etag"
+}
