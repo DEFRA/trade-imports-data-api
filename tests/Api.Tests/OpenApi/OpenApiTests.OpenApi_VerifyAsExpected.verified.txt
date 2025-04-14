@@ -146,6 +146,59 @@
         }
       }
     },
+    "/customs-declarations/{mrn}/import-pre-notifications": {
+      "get": {
+        "tags": [
+          "CustomsDeclarationsWithImportPreNotifications"
+        ],
+        "summary": "Get CustomsDeclaration with ImportPreNotifications",
+        "description": "Get a Customs Declaration by MRN along with the associated import pre-notifications",
+        "operationId": "CustomsDeclarationWithImportPreNotificationsByMrn",
+        "parameters": [
+          {
+            "name": "mrn",
+            "in": "path",
+            "description": "MRN",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations.CustomsDeclarationWithImportPreNotificationsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/gmrs/{gmrId}": {
       "get": {
         "tags": [
@@ -410,6 +463,60 @@
           }
         }
       }
+    },
+    "/import-pre-notifications/{chedId}/customs-declarations": {
+      "get": {
+        "tags": [
+          "ImportPreNotificationsWithCustomsDeclarations"
+        ],
+        "summary": "Get ImportPreNotification with CustomsDeclarations",
+        "description": "Get an import pre-notification by CHED ID along with the associated customs-declarations",
+        "operationId": "GetImportPreNotificationAndCustomsDeclarationsByChedId",
+        "parameters": [
+          {
+            "name": "chedId",
+            "in": "path",
+            "description": "CHED ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "CHEDA.GB.2024.1020304"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Api.Endpoints.ImportPreNotifications.ImportPreNotificationWithCustomDeclarationsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -456,6 +563,55 @@
         },
         "additionalProperties": false
       },
+      "Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations.CustomsDeclarationWithImportPreNotificationsResponse": {
+        "type": "object",
+        "properties": {
+          "movementReferenceNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "clearanceRequest": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ClearanceRequest"
+              }
+            ],
+            "nullable": true
+          },
+          "clearanceDecision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ClearanceDecision"
+              }
+            ],
+            "nullable": true
+          },
+          "finalisation": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.CustomsDeclaration.Finalisation"
+              }
+            ],
+            "nullable": true
+          },
+          "importPreNotifications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Api.Endpoints.ImportPreNotifications.ImportPreNotificationResponse"
+            },
+            "nullable": true
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
       "Defra.TradeImportsDataApi.Api.Endpoints.Gmrs.GmrResponse": {
         "type": "object",
         "properties": {
@@ -487,6 +643,35 @@
                 "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.ImportPreNotification"
               }
             ],
+            "nullable": true
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Defra.TradeImportsDataApi.Api.Endpoints.ImportPreNotifications.ImportPreNotificationWithCustomDeclarationsResponse": {
+        "type": "object",
+        "properties": {
+          "importPreNotification": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.ImportPreNotification"
+              }
+            ],
+            "nullable": true
+          },
+          "customsDeclarations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations.CustomsDeclarationResponse"
+            },
             "nullable": true
           },
           "created": {
