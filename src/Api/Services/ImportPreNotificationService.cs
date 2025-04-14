@@ -19,13 +19,18 @@ public class ImportPreNotificationService(IDbContext dbContext, IEventPublisher 
         return await dbContext.ImportPreNotifications.Find(chedId, cancellationToken);
     }
 
-    public async Task<List<ImportPreNotificationEntity>> GetImportPreNotificationsByMrn(string mrn, CancellationToken cancellationToken)
+    public async Task<List<ImportPreNotificationEntity>> GetImportPreNotificationsByMrn(
+        string mrn,
+        CancellationToken cancellationToken
+    )
     {
-        var identifiers = await dbContext.CustomsDeclarations.Where(x => x.Id == mrn)
+        var identifiers = await dbContext
+            .CustomsDeclarations.Where(x => x.Id == mrn)
             .SelectMany(x => x.ImportPreNotificationIdentifiers)
             .ToListAsync(cancellationToken);
 
-        return await dbContext.ImportPreNotifications.Where(x => identifiers.Contains(x.CustomsDeclarationIdentifier))
+        return await dbContext
+            .ImportPreNotifications.Where(x => identifiers.Contains(x.CustomsDeclarationIdentifier))
             .ToListAsync(cancellationToken: cancellationToken);
     }
 

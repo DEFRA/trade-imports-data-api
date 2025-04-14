@@ -25,8 +25,8 @@ public static class EndpointRouteBuilderExtensions
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .RequireAuthorization(PolicyNames.Read);
 
-        AllowAnonymousForDevelopment(isDevelopment, route); 
-        
+        AllowAnonymousForDevelopment(isDevelopment, route);
+
         route = app.MapGet("import-pre-notifications/{chedId}/customs-declarations", GetWithCustomsDeclarations)
             .WithName("GetImportPreNotificationAndCustomsDeclarationsByChedId")
             .WithTags("ImportPreNotificationsWithCustomsDeclarations")
@@ -120,18 +120,24 @@ public static class EndpointRouteBuilderExtensions
 
         context.SetResponseEtag(importPreNotificationEntity.ETag);
 
-        var customsDeclarations = await customsDeclarationService.GetCustomsDeclarationsByChedId(chedId, cancellationToken);
+        var customsDeclarations = await customsDeclarationService.GetCustomsDeclarationsByChedId(
+            chedId,
+            cancellationToken
+        );
 
         return Results.Ok(
             new ImportPreNotificationWithCustomDeclarationsResponse(
                 importPreNotificationEntity.ImportPreNotification,
-                customsDeclarations.Select(customsDeclarationEntity => new CustomsDeclarationResponse(
-                    customsDeclarationEntity.Id,
-                    customsDeclarationEntity.ClearanceRequest,
-                    customsDeclarationEntity.ClearanceDecision,
-                    customsDeclarationEntity.Finalisation,
-                    customsDeclarationEntity.Created,
-                    customsDeclarationEntity.Updated)).ToList(),
+                customsDeclarations
+                    .Select(customsDeclarationEntity => new CustomsDeclarationResponse(
+                        customsDeclarationEntity.Id,
+                        customsDeclarationEntity.ClearanceRequest,
+                        customsDeclarationEntity.ClearanceDecision,
+                        customsDeclarationEntity.Finalisation,
+                        customsDeclarationEntity.Created,
+                        customsDeclarationEntity.Updated
+                    ))
+                    .ToList(),
                 importPreNotificationEntity.Created,
                 importPreNotificationEntity.Updated
             )

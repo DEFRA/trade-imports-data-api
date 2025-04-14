@@ -12,4 +12,5 @@ public record CustomsDeclarationWithImportPreNotificationsResponse(
     [property: JsonPropertyName("finalisation")] Finalisation? Finalisation,
     [property: JsonPropertyName("importPreNotifications")] List<ImportPreNotificationResponse> ImportPreNotifications,
     [property: JsonPropertyName("created")] DateTime Created,
-    [property: JsonPropertyName("updated")] DateTime Updated);
+    [property: JsonPropertyName("updated")] DateTime Updated
+);

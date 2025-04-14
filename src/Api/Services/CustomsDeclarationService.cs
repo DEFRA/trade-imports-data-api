@@ -23,10 +23,14 @@ public class CustomsDeclarationService(IDbContext dbContext) : ICustomsDeclarati
         return customsDeclarationEntity;
     }
 
-    public async Task<List<CustomsDeclarationEntity>> GetCustomsDeclarationsByChedId(string chedId, CancellationToken cancellationToken)
+    public async Task<List<CustomsDeclarationEntity>> GetCustomsDeclarationsByChedId(
+        string chedId,
+        CancellationToken cancellationToken
+    )
     {
         var identifier = new ImportDocumentReference(chedId).GetIdentifier();
-        return await dbContext.CustomsDeclarations.Where(x => x.ImportPreNotificationIdentifiers.Contains(identifier))
+        return await dbContext
+            .CustomsDeclarations.Where(x => x.ImportPreNotificationIdentifiers.Contains(identifier))
             .ToListAsync(cancellationToken: cancellationToken);
     }
 

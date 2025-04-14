@@ -115,7 +115,10 @@ public static class EndpointRouteBuilderExtensions
             return Results.NotFound();
         }
 
-        var importPreNotifications = await importPreNotificationService.GetImportPreNotificationsByMrn(mrn, cancellationToken);
+        var importPreNotifications = await importPreNotificationService.GetImportPreNotificationsByMrn(
+            mrn,
+            cancellationToken
+        );
 
         context.SetResponseEtag(customsDeclarationEntity.ETag);
 
@@ -125,10 +128,9 @@ public static class EndpointRouteBuilderExtensions
                 customsDeclarationEntity.ClearanceRequest,
                 customsDeclarationEntity.ClearanceDecision,
                 customsDeclarationEntity.Finalisation,
-                importPreNotifications.Select(x => new ImportPreNotificationResponse(
-                    x.ImportPreNotification,
-                    x.Created,
-                    x.Updated)).ToList(),
+                importPreNotifications
+                    .Select(x => new ImportPreNotificationResponse(x.ImportPreNotification, x.Created, x.Updated))
+                    .ToList(),
                 customsDeclarationEntity.Created,
                 customsDeclarationEntity.Updated
             )
