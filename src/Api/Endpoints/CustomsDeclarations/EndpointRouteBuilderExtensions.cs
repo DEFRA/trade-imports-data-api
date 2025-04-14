@@ -115,10 +115,10 @@ public static class EndpointRouteBuilderExtensions
         );
 
         return Results.Ok(
-                importPreNotifications
-                    .Select(x => new ImportPreNotificationResponse(x.ImportPreNotification, x.Created, x.Updated))
-                    .ToList()
-            );
+            importPreNotifications
+                .Select(x => new ImportPreNotificationResponse(x.ImportPreNotification, x.Created, x.Updated))
+                .ToList()
+        );
     }
 
     [HttpPut]

@@ -114,16 +114,18 @@ public static class EndpointRouteBuilderExtensions
             cancellationToken
         );
 
-        return Results.Ok(customsDeclarations
-            .Select(customsDeclarationEntity => new CustomsDeclarationResponse(
-                customsDeclarationEntity.Id,
-                customsDeclarationEntity.ClearanceRequest,
-                customsDeclarationEntity.ClearanceDecision,
-                customsDeclarationEntity.Finalisation,
-                customsDeclarationEntity.Created,
-                customsDeclarationEntity.Updated
-            ))
-            .ToList());
+        return Results.Ok(
+            customsDeclarations
+                .Select(customsDeclarationEntity => new CustomsDeclarationResponse(
+                    customsDeclarationEntity.Id,
+                    customsDeclarationEntity.ClearanceRequest,
+                    customsDeclarationEntity.ClearanceDecision,
+                    customsDeclarationEntity.Finalisation,
+                    customsDeclarationEntity.Created,
+                    customsDeclarationEntity.Updated
+                ))
+                .ToList()
+        );
     }
 
     /// <param name="chedId" example="CHEDA.GB.2024.1020304">CHED ID</param>

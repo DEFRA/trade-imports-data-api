@@ -46,16 +46,16 @@ public class GetImportPreNotificationsTests : WireMockTestBase<WireMockContext>
                     .Create()
                     .WithBody(
                         JsonSerializer.Serialize(
-                           new List<Api.Endpoints.ImportPreNotifications.ImportPreNotificationResponse>()
-                           {
-                               new Api.Endpoints.ImportPreNotifications.ImportPreNotificationResponse(
-                                   new Domain.Ipaffs.ImportPreNotification { ReferenceNumber = "ched" },
-                                   created,
-                                   updated
-                               )
-                           }
-                            )
+                            new List<Api.Endpoints.ImportPreNotifications.ImportPreNotificationResponse>()
+                            {
+                                new Api.Endpoints.ImportPreNotifications.ImportPreNotificationResponse(
+                                    new Domain.Ipaffs.ImportPreNotification { ReferenceNumber = "ched" },
+                                    created,
+                                    updated
+                                ),
+                            }
                         )
+                    )
                     .WithStatusCode(StatusCodes.Status200OK)
             );
 

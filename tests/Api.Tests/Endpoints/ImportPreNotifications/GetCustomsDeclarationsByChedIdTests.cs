@@ -25,7 +25,11 @@ public class GetCustomsDeclarationsByChedIdTests : EndpointTestBase, IClassFixtu
     private const string ChedId = "chedId";
     private readonly VerifySettings _settings;
 
-    public GetCustomsDeclarationsByChedIdTests(ApiWebApplicationFactory factory, ITestOutputHelper outputHelper, WireMockContext context)
+    public GetCustomsDeclarationsByChedIdTests(
+        ApiWebApplicationFactory factory,
+        ITestOutputHelper outputHelper,
+        WireMockContext context
+    )
         : base(factory, outputHelper)
     {
         WireMock = context.Server;
@@ -49,10 +53,13 @@ public class GetCustomsDeclarationsByChedIdTests : EndpointTestBase, IClassFixtu
     public async Task Get_WhenNotFound_ShouldNotBeFound()
     {
         var client = CreateClient();
-        MockCustomsDeclarationService.GetCustomsDeclarationsByChedId(ChedId, Arg.Any<CancellationToken>()).Returns(Task
-            .FromResult(new List<CustomsDeclarationEntity>()));
+        MockCustomsDeclarationService
+            .GetCustomsDeclarationsByChedId(ChedId, Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(new List<CustomsDeclarationEntity>()));
 
-        var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.ImportPreNotifications.GetCustomsDeclarations(ChedId));
+        var response = await client.GetAsync(
+            TradeImportsDataApi.Testing.Endpoints.ImportPreNotifications.GetCustomsDeclarations(ChedId)
+        );
 
         await VerifyJson(await response.Content.ReadAsStringAsync(), _settings);
     }
@@ -72,10 +79,13 @@ public class GetCustomsDeclarationsByChedIdTests : EndpointTestBase, IClassFixtu
                         Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
                         Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
                         ETag = "etag",
-                    }]
+                    },
+                ]
             );
 
-        var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.ImportPreNotifications.GetCustomsDeclarations(ChedId));
+        var response = await client.GetAsync(
+            TradeImportsDataApi.Testing.Endpoints.ImportPreNotifications.GetCustomsDeclarations(ChedId)
+        );
 
         await VerifyJson(await response.Content.ReadAsStringAsync(), _settings)
             .UseMethodName(nameof(Get_WhenFound_ShouldReturnContent));
@@ -87,7 +97,9 @@ public class GetCustomsDeclarationsByChedIdTests : EndpointTestBase, IClassFixtu
     {
         var client = CreateClient(addDefaultAuthorizationHeader: false);
 
-        var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.ImportPreNotifications.GetCustomsDeclarations(ChedId));
+        var response = await client.GetAsync(
+            TradeImportsDataApi.Testing.Endpoints.ImportPreNotifications.GetCustomsDeclarations(ChedId)
+        );
 
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
@@ -97,7 +109,9 @@ public class GetCustomsDeclarationsByChedIdTests : EndpointTestBase, IClassFixtu
     {
         var client = CreateClient(testUser: TestUser.WriteOnly);
 
-        var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.ImportPreNotifications.GetCustomsDeclarations(ChedId));
+        var response = await client.GetAsync(
+            TradeImportsDataApi.Testing.Endpoints.ImportPreNotifications.GetCustomsDeclarations(ChedId)
+        );
 
         response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
     }

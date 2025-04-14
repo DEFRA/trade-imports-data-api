@@ -49,7 +49,8 @@ public class GetCustomsDeclarationsTests : WireMockTestBase<WireMockContext>
                     .Create()
                     .WithBody(
                         JsonSerializer.Serialize(
-                            new List<CustomsDeclarationEntity>(){
+                            new List<CustomsDeclarationEntity>()
+                            {
                                 new()
                                 {
                                     Id = "123",
@@ -57,9 +58,10 @@ public class GetCustomsDeclarationsTests : WireMockTestBase<WireMockContext>
                                     Created = created,
                                     Updated = updated,
                                     ETag = "etag",
-                                }}
-                            )
+                                },
+                            }
                         )
+                    )
                     .WithStatusCode(StatusCodes.Status200OK)
             );
 

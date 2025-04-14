@@ -42,10 +42,7 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
 
         response.EnsureSuccessStatusCode();
 
-        var result = await Deserialize<List<CustomsDeclarationResponse>?>(
-            response,
-            cancellationToken
-        );
+        var result = await Deserialize<List<CustomsDeclarationResponse>?>(response, cancellationToken);
 
         return result;
     }
@@ -117,10 +114,7 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
 
         response.EnsureSuccessStatusCode();
 
-        var result = await Deserialize<List<ImportPreNotificationResponse>?>(
-            response,
-            cancellationToken
-        );
+        var result = await Deserialize<List<ImportPreNotificationResponse>?>(response, cancellationToken);
 
         return result;
     }
