@@ -36,7 +36,7 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
         CancellationToken cancellationToken
     )
     {
-        var response = await Get(Endpoints.ImportPreNotifications(chedId), cancellationToken);
+        var response = await Get(Endpoints.CustomsDeclarationsByChed(chedId), cancellationToken);
         if (response.StatusCode == HttpStatusCode.NotFound)
             return null;
 
@@ -108,7 +108,7 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
         CancellationToken cancellationToken
     )
     {
-        var response = await Get(Endpoints.CustomsDeclarations(mrn), cancellationToken);
+        var response = await Get(Endpoints.ImportPreNotificationsByMrn(mrn), cancellationToken);
         if (response.StatusCode == HttpStatusCode.NotFound)
             return null;
 
