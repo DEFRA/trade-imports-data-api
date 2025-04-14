@@ -4,7 +4,7 @@ public interface ITradeImportsDataApiClient
 {
     Task<ImportPreNotificationResponse?> GetImportPreNotification(string chedId, CancellationToken cancellationToken);
 
-    Task<ImportPreNotificationWithCustomDeclarationsResponse?> GetImportPreNotificationWithCustomsDeclarations(
+    Task<List<CustomsDeclarationResponse>?> GetCustomsDeclarationsByChedId(
         string chedId,
         CancellationToken cancellationToken
     );
@@ -22,7 +22,7 @@ public interface ITradeImportsDataApiClient
 
     Task<CustomsDeclarationResponse?> GetCustomsDeclaration(string mrn, CancellationToken cancellationToken);
 
-    Task<CustomsDeclarationWithImportPreNotificationsResponse?> GetCustomsDeclarationWithImportPreNotification(
+    Task<List<ImportPreNotificationResponse>?> GetImportPreNotificationsByMrn(
         string mrn,
         CancellationToken cancellationToken
     );

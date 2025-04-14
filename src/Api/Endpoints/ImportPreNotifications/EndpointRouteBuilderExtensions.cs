@@ -27,12 +27,12 @@ public static class EndpointRouteBuilderExtensions
 
         AllowAnonymousForDevelopment(isDevelopment, route);
 
-        route = app.MapGet("import-pre-notifications/{chedId}/customs-declarations", GetWithCustomsDeclarations)
+        route = app.MapGet("import-pre-notifications/{chedId}/customs-declarations", GetCustomsDeclarations)
             .WithName("GetImportPreNotificationAndCustomsDeclarationsByChedId")
             .WithTags("ImportPreNotificationsWithCustomsDeclarations")
             .WithSummary("Get ImportPreNotification with CustomsDeclarations")
             .WithDescription("Get an import pre-notification by CHED ID along with the associated customs-declarations")
-            .Produces<ImportPreNotificationWithCustomDeclarationsResponse>()
+            .Produces<List<CustomsDeclarationResponse>>()
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .RequireAuthorization(PolicyNames.Read);
@@ -101,7 +101,7 @@ public static class EndpointRouteBuilderExtensions
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpGet]
-    private static async Task<IResult> GetWithCustomsDeclarations(
+    private static async Task<IResult> GetCustomsDeclarations(
         [FromRoute] string chedId,
         HttpContext context,
         [FromServices] IImportPreNotificationService importPreNotificationService,
@@ -109,39 +109,21 @@ public static class EndpointRouteBuilderExtensions
         CancellationToken cancellationToken
     )
     {
-        var importPreNotificationEntity = await importPreNotificationService.GetImportPreNotification(
-            chedId,
-            cancellationToken
-        );
-        if (importPreNotificationEntity is null)
-        {
-            return Results.NotFound();
-        }
-
-        context.SetResponseEtag(importPreNotificationEntity.ETag);
-
         var customsDeclarations = await customsDeclarationService.GetCustomsDeclarationsByChedId(
             chedId,
             cancellationToken
         );
 
-        return Results.Ok(
-            new ImportPreNotificationWithCustomDeclarationsResponse(
-                importPreNotificationEntity.ImportPreNotification,
-                customsDeclarations
-                    .Select(customsDeclarationEntity => new CustomsDeclarationResponse(
-                        customsDeclarationEntity.Id,
-                        customsDeclarationEntity.ClearanceRequest,
-                        customsDeclarationEntity.ClearanceDecision,
-                        customsDeclarationEntity.Finalisation,
-                        customsDeclarationEntity.Created,
-                        customsDeclarationEntity.Updated
-                    ))
-                    .ToList(),
-                importPreNotificationEntity.Created,
-                importPreNotificationEntity.Updated
-            )
-        );
+        return Results.Ok(customsDeclarations
+            .Select(customsDeclarationEntity => new CustomsDeclarationResponse(
+                customsDeclarationEntity.Id,
+                customsDeclarationEntity.ClearanceRequest,
+                customsDeclarationEntity.ClearanceDecision,
+                customsDeclarationEntity.Finalisation,
+                customsDeclarationEntity.Created,
+                customsDeclarationEntity.Updated
+            ))
+            .ToList());
     }
 
     /// <param name="chedId" example="CHEDA.GB.2024.1020304">CHED ID</param>

@@ -17,6 +17,8 @@ public static class Endpoints
 
         public static string Get(string chedId) => $"{Root}/{chedId}";
 
+        public static string GetCustomsDeclarations(string chedId) => $"{Root}/{chedId}/customs-declarations";
+
         public static string Put(string chedId) => $"{Root}/{chedId}";
     }
 
@@ -25,6 +27,8 @@ public static class Endpoints
         private const string Root = "/customs-declarations";
 
         public static string Get(string mrn) => $"{Root}/{mrn}";
+
+        public static string GetImportPreNotifications(string mrn) => $"{Root}/{mrn}/import-pre-notifications";
 
         public static string Put(string mrn) => $"{Root}/{mrn}";
     }
