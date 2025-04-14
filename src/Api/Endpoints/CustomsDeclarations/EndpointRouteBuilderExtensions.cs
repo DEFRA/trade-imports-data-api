@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using Defra.TradeImportsDataApi.Api.Authentication;
+using Defra.TradeImportsDataApi.Api.Endpoints.ImportPreNotifications;
 using Defra.TradeImportsDataApi.Api.Exceptions;
 using Defra.TradeImportsDataApi.Api.Extensions;
 using Defra.TradeImportsDataApi.Api.Services;
@@ -20,6 +21,18 @@ public static class EndpointRouteBuilderExtensions
             .WithSummary("Get CustomsDeclaration")
             .WithDescription("Get a Customs Declaration by MRN")
             .Produces<CustomsDeclarationResponse>()
+            .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesProblem(StatusCodes.Status500InternalServerError)
+            .RequireAuthorization(PolicyNames.Read);
+
+        AllowAnonymousForDevelopment(isDevelopment, route);
+
+        route = app.MapGet("customs-declarations/{mrn}/import-pre-notifications", GetImportPreNotifications)
+            .WithName("ImportPreNotificationsByMrn")
+            .WithTags("ImportPreNotificationsByMrn")
+            .WithSummary("Get ImportPreNotifications by MRN")
+            .WithDescription("Get associated import pre-notifications by MRN")
+            .Produces<List<ImportPreNotificationResponse>>()
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .RequireAuthorization(PolicyNames.Read);
@@ -78,6 +91,33 @@ public static class EndpointRouteBuilderExtensions
                 customsDeclarationEntity.Created,
                 customsDeclarationEntity.Updated
             )
+        );
+    }
+
+    /// <param name="mrn">MRN</param>
+    /// <param name="context"></param>
+    /// <param name="importPreNotificationService"></param>
+    /// <param name="customsDeclarationService"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpGet]
+    private static async Task<IResult> GetImportPreNotifications(
+        [FromRoute] string mrn,
+        HttpContext context,
+        [FromServices] IImportPreNotificationService importPreNotificationService,
+        [FromServices] ICustomsDeclarationService customsDeclarationService,
+        CancellationToken cancellationToken
+    )
+    {
+        var importPreNotifications = await importPreNotificationService.GetImportPreNotificationsByMrn(
+            mrn,
+            cancellationToken
+        );
+
+        return Results.Ok(
+            importPreNotifications
+                .Select(x => new ImportPreNotificationResponse(x.ImportPreNotification, x.Created, x.Updated))
+                .ToList()
         );
     }
 

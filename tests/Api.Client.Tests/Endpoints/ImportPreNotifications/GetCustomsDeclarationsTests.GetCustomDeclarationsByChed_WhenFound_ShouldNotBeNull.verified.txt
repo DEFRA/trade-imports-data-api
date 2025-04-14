@@ -1,0 +1,11 @@
+﻿[
+  {
+    MovementReferenceNumber: null,
+    ClearanceRequest: null,
+    ClearanceDecision: null,
+    Finalisation: null,
+    Created: 0001-01-01,
+    Updated: 0001-01-01,
+    ETag: etag
+  }
+]

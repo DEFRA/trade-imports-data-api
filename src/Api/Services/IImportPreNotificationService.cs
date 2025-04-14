@@ -5,6 +5,11 @@ namespace Defra.TradeImportsDataApi.Api.Services;
 public interface IImportPreNotificationService
 {
     Task<ImportPreNotificationEntity?> GetImportPreNotification(string chedId, CancellationToken cancellationToken);
+
+    Task<List<ImportPreNotificationEntity>> GetImportPreNotificationsByMrn(
+        string mrn,
+        CancellationToken cancellationToken
+    );
     Task<ImportPreNotificationEntity> Insert(
         ImportPreNotificationEntity importPreNotificationEntity,
         CancellationToken cancellationToken

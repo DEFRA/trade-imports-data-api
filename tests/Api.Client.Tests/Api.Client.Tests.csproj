@@ -23,9 +23,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Api.Client\Api.Client.csproj"/>
+    <ProjectReference Include="..\..\src\Api.Client\Api.Client.csproj" />
     <ProjectReference Include="..\..\src\Api\Api.csproj" />
     <ProjectReference Include="..\Testing\Testing.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Endpoints\CustomsDeclarations\GetImportPreNotificationsTests.GetCustomsDeclaration_WhenFound_ShouldNotBeNull.verified.txt">
+      <DependentUpon>GetImportPreNotificationsTests.cs</DependentUpon>
+    </None>
+    <None Update="Endpoints\ImportPreNotifications\GetCustomsDeclarationsTests.GetImportPreNotification_WhenFound_ShouldNotBeNull.verified.txt">
+      <DependentUpon>GetCustomsDeclarationsTests.cs</DependentUpon>
+    </None>
   </ItemGroup>
 
 </Project>

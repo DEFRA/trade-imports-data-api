@@ -31,6 +31,22 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
         };
     }
 
+    public async Task<List<CustomsDeclarationResponse>?> GetCustomsDeclarationsByChedId(
+        string chedId,
+        CancellationToken cancellationToken
+    )
+    {
+        var response = await Get(Endpoints.CustomsDeclarationsByChed(chedId), cancellationToken);
+        if (response.StatusCode == HttpStatusCode.NotFound)
+            return null;
+
+        response.EnsureSuccessStatusCode();
+
+        var result = await Deserialize<List<CustomsDeclarationResponse>?>(response, cancellationToken);
+
+        return result;
+    }
+
     public async Task PutImportPreNotification(
         string chedId,
         ImportPreNotification data,
@@ -85,6 +101,22 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
         {
             ETag = response.Headers.ETag?.Tag,
         };
+    }
+
+    public async Task<List<ImportPreNotificationResponse>?> GetImportPreNotificationsByMrn(
+        string mrn,
+        CancellationToken cancellationToken
+    )
+    {
+        var response = await Get(Endpoints.ImportPreNotificationsByMrn(mrn), cancellationToken);
+        if (response.StatusCode == HttpStatusCode.NotFound)
+            return null;
+
+        response.EnsureSuccessStatusCode();
+
+        var result = await Deserialize<List<ImportPreNotificationResponse>?>(response, cancellationToken);
+
+        return result;
     }
 
     public async Task PutCustomsDeclaration(
