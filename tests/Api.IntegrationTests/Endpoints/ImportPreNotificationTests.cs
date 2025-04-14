@@ -102,13 +102,29 @@ public class ImportPreNotificationTests : IntegrationTestBase
 
         if (cdResult is null)
         {
-
             await client.PutCustomsDeclaration(
                 mrn,
-                new CustomsDeclaration { ClearanceRequest = new ClearanceRequest { ExternalVersion = 1, Commodities = [new Commodity()
+                new CustomsDeclaration
                 {
-                    Documents = [new ImportDocument() {DocumentReference = new ImportDocumentReference("GBCHD2025.1234567"), DocumentCode = "C640"}]
-                }] } },
+                    ClearanceRequest = new ClearanceRequest
+                    {
+                        ExternalVersion = 1,
+                        Commodities =
+                        [
+                            new Commodity()
+                            {
+                                Documents =
+                                [
+                                    new ImportDocument()
+                                    {
+                                        DocumentReference = new ImportDocumentReference("GBCHD2025.1234567"),
+                                        DocumentCode = "C640",
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                },
                 null,
                 CancellationToken.None
             );

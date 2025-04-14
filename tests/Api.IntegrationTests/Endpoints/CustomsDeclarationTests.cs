@@ -81,7 +81,6 @@ public class CustomsDeclarationTests : IntegrationTestBase
 
         if (cdResult is null)
         {
-
             await client.PutCustomsDeclaration(
                 mrn,
                 new CustomsDeclaration
@@ -89,11 +88,21 @@ public class CustomsDeclarationTests : IntegrationTestBase
                     ClearanceRequest = new ClearanceRequest
                     {
                         ExternalVersion = 1,
-                        Commodities = [new Commodity()
-                        {
-                            Documents = [new ImportDocument() {DocumentReference = new ImportDocumentReference("GBCHD2025.1234567"), DocumentCode = "C640"}]
-                        }]
-                    }
+                        Commodities =
+                        [
+                            new Commodity()
+                            {
+                                Documents =
+                                [
+                                    new ImportDocument()
+                                    {
+                                        DocumentReference = new ImportDocumentReference("GBCHD2025.1234567"),
+                                        DocumentCode = "C640",
+                                    },
+                                ],
+                            },
+                        ],
+                    },
                 },
                 null,
                 CancellationToken.None
