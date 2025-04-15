@@ -28,13 +28,4 @@
     <ProjectReference Include="..\Testing\Testing.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="Endpoints\CustomsDeclarations\GetImportPreNotificationsTests.GetCustomsDeclaration_WhenFound_ShouldNotBeNull.verified.txt">
-      <DependentUpon>GetImportPreNotificationsTests.cs</DependentUpon>
-    </None>
-    <None Update="Endpoints\ImportPreNotifications\GetCustomsDeclarationsTests.GetImportPreNotification_WhenFound_ShouldNotBeNull.verified.txt">
-      <DependentUpon>GetCustomsDeclarationsTests.cs</DependentUpon>
-    </None>
-  </ItemGroup>
-
 </Project>
