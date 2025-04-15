@@ -24,18 +24,24 @@ services:
     volumes:
       - mongodb-data:/data
     restart: always
-  
+
   data-api:
     build:
       dockerfile: Dockerfile
-    command: [ "--integrationTest=true" ]
     depends_on:
       mongodb:
         condition: service_healthy
+      localstack:
+        condition: service_healthy
+    env_file:
+      - 'compose/aws.env'
     environment:
       ASPNETCORE_ENVIRONMENT: Development
+      ENVIRONMENT: local
       PORT: 8080
       Mongo__DatabaseUri: mongodb://mongodb:27017/?directConnection=true
+      AWS__ServiceUrl: http://localstack:4566
+      AWS__AuthenticationRegion: eu-west-2
     ports:
       - "8080:8080"
     healthcheck:
@@ -45,6 +51,27 @@ services:
       retries: 10
       start_period: 5s
 
+  localstack:
+    image: localstack/localstack
+    ports:
+      - '4566:4566' # LocalStack Gateway
+      - '4510-4559:4510-4559' # external services port range
+    env_file:
+      - 'compose/aws.env'
+    environment:
+      DEBUG: ${DEBUG:-1}
+      LS_LOG: info # Localstack DEBUG Level
+      SERVICES: sns,sqs
+      LOCALSTACK_HOST: 127.0.0.1
+      TZ: Europe/London
+    volumes:
+      - '${TMPDIR:-/tmp}/localstack:/var/lib/localstack'
+      - ./compose/start-localstack.sh:/etc/localstack/init/ready.d/start-localstack.sh
+    healthcheck:
+      test: cat /tmp/ready
+      interval: 5s
+      start_period: 5s
+      retries: 10
+
 volumes:
   mongodb-data:
-    

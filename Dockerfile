@@ -43,6 +43,7 @@ COPY Directory.Build.props Directory.Build.props
 RUN dotnet restore
 
 COPY src/Api src/Api
+COPY src/Api/appsettings.json .
 COPY src/Api.Client src/Api.Client
 COPY src/Domain src/Domain
 COPY src/Data src/Data

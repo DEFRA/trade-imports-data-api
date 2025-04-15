@@ -3,7 +3,6 @@ using Defra.TradeImportsDataApi.Api.Utils;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.Events;
-using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using MongoDB.Driver.Linq;
 
 namespace Defra.TradeImportsDataApi.Api.Services;
@@ -44,9 +43,11 @@ public class ImportPreNotificationService(IDbContext dbContext, IEventPublisher 
             ResourceEventOperations.Created,
             importPreNotificationEntity.ImportPreNotification
         );
+
         await dbContext.ImportPreNotifications.Insert(importPreNotificationEntity, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
-        await eventPublisher.Publish(@event, cancellationToken);
+        await eventPublisher.Publish(@event, @event.ResourceType, cancellationToken);
+
         return importPreNotificationEntity;
     }
 
@@ -57,7 +58,6 @@ public class ImportPreNotificationService(IDbContext dbContext, IEventPublisher 
     )
     {
         var existing = await dbContext.ImportPreNotifications.Find(importPreNotificationEntity.Id, cancellationToken);
-
         if (existing == null)
         {
             throw new EntityNotFoundException(nameof(ImportPreNotificationEntity), importPreNotificationEntity.Id);
@@ -72,15 +72,17 @@ public class ImportPreNotificationService(IDbContext dbContext, IEventPublisher 
             importPreNotificationEntity.ImportPreNotification,
             existing.ImportPreNotification
         );
+
         await dbContext.ImportPreNotifications.Update(importPreNotificationEntity, etag, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
-        await eventPublisher.Publish(@event, cancellationToken);
+        await eventPublisher.Publish(@event, @event.ResourceType, cancellationToken);
+
         return importPreNotificationEntity;
     }
 
     private ResourceEvent<T> CreateEvent<T>(string id, string operation, T body)
     {
-        return new ResourceEvent<T>()
+        return new ResourceEvent<T>
         {
             ResourceId = id,
             ResourceType = typeof(T).Name,

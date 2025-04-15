@@ -1,4 +1,5 @@
 using System.Reflection;
+using Amazon.SimpleNotificationService;
 using Defra.TradeImportsDataApi.Api.Authentication;
 using Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations;
 using Defra.TradeImportsDataApi.Api.Endpoints.Gmrs;
@@ -54,13 +55,7 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
     // Load certificates into Trust Store - Note must happen before Mongo and Http client connections
     builder.Services.AddCustomTrustStore();
 
-    // Configure logging to use the CDP Platform standards.
-    builder.Services.AddHttpContextAccessor();
-    if (!integrationTest)
-        // Configuring Serilog below wipes out the framework logging
-        // so we don't execute the following when the host is running
-        // within an integration test
-        builder.Host.UseSerilog(CdpLogging.Configuration);
+    builder.ConfigureLoggingAndTracing(integrationTest);
 
     // This adds default rate limiter, total request timeout, retries, circuit breaker and timeout per attempt
     builder.Services.ConfigureHttpClientDefaults(options => options.AddStandardResilienceHandler());
@@ -133,6 +128,8 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
     builder.Services.AddTransient<IImportPreNotificationService, ImportPreNotificationService>();
     builder.Services.AddTransient<ICustomsDeclarationService, CustomsDeclarationService>();
     builder.Services.AddSingleton<IEventPublisher, EventPublisher>();
+    builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
+    builder.Services.AddAWSService<IAmazonSimpleNotificationService>();
 
     builder.Services.AddDbContext(builder.Configuration);
 
@@ -151,7 +148,6 @@ static WebApplication BuildWebApplication(WebApplicationBuilder builder)
     app.MapGmrEndpoints(isDevelopment);
     app.MapImportPreNotificationEndpoints(isDevelopment);
     app.MapCustomsDeclarationEndpoints(isDevelopment);
-
     app.UseSwagger(options =>
     {
         options.RouteTemplate = "/.well-known/openapi/{documentName}/openapi.json";
@@ -163,7 +159,6 @@ static WebApplication BuildWebApplication(WebApplicationBuilder builder)
         options.RoutePrefix = "redoc";
         options.SpecUrl = "/.well-known/openapi/v1/openapi.json";
     });
-
     app.UseStatusCodePages();
     app.UseExceptionHandler(
         new ExceptionHandlerOptions
