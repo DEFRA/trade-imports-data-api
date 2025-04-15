@@ -90,11 +90,11 @@ public class CustomsDeclarationTests : IntegrationTestBase
                         ExternalVersion = 1,
                         Commodities =
                         [
-                            new Commodity()
+                            new Commodity
                             {
                                 Documents =
                                 [
-                                    new ImportDocument()
+                                    new ImportDocument
                                     {
                                         DocumentReference = new ImportDocumentReference("GBCHD2025.1234567"),
                                         DocumentCode = "C640",

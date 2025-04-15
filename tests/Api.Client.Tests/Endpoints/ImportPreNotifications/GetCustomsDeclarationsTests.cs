@@ -49,7 +49,7 @@ public class GetCustomsDeclarationsTests : WireMockTestBase<WireMockContext>
                     .Create()
                     .WithBody(
                         JsonSerializer.Serialize(
-                            new List<CustomsDeclarationEntity>()
+                            new List<CustomsDeclarationEntity>
                             {
                                 new()
                                 {

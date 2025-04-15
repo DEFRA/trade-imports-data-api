@@ -51,7 +51,7 @@ public static class ResourceEventExtensions
         var diff = previousNode.CreatePatch(currentNode);
 
         return diff
-            .Operations.Select(x => new Diff()
+            .Operations.Select(x => new Diff
             {
                 Path = x.Path.ToString(),
                 Operation = x.Op.ToString(),
