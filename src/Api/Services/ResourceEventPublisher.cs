@@ -2,27 +2,28 @@ using System.Text.Json;
 using Amazon.SimpleNotificationService;
 using Amazon.SimpleNotificationService.Model;
 using Defra.TradeImportsDataApi.Api.Utils.Logging;
+using Defra.TradeImportsDataApi.Domain.Events;
 using Microsoft.AspNetCore.HeaderPropagation;
 using Microsoft.Extensions.Options;
 
 namespace Defra.TradeImportsDataApi.Api.Services;
 
-public class EventPublisher(
+public class ResourceEventPublisher(
     IAmazonSimpleNotificationService simpleNotificationService,
     IOptions<TraceHeader> traceHeader,
     HeaderPropagationValues headerPropagationValues
-) : IEventPublisher
+) : IResourceEventPublisher
 {
     private string? _topicArn;
 
-    public async Task Publish<T>(T @event, string resourceType, CancellationToken cancellationToken)
+    public async Task Publish<T>(ResourceEvent<T> @event, CancellationToken cancellationToken)
     {
         var topicArn = await GetTopicArn();
         var messageAttributes = new Dictionary<string, MessageAttributeValue>
         {
             {
-                nameof(resourceType),
-                new MessageAttributeValue { StringValue = resourceType, DataType = "String" }
+                "resourceType",
+                new MessageAttributeValue { StringValue = @event.ResourceType, DataType = "String" }
             },
         };
 
