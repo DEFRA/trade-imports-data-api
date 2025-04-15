@@ -43,7 +43,6 @@ COPY Directory.Build.props Directory.Build.props
 RUN dotnet restore
 
 COPY src/Api src/Api
-COPY src/Api/appsettings.json .
 COPY src/Api.Client src/Api.Client
 COPY src/Domain src/Domain
 COPY src/Data src/Data
@@ -56,6 +55,8 @@ COPY tests/Data.Tests tests/Data.Tests
 RUN dotnet csharpier --check .
 
 RUN dotnet build src/Api/Api.csproj --no-restore -c Release
+
+COPY src/Api/appsettings.json .
 RUN dotnet swagger tofile --output openapi.json ./src/Api/bin/Release/net9.0/Defra.TradeImportsDataApi.Api.dll v1
 RUN vacuum lint -d -r .vacuum.yml openapi.json
 
