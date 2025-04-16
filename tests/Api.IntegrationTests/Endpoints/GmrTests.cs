@@ -34,6 +34,8 @@ public class GmrTests : IntegrationTestBase
         result = await client.GetGmr(gmrId, CancellationToken.None);
         result.Should().NotBeNull();
         result.Gmr.State.Should().Be(State.Open);
+        result.Created.Should().BeAfter(DateTime.MinValue);
+        result.Updated.Should().BeAfter(DateTime.MinValue);
 
         await client.PutGmr(
             gmrId,
@@ -42,9 +44,11 @@ public class GmrTests : IntegrationTestBase
             CancellationToken.None
         );
 
-        result = await client.GetGmr(gmrId, CancellationToken.None);
-        result.Should().NotBeNull();
-        result.Gmr.State.Should().Be(State.Finalised);
+        var result2 = await client.GetGmr(gmrId, CancellationToken.None);
+        result2.Should().NotBeNull();
+        result2.Gmr.State.Should().Be(State.Finalised);
+        result2.Created.Should().Be(result.Created);
+        result2.Updated.Should().BeAfter(result.Updated);
     }
 
     [Fact]

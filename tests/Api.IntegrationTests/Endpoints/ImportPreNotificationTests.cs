@@ -66,6 +66,8 @@ public class ImportPreNotificationTests : SqsTestBase
         result = await client.GetImportPreNotification(chedRef, CancellationToken.None);
         result.Should().NotBeNull();
         result.ImportPreNotification.Version.Should().Be(1);
+        result.Created.Should().BeAfter(DateTime.MinValue);
+        result.Updated.Should().BeAfter(DateTime.MinValue);
 
         await client.PutImportPreNotification(
             chedRef,
@@ -74,9 +76,11 @@ public class ImportPreNotificationTests : SqsTestBase
             CancellationToken.None
         );
 
-        result = await client.GetImportPreNotification(chedRef, CancellationToken.None);
-        result.Should().NotBeNull();
-        result.ImportPreNotification.Version.Should().Be(2);
+        var result2 = await client.GetImportPreNotification(chedRef, CancellationToken.None);
+        result2.Should().NotBeNull();
+        result2.ImportPreNotification.Version.Should().Be(2);
+        result2.Created.Should().Be(result.Created);
+        result2.Updated.Should().BeAfter(result.Updated);
     }
 
     [Fact]

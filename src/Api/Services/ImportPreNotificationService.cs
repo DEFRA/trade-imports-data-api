@@ -59,6 +59,8 @@ public class ImportPreNotificationService(IDbContext dbContext, IResourceEventPu
             throw new EntityNotFoundException(nameof(ImportPreNotificationEntity), importPreNotificationEntity.Id);
         }
 
+        importPreNotificationEntity.Created = existing.Created;
+
         await dbContext.ImportPreNotifications.Update(importPreNotificationEntity, etag, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
         await resourceEventPublisher.Publish(

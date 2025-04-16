@@ -1,3 +1,4 @@
+using Defra.TradeImportsDataApi.Api.Exceptions;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
 
@@ -20,6 +21,14 @@ public class GmrService(IDbContext dbContext) : IGmrService
 
     public async Task<GmrEntity> Update(GmrEntity gmrEntity, string etag, CancellationToken cancellationToken)
     {
+        var existing = await dbContext.Gmrs.Find(gmrEntity.Id, cancellationToken);
+        if (existing == null)
+        {
+            throw new EntityNotFoundException(nameof(GmrEntity), gmrEntity.Id);
+        }
+
+        gmrEntity.Created = existing.Created;
+
         await dbContext.Gmrs.Update(gmrEntity, etag, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
 
