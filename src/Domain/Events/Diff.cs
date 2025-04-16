@@ -2,14 +2,14 @@ using System.Text.Json.Serialization;
 
 namespace Defra.TradeImportsDataApi.Domain.Events;
 
-public class Diff
+public record Diff
 {
     [JsonPropertyName("path")]
-    public required string Path { get; set; }
+    public required string Path { get; init; }
 
     [JsonPropertyName("operation")]
-    public required string Operation { get; set; }
+    public required string Operation { get; init; }
 
-    [JsonPropertyName("Value")]
-    public string? Value { get; set; }
+    [JsonPropertyName("value")]
+    public string? Value { get; init; }
 }

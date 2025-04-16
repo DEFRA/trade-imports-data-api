@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Defra.TradeImportsDataApi.Api.Authentication;
 using Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations;
+using Defra.TradeImportsDataApi.Api.Exceptions;
 using Defra.TradeImportsDataApi.Api.Extensions;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Api.Utils;
@@ -15,9 +16,11 @@ public static class EndpointRouteBuilderExtensions
 {
     public static void MapImportPreNotificationEndpoints(this IEndpointRouteBuilder app, bool isDevelopment)
     {
+        const string groupName = "ImportPreNotifications";
+
         var route = app.MapGet("import-pre-notifications/{chedId}/", Get)
             .WithName("GetImportPreNotificationByChedId")
-            .WithTags("ImportPreNotifications")
+            .WithTags(groupName)
             .WithSummary("Get ImportPreNotification")
             .WithDescription("Get an import pre-notification by CHED ID")
             .Produces<ImportPreNotificationResponse>()
@@ -28,10 +31,10 @@ public static class EndpointRouteBuilderExtensions
         AllowAnonymousForDevelopment(isDevelopment, route);
 
         route = app.MapGet("import-pre-notifications/{chedId}/customs-declarations", GetCustomsDeclarations)
-            .WithName("GetImportPreNotificationAndCustomsDeclarationsByChedId")
-            .WithTags("ImportPreNotificationsWithCustomsDeclarations")
-            .WithSummary("Get ImportPreNotification with CustomsDeclarations")
-            .WithDescription("Get an import pre-notification by CHED ID along with the associated customs-declarations")
+            .WithName("GetCustomsDeclarationsByChedId")
+            .WithTags(groupName)
+            .WithSummary("Get CustomsDeclarations by CHED ID")
+            .WithDescription("Get associated customs declarations by CHED ID")
             .Produces<List<CustomsDeclarationResponse>>()
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
@@ -41,12 +44,13 @@ public static class EndpointRouteBuilderExtensions
 
         route = app.MapPut("import-pre-notifications/{chedId}/", Put)
             .WithName("PutImportPreNotification")
-            .WithTags("ImportPreNotifications")
+            .WithTags(groupName)
             .WithSummary("Put ImportPreNotification")
             .WithDescription("Put an import pre-notification")
             .Produces(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status204NoContent)
             .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesProblem(StatusCodes.Status404NotFound)
             .ProducesProblem(StatusCodes.Status409Conflict)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .RequireAuthorization(PolicyNames.Write);
@@ -169,6 +173,10 @@ public static class EndpointRouteBuilderExtensions
         catch (ConcurrencyException)
         {
             return Results.Conflict();
+        }
+        catch (EntityNotFoundException)
+        {
+            return Results.NotFound();
         }
     }
 }

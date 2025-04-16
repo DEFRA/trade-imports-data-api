@@ -123,8 +123,74 @@
               }
             }
           },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
           "409": {
             "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/customs-declarations/{mrn}/import-pre-notifications": {
+      "get": {
+        "tags": [
+          "CustomsDeclarations"
+        ],
+        "summary": "Get ImportPreNotifications by MRN",
+        "description": "Get associated import pre-notifications by MRN",
+        "operationId": "ImportPreNotificationsByMrn",
+        "parameters": [
+          {
+            "name": "mrn",
+            "in": "path",
+            "description": "MRN",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Api.Endpoints.ImportPreNotifications.ImportPreNotificationResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -388,64 +454,18 @@
               }
             }
           },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
           "409": {
             "description": "Conflict",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/customs-declarations/{mrn}/import-pre-notifications": {
-      "get": {
-        "tags": [
-          "ImportPreNotificationsByMrn"
-        ],
-        "summary": "Get ImportPreNotifications by MRN",
-        "description": "Get associated import pre-notifications by MRN",
-        "operationId": "ImportPreNotificationsByMrn",
-        "parameters": [
-          {
-            "name": "mrn",
-            "in": "path",
-            "description": "MRN",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Api.Endpoints.ImportPreNotifications.ImportPreNotificationResponse"
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -470,11 +490,11 @@
     "/import-pre-notifications/{chedId}/customs-declarations": {
       "get": {
         "tags": [
-          "ImportPreNotificationsWithCustomsDeclarations"
+          "ImportPreNotifications"
         ],
-        "summary": "Get ImportPreNotification with CustomsDeclarations",
-        "description": "Get an import pre-notification by CHED ID along with the associated customs-declarations",
-        "operationId": "GetImportPreNotificationAndCustomsDeclarationsByChedId",
+        "summary": "Get CustomsDeclarations by CHED ID",
+        "description": "Get associated customs declarations by CHED ID",
+        "operationId": "GetCustomsDeclarationsByChedId",
         "parameters": [
           {
             "name": "chedId",
