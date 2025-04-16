@@ -1,6 +1,7 @@
 using System.Text.Json;
 using Amazon.SimpleNotificationService;
 using Amazon.SimpleNotificationService.Model;
+using Defra.TradeImportsDataApi.Api.Configuration;
 using Defra.TradeImportsDataApi.Api.Utils.Logging;
 using Defra.TradeImportsDataApi.Domain.Events;
 using Microsoft.AspNetCore.HeaderPropagation;
@@ -10,15 +11,13 @@ namespace Defra.TradeImportsDataApi.Api.Services;
 
 public class ResourceEventPublisher(
     IAmazonSimpleNotificationService simpleNotificationService,
-    IOptions<TraceHeader> traceHeader,
-    HeaderPropagationValues headerPropagationValues
+    IOptions<TraceHeader> traceHeaderOptions,
+    HeaderPropagationValues headerPropagationValues,
+    IOptions<ResourceEventOptions> resourceEventOptions
 ) : IResourceEventPublisher
 {
-    private string? _topicArn;
-
     public async Task Publish<T>(ResourceEvent<T> @event, CancellationToken cancellationToken)
     {
-        var topicArn = await GetTopicArn();
         var messageAttributes = new Dictionary<string, MessageAttributeValue>
         {
             {
@@ -31,7 +30,7 @@ public class ResourceEventPublisher(
 
         var request = new PublishRequest
         {
-            TopicArn = topicArn,
+            TopicArn = resourceEventOptions.Value.TopicArn,
             MessageAttributes = messageAttributes,
             Message = JsonSerializer.Serialize(@event),
         };
@@ -43,29 +42,13 @@ public class ResourceEventPublisher(
     {
         if (
             headerPropagationValues.Headers != null
-            && headerPropagationValues.Headers.TryGetValue(traceHeader.Value.Name, out var traceId)
+            && headerPropagationValues.Headers.TryGetValue(traceHeaderOptions.Value.Name, out var traceId)
         )
         {
             messageAttributes.Add(
-                traceHeader.Value.Name,
+                traceHeaderOptions.Value.Name,
                 new MessageAttributeValue { StringValue = traceId, DataType = "String" }
             );
         }
-    }
-
-    private async Task<string> GetTopicArn()
-    {
-        if (_topicArn is not null)
-            return _topicArn;
-
-        // Topic name has not moved into config yet as it should remain
-        // common throughout all environments
-        var topic = await simpleNotificationService.FindTopicAsync("trade_imports_data_upserted");
-
-        // Class registered as singleton so this serves as a cache and
-        // therefore a one time lookup
-        _topicArn = topic.TopicArn;
-
-        return _topicArn;
     }
 }

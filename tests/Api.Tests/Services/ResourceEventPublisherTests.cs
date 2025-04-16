@@ -1,5 +1,6 @@
 using Amazon.SimpleNotificationService;
 using Amazon.SimpleNotificationService.Model;
+using Defra.TradeImportsDataApi.Api.Configuration;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Api.Utils.Logging;
 using Defra.TradeImportsDataApi.Data.Entities;
@@ -17,13 +18,13 @@ public class ResourceEventPublisherTests
     public async Task Publish_ShouldPublish()
     {
         var mockSimpleNotificationService = Substitute.For<IAmazonSimpleNotificationService>();
-        mockSimpleNotificationService
-            .FindTopicAsync("trade_imports_data_upserted")
-            .Returns(Task.FromResult(new Topic { TopicArn = "arn" }));
         var subject = new ResourceEventPublisher(
             mockSimpleNotificationService,
             new OptionsWrapper<TraceHeader>(new TraceHeader { Name = "trace-id" }),
-            new HeaderPropagationValues()
+            new HeaderPropagationValues(),
+            new OptionsWrapper<ResourceEventOptions>(
+                new ResourceEventOptions { ArnPrefix = "arn", TopicName = "topic-name" }
+            )
         );
 
         await subject.Publish(
@@ -41,7 +42,7 @@ public class ResourceEventPublisherTests
             .Received()
             .PublishAsync(
                 Arg.Is<PublishRequest>(x =>
-                    x.TopicArn == "arn"
+                    x.TopicArn == "arn:topic-name"
                     && x.MessageAttributes.ContainsKey("resourceType")
                     && x.MessageAttributes["resourceType"].StringValue == "resourceType"
                     && x.Message
@@ -55,14 +56,14 @@ public class ResourceEventPublisherTests
     public async Task Publish_WhenTraceIdPresent_ShouldBeIncluded()
     {
         var mockSimpleNotificationService = Substitute.For<IAmazonSimpleNotificationService>();
-        mockSimpleNotificationService
-            .FindTopicAsync("trade_imports_data_upserted")
-            .Returns(Task.FromResult(new Topic { TopicArn = "arn" }));
         var headerPropagationValues = new HeaderPropagationValues();
         var subject = new ResourceEventPublisher(
             mockSimpleNotificationService,
             new OptionsWrapper<TraceHeader>(new TraceHeader { Name = "trace-id" }),
-            headerPropagationValues
+            headerPropagationValues,
+            new OptionsWrapper<ResourceEventOptions>(
+                new ResourceEventOptions { ArnPrefix = "arn", TopicName = "topic-name" }
+            )
         );
 
         headerPropagationValues.Headers = new Dictionary<string, StringValues> { { "trace-id", "trace-id-value" } };
