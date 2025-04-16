@@ -44,6 +44,8 @@ public class CustomsDeclarationTests : SqsTestBase
 
         result = await client.GetCustomsDeclaration(mrn, CancellationToken.None);
         result.Should().NotBeNull();
+        result.Created.Should().BeAfter(DateTime.MinValue);
+        result.Updated.Should().BeAfter(DateTime.MinValue);
         result.ClearanceRequest?.ExternalVersion.Should().Be(1);
 
         await client.PutCustomsDeclaration(
@@ -53,9 +55,11 @@ public class CustomsDeclarationTests : SqsTestBase
             CancellationToken.None
         );
 
-        result = await client.GetCustomsDeclaration(mrn, CancellationToken.None);
-        result.Should().NotBeNull();
-        result.ClearanceRequest?.ExternalVersion.Should().Be(2);
+        var result2 = await client.GetCustomsDeclaration(mrn, CancellationToken.None);
+        result2.Should().NotBeNull();
+        result2.ClearanceRequest?.ExternalVersion.Should().Be(2);
+        result2.Created.Should().Be(result.Created);
+        result2.Updated.Should().BeAfter(result.Updated);
     }
 
     [Fact]

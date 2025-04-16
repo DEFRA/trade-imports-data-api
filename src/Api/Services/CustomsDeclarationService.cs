@@ -54,6 +54,8 @@ public class CustomsDeclarationService(IDbContext dbContext, IResourceEventPubli
             throw new EntityNotFoundException(nameof(CustomsDeclarationEntity), customsDeclarationEntity.Id);
         }
 
+        customsDeclarationEntity.Created = existing.Created;
+
         await dbContext.CustomsDeclarations.Update(customsDeclarationEntity, etag, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
         await resourceEventPublisher.Publish(
