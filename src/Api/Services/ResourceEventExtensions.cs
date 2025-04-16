@@ -6,7 +6,7 @@ using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.Events;
 using Json.Patch;
 
-namespace Defra.TradeImportsDataApi.Api.Services.Extensions;
+namespace Defra.TradeImportsDataApi.Api.Services;
 
 public static class ResourceEventExtensions
 {
@@ -26,18 +26,19 @@ public static class ResourceEventExtensions
             ResourceId = entity.Id,
             ResourceType = typeof(TDataEntity).Name,
             Operation = operation,
+            ETag = entity.ETag,
         };
     }
 
     public static ResourceEvent<TDataEntity> WithChangeSet<TDataEntity, TDomain>(
         this ResourceEvent<TDataEntity> @event,
-        TDomain from,
-        TDomain to
+        TDomain current,
+        TDomain previous
     )
         where TDataEntity : IDataEntity
         where TDomain : class
     {
-        return @event with { ChangeSet = CreateChangeSet(from, to) };
+        return @event with { ChangeSet = CreateChangeSet(current, previous) };
     }
 
     private static List<Diff> CreateChangeSet<T>([DisallowNull] T current, [DisallowNull] T previous)

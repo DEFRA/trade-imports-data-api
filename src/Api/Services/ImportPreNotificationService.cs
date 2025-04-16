@@ -1,5 +1,4 @@
 using Defra.TradeImportsDataApi.Api.Exceptions;
-using Defra.TradeImportsDataApi.Api.Services.Extensions;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.Events;

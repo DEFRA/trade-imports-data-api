@@ -4,7 +4,7 @@ using FluentAssertions;
 
 namespace Defra.TradeImportsDataApi.Api.IntegrationTests.Endpoints;
 
-public class CustomsDeclarationTests : IntegrationTestBase
+public class CustomsDeclarationTests : SqsTestBase
 {
     [Fact]
     public async Task WhenDoesNotExist_ShouldCreateAndRead()
@@ -112,5 +112,24 @@ public class CustomsDeclarationTests : IntegrationTestBase
         var actualResult = await client.GetImportPreNotificationsByMrn(mrn, CancellationToken.None);
         actualResult.Should().NotBeNull();
         actualResult.Count.Should().Be(1);
+    }
+
+    [Fact]
+    public async Task WhenCreating_ShouldEmitCreatedMessage()
+    {
+        var client = CreateDataApiClient();
+        var mrn = Guid.NewGuid().ToString("N");
+        await DrainAllMessages();
+
+        await client.PutCustomsDeclaration(
+            mrn,
+            new CustomsDeclaration { ClearanceRequest = new ClearanceRequest() },
+            null,
+            CancellationToken.None
+        );
+
+        Assert.True(
+            await AsyncWaiter.WaitForAsync(async () => (await GetQueueAttributes()).ApproximateNumberOfMessages == 1)
+        );
     }
 }

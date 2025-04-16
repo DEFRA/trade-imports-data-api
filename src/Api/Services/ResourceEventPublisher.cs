@@ -31,9 +31,9 @@ public class ResourceEventPublisher(
 
         var request = new PublishRequest
         {
+            TopicArn = topicArn,
             MessageAttributes = messageAttributes,
             Message = JsonSerializer.Serialize(@event),
-            TopicArn = topicArn,
         };
 
         await simpleNotificationService.PublishAsync(request, cancellationToken);

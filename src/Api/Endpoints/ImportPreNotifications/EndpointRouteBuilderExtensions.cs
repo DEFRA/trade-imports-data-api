@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Defra.TradeImportsDataApi.Api.Authentication;
 using Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations;
+using Defra.TradeImportsDataApi.Api.Exceptions;
 using Defra.TradeImportsDataApi.Api.Extensions;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Api.Utils;
@@ -49,6 +50,7 @@ public static class EndpointRouteBuilderExtensions
             .Produces(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status204NoContent)
             .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesProblem(StatusCodes.Status404NotFound)
             .ProducesProblem(StatusCodes.Status409Conflict)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .RequireAuthorization(PolicyNames.Write);
@@ -171,6 +173,10 @@ public static class EndpointRouteBuilderExtensions
         catch (ConcurrencyException)
         {
             return Results.Conflict();
+        }
+        catch (EntityNotFoundException)
+        {
+            return Results.NotFound();
         }
     }
 }

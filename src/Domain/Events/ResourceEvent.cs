@@ -16,9 +16,12 @@ public record ResourceEvent<T>
     [JsonPropertyName("resource")]
     public T? Resource { get; init; }
 
+    [JsonPropertyName("etag")]
+    public string? ETag { get; init; }
+
     [JsonPropertyName("timestamp")]
     public DateTime Timestamp { get; init; } = DateTime.UtcNow;
 
     [JsonPropertyName("changeSet")]
-    public List<Diff> ChangeSet { get; set; } = [];
+    public List<Diff> ChangeSet { get; init; } = [];
 }
