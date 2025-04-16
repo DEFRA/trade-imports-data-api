@@ -10,12 +10,9 @@ namespace Defra.TradeImportsDataApi.Api.Services;
 
 public static class ResourceEventExtensions
 {
-    // Do we need this specific serializer options?
     private static readonly JsonSerializerOptions s_jsonOptions = new()
     {
-        PropertyNameCaseInsensitive = true,
-        NumberHandling = JsonNumberHandling.AllowReadingFromString,
-        Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) },
+        Converters = { new JsonStringEnumConverter() },
     };
 
     public static ResourceEvent<TDataEntity> ToResourceEvent<TDataEntity>(this TDataEntity entity, string operation)
@@ -24,9 +21,22 @@ public static class ResourceEventExtensions
         return new ResourceEvent<TDataEntity>
         {
             ResourceId = entity.Id,
-            ResourceType = typeof(TDataEntity).Name,
+            ResourceType = ResourceTypeName<TDataEntity>(),
             Operation = operation,
             ETag = entity.ETag,
+        };
+    }
+
+    private static string ResourceTypeName<TDataEntity>()
+        where TDataEntity : IDataEntity
+    {
+        var name = typeof(TDataEntity).Name.Replace("Entity", string.Empty);
+
+        return name switch
+        {
+            ResourceEventResourceTypes.ImportPreNotification => ResourceEventResourceTypes.ImportPreNotification,
+            ResourceEventResourceTypes.CustomsDeclaration => ResourceEventResourceTypes.CustomsDeclaration,
+            _ => name,
         };
     }
 
