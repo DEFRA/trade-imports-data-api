@@ -15,9 +15,11 @@ public static class EndpointRouteBuilderExtensions
 {
     public static void MapCustomsDeclarationEndpoints(this IEndpointRouteBuilder app, bool isDevelopment)
     {
+        const string groupName = "CustomsDeclarations";
+
         var route = app.MapGet("customs-declarations/{mrn}/", Get)
             .WithName("CustomsDeclarationByMrn")
-            .WithTags("CustomsDeclarations")
+            .WithTags(groupName)
             .WithSummary("Get CustomsDeclaration")
             .WithDescription("Get a Customs Declaration by MRN")
             .Produces<CustomsDeclarationResponse>()
@@ -29,7 +31,7 @@ public static class EndpointRouteBuilderExtensions
 
         route = app.MapGet("customs-declarations/{mrn}/import-pre-notifications", GetImportPreNotifications)
             .WithName("ImportPreNotificationsByMrn")
-            .WithTags("ImportPreNotificationsByMrn")
+            .WithTags(groupName)
             .WithSummary("Get ImportPreNotifications by MRN")
             .WithDescription("Get associated import pre-notifications by MRN")
             .Produces<List<ImportPreNotificationResponse>>()
@@ -41,12 +43,13 @@ public static class EndpointRouteBuilderExtensions
 
         route = app.MapPut("customs-declarations/{mrn}/", Put)
             .WithName("PutCustomsDeclaration")
-            .WithTags("CustomsDeclarations")
+            .WithTags(groupName)
             .WithSummary("Put CustomsDeclaration")
             .WithDescription("Put a Customs Declaration")
             .Produces(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status204NoContent)
             .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesProblem(StatusCodes.Status404NotFound)
             .ProducesProblem(StatusCodes.Status409Conflict)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .RequireAuthorization(PolicyNames.Write);

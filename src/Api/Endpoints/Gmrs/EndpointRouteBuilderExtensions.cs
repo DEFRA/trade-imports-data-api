@@ -13,9 +13,11 @@ public static class EndpointRouteBuilderExtensions
 {
     public static void MapGmrEndpoints(this IEndpointRouteBuilder app, bool isDevelopment)
     {
+        const string groupName = "Gmrs";
+
         var route = app.MapGet("gmrs/{gmrId}/", Get)
             .WithName("GmrsByGmrId")
-            .WithTags("Gmrs")
+            .WithTags(groupName)
             .WithSummary("Get Gmr")
             .WithDescription("Get a GMR by GMR ID")
             .Produces<GmrResponse>()
@@ -27,7 +29,7 @@ public static class EndpointRouteBuilderExtensions
 
         route = app.MapPut("gmrs/{gmrId}/", Put)
             .WithName("PutGmr")
-            .WithTags("Gmrs")
+            .WithTags(groupName)
             .WithSummary("Put Gmr")
             .WithDescription("Put a GMR")
             .Produces(StatusCodes.Status201Created)

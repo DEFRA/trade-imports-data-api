@@ -31,16 +31,4 @@
     <EmbeddedResource Include="Endpoints\*\*.json" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="Endpoints\ImportPreNotifications\GetCustomsDeclarationsByChedIdTests.Get_WhenFound_ShouldReturnContent.verified.txt">
-      <DependentUpon>GetCustomsDeclarationsByChedIdTests.cs</DependentUpon>
-    </None>
-    <None Update="Endpoints\ImportPreNotifications\GetCustomsDeclarationsByChedIdTests.Get_WhenFound_ShouldReturnContent_response.verified.txt">
-      <DependentUpon>GetCustomsDeclarationsByChedIdTests.cs</DependentUpon>
-    </None>
-    <None Update="Endpoints\ImportPreNotifications\GetCustomsDeclarationsByChedIdTests.Get_WhenNotFound_ShouldNotBeFound.verified.txt">
-      <DependentUpon>GetCustomsDeclarationsByChedIdTests.cs</DependentUpon>
-    </None>
-  </ItemGroup>
-
 </Project>
