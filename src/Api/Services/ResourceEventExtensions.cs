@@ -24,6 +24,7 @@ public static class ResourceEventExtensions
             ResourceType = ResourceTypeName<TDataEntity>(),
             Operation = operation,
             ETag = entity.ETag,
+            Resource = entity,
         };
     }
 

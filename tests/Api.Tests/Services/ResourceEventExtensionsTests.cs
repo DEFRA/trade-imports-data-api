@@ -17,6 +17,7 @@ public class ResourceEventExtensionsTests
         result.ResourceType.Should().Be("Fixture");
         result.Operation.Should().Be("operation");
         result.ETag.Should().Be("etag");
+        result.Resource.Should().Be(subject);
     }
 
     [Fact]
