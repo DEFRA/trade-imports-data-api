@@ -148,6 +148,27 @@ public class ResourceEventExtensionsTests
         result.SubResourceType.Should().Be("Finalisation");
     }
 
+    [Fact]
+    public void WhenWithChangeSet_AndMultipleKnownSubResourceTypes_ShouldThrow()
+    {
+        var subject = new FixtureEntity { Id = "id", ETag = "etag" };
+        var previous = new CustomsDeclarationData(ClearanceRequest: null, ClearanceDecision: null, Finalisation: null);
+        var current = new CustomsDeclarationData(
+            new ClearanceRequest(),
+            new ClearanceDecision { Items = [] },
+            new Finalisation
+            {
+                ExternalVersion = 0,
+                FinalState = FinalState.Cleared,
+                IsManualRelease = false,
+            }
+        );
+
+        var act = () => subject.ToResourceEvent("operation").WithChangeSet(current, previous);
+
+        act.Should().Throw<InvalidOperationException>();
+    }
+
     private class FixtureEntity : IDataEntity
     {
         public string Name { get; set; } = null!;
