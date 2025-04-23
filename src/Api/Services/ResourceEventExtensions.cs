@@ -49,7 +49,30 @@ public static class ResourceEventExtensions
         where TDataEntity : IDataEntity
         where TDomain : class
     {
-        return @event with { ChangeSet = CreateChangeSet(current, previous) };
+        var changeSet = CreateChangeSet(current, previous);
+        var knownSubResourceTypes = changeSet
+            .Select(x => x.Path[1..])
+            .Distinct()
+            .Select(x =>
+                x switch
+                {
+                    ResourceEventSubResourceTypes.ClearanceRequest => ResourceEventSubResourceTypes.ClearanceRequest,
+                    ResourceEventSubResourceTypes.ClearanceDecision => ResourceEventSubResourceTypes.ClearanceDecision,
+                    ResourceEventSubResourceTypes.Finalisation => ResourceEventSubResourceTypes.Finalisation,
+                    _ => null,
+                }
+            )
+            .OfType<string>()
+            .ToList();
+
+        if (knownSubResourceTypes.Count > 1)
+            throw new InvalidOperationException("Change set contains multiple sub resource types");
+
+        return @event with
+        {
+            ChangeSet = changeSet,
+            SubResourceType = knownSubResourceTypes.FirstOrDefault(),
+        };
     }
 
     private static List<Diff> CreateChangeSet<T>([DisallowNull] T current, [DisallowNull] T previous)

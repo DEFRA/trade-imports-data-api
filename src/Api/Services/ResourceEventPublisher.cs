@@ -21,10 +21,18 @@ public class ResourceEventPublisher(
         var messageAttributes = new Dictionary<string, MessageAttributeValue>
         {
             {
-                "resourceType",
+                nameof(@event.ResourceType),
                 new MessageAttributeValue { StringValue = @event.ResourceType, DataType = "String" }
             },
         };
+
+        if (@event.SubResourceType is not null)
+        {
+            messageAttributes.Add(
+                nameof(@event.SubResourceType),
+                new MessageAttributeValue { StringValue = @event.SubResourceType, DataType = "String" }
+            );
+        }
 
         AddTraceIdIfPresent(messageAttributes);
 

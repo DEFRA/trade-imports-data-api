@@ -43,10 +43,10 @@ public class ResourceEventPublisherTests
             .PublishAsync(
                 Arg.Is<PublishRequest>(x =>
                     x.TopicArn == "arn:topic-name"
-                    && x.MessageAttributes.ContainsKey("resourceType")
-                    && x.MessageAttributes["resourceType"].StringValue == "resourceType"
+                    && x.MessageAttributes.ContainsKey("ResourceType")
+                    && x.MessageAttributes["ResourceType"].StringValue == "resourceType"
                     && x.Message
-                        == "{\"resourceId\":\"resourceId\",\"resourceType\":\"resourceType\",\"operation\":\"operation\",\"resource\":null,\"etag\":null,\"timestamp\":\"2025-04-16T07:00:00Z\",\"changeSet\":[]}"
+                        == "{\"resourceId\":\"resourceId\",\"resourceType\":\"resourceType\",\"subResourceType\":null,\"operation\":\"operation\",\"resource\":null,\"etag\":null,\"timestamp\":\"2025-04-16T07:00:00Z\",\"changeSet\":[]}"
                 ),
                 CancellationToken.None
             );
@@ -84,6 +84,41 @@ public class ResourceEventPublisherTests
                 Arg.Is<PublishRequest>(x =>
                     x.MessageAttributes.ContainsKey("trace-id")
                     && x.MessageAttributes["trace-id"].StringValue == "trace-id-value"
+                ),
+                CancellationToken.None
+            );
+    }
+
+    [Fact]
+    public async Task Publish_WhenSubResourceTypeSet_ShouldBeIncluded()
+    {
+        var mockSimpleNotificationService = Substitute.For<IAmazonSimpleNotificationService>();
+        var subject = new ResourceEventPublisher(
+            mockSimpleNotificationService,
+            new OptionsWrapper<TraceHeader>(new TraceHeader { Name = "trace-id" }),
+            new HeaderPropagationValues(),
+            new OptionsWrapper<ResourceEventOptions>(
+                new ResourceEventOptions { ArnPrefix = "arn", TopicName = "topic-name" }
+            )
+        );
+
+        await subject.Publish(
+            new ResourceEvent<FixtureEntity>
+            {
+                ResourceId = "resourceId",
+                ResourceType = "resourceType",
+                SubResourceType = "subResourceType",
+                Operation = "operation",
+            },
+            CancellationToken.None
+        );
+
+        await mockSimpleNotificationService
+            .Received()
+            .PublishAsync(
+                Arg.Is<PublishRequest>(x =>
+                    x.MessageAttributes.ContainsKey("SubResourceType")
+                    && x.MessageAttributes["SubResourceType"].StringValue == "subResourceType"
                 ),
                 CancellationToken.None
             );
