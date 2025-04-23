@@ -50,30 +50,28 @@ public static class ResourceEventExtensions
         where TDomain : class
     {
         var changeSet = CreateChangeSet(current, previous);
-        var knownChildResourceTypes = changeSet
+        var knownSubResourceTypes = changeSet
             .Select(x => x.Path[1..])
             .Distinct()
             .Select(x =>
                 x switch
                 {
-                    ResourceEventChildResourceTypes.ClearanceRequest =>
-                        ResourceEventChildResourceTypes.ClearanceRequest,
-                    ResourceEventChildResourceTypes.ClearanceDecision =>
-                        ResourceEventChildResourceTypes.ClearanceDecision,
-                    ResourceEventChildResourceTypes.Finalisation => ResourceEventChildResourceTypes.Finalisation,
+                    ResourceEventSubResourceTypes.ClearanceRequest => ResourceEventSubResourceTypes.ClearanceRequest,
+                    ResourceEventSubResourceTypes.ClearanceDecision => ResourceEventSubResourceTypes.ClearanceDecision,
+                    ResourceEventSubResourceTypes.Finalisation => ResourceEventSubResourceTypes.Finalisation,
                     _ => null,
                 }
             )
             .OfType<string>()
             .ToList();
 
-        if (knownChildResourceTypes.Count > 1)
-            throw new InvalidOperationException("Change set contains multiple child resource types");
+        if (knownSubResourceTypes.Count > 1)
+            throw new InvalidOperationException("Change set contains multiple sub resource types");
 
         return @event with
         {
             ChangeSet = changeSet,
-            ChildResourceType = knownChildResourceTypes.FirstOrDefault(),
+            SubResourceType = knownSubResourceTypes.FirstOrDefault(),
         };
     }
 

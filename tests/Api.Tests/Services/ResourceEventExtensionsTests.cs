@@ -22,7 +22,7 @@ public class ResourceEventExtensionsTests
     }
 
     [Fact]
-    public void WhenWithChangeSet_AndMultipleUnknownChildFieldsChanging_ShouldNotThrow()
+    public void WhenWithChangeSet_AndMultipleUnknownSubFieldsChanging_ShouldNotThrow()
     {
         var previous = new FixtureEntity
         {
@@ -76,7 +76,7 @@ public class ResourceEventExtensionsTests
     }
 
     [Fact]
-    public void WhenWithChangeSet_AndChildResourceTypeIsUnknown_ShouldNotSetChildResourceType()
+    public void WhenWithChangeSet_AndSubResourceTypeIsUnknown_ShouldNotSetSubResourceType()
     {
         var previous = new FixtureEntity
         {
@@ -96,11 +96,11 @@ public class ResourceEventExtensionsTests
 
         var result = subject.WithChangeSet(current, previous);
 
-        result.ChildResourceType.Should().BeNull();
+        result.SubResourceType.Should().BeNull();
     }
 
     [Fact]
-    public void WhenWithChangeSet_AndChildResourceTypeIsClearanceRequest_ShouldSetChildResourceType()
+    public void WhenWithChangeSet_AndSubResourceTypeIsClearanceRequest_ShouldSetSubResourceType()
     {
         var subject = new FixtureEntity { Id = "id", ETag = "etag" };
         var previous = new CustomsDeclarationData(ClearanceRequest: null, ClearanceDecision: null, Finalisation: null);
@@ -108,11 +108,11 @@ public class ResourceEventExtensionsTests
 
         var result = subject.ToResourceEvent("operation").WithChangeSet(current, previous);
 
-        result.ChildResourceType.Should().Be("ClearanceRequest");
+        result.SubResourceType.Should().Be("ClearanceRequest");
     }
 
     [Fact]
-    public void WhenWithChangeSet_AndChildResourceTypeIsClearanceDecision_ShouldSetChildResourceType()
+    public void WhenWithChangeSet_AndSubResourceTypeIsClearanceDecision_ShouldSetSubResourceType()
     {
         var subject = new FixtureEntity { Id = "id", ETag = "etag" };
         var previous = new CustomsDeclarationData(ClearanceRequest: null, ClearanceDecision: null, Finalisation: null);
@@ -124,11 +124,11 @@ public class ResourceEventExtensionsTests
 
         var result = subject.ToResourceEvent("operation").WithChangeSet(current, previous);
 
-        result.ChildResourceType.Should().Be("ClearanceDecision");
+        result.SubResourceType.Should().Be("ClearanceDecision");
     }
 
     [Fact]
-    public void WhenWithChangeSet_AndChildResourceTypeIsFinalisation_ShouldSetChildResourceType()
+    public void WhenWithChangeSet_AndSubResourceTypeIsFinalisation_ShouldSetSubResourceType()
     {
         var subject = new FixtureEntity { Id = "id", ETag = "etag" };
         var previous = new CustomsDeclarationData(ClearanceRequest: null, ClearanceDecision: null, Finalisation: null);
@@ -145,7 +145,7 @@ public class ResourceEventExtensionsTests
 
         var result = subject.ToResourceEvent("operation").WithChangeSet(current, previous);
 
-        result.ChildResourceType.Should().Be("Finalisation");
+        result.SubResourceType.Should().Be("Finalisation");
     }
 
     private class FixtureEntity : IDataEntity

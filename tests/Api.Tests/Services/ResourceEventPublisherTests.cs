@@ -46,7 +46,7 @@ public class ResourceEventPublisherTests
                     && x.MessageAttributes.ContainsKey("ResourceType")
                     && x.MessageAttributes["ResourceType"].StringValue == "resourceType"
                     && x.Message
-                        == "{\"resourceId\":\"resourceId\",\"resourceType\":\"resourceType\",\"childResourceType\":null,\"operation\":\"operation\",\"resource\":null,\"etag\":null,\"timestamp\":\"2025-04-16T07:00:00Z\",\"changeSet\":[]}"
+                        == "{\"resourceId\":\"resourceId\",\"resourceType\":\"resourceType\",\"subResourceType\":null,\"operation\":\"operation\",\"resource\":null,\"etag\":null,\"timestamp\":\"2025-04-16T07:00:00Z\",\"changeSet\":[]}"
                 ),
                 CancellationToken.None
             );
@@ -90,7 +90,7 @@ public class ResourceEventPublisherTests
     }
 
     [Fact]
-    public async Task Publish_WhenChildResourceTypeSet_ShouldBeIncluded()
+    public async Task Publish_WhenSubResourceTypeSet_ShouldBeIncluded()
     {
         var mockSimpleNotificationService = Substitute.For<IAmazonSimpleNotificationService>();
         var subject = new ResourceEventPublisher(
@@ -107,7 +107,7 @@ public class ResourceEventPublisherTests
             {
                 ResourceId = "resourceId",
                 ResourceType = "resourceType",
-                ChildResourceType = "childResourceType",
+                SubResourceType = "subResourceType",
                 Operation = "operation",
             },
             CancellationToken.None
@@ -117,8 +117,8 @@ public class ResourceEventPublisherTests
             .Received()
             .PublishAsync(
                 Arg.Is<PublishRequest>(x =>
-                    x.MessageAttributes.ContainsKey("ChildResourceType")
-                    && x.MessageAttributes["ChildResourceType"].StringValue == "childResourceType"
+                    x.MessageAttributes.ContainsKey("SubResourceType")
+                    && x.MessageAttributes["SubResourceType"].StringValue == "subResourceType"
                 ),
                 CancellationToken.None
             );

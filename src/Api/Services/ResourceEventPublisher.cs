@@ -26,11 +26,11 @@ public class ResourceEventPublisher(
             },
         };
 
-        if (@event.ChildResourceType is not null)
+        if (@event.SubResourceType is not null)
         {
             messageAttributes.Add(
-                nameof(@event.ChildResourceType),
-                new MessageAttributeValue { StringValue = @event.ChildResourceType, DataType = "String" }
+                nameof(@event.SubResourceType),
+                new MessageAttributeValue { StringValue = @event.SubResourceType, DataType = "String" }
             );
         }
 

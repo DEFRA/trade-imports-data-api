@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Defra.TradeImportsDataApi.Domain.Events;
 
 [ExcludeFromCodeCoverage]
-public static class ResourceEventChildResourceTypes
+public static class ResourceEventSubResourceTypes
 {
     public const string ClearanceRequest = nameof(ClearanceRequest);
 
