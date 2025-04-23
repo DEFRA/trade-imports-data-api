@@ -49,7 +49,17 @@ public static class ResourceEventExtensions
         where TDataEntity : IDataEntity
         where TDomain : class
     {
-        return @event with { ChangeSet = CreateChangeSet(current, previous) };
+        var changeSet = CreateChangeSet(current, previous);
+        var childResourceTypes = changeSet.Select(x => x.Path[1..]).Distinct().ToArray();
+
+        if (childResourceTypes.Length > 1)
+            throw new InvalidOperationException("Change set contains multiple child resource types");
+
+        return @event with
+        {
+            ChangeSet = changeSet,
+            ChildResourceType = childResourceTypes.FirstOrDefault(),
+        };
     }
 
     private static List<Diff> CreateChangeSet<T>([DisallowNull] T current, [DisallowNull] T previous)

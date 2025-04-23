@@ -10,6 +10,9 @@ public record ResourceEvent<T>
     [JsonPropertyName("resourceType")]
     public required string ResourceType { get; init; }
 
+    [JsonPropertyName("childResourceType")]
+    public string? ChildResourceType { get; init; }
+
     [JsonPropertyName("operation")]
     public required string Operation { get; init; }
 

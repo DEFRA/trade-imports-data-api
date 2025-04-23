@@ -21,7 +21,7 @@ public class ResourceEventExtensionsTests
     }
 
     [Fact]
-    public void WhenWithChangeSet_ShouldCreateChangeSet()
+    public void WhenWithChangeSet_AndMultipleChildFieldsChanging_ShouldThrow()
     {
         var previous = new FixtureEntity
         {
@@ -39,15 +39,60 @@ public class ResourceEventExtensionsTests
         };
         var subject = current.ToResourceEvent("operation");
 
+        var act = () => subject.WithChangeSet(current, previous);
+
+        act.Should().Throw<InvalidOperationException>();
+    }
+
+    [Fact]
+    public void WhenWithChangeSet_ShouldCreateChangeSet()
+    {
+        var previous = new FixtureEntity
+        {
+            Name = "From",
+            Id = "id",
+            ETag = "etag",
+            FixtureType = FixtureType.Value1,
+        };
+        var current = new FixtureEntity
+        {
+            Name = "To",
+            Id = "id",
+            ETag = "etag",
+            FixtureType = FixtureType.Value1,
+        };
+        var subject = current.ToResourceEvent("operation");
+
         var result = subject.WithChangeSet(current, previous);
 
-        result.ChangeSet.Count.Should().Be(2);
+        result.ChangeSet.Count.Should().Be(1);
         result.ChangeSet[0].Operation.Should().Be("Replace");
         result.ChangeSet[0].Path.Should().Be("/Name");
         result.ChangeSet[0].Value.Should().Be("To");
-        result.ChangeSet[1].Operation.Should().Be("Replace");
-        result.ChangeSet[1].Path.Should().Be("/FixtureType");
-        result.ChangeSet[1].Value.Should().Be("Value2");
+    }
+
+    [Fact]
+    public void WhenWithChangeSet_ShouldSetChildResourceType()
+    {
+        var previous = new FixtureEntity
+        {
+            Name = "From",
+            Id = "id",
+            ETag = "etag",
+            FixtureType = FixtureType.Value1,
+        };
+        var current = new FixtureEntity
+        {
+            Name = "To",
+            Id = "id",
+            ETag = "etag",
+            FixtureType = FixtureType.Value1,
+        };
+        var subject = current.ToResourceEvent("operation");
+
+        var result = subject.WithChangeSet(current, previous);
+
+        result.ChildResourceType.Should().Be("Name");
     }
 
     private class FixtureEntity : IDataEntity

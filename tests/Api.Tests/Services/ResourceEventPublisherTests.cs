@@ -46,7 +46,7 @@ public class ResourceEventPublisherTests
                     && x.MessageAttributes.ContainsKey("resourceType")
                     && x.MessageAttributes["resourceType"].StringValue == "resourceType"
                     && x.Message
-                        == "{\"resourceId\":\"resourceId\",\"resourceType\":\"resourceType\",\"operation\":\"operation\",\"resource\":null,\"etag\":null,\"timestamp\":\"2025-04-16T07:00:00Z\",\"changeSet\":[]}"
+                        == "{\"resourceId\":\"resourceId\",\"resourceType\":\"resourceType\",\"childResourceType\":null,\"operation\":\"operation\",\"resource\":null,\"etag\":null,\"timestamp\":\"2025-04-16T07:00:00Z\",\"changeSet\":[]}"
                 ),
                 CancellationToken.None
             );
