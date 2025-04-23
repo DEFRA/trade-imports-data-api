@@ -51,7 +51,7 @@ public static class ResourceEventExtensions
     {
         var changeSet = CreateChangeSet(current, previous);
         var knownSubResourceTypes = changeSet
-            .Select(x => x.Path[1..])
+            .Select(x => x.Path.Split('/', StringSplitOptions.RemoveEmptyEntries).FirstOrDefault())
             .Distinct()
             .Select(x =>
                 x switch
