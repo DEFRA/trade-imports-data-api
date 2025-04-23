@@ -21,7 +21,7 @@ public class ResourceEventPublisher(
         var messageAttributes = new Dictionary<string, MessageAttributeValue>
         {
             {
-                "resourceType",
+                nameof(@event.ResourceType),
                 new MessageAttributeValue { StringValue = @event.ResourceType, DataType = "String" }
             },
         };
@@ -29,7 +29,7 @@ public class ResourceEventPublisher(
         if (@event.ChildResourceType is not null)
         {
             messageAttributes.Add(
-                "childResourceType",
+                nameof(@event.ChildResourceType),
                 new MessageAttributeValue { StringValue = @event.ChildResourceType, DataType = "String" }
             );
         }
