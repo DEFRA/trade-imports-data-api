@@ -10,7 +10,6 @@ public class CatchCertificateDetails
     /// <summary>
     /// The UUID of the catch certificate
     /// </summary>
-
     [JsonPropertyName("catchCertificateId")]
     [System.ComponentModel.Description("The UUID of the catch certificate")]
     public string? CatchCertificateId { get; set; }
@@ -18,7 +17,6 @@ public class CatchCertificateDetails
     /// <summary>
     /// Catch certificate reference
     /// </summary>
-
     [JsonPropertyName("catchCertificateReference")]
     [System.ComponentModel.Description("Catch certificate reference")]
     public string? CatchCertificateReference { get; set; }
@@ -26,7 +24,6 @@ public class CatchCertificateDetails
     /// <summary>
     /// Catch certificate date of issue
     /// </summary>
-
     [JsonPropertyName("issuedOn")]
     [System.ComponentModel.Description("Catch certificate date of issue")]
     public DateOnly? IssuedOn { get; set; }
@@ -34,7 +31,6 @@ public class CatchCertificateDetails
     /// <summary>
     /// Catch certificate flag state of catching vessel(s)
     /// </summary>
-
     [JsonPropertyName("flagState")]
     [System.ComponentModel.Description("Catch certificate flag state of catching vessel(s)")]
     public string? FlagState { get; set; }
@@ -42,7 +38,6 @@ public class CatchCertificateDetails
     /// <summary>
     /// List of species imported under this catch certificate
     /// </summary>
-
     [JsonPropertyName("species")]
     [System.ComponentModel.Description("List of species imported under this catch certificate")]
     public string[]? Species { get; set; }

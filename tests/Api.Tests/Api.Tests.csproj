@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -8,7 +7,6 @@
     <AssemblyName>Defra.TradeImportsDataApi.Api.Tests</AssemblyName>
     <RootNamespace>Defra.TradeImportsDataApi.Api.Tests</RootNamespace>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.4" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
@@ -21,14 +19,11 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\src\Api\Api.csproj" />
     <ProjectReference Include="..\Testing\Testing.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Include="Endpoints\*\*.json" />
   </ItemGroup>
-
 </Project>

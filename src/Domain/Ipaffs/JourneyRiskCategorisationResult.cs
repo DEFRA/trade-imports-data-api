@@ -11,7 +11,6 @@ public class JourneyRiskCategorisationResult
     /// <summary>
     /// Risk Level is defined using enum values High,Medium,Low
     /// </summary>
-
     [JsonPropertyName("riskLevel")]
     [System.ComponentModel.Description("Risk Level is defined using enum values High,Medium,Low")]
     public JourneyRiskCategorisationResultRiskLevel? RiskLevel { get; set; }
@@ -19,7 +18,6 @@ public class JourneyRiskCategorisationResult
     /// <summary>
     /// Indicator of whether the risk level was determined by the system or by the user
     /// </summary>
-
     [JsonPropertyName("riskLevelMethod")]
     [System.ComponentModel.Description(
         "Indicator of whether the risk level was determined by the system or by the user"
@@ -29,7 +27,6 @@ public class JourneyRiskCategorisationResult
     /// <summary>
     /// The date and time the risk level has been set for a notification
     /// </summary>
-
     [JsonPropertyName("riskLevelSetFor")]
     [System.ComponentModel.Description("The date and time the risk level has been set for a notification")]
     [UnknownTimeZoneDateTimeJsonConverter(nameof(RiskLevelSetFor))]

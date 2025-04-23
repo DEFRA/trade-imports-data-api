@@ -10,7 +10,6 @@ public class MeansOfTransport
     /// <summary>
     /// Type of transport
     /// </summary>
-
     [JsonPropertyName("type")]
     [System.ComponentModel.Description("Type of transport")]
     public MeansOfTransportType? Type { get; set; }
@@ -18,7 +17,6 @@ public class MeansOfTransport
     /// <summary>
     /// Document for transport
     /// </summary>
-
     [JsonPropertyName("document")]
     [System.ComponentModel.Description("Document for transport")]
     public string? Document { get; set; }
@@ -26,7 +24,6 @@ public class MeansOfTransport
     /// <summary>
     /// ID of transport
     /// </summary>
-
     [JsonPropertyName("id")]
     [System.ComponentModel.Description("ID of transport")]
     public string? Id { get; set; }

@@ -11,7 +11,6 @@ public class Applicant
     /// <summary>
     /// Name of laboratory
     /// </summary>
-
     [JsonPropertyName("laboratory")]
     [System.ComponentModel.Description("Name of laboratory")]
     public string? Laboratory { get; set; }
@@ -19,7 +18,6 @@ public class Applicant
     /// <summary>
     /// Laboratory address
     /// </summary>
-
     [JsonPropertyName("laboratoryAddress")]
     [System.ComponentModel.Description("Laboratory address")]
     public string? LaboratoryAddress { get; set; }
@@ -27,7 +25,6 @@ public class Applicant
     /// <summary>
     /// Laboratory identification
     /// </summary>
-
     [JsonPropertyName("laboratoryIdentification")]
     [System.ComponentModel.Description("Laboratory identification")]
     public string? LaboratoryIdentification { get; set; }
@@ -35,7 +32,6 @@ public class Applicant
     /// <summary>
     /// Laboratory phone number
     /// </summary>
-
     [JsonPropertyName("laboratoryPhoneNumber")]
     [System.ComponentModel.Description("Laboratory phone number")]
     public string? LaboratoryPhoneNumber { get; set; }
@@ -43,7 +39,6 @@ public class Applicant
     /// <summary>
     /// Laboratory email
     /// </summary>
-
     [JsonPropertyName("laboratoryEmail")]
     [System.ComponentModel.Description("Laboratory email")]
     public string? LaboratoryEmail { get; set; }
@@ -51,7 +46,6 @@ public class Applicant
     /// <summary>
     /// Sample batch number
     /// </summary>
-
     [JsonPropertyName("sampleBatchNumber")]
     [System.ComponentModel.Description("Sample batch number")]
     public string? SampleBatchNumber { get; set; }
@@ -59,7 +53,6 @@ public class Applicant
     /// <summary>
     /// Type of analysis
     /// </summary>
-
     [JsonPropertyName("analysisType")]
     [System.ComponentModel.Description("Type of analysis")]
     public ApplicantAnalysisType? AnalysisType { get; set; }
@@ -67,7 +60,6 @@ public class Applicant
     /// <summary>
     /// Number of samples analysed
     /// </summary>
-
     [JsonPropertyName("numberOfSamples")]
     [System.ComponentModel.Description("Number of samples analysed")]
     public int? NumberOfSamples { get; set; }
@@ -75,7 +67,6 @@ public class Applicant
     /// <summary>
     /// Type of sample
     /// </summary>
-
     [JsonPropertyName("sampleType")]
     [System.ComponentModel.Description("Type of sample")]
     public string? SampleType { get; set; }
@@ -83,7 +74,6 @@ public class Applicant
     /// <summary>
     /// Conservation of sample
     /// </summary>
-
     [JsonPropertyName("conservationOfSample")]
     [System.ComponentModel.Description("Conservation of sample")]
     public ApplicantConservationOfSample? ConservationOfSample { get; set; }
@@ -91,7 +81,6 @@ public class Applicant
     /// <summary>
     /// inspector
     /// </summary>
-
     [JsonPropertyName("inspector")]
     [System.ComponentModel.Description("inspector")]
     public Inspector? Inspector { get; set; }
@@ -99,7 +88,6 @@ public class Applicant
     /// <summary>
     /// DateTime
     /// </summary>
-
     [JsonPropertyName("sampledOn")]
     [System.ComponentModel.Description("DateTime")]
     [UnknownTimeZoneDateTimeJsonConverter(nameof(SampledOn))]

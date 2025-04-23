@@ -10,7 +10,6 @@ public class ValidationMessageCode
     /// <summary>
     /// Field
     /// </summary>
-
     [JsonPropertyName("field")]
     [System.ComponentModel.Description("Field")]
     public string? Field { get; set; }
@@ -18,7 +17,6 @@ public class ValidationMessageCode
     /// <summary>
     /// Code
     /// </summary>
-
     [JsonPropertyName("code")]
     [System.ComponentModel.Description("Code")]
     public string? Code { get; set; }
