@@ -341,6 +341,24 @@
     "finalState": 0,
     "isManualRelease": true
   },
+  "inboundError": {
+    "externalCorrelationId": "ExternalCorrelationId6aeab374-36e3-4baf-85d0-11a1b9ed39df",
+    "externalVersion": 237,
+    "errors": [
+      {
+        "code": "Code608891fd-f4e4-482d-9466-8a0767eaa29d",
+        "message": "Message714fdb0d-68ff-4500-a663-3266bacf2730"
+      },
+      {
+        "code": "Code7028e97f-2bf9-48fb-8fc5-b595f0a923e2",
+        "message": "Messageae1a5bf5-a246-492e-8af8-99cc380ad892"
+      },
+      {
+        "code": "Codef0b58749-eb9b-483d-97b6-6715fd2d0ca1",
+        "message": "Message373f1ed1-3c0a-49ac-89ae-a07fe8f7c8d6"
+      }
+    ]
+  },
   "created": "2025-04-03T10:00:00Z",
   "updated": "2025-04-03T10:15:00Z"
 }

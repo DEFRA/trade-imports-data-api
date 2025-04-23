@@ -10,4 +10,6 @@ public static class ResourceEventSubResourceTypes
     public const string ClearanceDecision = nameof(ClearanceDecision);
 
     public const string Finalisation = nameof(Finalisation);
+
+    public const string InboundError = nameof(InboundError);
 }

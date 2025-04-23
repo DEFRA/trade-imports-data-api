@@ -127,7 +127,8 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
         var customsDeclaration = fixture.Create<Gmr>();
         var serialized = JsonSerializer.Serialize(customsDeclaration, s_jsonOptions);
 
-        // Take this file and replace GetTests_DomainExample.json when needed
+        // Take this file and replace GetTests_DomainExample.json when needed or
+        // take the parts that have changed/been added to minimise the amount of unnecessary changes
         await File.WriteAllTextAsync(
             $"{nameof(Get_WhenGenerating_GetTests_DomainExample_ShouldSerialize)}_Gmr.json",
             serialized

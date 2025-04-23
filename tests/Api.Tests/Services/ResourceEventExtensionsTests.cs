@@ -103,8 +103,18 @@ public class ResourceEventExtensionsTests
     public void WhenWithChangeSet_AndSubResourceTypeIsClearanceRequest_ShouldSetSubResourceType()
     {
         var subject = new FixtureEntity { Id = "id", ETag = "etag" };
-        var previous = new CustomsDeclarationData(ClearanceRequest: null, ClearanceDecision: null, Finalisation: null);
-        var current = new CustomsDeclarationData(new ClearanceRequest(), ClearanceDecision: null, Finalisation: null);
+        var previous = new CustomsDeclarationData(
+            ClearanceRequest: null,
+            ClearanceDecision: null,
+            Finalisation: null,
+            InboundError: null
+        );
+        var current = new CustomsDeclarationData(
+            new ClearanceRequest(),
+            ClearanceDecision: null,
+            Finalisation: null,
+            InboundError: null
+        );
 
         var result = subject.ToResourceEvent("operation").WithChangeSet(current, previous);
 
@@ -118,12 +128,14 @@ public class ResourceEventExtensionsTests
         var previous = new CustomsDeclarationData(
             new ClearanceRequest { ExternalVersion = 1 },
             ClearanceDecision: null,
-            Finalisation: null
+            Finalisation: null,
+            InboundError: null
         );
         var current = new CustomsDeclarationData(
             new ClearanceRequest { ExternalVersion = 2 },
             ClearanceDecision: null,
-            Finalisation: null
+            Finalisation: null,
+            InboundError: null
         );
 
         var result = subject.ToResourceEvent("operation").WithChangeSet(current, previous);
@@ -135,11 +147,17 @@ public class ResourceEventExtensionsTests
     public void WhenWithChangeSet_AndSubResourceTypeIsClearanceDecision_ShouldSetSubResourceType()
     {
         var subject = new FixtureEntity { Id = "id", ETag = "etag" };
-        var previous = new CustomsDeclarationData(ClearanceRequest: null, ClearanceDecision: null, Finalisation: null);
+        var previous = new CustomsDeclarationData(
+            ClearanceRequest: null,
+            ClearanceDecision: null,
+            Finalisation: null,
+            InboundError: null
+        );
         var current = new CustomsDeclarationData(
             ClearanceRequest: null,
             new ClearanceDecision { Items = [] },
-            Finalisation: null
+            Finalisation: null,
+            InboundError: null
         );
 
         var result = subject.ToResourceEvent("operation").WithChangeSet(current, previous);
@@ -151,7 +169,12 @@ public class ResourceEventExtensionsTests
     public void WhenWithChangeSet_AndSubResourceTypeIsFinalisation_ShouldSetSubResourceType()
     {
         var subject = new FixtureEntity { Id = "id", ETag = "etag" };
-        var previous = new CustomsDeclarationData(ClearanceRequest: null, ClearanceDecision: null, Finalisation: null);
+        var previous = new CustomsDeclarationData(
+            ClearanceRequest: null,
+            ClearanceDecision: null,
+            Finalisation: null,
+            InboundError: null
+        );
         var current = new CustomsDeclarationData(
             ClearanceRequest: null,
             ClearanceDecision: null,
@@ -160,7 +183,8 @@ public class ResourceEventExtensionsTests
                 ExternalVersion = 0,
                 FinalState = FinalState.Cleared,
                 IsManualRelease = false,
-            }
+            },
+            InboundError: null
         );
 
         var result = subject.ToResourceEvent("operation").WithChangeSet(current, previous);
@@ -169,10 +193,37 @@ public class ResourceEventExtensionsTests
     }
 
     [Fact]
+    public void WhenWithChangeSet_AndSubResourceTypeIsInboundError_ShouldSetSubResourceType()
+    {
+        var subject = new FixtureEntity { Id = "id", ETag = "etag" };
+        var previous = new CustomsDeclarationData(
+            ClearanceRequest: null,
+            ClearanceDecision: null,
+            Finalisation: null,
+            InboundError: null
+        );
+        var current = new CustomsDeclarationData(
+            ClearanceRequest: null,
+            ClearanceDecision: null,
+            Finalisation: null,
+            InboundError: new InboundError()
+        );
+
+        var result = subject.ToResourceEvent("operation").WithChangeSet(current, previous);
+
+        result.SubResourceType.Should().Be("InboundError");
+    }
+
+    [Fact]
     public void WhenWithChangeSet_AndMultipleKnownSubResourceTypes_ShouldThrow()
     {
         var subject = new FixtureEntity { Id = "id", ETag = "etag" };
-        var previous = new CustomsDeclarationData(ClearanceRequest: null, ClearanceDecision: null, Finalisation: null);
+        var previous = new CustomsDeclarationData(
+            ClearanceRequest: null,
+            ClearanceDecision: null,
+            Finalisation: null,
+            InboundError: null
+        );
         var current = new CustomsDeclarationData(
             new ClearanceRequest(),
             new ClearanceDecision { Items = [] },
@@ -181,7 +232,8 @@ public class ResourceEventExtensionsTests
                 ExternalVersion = 0,
                 FinalState = FinalState.Cleared,
                 IsManualRelease = false,
-            }
+            },
+            InboundError: null
         );
 
         var act = () => subject.ToResourceEvent("operation").WithChangeSet(current, previous);
@@ -210,6 +262,7 @@ public class ResourceEventExtensionsTests
     private sealed record CustomsDeclarationData(
         ClearanceRequest? ClearanceRequest,
         ClearanceDecision? ClearanceDecision,
-        Finalisation? Finalisation
+        Finalisation? Finalisation,
+        InboundError? InboundError
     );
 }

@@ -59,6 +59,7 @@ public static class ResourceEventExtensions
                     ResourceEventSubResourceTypes.ClearanceRequest => ResourceEventSubResourceTypes.ClearanceRequest,
                     ResourceEventSubResourceTypes.ClearanceDecision => ResourceEventSubResourceTypes.ClearanceDecision,
                     ResourceEventSubResourceTypes.Finalisation => ResourceEventSubResourceTypes.Finalisation,
+                    ResourceEventSubResourceTypes.InboundError => ResourceEventSubResourceTypes.InboundError,
                     _ => null,
                 }
             )

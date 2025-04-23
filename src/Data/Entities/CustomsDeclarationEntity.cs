@@ -20,6 +20,8 @@ namespace Defra.TradeImportsDataApi.Data.Entities
 
         public Finalisation? Finalisation { get; set; }
 
+        public InboundError? InboundError { get; set; }
+
         public void OnSave()
         {
             ImportPreNotificationIdentifiers.Clear();

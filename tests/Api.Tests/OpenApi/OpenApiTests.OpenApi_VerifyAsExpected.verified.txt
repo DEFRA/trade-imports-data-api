@@ -578,6 +578,14 @@
             ],
             "nullable": true
           },
+          "inboundError": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.CustomsDeclaration.InboundError"
+              }
+            ],
+            "nullable": true
+          },
           "created": {
             "type": "string",
             "format": "date-time"
@@ -908,6 +916,14 @@
               }
             ],
             "nullable": true
+          },
+          "inboundError": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.CustomsDeclaration.InboundError"
+              }
+            ],
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -998,6 +1014,42 @@
         "type": "object",
         "properties": {
           "value": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Defra.TradeImportsDataApi.Domain.CustomsDeclaration.InboundError": {
+        "type": "object",
+        "properties": {
+          "externalCorrelationId": {
+            "type": "string",
+            "nullable": true
+          },
+          "externalVersion": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.CustomsDeclaration.InboundErrorItem"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Defra.TradeImportsDataApi.Domain.CustomsDeclaration.InboundErrorItem": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
             "type": "string",
             "nullable": true
           }

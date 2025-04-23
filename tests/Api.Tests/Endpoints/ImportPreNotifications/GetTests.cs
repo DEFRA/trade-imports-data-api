@@ -105,7 +105,8 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
         var importPreNotification = fixture.Create<ImportPreNotification>();
         var serialized = JsonSerializer.Serialize(importPreNotification, s_jsonOptions);
 
-        // Take this file and replace GetTests_DomainExample.json when needed
+        // Take this file and replace GetTests_DomainExample.json when needed or
+        // take the parts that have changed/been added to minimise the amount of unnecessary changes
         await File.WriteAllTextAsync(
             $"{nameof(Get_WhenGenerating_GetTests_DomainExample_ShouldSerialize)}_ImportPreNotification.json",
             serialized

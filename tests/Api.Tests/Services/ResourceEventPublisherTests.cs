@@ -6,6 +6,7 @@ using Defra.TradeImportsDataApi.Api.Utils.Logging;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.Events;
 using Microsoft.AspNetCore.HeaderPropagation;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using NSubstitute;
@@ -24,7 +25,8 @@ public class ResourceEventPublisherTests
             new HeaderPropagationValues(),
             new OptionsWrapper<ResourceEventOptions>(
                 new ResourceEventOptions { ArnPrefix = "arn", TopicName = "topic-name" }
-            )
+            ),
+            NullLogger<ResourceEventPublisher>.Instance
         );
 
         await subject.Publish(
@@ -63,7 +65,8 @@ public class ResourceEventPublisherTests
             headerPropagationValues,
             new OptionsWrapper<ResourceEventOptions>(
                 new ResourceEventOptions { ArnPrefix = "arn", TopicName = "topic-name" }
-            )
+            ),
+            NullLogger<ResourceEventPublisher>.Instance
         );
 
         headerPropagationValues.Headers = new Dictionary<string, StringValues> { { "trace-id", "trace-id-value" } };
@@ -99,7 +102,8 @@ public class ResourceEventPublisherTests
             new HeaderPropagationValues(),
             new OptionsWrapper<ResourceEventOptions>(
                 new ResourceEventOptions { ArnPrefix = "arn", TopicName = "topic-name" }
-            )
+            ),
+            NullLogger<ResourceEventPublisher>.Instance
         );
 
         await subject.Publish(
