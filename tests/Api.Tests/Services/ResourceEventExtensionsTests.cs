@@ -112,6 +112,26 @@ public class ResourceEventExtensionsTests
     }
 
     [Fact]
+    public void WhenWithChangeSet_AndSubResourceTypeIsClearanceRequest_WithChildPropertyChange_ShouldSetSubResourceType()
+    {
+        var subject = new FixtureEntity { Id = "id", ETag = "etag" };
+        var previous = new CustomsDeclarationData(
+            new ClearanceRequest { ExternalVersion = 1 },
+            ClearanceDecision: null,
+            Finalisation: null
+        );
+        var current = new CustomsDeclarationData(
+            new ClearanceRequest { ExternalVersion = 2 },
+            ClearanceDecision: null,
+            Finalisation: null
+        );
+
+        var result = subject.ToResourceEvent("operation").WithChangeSet(current, previous);
+
+        result.SubResourceType.Should().Be("ClearanceRequest");
+    }
+
+    [Fact]
     public void WhenWithChangeSet_AndSubResourceTypeIsClearanceDecision_ShouldSetSubResourceType()
     {
         var subject = new FixtureEntity { Id = "id", ETag = "etag" };
