@@ -1,5 +1,6 @@
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Data.Entities;
+using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 using FluentAssertions;
 
 namespace Defra.TradeImportsDataApi.Api.Tests.Services;
@@ -21,7 +22,7 @@ public class ResourceEventExtensionsTests
     }
 
     [Fact]
-    public void WhenWithChangeSet_AndMultipleChildFieldsChanging_ShouldThrow()
+    public void WhenWithChangeSet_AndMultipleUnknownChildFieldsChanging_ShouldNotThrow()
     {
         var previous = new FixtureEntity
         {
@@ -41,7 +42,7 @@ public class ResourceEventExtensionsTests
 
         var act = () => subject.WithChangeSet(current, previous);
 
-        act.Should().Throw<InvalidOperationException>();
+        act.Should().NotThrow<InvalidOperationException>();
     }
 
     [Fact]
@@ -59,20 +60,23 @@ public class ResourceEventExtensionsTests
             Name = "To",
             Id = "id",
             ETag = "etag",
-            FixtureType = FixtureType.Value1,
+            FixtureType = FixtureType.Value2,
         };
         var subject = current.ToResourceEvent("operation");
 
         var result = subject.WithChangeSet(current, previous);
 
-        result.ChangeSet.Count.Should().Be(1);
+        result.ChangeSet.Count.Should().Be(2);
         result.ChangeSet[0].Operation.Should().Be("Replace");
         result.ChangeSet[0].Path.Should().Be("/Name");
         result.ChangeSet[0].Value.Should().Be("To");
+        result.ChangeSet[1].Operation.Should().Be("Replace");
+        result.ChangeSet[1].Path.Should().Be("/FixtureType");
+        result.ChangeSet[1].Value.Should().Be("Value2");
     }
 
     [Fact]
-    public void WhenWithChangeSet_ShouldSetChildResourceType()
+    public void WhenWithChangeSet_AndChildResourceTypeIsUnknown_ShouldNotSetChildResourceType()
     {
         var previous = new FixtureEntity
         {
@@ -92,7 +96,56 @@ public class ResourceEventExtensionsTests
 
         var result = subject.WithChangeSet(current, previous);
 
-        result.ChildResourceType.Should().Be("Name");
+        result.ChildResourceType.Should().BeNull();
+    }
+
+    [Fact]
+    public void WhenWithChangeSet_AndChildResourceTypeIsClearanceRequest_ShouldSetChildResourceType()
+    {
+        var subject = new FixtureEntity { Id = "id", ETag = "etag" };
+        var previous = new CustomsDeclarationData(ClearanceRequest: null, ClearanceDecision: null, Finalisation: null);
+        var current = new CustomsDeclarationData(new ClearanceRequest(), ClearanceDecision: null, Finalisation: null);
+
+        var result = subject.ToResourceEvent("operation").WithChangeSet(current, previous);
+
+        result.ChildResourceType.Should().Be("ClearanceRequest");
+    }
+
+    [Fact]
+    public void WhenWithChangeSet_AndChildResourceTypeIsClearanceDecision_ShouldSetChildResourceType()
+    {
+        var subject = new FixtureEntity { Id = "id", ETag = "etag" };
+        var previous = new CustomsDeclarationData(ClearanceRequest: null, ClearanceDecision: null, Finalisation: null);
+        var current = new CustomsDeclarationData(
+            ClearanceRequest: null,
+            new ClearanceDecision { Items = [] },
+            Finalisation: null
+        );
+
+        var result = subject.ToResourceEvent("operation").WithChangeSet(current, previous);
+
+        result.ChildResourceType.Should().Be("ClearanceDecision");
+    }
+
+    [Fact]
+    public void WhenWithChangeSet_AndChildResourceTypeIsFinalisation_ShouldSetChildResourceType()
+    {
+        var subject = new FixtureEntity { Id = "id", ETag = "etag" };
+        var previous = new CustomsDeclarationData(ClearanceRequest: null, ClearanceDecision: null, Finalisation: null);
+        var current = new CustomsDeclarationData(
+            ClearanceRequest: null,
+            ClearanceDecision: null,
+            new Finalisation
+            {
+                ExternalVersion = 0,
+                FinalState = FinalState.Cleared,
+                IsManualRelease = false,
+            }
+        );
+
+        var result = subject.ToResourceEvent("operation").WithChangeSet(current, previous);
+
+        result.ChildResourceType.Should().Be("Finalisation");
     }
 
     private class FixtureEntity : IDataEntity
@@ -112,4 +165,10 @@ public class ResourceEventExtensionsTests
         Value1,
         Value2,
     }
+
+    private sealed record CustomsDeclarationData(
+        ClearanceRequest? ClearanceRequest,
+        ClearanceDecision? ClearanceDecision,
+        Finalisation? Finalisation
+    );
 }
