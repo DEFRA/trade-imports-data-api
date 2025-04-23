@@ -26,6 +26,14 @@ public class ResourceEventPublisher(
             },
         };
 
+        if (@event.ChildResourceType is not null)
+        {
+            messageAttributes.Add(
+                "childResourceType",
+                new MessageAttributeValue { StringValue = @event.ChildResourceType, DataType = "String" }
+            );
+        }
+
         AddTraceIdIfPresent(messageAttributes);
 
         var request = new PublishRequest

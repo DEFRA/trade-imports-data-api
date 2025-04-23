@@ -89,6 +89,41 @@ public class ResourceEventPublisherTests
             );
     }
 
+    [Fact]
+    public async Task Publish_WhenChildResourceTypeSet_ShouldBeIncluded()
+    {
+        var mockSimpleNotificationService = Substitute.For<IAmazonSimpleNotificationService>();
+        var subject = new ResourceEventPublisher(
+            mockSimpleNotificationService,
+            new OptionsWrapper<TraceHeader>(new TraceHeader { Name = "trace-id" }),
+            new HeaderPropagationValues(),
+            new OptionsWrapper<ResourceEventOptions>(
+                new ResourceEventOptions { ArnPrefix = "arn", TopicName = "topic-name" }
+            )
+        );
+
+        await subject.Publish(
+            new ResourceEvent<FixtureEntity>
+            {
+                ResourceId = "resourceId",
+                ResourceType = "resourceType",
+                ChildResourceType = "childResourceType",
+                Operation = "operation",
+            },
+            CancellationToken.None
+        );
+
+        await mockSimpleNotificationService
+            .Received()
+            .PublishAsync(
+                Arg.Is<PublishRequest>(x =>
+                    x.MessageAttributes.ContainsKey("childResourceType")
+                    && x.MessageAttributes["childResourceType"].StringValue == "childResourceType"
+                ),
+                CancellationToken.None
+            );
+    }
+
     private class FixtureEntity : IDataEntity
     {
         public string Name { get; set; } = null!;
