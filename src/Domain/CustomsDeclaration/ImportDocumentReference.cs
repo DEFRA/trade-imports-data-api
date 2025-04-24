@@ -2,26 +2,29 @@ namespace Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 
 public class ImportDocumentReference(string value)
 {
+    private static readonly string[] _validDocumentCodes = ["C640", "C678", "N853", "N851", "9115", "C085", "N002"];
+
     public string Value { get; set; } = value;
 
-    public bool IsValid()
+    public static bool IsValid(string documentCode)
     {
-        return ChedReferenceRegexes.IPaffsIdentifier().IsExactMatch(Value)
-            || ChedReferenceRegexes.DocumentReferenceWithoutCountry().IsExactMatch(Value);
+        return _validDocumentCodes.Contains(documentCode);
     }
 
-    public string GetIdentifier()
+    public string GetIdentifier(string documentCode)
     {
-        if (IsValid())
+        if (!IsValid(documentCode)) return string.Empty;
+        var identifier = ChedReferenceRegexes.DocumentReferenceIdentifier().Match(Value).Value.Replace(".", "");
+        if (string.IsNullOrEmpty(identifier))
         {
-            var identifier = ChedReferenceRegexes.DocumentReferenceIdentifier().Match(Value).Value.Replace(".", "");
-            if (identifier.Length == 9)
-            {
-                identifier = $"20{identifier}";
-            }
-
-            return identifier;
+            throw new FormatException($"Document Reference invalid format {Value}");
         }
-        return string.Empty;
+
+        if (identifier.Length > 7)
+        {
+            identifier = identifier.Substring(identifier.Length - 7);
+        }
+
+        return identifier;
     }
 }

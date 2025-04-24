@@ -20,4 +20,17 @@ public class ImportDocument
 
     [JsonPropertyName("documentQuantity")]
     public decimal? DocumentQuantity { get; set; }
+
+    public bool HasValidDocumentReference()
+    {
+        return !string.IsNullOrEmpty(DocumentCode) && ImportDocumentReference.IsValid(DocumentCode);
+    }
+
+    public string GetDocumentReferenceIdentifier()
+    {
+        if (!string.IsNullOrEmpty(DocumentCode) && DocumentReference != null) 
+            return DocumentReference.GetIdentifier(DocumentCode);
+
+        return string.Empty;
+    }
 }
