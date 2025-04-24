@@ -16,10 +16,6 @@ public class ImportDocumentReference(string value)
         if (!IsValid(documentCode))
             return string.Empty;
         var identifier = ChedReferenceRegexes.DocumentReferenceIdentifier().Match(Value).Value.Replace(".", "");
-        if (string.IsNullOrEmpty(identifier))
-        {
-            throw new FormatException($"Document Reference invalid format {Value}");
-        }
 
         if (identifier.Length > 7)
         {

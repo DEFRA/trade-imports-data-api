@@ -10,6 +10,11 @@ public class ChedIdReference(string value)
     {
         var identifier = ChedReferenceRegexes.DocumentReferenceIdentifier().Match(Value).Value.Replace(".", "");
 
+        if (identifier.Length == 0)
+        {
+            throw new FormatException($"Invalid value {Value}");
+        }
+
         if (identifier.Length > 7)
         {
             identifier = identifier.Substring(identifier.Length - 7);
