@@ -1,5 +1,6 @@
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
+using Defra.TradeImportsDataApi.Testing;
 using FluentAssertions;
 
 namespace Defra.TradeImportsDataApi.Api.IntegrationTests.Endpoints;
@@ -10,7 +11,7 @@ public class ImportPreNotificationTests : SqsTestBase
     public async Task WhenDoesNotExist_ShouldCreateAndRead()
     {
         var client = CreateDataApiClient();
-        var chedRef = "CHEDA.GB.2025.1234567";
+        var chedRef = ImportPreNotificationIdGenerator.Generate();
 
         var result = await client.GetImportPreNotification(chedRef, CancellationToken.None);
         result.Should().BeNull();
@@ -30,7 +31,7 @@ public class ImportPreNotificationTests : SqsTestBase
     public async Task WhenRelatedCustomsDeclarationsDoesNotExist_ShouldCreateAndRead()
     {
         var client = CreateDataApiClient();
-        var chedRef = "CHEDA.GB.2025.1234567";
+        var chedRef = ImportPreNotificationIdGenerator.Generate();
 
         var result = await client.GetImportPreNotification(chedRef, CancellationToken.None);
         result.Should().BeNull();
@@ -51,7 +52,7 @@ public class ImportPreNotificationTests : SqsTestBase
     public async Task WhenExists_ShouldUpdate()
     {
         var client = CreateDataApiClient();
-        var chedRef = "CHEDA.GB.2025.7654321";
+        var chedRef = ImportPreNotificationIdGenerator.Generate();
 
         var result = await client.GetImportPreNotification(chedRef, CancellationToken.None);
         result.Should().BeNull();
@@ -87,7 +88,7 @@ public class ImportPreNotificationTests : SqsTestBase
     public async Task WhenRelatedCustomsDeclarationsExists_ShouldRead()
     {
         var client = CreateDataApiClient();
-        var chedRef = "CHEDA.GB.2025.2345678";
+        var chedRef = "CHEDA.GB.2025.1234567";
         var mrn = "testmrn123";
 
         var result = await client.GetImportPreNotification(chedRef, CancellationToken.None);
@@ -121,7 +122,7 @@ public class ImportPreNotificationTests : SqsTestBase
                                 [
                                     new ImportDocument
                                     {
-                                        DocumentReference = new ImportDocumentReference("GBCHD2025.1234567"),
+                                        DocumentReference = new ImportDocumentReference($"GBCHD2025.1234567"),
                                         DocumentCode = "C640",
                                     },
                                 ],
@@ -143,7 +144,8 @@ public class ImportPreNotificationTests : SqsTestBase
     public async Task WhenCreating_ShouldEmitCreatedMessage()
     {
         var client = CreateDataApiClient();
-        var chedRef = Guid.NewGuid().ToString("N");
+        var chedRef = ImportPreNotificationIdGenerator.Generate();
+
         await DrainAllMessages();
 
         await client.PutImportPreNotification(
