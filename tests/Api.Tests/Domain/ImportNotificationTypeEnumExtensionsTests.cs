@@ -24,9 +24,9 @@ public class ImportNotificationTypeEnumExtensionsTests
     [InlineData("INVALID", null)]
     public void GetChedTypeTest(string documentCode, ImportNotificationType? expectedImportNotificationType)
     {
-        new ImportDocument()
-        {
-            DocumentCode = documentCode
-        }.GetChedType().Should().Be(expectedImportNotificationType);
+        new ImportDocument() { DocumentCode = documentCode }
+            .GetChedType()
+            .Should()
+            .Be(expectedImportNotificationType);
     }
 }

@@ -28,7 +28,7 @@ public class ImportDocument
 
     public string GetDocumentReferenceIdentifier()
     {
-        if (!string.IsNullOrEmpty(DocumentCode) && DocumentReference != null) 
+        if (!string.IsNullOrEmpty(DocumentCode) && DocumentReference != null)
             return DocumentReference.GetIdentifier(DocumentCode);
 
         return string.Empty;

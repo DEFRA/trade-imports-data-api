@@ -13,7 +13,8 @@ public class ImportDocumentReference(string value)
 
     public string GetIdentifier(string documentCode)
     {
-        if (!IsValid(documentCode)) return string.Empty;
+        if (!IsValid(documentCode))
+            return string.Empty;
         var identifier = ChedReferenceRegexes.DocumentReferenceIdentifier().Match(Value).Value.Replace(".", "");
         if (string.IsNullOrEmpty(identifier))
         {
