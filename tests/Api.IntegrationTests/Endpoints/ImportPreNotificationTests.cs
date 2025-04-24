@@ -10,7 +10,7 @@ public class ImportPreNotificationTests : SqsTestBase
     public async Task WhenDoesNotExist_ShouldCreateAndRead()
     {
         var client = CreateDataApiClient();
-        var chedRef = Guid.NewGuid().ToString("N");
+        var chedRef = "CHEDA.GB.2025.1234567";
 
         var result = await client.GetImportPreNotification(chedRef, CancellationToken.None);
         result.Should().BeNull();
@@ -30,7 +30,7 @@ public class ImportPreNotificationTests : SqsTestBase
     public async Task WhenRelatedCustomsDeclarationsDoesNotExist_ShouldCreateAndRead()
     {
         var client = CreateDataApiClient();
-        var chedRef = Guid.NewGuid().ToString("N");
+        var chedRef = "CHEDA.GB.2025.1234567";
 
         var result = await client.GetImportPreNotification(chedRef, CancellationToken.None);
         result.Should().BeNull();
@@ -51,7 +51,7 @@ public class ImportPreNotificationTests : SqsTestBase
     public async Task WhenExists_ShouldUpdate()
     {
         var client = CreateDataApiClient();
-        var chedRef = Guid.NewGuid().ToString("N");
+        var chedRef = "CHEDA.GB.2025.7654321";
 
         var result = await client.GetImportPreNotification(chedRef, CancellationToken.None);
         result.Should().BeNull();
@@ -87,7 +87,7 @@ public class ImportPreNotificationTests : SqsTestBase
     public async Task WhenRelatedCustomsDeclarationsExists_ShouldRead()
     {
         var client = CreateDataApiClient();
-        var chedRef = "CHEDA.GB.2025.1234567";
+        var chedRef = "CHEDA.GB.2025.2345678";
         var mrn = "testmrn123";
 
         var result = await client.GetImportPreNotification(chedRef, CancellationToken.None);
