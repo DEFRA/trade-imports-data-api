@@ -10,7 +10,6 @@ public class OfficialVeterinarian
     /// <summary>
     /// First name of official veterinarian
     /// </summary>
-
     [JsonPropertyName("firstName")]
     [System.ComponentModel.Description("First name of official veterinarian")]
     public string? FirstName { get; set; }
@@ -18,7 +17,6 @@ public class OfficialVeterinarian
     /// <summary>
     /// Last name of official veterinarian
     /// </summary>
-
     [JsonPropertyName("lastName")]
     [System.ComponentModel.Description("Last name of official veterinarian")]
     public string? LastName { get; set; }
@@ -26,7 +24,6 @@ public class OfficialVeterinarian
     /// <summary>
     /// Email address of official veterinarian
     /// </summary>
-
     [JsonPropertyName("email")]
     [System.ComponentModel.Description("Email address of official veterinarian")]
     public string? Email { get; set; }
@@ -34,7 +31,6 @@ public class OfficialVeterinarian
     /// <summary>
     /// Phone number of official veterinarian
     /// </summary>
-
     [JsonPropertyName("phone")]
     [System.ComponentModel.Description("Phone number of official veterinarian")]
     public string? Phone { get; set; }
@@ -42,7 +38,6 @@ public class OfficialVeterinarian
     /// <summary>
     /// Fax number of official veterinarian
     /// </summary>
-
     [JsonPropertyName("fax")]
     [System.ComponentModel.Description("Fax number of official veterinarian")]
     public string? Fax { get; set; }
@@ -50,7 +45,6 @@ public class OfficialVeterinarian
     /// <summary>
     /// Date of sign
     /// </summary>
-
     [JsonPropertyName("signed")]
     [System.ComponentModel.Description("Date of sign")]
     public string? Signed { get; set; }

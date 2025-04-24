@@ -11,7 +11,6 @@ public class RiskAssessmentResult
     /// <summary>
     /// List of risk assessed commodities
     /// </summary>
-
     [JsonPropertyName("commodityResults")]
     [System.ComponentModel.Description("List of risk assessed commodities")]
     public CommodityRiskResult[]? CommodityResults { get; set; }
@@ -19,7 +18,6 @@ public class RiskAssessmentResult
     /// <summary>
     /// Date and time of assessment
     /// </summary>
-
     [JsonPropertyName("assessedOn")]
     [System.ComponentModel.Description("Date and time of assessment")]
     [UnknownTimeZoneDateTimeJsonConverter(nameof(AssessedOn))]

@@ -10,7 +10,6 @@ public class UserInformation
     /// <summary>
     /// Display name
     /// </summary>
-
     [JsonPropertyName("displayName")]
     [System.ComponentModel.Description("Display name")]
     public string? DisplayName { get; set; }
@@ -18,7 +17,6 @@ public class UserInformation
     /// <summary>
     /// User ID
     /// </summary>
-
     [JsonPropertyName("userId")]
     [System.ComponentModel.Description("User ID")]
     public string? UserId { get; set; }
@@ -26,7 +24,6 @@ public class UserInformation
     /// <summary>
     /// Is this user a control
     /// </summary>
-
     [JsonPropertyName("isControlUser")]
     [System.ComponentModel.Description("Is this user a control")]
     public bool? IsControlUser { get; set; }

@@ -10,7 +10,6 @@ public class LaboratoryTestResult
     /// <summary>
     /// When sample was used
     /// </summary>
-
     [JsonPropertyName("sampleUseByDate")]
     [System.ComponentModel.Description("When sample was used")]
     public string? SampleUseByDate { get; set; }
@@ -18,7 +17,6 @@ public class LaboratoryTestResult
     /// <summary>
     /// When it was released
     /// </summary>
-
     [JsonPropertyName("releasedOn")]
     [System.ComponentModel.Description("When it was released")]
     public DateOnly? ReleasedOn { get; set; }
@@ -26,7 +24,6 @@ public class LaboratoryTestResult
     /// <summary>
     /// Laboratory test method
     /// </summary>
-
     [JsonPropertyName("laboratoryTestMethod")]
     [System.ComponentModel.Description("Laboratory test method")]
     public string? LaboratoryTestMethod { get; set; }
@@ -34,7 +31,6 @@ public class LaboratoryTestResult
     /// <summary>
     /// Result of test
     /// </summary>
-
     [JsonPropertyName("results")]
     [System.ComponentModel.Description("Result of test")]
     public string? Results { get; set; }
@@ -42,7 +38,6 @@ public class LaboratoryTestResult
     /// <summary>
     /// Conclusion of laboratory test
     /// </summary>
-
     [JsonPropertyName("conclusion")]
     [System.ComponentModel.Description("Conclusion of laboratory test")]
     public LaboratoryTestResultConclusion? Conclusion { get; set; }
@@ -50,7 +45,6 @@ public class LaboratoryTestResult
     /// <summary>
     /// Date of lab test created in IPAFFS
     /// </summary>
-
     [JsonPropertyName("labTestCreatedOn")]
     [System.ComponentModel.Description("Date of lab test created in IPAFFS")]
     public DateOnly? LabTestCreatedOn { get; set; }

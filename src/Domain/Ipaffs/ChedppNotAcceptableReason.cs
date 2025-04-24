@@ -10,7 +10,6 @@ public class ChedppNotAcceptableReason
     /// <summary>
     /// reason for refusal
     /// </summary>
-
     [JsonPropertyName("reason")]
     [System.ComponentModel.Description("reason for refusal")]
     public ChedppNotAcceptableReasonReason? Reason { get; set; }
@@ -18,7 +17,6 @@ public class ChedppNotAcceptableReason
     /// <summary>
     /// commodity or package
     /// </summary>
-
     [JsonPropertyName("commodityOrPackage")]
     [System.ComponentModel.Description("commodity or package")]
     public ChedppNotAcceptableReasonCommodityOrPackage? CommodityOrPackage { get; set; }
