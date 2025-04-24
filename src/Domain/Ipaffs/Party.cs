@@ -10,7 +10,6 @@ public class Party
     /// <summary>
     /// IPAFFS ID of party
     /// </summary>
-
     [JsonPropertyName("id")]
     [System.ComponentModel.Description("IPAFFS ID of party")]
     public string? Id { get; set; }
@@ -18,7 +17,6 @@ public class Party
     /// <summary>
     /// Name of party
     /// </summary>
-
     [JsonPropertyName("name")]
     [System.ComponentModel.Description("Name of party")]
     public string? Name { get; set; }
@@ -26,7 +24,6 @@ public class Party
     /// <summary>
     /// Company ID
     /// </summary>
-
     [JsonPropertyName("companyId")]
     [System.ComponentModel.Description("Company ID")]
     public string? CompanyId { get; set; }
@@ -34,7 +31,6 @@ public class Party
     /// <summary>
     /// Contact ID (B2C)
     /// </summary>
-
     [JsonPropertyName("contactId")]
     [System.ComponentModel.Description("Contact ID (B2C)")]
     public string? ContactId { get; set; }
@@ -42,7 +38,6 @@ public class Party
     /// <summary>
     /// Company name
     /// </summary>
-
     [JsonPropertyName("companyName")]
     [System.ComponentModel.Description("Company name")]
     public string? CompanyName { get; set; }
@@ -50,7 +45,6 @@ public class Party
     /// <summary>
     /// Addresses
     /// </summary>
-
     [JsonPropertyName("addresses")]
     [System.ComponentModel.Description("Addresses")]
     public string[]? Addresses { get; set; }
@@ -58,7 +52,6 @@ public class Party
     /// <summary>
     /// County
     /// </summary>
-
     [JsonPropertyName("county")]
     [System.ComponentModel.Description("County")]
     public string? County { get; set; }
@@ -66,7 +59,6 @@ public class Party
     /// <summary>
     /// Post code of party
     /// </summary>
-
     [JsonPropertyName("postCode")]
     [System.ComponentModel.Description("Post code of party")]
     public string? PostCode { get; set; }
@@ -74,7 +66,6 @@ public class Party
     /// <summary>
     /// Country of party
     /// </summary>
-
     [JsonPropertyName("country")]
     [System.ComponentModel.Description("Country of party")]
     public string? Country { get; set; }
@@ -82,7 +73,6 @@ public class Party
     /// <summary>
     /// City
     /// </summary>
-
     [JsonPropertyName("city")]
     [System.ComponentModel.Description("City")]
     public string? City { get; set; }
@@ -90,7 +80,6 @@ public class Party
     /// <summary>
     /// TRACES ID
     /// </summary>
-
     [JsonPropertyName("tracesId")]
     [System.ComponentModel.Description("TRACES ID")]
     public int? TracesId { get; set; }
@@ -98,7 +87,6 @@ public class Party
     /// <summary>
     /// Type of party
     /// </summary>
-
     [JsonPropertyName("type")]
     [System.ComponentModel.Description("Type of party")]
     public PartyType? Type { get; set; }
@@ -106,7 +94,6 @@ public class Party
     /// <summary>
     /// Approval number
     /// </summary>
-
     [JsonPropertyName("approvalNumber")]
     [System.ComponentModel.Description("Approval number")]
     public string? ApprovalNumber { get; set; }
@@ -114,7 +101,6 @@ public class Party
     /// <summary>
     /// Phone number of party
     /// </summary>
-
     [JsonPropertyName("phone")]
     [System.ComponentModel.Description("Phone number of party")]
     public string? Phone { get; set; }
@@ -122,7 +108,6 @@ public class Party
     /// <summary>
     /// Fax number of party
     /// </summary>
-
     [JsonPropertyName("fax")]
     [System.ComponentModel.Description("Fax number of party")]
     public string? Fax { get; set; }
@@ -130,7 +115,6 @@ public class Party
     /// <summary>
     /// Email number of party
     /// </summary>
-
     [JsonPropertyName("email")]
     [System.ComponentModel.Description("Email number of party")]
     public string? Email { get; set; }

@@ -10,7 +10,6 @@ public class ControlAuthority
     /// <summary>
     /// Official veterinarian
     /// </summary>
-
     [JsonPropertyName("officialVeterinarian")]
     [System.ComponentModel.Description("Official veterinarian")]
     public OfficialVeterinarian? OfficialVeterinarian { get; set; }
@@ -18,7 +17,6 @@ public class ControlAuthority
     /// <summary>
     /// Customs reference number
     /// </summary>
-
     [JsonPropertyName("customsReferenceNo")]
     [System.ComponentModel.Description("Customs reference number")]
     public string? CustomsReferenceNo { get; set; }
@@ -26,7 +24,6 @@ public class ControlAuthority
     /// <summary>
     /// Were containers resealed?
     /// </summary>
-
     [JsonPropertyName("containerResealed")]
     [System.ComponentModel.Description("Were containers resealed?")]
     public bool? ContainerResealed { get; set; }
@@ -34,7 +31,6 @@ public class ControlAuthority
     /// <summary>
     /// When the containers are resealed they need new seal numbers
     /// </summary>
-
     [JsonPropertyName("newSealNumber")]
     [System.ComponentModel.Description("When the containers are resealed they need new seal numbers")]
     public string? NewSealNumber { get; set; }
@@ -42,7 +38,6 @@ public class ControlAuthority
     /// <summary>
     /// Illegal, Unreported and Unregulated (IUU) fishing reference number
     /// </summary>
-
     [JsonPropertyName("iuuFishingReference")]
     [System.ComponentModel.Description("Illegal, Unreported and Unregulated (IUU) fishing reference number")]
     public string? IuuFishingReference { get; set; }
@@ -50,7 +45,6 @@ public class ControlAuthority
     /// <summary>
     /// Was Illegal, Unreported and Unregulated (IUU) check required
     /// </summary>
-
     [JsonPropertyName("iuuCheckRequired")]
     [System.ComponentModel.Description("Was Illegal, Unreported and Unregulated (IUU) check required")]
     public bool? IuuCheckRequired { get; set; }
@@ -58,7 +52,6 @@ public class ControlAuthority
     /// <summary>
     /// Result of Illegal, Unreported and Unregulated (IUU) check
     /// </summary>
-
     [JsonPropertyName("iuuOption")]
     [System.ComponentModel.Description("Result of Illegal, Unreported and Unregulated (IUU) check")]
     public ControlAuthorityIuuOption? IuuOption { get; set; }

@@ -10,7 +10,6 @@ public class DetailsOnReExport
     /// <summary>
     /// Date of re-export
     /// </summary>
-
     [JsonPropertyName("date")]
     [System.ComponentModel.Description("Date of re-export")]
     public DateOnly? Date { get; set; }
@@ -18,7 +17,6 @@ public class DetailsOnReExport
     /// <summary>
     /// Number of vehicle
     /// </summary>
-
     [JsonPropertyName("meansOfTransportNo")]
     [System.ComponentModel.Description("Number of vehicle")]
     public string? MeansOfTransportNo { get; set; }
@@ -26,7 +24,6 @@ public class DetailsOnReExport
     /// <summary>
     /// Type of transport to be used
     /// </summary>
-
     [JsonPropertyName("transportType")]
     [System.ComponentModel.Description("Type of transport to be used")]
     public DetailsOnReExportTransportType? TransportType { get; set; }
@@ -34,7 +31,6 @@ public class DetailsOnReExport
     /// <summary>
     /// Document issued for re-export
     /// </summary>
-
     [JsonPropertyName("document")]
     [System.ComponentModel.Description("Document issued for re-export")]
     public string? Document { get; set; }
@@ -42,7 +38,6 @@ public class DetailsOnReExport
     /// <summary>
     /// Two letter ISO code for country of re-dispatching
     /// </summary>
-
     [JsonPropertyName("countryOfReDispatching")]
     [System.ComponentModel.Description("Two letter ISO code for country of re-dispatching")]
     public string? CountryOfReDispatching { get; set; }
@@ -50,7 +45,6 @@ public class DetailsOnReExport
     /// <summary>
     /// Exit BIP (where consignment will leave the country)
     /// </summary>
-
     [JsonPropertyName("exitBip")]
     [System.ComponentModel.Description("Exit BIP (where consignment will leave the country)")]
     public string? ExitBip { get; set; }

@@ -52,7 +52,7 @@ COPY tests/Api.Tests tests/Api.Tests
 COPY tests/Api.IntegrationTests tests/Api.IntegrationTests
 COPY tests/Data.Tests tests/Data.Tests
 
-RUN dotnet csharpier --check .
+RUN dotnet csharpier check .
 
 RUN dotnet build src/Api/Api.csproj --no-restore -c Release
 
