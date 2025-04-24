@@ -3,6 +3,7 @@ using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 using Defra.TradeImportsDataApi.Domain.Events;
+using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using MongoDB.Driver.Linq;
 
 namespace Defra.TradeImportsDataApi.Api.Services;
@@ -35,7 +36,7 @@ public class CustomsDeclarationService(IDbContext dbContext, IResourceEventPubli
         CancellationToken cancellationToken
     )
     {
-        var identifier = new ImportDocumentReference(chedId).GetIdentifier();
+        var identifier = new ChedIdReference(chedId).GetIdentifier();
 
         return await dbContext
             .CustomsDeclarations.Where(x => x.ImportPreNotificationIdentifiers.Contains(identifier))

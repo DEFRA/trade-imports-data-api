@@ -31,13 +31,13 @@ namespace Defra.TradeImportsDataApi.Data.Entities
             {
                 if (documents == null)
                     continue;
-                foreach (var documentReference in documents.Select(doc => doc.DocumentReference))
+                foreach (var documentReference in documents)
                 {
                     if (documentReference == null)
                         continue;
-                    if (documentReference.IsValid())
+                    if (documentReference.HasValidDocumentReference())
                     {
-                        ImportPreNotificationIdentifiers.Add(documentReference.GetIdentifier());
+                        ImportPreNotificationIdentifiers.Add(documentReference.GetDocumentReferenceIdentifier());
                     }
                 }
             }

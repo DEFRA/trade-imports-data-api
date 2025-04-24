@@ -19,7 +19,7 @@ namespace Defra.TradeImportsDataApi.Data.Entities
 
         public void OnSave()
         {
-            CustomsDeclarationIdentifier = new ImportDocumentReference(Id).GetIdentifier();
+            CustomsDeclarationIdentifier = new ChedIdReference(Id).GetIdentifier();
         }
     }
 }

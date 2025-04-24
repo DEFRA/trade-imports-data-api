@@ -1,5 +1,6 @@
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
+using Defra.TradeImportsDataApi.Testing;
 using FluentAssertions;
 
 namespace Defra.TradeImportsDataApi.Api.IntegrationTests.Endpoints;
@@ -10,7 +11,7 @@ public class ImportPreNotificationTests : SqsTestBase
     public async Task WhenDoesNotExist_ShouldCreateAndRead()
     {
         var client = CreateDataApiClient();
-        var chedRef = Guid.NewGuid().ToString("N");
+        var chedRef = ImportPreNotificationIdGenerator.Generate();
 
         var result = await client.GetImportPreNotification(chedRef, CancellationToken.None);
         result.Should().BeNull();
@@ -30,7 +31,7 @@ public class ImportPreNotificationTests : SqsTestBase
     public async Task WhenRelatedCustomsDeclarationsDoesNotExist_ShouldCreateAndRead()
     {
         var client = CreateDataApiClient();
-        var chedRef = Guid.NewGuid().ToString("N");
+        var chedRef = ImportPreNotificationIdGenerator.Generate();
 
         var result = await client.GetImportPreNotification(chedRef, CancellationToken.None);
         result.Should().BeNull();
@@ -51,7 +52,7 @@ public class ImportPreNotificationTests : SqsTestBase
     public async Task WhenExists_ShouldUpdate()
     {
         var client = CreateDataApiClient();
-        var chedRef = Guid.NewGuid().ToString("N");
+        var chedRef = ImportPreNotificationIdGenerator.Generate();
 
         var result = await client.GetImportPreNotification(chedRef, CancellationToken.None);
         result.Should().BeNull();
@@ -143,7 +144,8 @@ public class ImportPreNotificationTests : SqsTestBase
     public async Task WhenCreating_ShouldEmitCreatedMessage()
     {
         var client = CreateDataApiClient();
-        var chedRef = Guid.NewGuid().ToString("N");
+        var chedRef = ImportPreNotificationIdGenerator.Generate();
+
         await DrainAllMessages();
 
         await client.PutImportPreNotification(
