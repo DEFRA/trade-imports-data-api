@@ -657,6 +657,10 @@
             "format": "int32",
             "nullable": true
           },
+          "sourceVersion": {
+            "type": "string",
+            "nullable": true
+          },
           "items": {
             "type": "array",
             "items": {
