@@ -4,6 +4,7 @@
     ClearanceRequest: null,
     ClearanceDecision: null,
     Finalisation: null,
+    InboundError: null,
     Created: 0001-01-01,
     Updated: 0001-01-01,
     ETag: etag
