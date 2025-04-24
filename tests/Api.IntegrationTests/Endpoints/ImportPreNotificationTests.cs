@@ -122,7 +122,7 @@ public class ImportPreNotificationTests : SqsTestBase
                                 [
                                     new ImportDocument
                                     {
-                                        DocumentReference = new ImportDocumentReference($"GBCHD2025.1234567"),
+                                        DocumentReference = new ImportDocumentReference("GBCHD2025.1234567"),
                                         DocumentCode = "C640",
                                     },
                                 ],
