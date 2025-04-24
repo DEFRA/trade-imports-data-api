@@ -2,8 +2,14 @@ using System.Text.Json.Serialization;
 
 namespace Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 
-public class InboundErrorItem
+public class InboundErrorNotification
 {
+    [JsonPropertyName("externalCorrelationId")]
+    public string? ExternalCorrelationId { get; set; }
+
+    [JsonPropertyName("externalVersion")]
+    public int? ExternalVersion { get; set; }
+
     [JsonPropertyName("code")]
     public string? Code { get; set; }
 
