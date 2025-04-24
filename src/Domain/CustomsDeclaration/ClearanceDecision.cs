@@ -16,6 +16,9 @@ public class ClearanceDecision
     [JsonPropertyName("decisionNumber")]
     public int? DecisionNumber { get; set; }
 
+    [JsonPropertyName("sourceVersion")]
+    public string? SourceVersion { get; set; }
+
     [JsonPropertyName("items")]
     public required ClearanceDecisionItem[] Items { get; set; } = [];
 }
