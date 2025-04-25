@@ -52,6 +52,7 @@ public class GetTests : WireMockTestBase<WireMockContext>
                                 new ClearanceRequest(),
                                 ClearanceDecision: null,
                                 Finalisation: null,
+                                InboundError: null,
                                 created,
                                 updated
                             )

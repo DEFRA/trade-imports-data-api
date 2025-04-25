@@ -13,7 +13,8 @@ public class ResourceEventPublisher(
     IAmazonSimpleNotificationService simpleNotificationService,
     IOptions<TraceHeader> traceHeaderOptions,
     HeaderPropagationValues headerPropagationValues,
-    IOptions<ResourceEventOptions> resourceEventOptions
+    IOptions<ResourceEventOptions> resourceEventOptions,
+    ILogger<ResourceEventPublisher> logger
 ) : IResourceEventPublisher
 {
     public async Task Publish<T>(ResourceEvent<T> @event, CancellationToken cancellationToken)
@@ -44,6 +45,13 @@ public class ResourceEventPublisher(
         };
 
         await simpleNotificationService.PublishAsync(request, cancellationToken);
+
+        logger.LogInformation(
+            "Published resource event {ResourceType} {Operation} {SubResourceType}",
+            @event.ResourceType,
+            @event.Operation,
+            @event.SubResourceType
+        );
     }
 
     private void AddTraceIdIfPresent(Dictionary<string, MessageAttributeValue> messageAttributes)

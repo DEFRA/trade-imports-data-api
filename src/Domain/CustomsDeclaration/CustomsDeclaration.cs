@@ -7,4 +7,6 @@ public class CustomsDeclaration
     public ClearanceDecision? ClearanceDecision { get; set; }
 
     public Finalisation? Finalisation { get; set; }
+
+    public InboundError? InboundError { get; set; }
 }

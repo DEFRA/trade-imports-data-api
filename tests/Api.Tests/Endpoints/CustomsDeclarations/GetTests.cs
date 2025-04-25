@@ -102,7 +102,8 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
         var customsDeclaration = fixture.Create<CustomsDeclaration>();
         var serialized = JsonSerializer.Serialize(customsDeclaration, s_jsonOptions);
 
-        // Take this file and replace GetTests_DomainExample.json when needed
+        // Take this file and replace GetTests_DomainExample.json when needed or
+        // take the parts that have changed/been added to minimise the amount of unnecessary changes
         await File.WriteAllTextAsync(
             $"{nameof(Get_WhenGenerating_GetTests_DomainExample_ShouldSerialize)}_CustomsDeclaration.json",
             serialized
@@ -129,6 +130,7 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
                     ClearanceRequest = customsDeclaration.ClearanceRequest,
                     ClearanceDecision = customsDeclaration.ClearanceDecision,
                     Finalisation = customsDeclaration.Finalisation,
+                    InboundError = customsDeclaration.InboundError,
                     Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
                     Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
                     ETag = "etag",

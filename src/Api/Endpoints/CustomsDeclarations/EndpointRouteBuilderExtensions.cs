@@ -91,6 +91,7 @@ public static class EndpointRouteBuilderExtensions
                 customsDeclarationEntity.ClearanceRequest,
                 customsDeclarationEntity.ClearanceDecision,
                 customsDeclarationEntity.Finalisation,
+                customsDeclarationEntity.InboundError,
                 customsDeclarationEntity.Created,
                 customsDeclarationEntity.Updated
             )
@@ -140,6 +141,7 @@ public static class EndpointRouteBuilderExtensions
             ClearanceRequest = data.ClearanceRequest,
             ClearanceDecision = data.ClearanceDecision,
             Finalisation = data.Finalisation,
+            InboundError = data.InboundError,
         };
 
         var etag = ETags.ValidateAndParseFirst(ifMatch);
