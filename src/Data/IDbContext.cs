@@ -10,5 +10,7 @@ public interface IDbContext
 
     IMongoCollectionSet<GmrEntity> Gmrs { get; }
 
+    IMongoCollectionSet<ProcessingErrorEntity> ProcessingErrors { get; }
+
     Task SaveChangesAsync(CancellationToken cancellation = default);
 }

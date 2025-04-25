@@ -4,7 +4,6 @@ using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 using Defra.TradeImportsDataApi.Domain.Events;
-using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using FluentAssertions;
 using NSubstitute;
 

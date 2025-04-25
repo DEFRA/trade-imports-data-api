@@ -543,6 +543,146 @@
           }
         }
       }
+    },
+    "/processing-errors/{mrn}": {
+      "get": {
+        "tags": [
+          "ProcessingErrors"
+        ],
+        "summary": "Get ProcessingError",
+        "description": "Get a Processing Error by MRN",
+        "operationId": "ProcessingErrorByMrn",
+        "parameters": [
+          {
+            "name": "mrn",
+            "in": "path",
+            "description": "MRN",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Api.Endpoints.ProcessingErrors.ProcessingErrorResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "ProcessingErrors"
+        ],
+        "summary": "Put ProcessingError",
+        "description": "Put a Processing Error",
+        "operationId": "PutProcessingError",
+        "parameters": [
+          {
+            "name": "mrn",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.ProcessingErrors.ProcessingError"
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -626,6 +766,32 @@
             "allOf": [
               {
                 "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.ImportPreNotification"
+              }
+            ],
+            "nullable": true
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Defra.TradeImportsDataApi.Api.Endpoints.ProcessingErrors.ProcessingErrorResponse": {
+        "type": "object",
+        "properties": {
+          "movementReferenceNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "processingError": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.ProcessingErrors.ProcessingError"
               }
             ],
             "nullable": true
@@ -1026,14 +1192,14 @@
           "notifications": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.CustomsDeclaration.InboundErrorNotification"
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Errors.ErrorNotification"
             },
             "nullable": true
           }
         },
         "additionalProperties": false
       },
-      "Defra.TradeImportsDataApi.Domain.CustomsDeclaration.InboundErrorItem": {
+      "Defra.TradeImportsDataApi.Domain.Errors.ErrorItem": {
         "type": "object",
         "properties": {
           "code": {
@@ -1047,7 +1213,7 @@
         },
         "additionalProperties": false
       },
-      "Defra.TradeImportsDataApi.Domain.CustomsDeclaration.InboundErrorNotification": {
+      "Defra.TradeImportsDataApi.Domain.Errors.ErrorNotification": {
         "type": "object",
         "properties": {
           "externalCorrelationId": {
@@ -1062,8 +1228,12 @@
           "errors": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.CustomsDeclaration.InboundErrorItem"
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Errors.ErrorItem"
             },
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
             "nullable": true
           }
         },
@@ -4881,6 +5051,19 @@
               "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.IdentificationDetails"
             },
             "description": "Details helpful for identification",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Defra.TradeImportsDataApi.Domain.ProcessingErrors.ProcessingError": {
+        "type": "object",
+        "properties": {
+          "notifications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Errors.ErrorNotification"
+            },
             "nullable": true
           }
         },
