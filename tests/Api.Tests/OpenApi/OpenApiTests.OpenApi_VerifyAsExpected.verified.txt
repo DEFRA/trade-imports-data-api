@@ -1033,6 +1033,20 @@
         },
         "additionalProperties": false
       },
+      "Defra.TradeImportsDataApi.Domain.CustomsDeclaration.InboundErrorItem": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "Defra.TradeImportsDataApi.Domain.CustomsDeclaration.InboundErrorNotification": {
         "type": "object",
         "properties": {
@@ -1045,12 +1059,11 @@
             "format": "int32",
             "nullable": true
           },
-          "code": {
-            "type": "string",
-            "nullable": true
-          },
-          "message": {
-            "type": "string",
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.CustomsDeclaration.InboundErrorItem"
+            },
             "nullable": true
           }
         },

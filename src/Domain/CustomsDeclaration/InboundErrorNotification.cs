@@ -10,9 +10,6 @@ public class InboundErrorNotification
     [JsonPropertyName("externalVersion")]
     public int? ExternalVersion { get; set; }
 
-    [JsonPropertyName("code")]
-    public string? Code { get; set; }
-
-    [JsonPropertyName("message")]
-    public string? Message { get; set; }
+    [JsonPropertyName("errors")]
+    public InboundErrorItem[]? Errors { get; set; }
 }

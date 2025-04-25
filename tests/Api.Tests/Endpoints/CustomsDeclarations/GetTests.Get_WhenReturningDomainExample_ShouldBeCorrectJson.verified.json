@@ -344,22 +344,58 @@
   "inboundError": {
     "notifications": [
       {
-        "externalCorrelationId": "ExternalCorrelationId1876c2e7-36e8-4704-b2c6-b5e96e2f117b",
-        "externalVersion": 230,
-        "code": "Code2ae97016-7148-47c6-820d-6bca40482b0a",
-        "message": "Messageb56851be-4e82-48de-ad19-62ffa7833e2b"
+        "externalCorrelationId": "ExternalCorrelationId5a0fb6fd-70ef-4159-a8ca-51455cab6016",
+        "externalVersion": 194,
+        "errors": [
+          {
+            "code": "Code05d73f4c-48da-4c60-b677-2dc8160bd332",
+            "message": "Message82f30258-65e0-4d59-b50c-4b8c9403974e"
+          },
+          {
+            "code": "Code5a17896c-1e03-4c0b-bafd-767772abf733",
+            "message": "Message30956315-6693-461e-82e7-31832ab96b75"
+          },
+          {
+            "code": "Codef9127674-2924-44a6-aa27-f771fbd9ecac",
+            "message": "Message1702ffe6-bbaa-4386-8edf-c1a1ad6fc3c0"
+          }
+        ]
       },
       {
-        "externalCorrelationId": "ExternalCorrelationIdf950c205-1e7e-4e44-b0a9-547eb3af65fc",
-        "externalVersion": 96,
-        "code": "Code016aa499-5a17-4edd-8e64-2c2d75691517",
-        "message": "Message36c8ec31-e8c7-4e3b-bcac-036bb4b6661f"
+        "externalCorrelationId": "ExternalCorrelationIdb19e0c33-34b2-446f-aae2-934a50c5472e",
+        "externalVersion": 170,
+        "errors": [
+          {
+            "code": "Codee681e46c-e169-4667-99f0-e7cad24ae9fa",
+            "message": "Message1d569ca4-ce24-4a88-a365-298e630b484a"
+          },
+          {
+            "code": "Coded44ab4e5-9f30-49b8-9029-a29b1b68ed20",
+            "message": "Message46868672-47e2-4873-b0f6-aa5c94f90f8d"
+          },
+          {
+            "code": "Codee4d8c3b1-0f57-489c-aa33-856312cfa9e6",
+            "message": "Messagee3938997-64fe-4830-8b53-daeb510c163d"
+          }
+        ]
       },
       {
-        "externalCorrelationId": "ExternalCorrelationId432c16a0-7c4e-4fb8-9501-d7034e9fa815",
-        "externalVersion": 15,
-        "code": "Codedde5aff0-d7f8-49cc-a1d7-1e1deab4ff02",
-        "message": "Messagef476e9aa-e398-4b43-9a8b-5c75ce36ff4a"
+        "externalCorrelationId": "ExternalCorrelationId4475cf43-6aba-4c98-a0ca-13357a85abb1",
+        "externalVersion": 108,
+        "errors": [
+          {
+            "code": "Code9e3906b5-f906-4b50-9087-0c7e8ec7ea83",
+            "message": "Message5b28bfb2-73be-4be8-a408-7e909f8868f5"
+          },
+          {
+            "code": "Codec6335c38-8f1b-4423-9cb4-2b7af184d0c2",
+            "message": "Messaged19a819e-c0b0-4f24-9830-894782c485e3"
+          },
+          {
+            "code": "Code01c7adcc-98ed-452d-93de-171f926a051b",
+            "message": "Messagefecd9c5b-8818-45bc-b874-f43ccdeb59c2"
+          }
+        ]
       }
     ]
   },
