@@ -52,19 +52,17 @@ public class ProcessingErrorTests : SqsTestBase
         result2.Updated.Should().BeAfter(result.Updated);
     }
 
-    // [Fact]
-    // public async Task WhenCreating_ShouldEmitCreatedMessage()
-#pragma warning disable S125
-    // {
-#pragma warning restore S125
-    //     var client = CreateDataApiClient();
-    //     var mrn = Guid.NewGuid().ToString("N");
-    //     await DrainAllMessages();
-    //
-    //     await client.PutProcessingError(mrn, new ProcessingError(), null, CancellationToken.None);
-    //
-    //     Assert.True(
-    //         await AsyncWaiter.WaitForAsync(async () => (await GetQueueAttributes()).ApproximateNumberOfMessages == 1)
-    //     );
-    // }
+    [Fact]
+    public async Task WhenCreating_ShouldEmitCreatedMessage()
+    {
+        var client = CreateDataApiClient();
+        var mrn = Guid.NewGuid().ToString("N");
+        await DrainAllMessages();
+
+        await client.PutProcessingError(mrn, new ProcessingError(), null, CancellationToken.None);
+
+        Assert.True(
+            await AsyncWaiter.WaitForAsync(async () => (await GetQueueAttributes()).ApproximateNumberOfMessages == 1)
+        );
+    }
 }

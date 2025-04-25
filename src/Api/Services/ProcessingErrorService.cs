@@ -1,10 +1,13 @@
 using Defra.TradeImportsDataApi.Api.Exceptions;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
+using Defra.TradeImportsDataApi.Domain.Events;
+using Defra.TradeImportsDataApi.Domain.ProcessingErrors;
 
 namespace Defra.TradeImportsDataApi.Api.Services;
 
-public class ProcessingErrorService(IDbContext dbContext) : IProcessingErrorService
+public class ProcessingErrorService(IDbContext dbContext, IResourceEventPublisher resourceEventPublisher)
+    : IProcessingErrorService
 {
     public async Task<ProcessingErrorEntity?> GetProcessingError(string mrn, CancellationToken cancellationToken)
     {
@@ -18,6 +21,12 @@ public class ProcessingErrorService(IDbContext dbContext) : IProcessingErrorServ
     {
         await dbContext.ProcessingErrors.Insert(processingErrorEntity, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
+        await resourceEventPublisher.Publish(
+            processingErrorEntity
+                .ToResourceEvent(ResourceEventOperations.Created)
+                .WithChangeSet(processingErrorEntity.ProcessingError, new ProcessingError()),
+            cancellationToken
+        );
 
         return processingErrorEntity;
     }
@@ -38,6 +47,12 @@ public class ProcessingErrorService(IDbContext dbContext) : IProcessingErrorServ
 
         await dbContext.ProcessingErrors.Update(processingErrorEntity, etag, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
+        await resourceEventPublisher.Publish(
+            processingErrorEntity
+                .ToResourceEvent(ResourceEventOperations.Updated)
+                .WithChangeSet(processingErrorEntity.ProcessingError, existing.ProcessingError),
+            cancellationToken
+        );
 
         return processingErrorEntity;
     }

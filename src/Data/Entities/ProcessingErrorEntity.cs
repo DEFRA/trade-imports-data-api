@@ -12,7 +12,7 @@ public class ProcessingErrorEntity : IDataEntity
 
     public DateTime Updated { get; set; }
 
-    public ProcessingError? ProcessingError { get; set; }
+    public required ProcessingError ProcessingError { get; set; }
 
     public void OnSave() { }
 }
