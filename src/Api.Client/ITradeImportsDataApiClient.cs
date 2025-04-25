@@ -33,4 +33,13 @@ public interface ITradeImportsDataApiClient
         string? etag,
         CancellationToken cancellationToken
     );
+
+    Task<ProcessingErrorResponse?> GetProcessingError(string mrn, CancellationToken cancellationToken);
+
+    Task PutProcessingError(
+        string mrn,
+        Domain.ProcessingErrors.ProcessingError data,
+        string? etag,
+        CancellationToken cancellationToken
+    );
 }

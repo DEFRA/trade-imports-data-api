@@ -5,6 +5,7 @@ using System.Text.Json;
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 using Defra.TradeImportsDataApi.Domain.Gvms;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
+using Defra.TradeImportsDataApi.Domain.ProcessingErrors;
 
 namespace Defra.TradeImportsDataApi.Api.Client;
 
@@ -127,6 +128,35 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
     )
     {
         var requestUri = Endpoints.CustomsDeclarations(mrn);
+        var response = await Put(data, etag, requestUri, cancellationToken);
+
+        response.EnsureSuccessStatusCode();
+    }
+
+    public async Task<ProcessingErrorResponse?> GetProcessingError(string mrn, CancellationToken cancellationToken)
+    {
+        var response = await Get(Endpoints.ProcessingErrors(mrn), cancellationToken);
+        if (response.StatusCode == HttpStatusCode.NotFound)
+            return null;
+
+        response.EnsureSuccessStatusCode();
+
+        var result = await Deserialize<ProcessingErrorResponse>(response, cancellationToken);
+
+        return result with
+        {
+            ETag = response.Headers.ETag?.Tag,
+        };
+    }
+
+    public async Task PutProcessingError(
+        string mrn,
+        ProcessingError data,
+        string? etag,
+        CancellationToken cancellationToken
+    )
+    {
+        var requestUri = Endpoints.ProcessingErrors(mrn);
         var response = await Put(data, etag, requestUri, cancellationToken);
 
         response.EnsureSuccessStatusCode();

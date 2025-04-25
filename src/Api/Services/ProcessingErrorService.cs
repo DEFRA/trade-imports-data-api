@@ -1,28 +1,44 @@
+using Defra.TradeImportsDataApi.Api.Exceptions;
+using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
 
 namespace Defra.TradeImportsDataApi.Api.Services;
 
-public class ProcessingErrorService : IProcessingErrorService
+public class ProcessingErrorService(IDbContext dbContext) : IProcessingErrorService
 {
-    public Task<ProcessingErrorEntity?> GetProcessingError(string mrn, CancellationToken cancellationToken)
+    public async Task<ProcessingErrorEntity?> GetProcessingError(string mrn, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return await dbContext.ProcessingErrors.Find(mrn, cancellationToken);
     }
 
-    public Task<ProcessingErrorEntity> Insert(
+    public async Task<ProcessingErrorEntity> Insert(
         ProcessingErrorEntity processingErrorEntity,
         CancellationToken cancellationToken
     )
     {
-        throw new NotImplementedException();
+        await dbContext.ProcessingErrors.Insert(processingErrorEntity, cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
+
+        return processingErrorEntity;
     }
 
-    public Task<ProcessingErrorEntity> Update(
+    public async Task<ProcessingErrorEntity> Update(
         ProcessingErrorEntity processingErrorEntity,
         string etag,
         CancellationToken cancellationToken
     )
     {
-        throw new NotImplementedException();
+        var existing = await dbContext.ProcessingErrors.Find(processingErrorEntity.Id, cancellationToken);
+        if (existing == null)
+        {
+            throw new EntityNotFoundException(nameof(ProcessingErrorEntity), processingErrorEntity.Id);
+        }
+
+        processingErrorEntity.Created = existing.Created;
+
+        await dbContext.ProcessingErrors.Update(processingErrorEntity, etag, cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
+
+        return processingErrorEntity;
     }
 }
