@@ -17,7 +17,11 @@ public class ImportPreNotificationServiceTests
         var mockDbContext = Substitute.For<IDbContext>();
         var mockResourceEventPublisher = Substitute.For<IResourceEventPublisher>();
         var subject = new ImportPreNotificationService(mockDbContext, mockResourceEventPublisher);
-        var entity = new ImportPreNotificationEntity { Id = "id", ImportPreNotification = new ImportPreNotification() };
+        var entity = new ImportPreNotificationEntity
+        {
+            Id = "id",
+            ImportPreNotification = new ImportPreNotification { Version = 1 },
+        };
 
         await subject.Insert(entity, CancellationToken.None);
 
@@ -26,7 +30,9 @@ public class ImportPreNotificationServiceTests
         await mockResourceEventPublisher
             .Received()
             .Publish(
-                Arg.Is<ResourceEvent<ImportPreNotificationEntity>>(x => x.Operation == "Created"),
+                Arg.Is<ResourceEvent<ImportPreNotificationEntity>>(x =>
+                    x.Operation == "Created" && x.ChangeSet.Count > 0
+                ),
                 CancellationToken.None
             );
     }

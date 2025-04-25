@@ -24,7 +24,16 @@ public class CustomsDeclarationService(IDbContext dbContext, IResourceEventPubli
         await dbContext.CustomsDeclarations.Insert(customsDeclarationEntity, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
         await resourceEventPublisher.Publish(
-            customsDeclarationEntity.ToResourceEvent(ResourceEventOperations.Created),
+            customsDeclarationEntity
+                .ToResourceEvent(ResourceEventOperations.Created)
+                .WithChangeSet(
+                    new CustomsDeclarationData(
+                        customsDeclarationEntity.ClearanceRequest,
+                        customsDeclarationEntity.ClearanceDecision,
+                        customsDeclarationEntity.Finalisation
+                    ),
+                    CustomsDeclarationData.Empty
+                ),
             cancellationToken
         );
 
@@ -84,5 +93,9 @@ public class CustomsDeclarationService(IDbContext dbContext, IResourceEventPubli
         ClearanceRequest? ClearanceRequest,
         ClearanceDecision? ClearanceDecision,
         Finalisation? Finalisation
-    );
+    )
+    {
+        public static CustomsDeclarationData Empty =>
+            new(ClearanceRequest: null, ClearanceDecision: null, Finalisation: null);
+    }
 }

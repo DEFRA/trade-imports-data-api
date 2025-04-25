@@ -2,6 +2,7 @@ using Defra.TradeImportsDataApi.Api.Exceptions;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.Events;
+using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using MongoDB.Driver.Linq;
 
 namespace Defra.TradeImportsDataApi.Api.Services;
@@ -40,7 +41,9 @@ public class ImportPreNotificationService(IDbContext dbContext, IResourceEventPu
         await dbContext.ImportPreNotifications.Insert(importPreNotificationEntity, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
         await resourceEventPublisher.Publish(
-            importPreNotificationEntity.ToResourceEvent(ResourceEventOperations.Created),
+            importPreNotificationEntity
+                .ToResourceEvent(ResourceEventOperations.Created)
+                .WithChangeSet(importPreNotificationEntity.ImportPreNotification, new ImportPreNotification()),
             cancellationToken
         );
 

@@ -27,7 +27,9 @@ public class CustomsDeclarationServiceTests
         await mockResourceEventPublisher
             .Received()
             .Publish(
-                Arg.Is<ResourceEvent<CustomsDeclarationEntity>>(x => x.Operation == "Created"),
+                Arg.Is<ResourceEvent<CustomsDeclarationEntity>>(x =>
+                    x.Operation == "Created" && x.ChangeSet.Count > 0 && x.SubResourceType != null
+                ),
                 CancellationToken.None
             );
     }
@@ -74,7 +76,9 @@ public class CustomsDeclarationServiceTests
         await mockResourceEventPublisher
             .Received()
             .Publish(
-                Arg.Is<ResourceEvent<CustomsDeclarationEntity>>(x => x.Operation == "Updated" && x.ChangeSet.Count > 0),
+                Arg.Is<ResourceEvent<CustomsDeclarationEntity>>(x =>
+                    x.Operation == "Updated" && x.ChangeSet.Count > 0 && x.SubResourceType != null
+                ),
                 CancellationToken.None
             );
     }
