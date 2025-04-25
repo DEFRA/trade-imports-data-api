@@ -30,7 +30,8 @@ public class CustomsDeclarationService(IDbContext dbContext, IResourceEventPubli
                     new CustomsDeclarationData(
                         customsDeclarationEntity.ClearanceRequest,
                         customsDeclarationEntity.ClearanceDecision,
-                        customsDeclarationEntity.Finalisation
+                        customsDeclarationEntity.Finalisation,
+                        customsDeclarationEntity.InboundError
                     ),
                     CustomsDeclarationData.Empty
                 ),
@@ -75,12 +76,14 @@ public class CustomsDeclarationService(IDbContext dbContext, IResourceEventPubli
                     new CustomsDeclarationData(
                         customsDeclarationEntity.ClearanceRequest,
                         customsDeclarationEntity.ClearanceDecision,
-                        customsDeclarationEntity.Finalisation
+                        customsDeclarationEntity.Finalisation,
+                        customsDeclarationEntity.InboundError
                     ),
                     new CustomsDeclarationData(
                         existing.ClearanceRequest,
                         existing.ClearanceDecision,
-                        existing.Finalisation
+                        existing.Finalisation,
+                        existing.InboundError
                     )
                 ),
             cancellationToken
@@ -92,10 +95,11 @@ public class CustomsDeclarationService(IDbContext dbContext, IResourceEventPubli
     private sealed record CustomsDeclarationData(
         ClearanceRequest? ClearanceRequest,
         ClearanceDecision? ClearanceDecision,
-        Finalisation? Finalisation
+        Finalisation? Finalisation,
+        InboundError? InboundError
     )
     {
         public static CustomsDeclarationData Empty =>
-            new(ClearanceRequest: null, ClearanceDecision: null, Finalisation: null);
+            new(ClearanceRequest: null, ClearanceDecision: null, Finalisation: null, InboundError: null);
     }
 }
