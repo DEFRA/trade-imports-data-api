@@ -5,4 +5,6 @@ public static class ResourceEventResourceTypes
     public const string ImportPreNotification = nameof(ImportPreNotification);
 
     public const string CustomsDeclaration = nameof(CustomsDeclaration);
+
+    public const string ProcessingError = nameof(ProcessingError);
 }
