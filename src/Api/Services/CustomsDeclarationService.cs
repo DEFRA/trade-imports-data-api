@@ -27,13 +27,14 @@ public class CustomsDeclarationService(IDbContext dbContext, IResourceEventPubli
             customsDeclarationEntity
                 .ToResourceEvent(ResourceEventOperations.Created)
                 .WithChangeSet(
-                    new CustomsDeclarationData(
-                        customsDeclarationEntity.ClearanceRequest,
-                        customsDeclarationEntity.ClearanceDecision,
-                        customsDeclarationEntity.Finalisation,
-                        customsDeclarationEntity.InboundError
-                    ),
-                    CustomsDeclarationData.Empty
+                    new CustomsDeclaration
+                    {
+                        ClearanceRequest = customsDeclarationEntity.ClearanceRequest,
+                        ClearanceDecision = customsDeclarationEntity.ClearanceDecision,
+                        Finalisation = customsDeclarationEntity.Finalisation,
+                        InboundError = customsDeclarationEntity.InboundError,
+                    },
+                    new CustomsDeclaration()
                 ),
             cancellationToken
         );
@@ -73,33 +74,24 @@ public class CustomsDeclarationService(IDbContext dbContext, IResourceEventPubli
             customsDeclarationEntity
                 .ToResourceEvent(ResourceEventOperations.Updated)
                 .WithChangeSet(
-                    new CustomsDeclarationData(
-                        customsDeclarationEntity.ClearanceRequest,
-                        customsDeclarationEntity.ClearanceDecision,
-                        customsDeclarationEntity.Finalisation,
-                        customsDeclarationEntity.InboundError
-                    ),
-                    new CustomsDeclarationData(
-                        existing.ClearanceRequest,
-                        existing.ClearanceDecision,
-                        existing.Finalisation,
-                        existing.InboundError
-                    )
+                    new CustomsDeclaration
+                    {
+                        ClearanceRequest = customsDeclarationEntity.ClearanceRequest,
+                        ClearanceDecision = customsDeclarationEntity.ClearanceDecision,
+                        Finalisation = customsDeclarationEntity.Finalisation,
+                        InboundError = customsDeclarationEntity.InboundError,
+                    },
+                    new CustomsDeclaration
+                    {
+                        ClearanceRequest = existing.ClearanceRequest,
+                        ClearanceDecision = existing.ClearanceDecision,
+                        Finalisation = existing.Finalisation,
+                        InboundError = existing.InboundError,
+                    }
                 ),
             cancellationToken
         );
 
         return customsDeclarationEntity;
-    }
-
-    private sealed record CustomsDeclarationData(
-        ClearanceRequest? ClearanceRequest,
-        ClearanceDecision? ClearanceDecision,
-        Finalisation? Finalisation,
-        InboundError? InboundError
-    )
-    {
-        public static CustomsDeclarationData Empty =>
-            new(ClearanceRequest: null, ClearanceDecision: null, Finalisation: null, InboundError: null);
     }
 }

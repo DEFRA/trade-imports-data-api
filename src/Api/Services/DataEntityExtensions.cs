@@ -8,7 +8,7 @@ using Json.Patch;
 
 namespace Defra.TradeImportsDataApi.Api.Services;
 
-public static class ResourceEventExtensions
+public static class DataEntityExtensions
 {
     private static readonly JsonSerializerOptions s_jsonOptions = new()
     {
@@ -68,7 +68,9 @@ public static class ResourceEventExtensions
             .ToList();
 
         if (knownSubResourceTypes.Count > 1)
-            throw new InvalidOperationException("Change set contains multiple sub resource types");
+            throw new InvalidOperationException(
+                "Change set contains multiple known sub resource types, only one changing at a time is currently expected"
+            );
 
         return @event with
         {
