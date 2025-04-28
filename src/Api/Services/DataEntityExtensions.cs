@@ -8,7 +8,7 @@ using Json.Patch;
 
 namespace Defra.TradeImportsDataApi.Api.Services;
 
-public static class ResourceEventExtensions
+public static class DataEntityExtensions
 {
     private static readonly JsonSerializerOptions s_jsonOptions = new()
     {
