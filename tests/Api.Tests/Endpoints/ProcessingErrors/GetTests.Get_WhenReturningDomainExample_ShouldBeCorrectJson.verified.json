@@ -18,8 +18,7 @@
             "code": "Code39617846-afb3-4850-b0bc-70bbc63ca93c",
             "message": "Messagef3e9a4e0-a10a-4b6d-8ec5-b7083d4b2f68"
           }
-        ],
-        "message": "Message59f97e88-1163-472d-b77d-55e78f41f13c"
+        ]
       },
       {
         "externalCorrelationId": "ExternalCorrelationIdbcb39365-a337-42ac-bdee-94613207ad4f",
@@ -37,8 +36,7 @@
             "code": "Code957a89a0-23cb-4f3f-b1a6-8234f879213c",
             "message": "Message864cf362-38f8-4ce9-b648-7ed8066d83a0"
           }
-        ],
-        "message": "Message9ba06bd9-7764-4696-83cd-4ab0d9a74207"
+        ]
       },
       {
         "externalCorrelationId": "ExternalCorrelationIdca508e72-10f6-4b67-8c36-312d6b0678ca",
@@ -56,8 +54,7 @@
             "code": "Code9d3f6fd1-9a1e-44f9-98df-6a9a20de2c13",
             "message": "Message6f51b234-5938-4ef8-870c-8cede2ccf9ec"
           }
-        ],
-        "message": "Message6d073210-893b-43a7-987d-0a268c544cef"
+        ]
       }
     ]
   },

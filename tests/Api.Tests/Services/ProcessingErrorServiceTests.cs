@@ -21,7 +21,7 @@ public class ProcessingErrorServiceTests
         var entity = new ProcessingErrorEntity
         {
             Id = "id",
-            ProcessingError = new ProcessingError { Notifications = [new ErrorNotification { Message = "message" }] },
+            ProcessingError = new ProcessingError { Notifications = [new ErrorNotification { ExternalVersion = 1 }] },
         };
 
         await subject.Insert(entity, CancellationToken.None);
@@ -62,7 +62,7 @@ public class ProcessingErrorServiceTests
                     Id = "id",
                     ProcessingError = new ProcessingError
                     {
-                        Notifications = [new ErrorNotification { Message = "message1" }],
+                        Notifications = [new ErrorNotification { ExternalVersion = 1 }],
                     },
                 }
             );
@@ -75,8 +75,8 @@ public class ProcessingErrorServiceTests
             {
                 Notifications =
                 [
-                    new ErrorNotification { Message = "message1" },
-                    new ErrorNotification { Message = "message2" },
+                    new ErrorNotification { ExternalVersion = 1 },
+                    new ErrorNotification { ExternalVersion = 2 },
                 ],
             },
         };

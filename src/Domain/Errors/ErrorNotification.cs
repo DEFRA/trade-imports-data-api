@@ -11,8 +11,5 @@ public class ErrorNotification
     public int? ExternalVersion { get; set; }
 
     [JsonPropertyName("errors")]
-    public ErrorItem[]? Errors { get; set; }
-
-    [JsonPropertyName("message")]
-    public string? Message { get; set; }
+    public ErrorItem[] Errors { get; set; } = [];
 }
