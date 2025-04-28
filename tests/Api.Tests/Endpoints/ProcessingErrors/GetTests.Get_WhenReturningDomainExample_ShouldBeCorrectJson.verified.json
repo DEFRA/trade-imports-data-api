@@ -1,0 +1,63 @@
+﻿{
+  "movementReferenceNumber": "mrn",
+  "processingError": {
+    "notifications": [
+      {
+        "externalCorrelationId": "ExternalCorrelationId815625eb-3e33-460b-af4f-a5e5f23da033",
+        "externalVersion": 36,
+        "errors": [
+          {
+            "code": "Codebdc575a2-600d-4e93-895f-5055e57405a1",
+            "message": "Messagebdd0b3c7-3db7-423d-b5d9-4049d703a440"
+          },
+          {
+            "code": "Code255fcce4-169d-4fe7-bb07-1b4a7c8d9f2a",
+            "message": "Message12ca0008-11e3-4438-93c7-13729a46d3f6"
+          },
+          {
+            "code": "Code39617846-afb3-4850-b0bc-70bbc63ca93c",
+            "message": "Messagef3e9a4e0-a10a-4b6d-8ec5-b7083d4b2f68"
+          }
+        ]
+      },
+      {
+        "externalCorrelationId": "ExternalCorrelationIdbcb39365-a337-42ac-bdee-94613207ad4f",
+        "externalVersion": 206,
+        "errors": [
+          {
+            "code": "Code4b0de721-01df-4075-99cd-92cac951c4f7",
+            "message": "Message2bd87f46-dd45-4458-a6a8-1b34d649afbc"
+          },
+          {
+            "code": "Codecdfade00-0e8f-46ed-867c-3f1def4e46b4",
+            "message": "Message669684e0-c3c6-4243-9c83-039ab29735f6"
+          },
+          {
+            "code": "Code957a89a0-23cb-4f3f-b1a6-8234f879213c",
+            "message": "Message864cf362-38f8-4ce9-b648-7ed8066d83a0"
+          }
+        ]
+      },
+      {
+        "externalCorrelationId": "ExternalCorrelationIdca508e72-10f6-4b67-8c36-312d6b0678ca",
+        "externalVersion": 32,
+        "errors": [
+          {
+            "code": "Code6955771e-7e21-4bfc-a7f1-d5e4715519c6",
+            "message": "Messagefde95fca-5a0d-4151-9b18-efe29d46abe7"
+          },
+          {
+            "code": "Codebf2196ca-0cbd-4dcf-8e92-fbab5c1c08a4",
+            "message": "Messagef8e40251-dc09-44f4-b0de-c50fb7b594dc"
+          },
+          {
+            "code": "Code9d3f6fd1-9a1e-44f9-98df-6a9a20de2c13",
+            "message": "Message6f51b234-5938-4ef8-870c-8cede2ccf9ec"
+          }
+        ]
+      }
+    ]
+  },
+  "created": "2025-04-03T10:00:00Z",
+  "updated": "2025-04-03T10:15:00Z"
+}

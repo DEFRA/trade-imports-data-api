@@ -5,6 +5,7 @@ using Defra.TradeImportsDataApi.Api.Configuration;
 using Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations;
 using Defra.TradeImportsDataApi.Api.Endpoints.Gmrs;
 using Defra.TradeImportsDataApi.Api.Endpoints.ImportPreNotifications;
+using Defra.TradeImportsDataApi.Api.Endpoints.ProcessingErrors;
 using Defra.TradeImportsDataApi.Api.Health;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Api.Utils;
@@ -128,6 +129,7 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
     builder.Services.AddTransient<IGmrService, GmrService>();
     builder.Services.AddTransient<IImportPreNotificationService, ImportPreNotificationService>();
     builder.Services.AddTransient<ICustomsDeclarationService, CustomsDeclarationService>();
+    builder.Services.AddTransient<IProcessingErrorService, ProcessingErrorService>();
     builder.Services.AddOptions<ResourceEventOptions>().BindConfiguration("ResourceEvents").ValidateOptions();
     builder.Services.AddSingleton<IResourceEventPublisher, ResourceEventPublisher>();
     builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
@@ -150,6 +152,7 @@ static WebApplication BuildWebApplication(WebApplicationBuilder builder)
     app.MapGmrEndpoints(isDevelopment);
     app.MapImportPreNotificationEndpoints(isDevelopment);
     app.MapCustomsDeclarationEndpoints(isDevelopment);
+    app.MapProcessingErrorEndpoints(isDevelopment);
     app.UseSwagger(options =>
     {
         options.RouteTemplate = "/.well-known/openapi/{documentName}/openapi.json";

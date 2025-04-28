@@ -13,6 +13,7 @@ public class MongoDbContext : IDbContext
         ImportPreNotifications = new MongoCollectionSet<ImportPreNotificationEntity>(this);
         CustomsDeclarations = new MongoCollectionSet<CustomsDeclarationEntity>(this);
         Gmrs = new MongoCollectionSet<GmrEntity>(this);
+        ProcessingErrors = new MongoCollectionSet<ProcessingErrorEntity>(this);
     }
 
     internal IMongoDatabase Database { get; }
@@ -21,6 +22,7 @@ public class MongoDbContext : IDbContext
     public IMongoCollectionSet<ImportPreNotificationEntity> ImportPreNotifications { get; }
     public IMongoCollectionSet<CustomsDeclarationEntity> CustomsDeclarations { get; }
     public IMongoCollectionSet<GmrEntity> Gmrs { get; }
+    public IMongoCollectionSet<ProcessingErrorEntity> ProcessingErrors { get; }
 
     public async Task<IMongoDbTransaction> StartTransaction(CancellationToken cancellationToken = default)
     {
@@ -59,7 +61,10 @@ public class MongoDbContext : IDbContext
     private int GetChangedRecordsCount()
     {
         // This logic needs to be reviewed as it's easy to forget to include any new collection sets
-        return ImportPreNotifications.PendingChanges + CustomsDeclarations.PendingChanges + Gmrs.PendingChanges;
+        return ImportPreNotifications.PendingChanges
+            + CustomsDeclarations.PendingChanges
+            + Gmrs.PendingChanges
+            + ProcessingErrors.PendingChanges;
     }
 
     private async Task InternalSaveChangesAsync(CancellationToken cancellation = default)
@@ -68,5 +73,6 @@ public class MongoDbContext : IDbContext
         await ImportPreNotifications.PersistAsync(cancellation);
         await CustomsDeclarations.PersistAsync(cancellation);
         await Gmrs.PersistAsync(cancellation);
+        await ProcessingErrors.PersistAsync(cancellation);
     }
 }

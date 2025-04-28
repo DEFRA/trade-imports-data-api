@@ -13,4 +13,6 @@ internal static class Endpoints
 
     public static string ImportPreNotificationsByMrn(string mrn) =>
         $"/customs-declarations/{mrn}/import-pre-notifications";
+
+    public static string ProcessingErrors(string mrn) => $"/processing-errors/{mrn}";
 }

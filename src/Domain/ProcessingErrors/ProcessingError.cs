@@ -1,9 +1,9 @@
 using System.Text.Json.Serialization;
 using Defra.TradeImportsDataApi.Domain.Errors;
 
-namespace Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
+namespace Defra.TradeImportsDataApi.Domain.ProcessingErrors;
 
-public class InboundError
+public class ProcessingError
 {
     [JsonPropertyName("notifications")]
     public ErrorNotification[]? Notifications { get; set; }

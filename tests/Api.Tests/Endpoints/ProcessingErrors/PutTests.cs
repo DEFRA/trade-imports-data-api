@@ -4,27 +4,26 @@ using Defra.TradeImportsDataApi.Api.Exceptions;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
-using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
+using Defra.TradeImportsDataApi.Domain.ProcessingErrors;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using Xunit.Abstractions;
 
-namespace Defra.TradeImportsDataApi.Api.Tests.Endpoints.CustomsDeclarations;
+namespace Defra.TradeImportsDataApi.Api.Tests.Endpoints.ProcessingErrors;
 
 public class PutTests(ApiWebApplicationFactory factory, ITestOutputHelper outputHelper)
     : EndpointTestBase(factory, outputHelper)
 {
     private const string Mrn = "mrn";
-    private ICustomsDeclarationService MockCustomsDeclarationService { get; } =
-        Substitute.For<ICustomsDeclarationService>();
+    private IProcessingErrorService MockProcessingErrorService { get; } = Substitute.For<IProcessingErrorService>();
 
     protected override void ConfigureTestServices(IServiceCollection services)
     {
         base.ConfigureTestServices(services);
 
-        services.AddTransient<ICustomsDeclarationService>(_ => MockCustomsDeclarationService);
+        services.AddTransient<IProcessingErrorService>(_ => MockProcessingErrorService);
     }
 
     [Fact]
@@ -32,10 +31,7 @@ public class PutTests(ApiWebApplicationFactory factory, ITestOutputHelper output
     {
         var client = CreateClient(addDefaultAuthorizationHeader: false);
 
-        var response = await client.PutAsJsonAsync(
-            Testing.Endpoints.CustomsDeclarations.Put(Mrn),
-            new CustomsDeclaration()
-        );
+        var response = await client.PutAsJsonAsync(Testing.Endpoints.ProcessingErrors.Put(Mrn), new ProcessingError());
 
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
@@ -45,10 +41,7 @@ public class PutTests(ApiWebApplicationFactory factory, ITestOutputHelper output
     {
         var client = CreateClient(testUser: TestUser.ReadOnly);
 
-        var response = await client.PutAsJsonAsync(
-            Testing.Endpoints.CustomsDeclarations.Put(Mrn),
-            new CustomsDeclaration()
-        );
+        var response = await client.PutAsJsonAsync(Testing.Endpoints.ProcessingErrors.Put(Mrn), new ProcessingError());
 
         response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
     }
@@ -57,14 +50,11 @@ public class PutTests(ApiWebApplicationFactory factory, ITestOutputHelper output
     public async Task Put_WhenEntityNotFound_ShouldBeNotFound()
     {
         var client = CreateClient();
-        MockCustomsDeclarationService
-            .Insert(Arg.Any<CustomsDeclarationEntity>(), Arg.Any<CancellationToken>())
+        MockProcessingErrorService
+            .Insert(Arg.Any<ProcessingErrorEntity>(), Arg.Any<CancellationToken>())
             .Throws(new EntityNotFoundException("entityType", "entityId"));
 
-        var response = await client.PutAsJsonAsync(
-            Testing.Endpoints.CustomsDeclarations.Put(Mrn),
-            new CustomsDeclaration()
-        );
+        var response = await client.PutAsJsonAsync(Testing.Endpoints.ProcessingErrors.Put(Mrn), new ProcessingError());
 
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
@@ -73,14 +63,11 @@ public class PutTests(ApiWebApplicationFactory factory, ITestOutputHelper output
     public async Task Put_WhenConcurrencyException_ShouldBeConflict()
     {
         var client = CreateClient();
-        MockCustomsDeclarationService
-            .Insert(Arg.Any<CustomsDeclarationEntity>(), Arg.Any<CancellationToken>())
+        MockProcessingErrorService
+            .Insert(Arg.Any<ProcessingErrorEntity>(), Arg.Any<CancellationToken>())
             .Throws(new ConcurrencyException("entityId", "etag"));
 
-        var response = await client.PutAsJsonAsync(
-            Testing.Endpoints.CustomsDeclarations.Put(Mrn),
-            new CustomsDeclaration()
-        );
+        var response = await client.PutAsJsonAsync(Testing.Endpoints.ProcessingErrors.Put(Mrn), new ProcessingError());
 
         response.StatusCode.Should().Be(HttpStatusCode.Conflict);
     }

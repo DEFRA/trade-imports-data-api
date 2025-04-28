@@ -37,6 +37,7 @@ public static class ResourceEventExtensions
         {
             ResourceEventResourceTypes.ImportPreNotification => ResourceEventResourceTypes.ImportPreNotification,
             ResourceEventResourceTypes.CustomsDeclaration => ResourceEventResourceTypes.CustomsDeclaration,
+            ResourceEventResourceTypes.ProcessingError => ResourceEventResourceTypes.ProcessingError,
             _ => name,
         };
     }

@@ -32,4 +32,13 @@ public static class Endpoints
 
         public static string Put(string mrn) => $"{Root}/{mrn}";
     }
+
+    public static class ProcessingErrors
+    {
+        private const string Root = "/processing-errors";
+
+        public static string Get(string mrn) => $"{Root}/{mrn}";
+
+        public static string Put(string mrn) => $"{Root}/{mrn}";
+    }
 }
