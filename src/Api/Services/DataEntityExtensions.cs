@@ -68,7 +68,9 @@ public static class DataEntityExtensions
             .ToList();
 
         if (knownSubResourceTypes.Count > 1)
-            throw new InvalidOperationException("Change set contains multiple sub resource types");
+            throw new InvalidOperationException(
+                "Change set contains multiple known sub resource types, only one changing at a time is currently expected"
+            );
 
         return @event with
         {
