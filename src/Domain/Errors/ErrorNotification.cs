@@ -10,6 +10,9 @@ public class ErrorNotification
     [JsonPropertyName("externalVersion")]
     public int? ExternalVersion { get; set; }
 
+    [JsonPropertyName("created")]
+    public DateTime? Created { get; set; }
+
     [JsonPropertyName("errors")]
     public ErrorItem[] Errors { get; set; } = [];
 

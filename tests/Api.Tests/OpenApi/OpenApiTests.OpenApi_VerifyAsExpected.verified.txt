@@ -1308,6 +1308,11 @@
             "format": "int32",
             "nullable": true
           },
+          "created": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
           "errors": {
             "type": "array",
             "items": {
