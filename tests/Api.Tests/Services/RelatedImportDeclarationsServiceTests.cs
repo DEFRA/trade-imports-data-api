@@ -205,13 +205,13 @@ public class RelatedImportDeclarationsServiceTests
         var subject = new RelatedImportDeclarationsService(memoryDbContext);
 
         var response = await subject.Search(
-            new RelatedImportDeclarationsRequest() { ChedId = "1234510" },
+            new RelatedImportDeclarationsRequest() { ChedId = "1234567" },
             CancellationToken.None
         );
 
         response.Should().NotBeNull();
-        response.CustomsDeclaration.Length.Should().Be(1);
-        response.ImportPreNotifications.Length.Should().Be(2);
+        response.CustomsDeclaration.Length.Should().Be(0);
+        response.ImportPreNotifications.Length.Should().Be(0);
     }
 
     [Fact]
