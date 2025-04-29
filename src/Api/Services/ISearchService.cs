@@ -5,7 +5,8 @@ namespace Defra.TradeImportsDataApi.Api.Services;
 
 public interface ISearchService
 {
-    Task<(CustomsDeclarationEntity[] customsDeclaration, ImportPreNotificationEntity[] importPreNotifications)> Search(SearchRequest searchRequest,
+    Task<(CustomsDeclarationEntity[] customsDeclaration, ImportPreNotificationEntity[] importPreNotifications)> Search(
+        SearchRequest searchRequest,
         CancellationToken cancellationToken
     );
 }

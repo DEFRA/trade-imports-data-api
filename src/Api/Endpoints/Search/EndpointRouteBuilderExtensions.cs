@@ -31,7 +31,6 @@ public static class EndpointRouteBuilderExtensions
             route.AllowAnonymous();
     }
 
-
     /// <param name="request"></param>
     /// <param name="searchService"></param>
     /// <param name="cancellationToken"></param>
@@ -47,20 +46,25 @@ public static class EndpointRouteBuilderExtensions
         var searchResults = await searchService.Search(request, cancellationToken);
 
         var response = new SearchResponse(
-            searchResults.customsDeclaration.Select(x => new CustomsDeclarationResponse(
-                x.Id,
-                x.ClearanceRequest,
-                x.ClearanceDecision,
-                x.Finalisation,
-                x.InboundError,
-                x.Created,
-                x.Updated
-            )).ToArray(),
-            searchResults.importPreNotifications.Select(x => new ImportPreNotificationResponse(
-                x.ImportPreNotification,
-                x.Created,
-                x.Updated
-            )).ToArray());
+            searchResults
+                .customsDeclaration.Select(x => new CustomsDeclarationResponse(
+                    x.Id,
+                    x.ClearanceRequest,
+                    x.ClearanceDecision,
+                    x.Finalisation,
+                    x.InboundError,
+                    x.Created,
+                    x.Updated
+                ))
+                .ToArray(),
+            searchResults
+                .importPreNotifications.Select(x => new ImportPreNotificationResponse(
+                    x.ImportPreNotification,
+                    x.Created,
+                    x.Updated
+                ))
+                .ToArray()
+        );
 
         return Results.Ok(response);
     }
