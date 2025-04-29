@@ -6,6 +6,7 @@ using Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations;
 using Defra.TradeImportsDataApi.Api.Endpoints.Gmrs;
 using Defra.TradeImportsDataApi.Api.Endpoints.ImportPreNotifications;
 using Defra.TradeImportsDataApi.Api.Endpoints.ProcessingErrors;
+using Defra.TradeImportsDataApi.Api.Endpoints.Search;
 using Defra.TradeImportsDataApi.Api.Health;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Api.Utils;
@@ -126,6 +127,7 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
             options.Headers.Add(traceHeader);
     });
 
+    builder.Services.AddTransient<ISearchService, SearchService>();
     builder.Services.AddTransient<IGmrService, GmrService>();
     builder.Services.AddTransient<IImportPreNotificationService, ImportPreNotificationService>();
     builder.Services.AddTransient<ICustomsDeclarationService, CustomsDeclarationService>();
@@ -153,6 +155,7 @@ static WebApplication BuildWebApplication(WebApplicationBuilder builder)
     app.MapImportPreNotificationEndpoints(isDevelopment);
     app.MapCustomsDeclarationEndpoints(isDevelopment);
     app.MapProcessingErrorEndpoints(isDevelopment);
+    app.MapSearchEndpoints(isDevelopment);
     app.UseSwagger(options =>
     {
         options.RouteTemplate = "/.well-known/openapi/{documentName}/openapi.json";
