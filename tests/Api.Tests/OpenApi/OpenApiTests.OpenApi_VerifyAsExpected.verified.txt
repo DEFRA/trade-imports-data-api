@@ -684,14 +684,14 @@
         }
       }
     },
-    "/search": {
+    "/related-import-declarations": {
       "get": {
         "tags": [
-          "Search"
+          "related-import-declarations"
         ],
-        "summary": "Search",
-        "description": "Search",
-        "operationId": "Search",
+        "summary": "related-import-declarations",
+        "description": "related-import-declarations",
+        "operationId": "related-import-declarations",
         "parameters": [
           {
             "name": "Mrn",
@@ -713,13 +713,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "Identifier",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -728,7 +721,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Api.Endpoints.Search.SearchResponse"
+                  "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Api.Endpoints.Search.RelatedImportDeclarationsResponse"
                 }
               }
             }
@@ -869,7 +862,7 @@
         },
         "additionalProperties": false
       },
-      "Defra.TradeImportsDataApi.Api.Endpoints.Search.SearchResponse": {
+      "Defra.TradeImportsDataApi.Api.Endpoints.Search.RelatedImportDeclarationsResponse": {
         "type": "object",
         "properties": {
           "customsDeclarations": {

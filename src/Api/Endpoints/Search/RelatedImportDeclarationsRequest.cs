@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Defra.TradeImportsDataApi.Api.Endpoints.Search;
 
-public class SearchRequest
+public class RelatedImportDeclarationsRequest
 {
     [FromQuery]
     public string? Mrn { get; set; }
@@ -12,7 +12,4 @@ public class SearchRequest
 
     [FromQuery]
     public string? ChedId { get; set; }
-
-    [FromQuery]
-    public string? Identifier { get; set; }
 }

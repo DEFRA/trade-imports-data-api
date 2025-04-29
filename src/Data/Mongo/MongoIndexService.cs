@@ -7,11 +7,23 @@ namespace Defra.TradeImportsDataApi.Data.Mongo;
 
 public class MongoIndexService(IMongoDatabase database, ILogger<MongoIndexService> logger) : IHostedService
 {
-    public Task StartAsync(CancellationToken cancellationToken)
+    public async Task StartAsync(CancellationToken cancellationToken)
     {
-        return CreateIndex(
+        await CreateIndex(
             "CustomDeclarationIdentifierIdx",
             Builders<ImportPreNotificationEntity>.IndexKeys.Ascending(n => n.CustomsDeclarationIdentifier),
+            cancellationToken: cancellationToken
+        );
+
+        await CreateIndex(
+            "ImportPreNotificationIdentifierIdx",
+            Builders<CustomsDeclarationEntity>.IndexKeys.Ascending(n => n.ImportPreNotificationIdentifiers),
+            cancellationToken: cancellationToken
+        );
+
+        await CreateIndex(
+            "DeclarationUcrIdx",
+            Builders<CustomsDeclarationEntity>.IndexKeys.Ascending(n => n.ClearanceRequest!.DeclarationUcr),
             cancellationToken: cancellationToken
         );
     }

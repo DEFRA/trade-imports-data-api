@@ -3,10 +3,10 @@ using Defra.TradeImportsDataApi.Data.Entities;
 
 namespace Defra.TradeImportsDataApi.Api.Services;
 
-public interface ISearchService
+public interface IRelatedImportDeclarationsService
 {
     Task<(CustomsDeclarationEntity[] CustomsDeclaration, ImportPreNotificationEntity[] ImportPreNotifications)> Search(
-        SearchRequest searchRequest,
+        RelatedImportDeclarationsRequest request,
         CancellationToken cancellationToken
     );
 }

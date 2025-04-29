@@ -2,9 +2,9 @@ namespace Defra.TradeImportsDataApi.Testing;
 
 public static class Endpoints
 {
-    public static class Search
+    public static class RelatedImportDeclarations
     {
-        private const string Root = "/search";
+        private const string Root = "/related-import-declarations";
 
         public static string SearchByMrn(string mrn) => $"{Root}?mrn={mrn}";
     }
