@@ -1,0 +1,69 @@
+﻿{
+  customsDeclarations: [
+    {
+      movementReferenceNumber: Mrn1,
+      clearanceRequest: {
+        externalCorrelationId: null,
+        messageSentAt: 0001-01-01T00:00:00,
+        externalVersion: null,
+        previousExternalVersion: null,
+        declarationUcr: null,
+        declarationPartNumber: null,
+        declarationType: null,
+        arrivesAt: null,
+        submitterTurn: null,
+        declarantId: null,
+        declarantName: null,
+        dispatchCountryCode: null,
+        goodsLocationCode: null,
+        masterUcr: null,
+        commodities: null
+      },
+      clearanceDecision: null,
+      finalisation: null,
+      inboundError: null,
+      created: 2025-04-03T10:00:00Z,
+      updated: 2025-04-03T10:15:00Z
+    }
+  ],
+  importPreNotifications: [
+    {
+      importPreNotification: {
+        ipaffsId: null,
+        etag: null,
+        externalReferences: null,
+        referenceNumber: null,
+        version: null,
+        updatedSource: null,
+        lastUpdatedBy: null,
+        importNotificationType: null,
+        replaces: null,
+        replacedBy: null,
+        status: null,
+        splitConsignment: null,
+        childNotification: null,
+        journeyRiskCategorisation: null,
+        isHighRiskEuImport: null,
+        partOne: null,
+        decisionBy: null,
+        decisionDate: null,
+        partTwo: null,
+        partThree: null,
+        officialVeterinarian: null,
+        consignmentValidations: null,
+        agencyOrganisationId: null,
+        riskDecisionLockedOn: null,
+        isRiskDecisionLocked: null,
+        isBulkUploadInProgress: null,
+        requestId: null,
+        isCdsFullMatched: null,
+        chedTypeVersion: null,
+        isGMRMatched: null,
+        commoditiesSummary: null,
+        commodities: null
+      },
+      created: 2025-04-03T10:00:00Z,
+      updated: 2025-04-03T10:15:00Z
+    }
+  ]
+}

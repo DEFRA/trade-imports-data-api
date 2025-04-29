@@ -2,6 +2,13 @@ namespace Defra.TradeImportsDataApi.Testing;
 
 public static class Endpoints
 {
+    public static class Search
+    {
+        private const string Root = "/search";
+
+        public static string SearchByMrn(string mrn) => $"{Root}?mrn={mrn}";
+    }
+
     public static class Gmrs
     {
         private const string Root = "/gmrs";
