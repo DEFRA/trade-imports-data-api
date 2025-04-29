@@ -12,4 +12,7 @@ public class ErrorNotification
 
     [JsonPropertyName("errors")]
     public ErrorItem[] Errors { get; set; } = [];
+
+    [JsonPropertyName("message")]
+    public string? Message { get; set; }
 }
