@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -5,6 +6,7 @@ using MongoDB.Driver;
 
 namespace Defra.TradeImportsDataApi.Data.Mongo;
 
+[ExcludeFromCodeCoverage]
 public class MongoIndexService(IMongoDatabase database, ILogger<MongoIndexService> logger) : IHostedService
 {
     public async Task StartAsync(CancellationToken cancellationToken)

@@ -199,4 +199,21 @@ public class RelatedImportDeclarationsServiceTests
         response.CustomsDeclaration.Length.Should().Be(0);
         response.ImportPreNotifications.Length.Should().Be(1);
     }
+
+    [Fact]
+    public async Task GivenSearchByChedId_WhenNotExists_ThenShouldReturnEmpty()
+    {
+        var memoryDbContext = new MemoryDbContext();
+
+        var subject = new RelatedImportDeclarationsService(memoryDbContext);
+
+        var response = await subject.Search(
+            new RelatedImportDeclarationsRequest() { ChedId = "1234567" },
+            CancellationToken.None
+        );
+
+        response.Should().NotBeNull();
+        response.CustomsDeclaration.Length.Should().Be(0);
+        response.ImportPreNotifications.Length.Should().Be(0);
+    }
 }
