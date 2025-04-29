@@ -42,12 +42,11 @@ public static class EndpointRouteBuilderExtensions
         CancellationToken cancellationToken
     )
     {
-        Console.WriteLine(request);
         var searchResults = await searchService.Search(request, cancellationToken);
 
         var response = new SearchResponse(
             searchResults
-                .customsDeclaration.Select(x => new CustomsDeclarationResponse(
+                .CustomsDeclaration.Select(x => new CustomsDeclarationResponse(
                     x.Id,
                     x.ClearanceRequest,
                     x.ClearanceDecision,
@@ -58,7 +57,7 @@ public static class EndpointRouteBuilderExtensions
                 ))
                 .ToArray(),
             searchResults
-                .importPreNotifications.Select(x => new ImportPreNotificationResponse(
+                .ImportPreNotifications.Select(x => new ImportPreNotificationResponse(
                     x.ImportPreNotification,
                     x.Created,
                     x.Updated

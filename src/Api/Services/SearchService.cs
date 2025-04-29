@@ -8,8 +8,8 @@ namespace Defra.TradeImportsDataApi.Api.Services;
 public class SearchService : ISearchService
 {
     public Task<(
-        CustomsDeclarationEntity[] customsDeclaration,
-        ImportPreNotificationEntity[] importPreNotifications
+        CustomsDeclarationEntity[] CustomsDeclaration,
+        ImportPreNotificationEntity[] ImportPreNotifications
     )> Search(SearchRequest searchRequest, CancellationToken cancellationToken)
     {
         return Task.FromResult(
