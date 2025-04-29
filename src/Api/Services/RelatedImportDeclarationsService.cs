@@ -17,18 +17,19 @@ public class RelatedImportDeclarationsService(IDbContext dbContext) : IRelatedIm
         {
             return await StartFromCustomsDeclaration(
                 x => x.ClearanceRequest!.DeclarationUcr == request.Ducr,
+                request.MaxLinkDepth,
                 cancellationToken
             );
         }
 
         if (!string.IsNullOrEmpty(request.Mrn))
         {
-            return await StartFromCustomsDeclaration(x => x.Id == request.Mrn, cancellationToken);
+            return await StartFromCustomsDeclaration(x => x.Id == request.Mrn, request.MaxLinkDepth, cancellationToken);
         }
 
         if (!string.IsNullOrEmpty(request.ChedId))
         {
-            return await StartFromImportPreNotification(request.ChedId, cancellationToken);
+            return await StartFromImportPreNotification(request.ChedId, request.MaxLinkDepth, cancellationToken);
         }
 
         return new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[]>([], []);
@@ -39,6 +40,7 @@ public class RelatedImportDeclarationsService(IDbContext dbContext) : IRelatedIm
         ImportPreNotificationEntity[] ImportPreNotifications
     )> StartFromCustomsDeclaration(
         Expression<Func<CustomsDeclarationEntity, bool>> predicate,
+        int maxDepth,
         CancellationToken cancellationToken
     )
     {
@@ -50,16 +52,21 @@ public class RelatedImportDeclarationsService(IDbContext dbContext) : IRelatedIm
             .ImportPreNotifications.Where(x => identifiers.Contains(x.CustomsDeclarationIdentifier))
             .ToListAsync(cancellationToken: cancellationToken);
 
-        return new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[]>(
-            customsDeclarations.ToArray(),
-            notifications.ToArray()
+        return await IncludeIndirectLinks(
+            new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[]>(
+                customsDeclarations.ToArray(),
+                notifications.ToArray()
+            ),
+            0,
+            maxDepth,
+            cancellationToken
         );
     }
 
     private async Task<(
         CustomsDeclarationEntity[] CustomsDeclaration,
         ImportPreNotificationEntity[] ImportPreNotifications
-    )> StartFromImportPreNotification(string chedId, CancellationToken cancellationToken)
+    )> StartFromImportPreNotification(string chedId, int maxDepth, CancellationToken cancellationToken)
     {
         var identifier = chedId.Substring(chedId.Length - 7);
         var notification = (
@@ -79,9 +86,71 @@ public class RelatedImportDeclarationsService(IDbContext dbContext) : IRelatedIm
             )
             .ToListAsync(cancellationToken: cancellationToken);
 
-        return new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[]>(
-            customsDeclarations.ToArray(),
-            [notification]
+        return await IncludeIndirectLinks(
+            new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[]>(
+                customsDeclarations.ToArray(),
+                [notification]
+            ),
+            0,
+            maxDepth,
+            cancellationToken
+        );
+    }
+
+    private async Task<(
+        CustomsDeclarationEntity[] CustomsDeclaration,
+        ImportPreNotificationEntity[] ImportPreNotifications
+    )> IncludeIndirectLinks(
+        (CustomsDeclarationEntity[] CustomsDeclaration, ImportPreNotificationEntity[] ImportPreNotifications) data,
+        int currentDepth,
+        int maxDepth,
+        CancellationToken cancellationToken
+    )
+    {
+        if (currentDepth >= maxDepth)
+        {
+            return data;
+        }
+
+        var customsDeclarations = data.CustomsDeclaration.ToList();
+        var customsDeclarationIds = customsDeclarations.Select(x => x.Id);
+        var importPreNotifications = data.ImportPreNotifications.ToList();
+        var importPreNotificationIds = importPreNotifications.Select(x => x.Id);
+
+        var identifiers = data
+            .CustomsDeclaration.SelectMany(x => x.ImportPreNotificationIdentifiers)
+            .Union(data.ImportPreNotifications.Select(x => x.CustomsDeclarationIdentifier))
+            .Distinct()
+            .ToList();
+
+        if (identifiers.Any())
+        {
+            importPreNotifications.AddRange(
+                await dbContext
+                    .ImportPreNotifications.Where(x =>
+                        identifiers.Contains(x.CustomsDeclarationIdentifier) && !importPreNotificationIds.Contains(x.Id)
+                    )
+                    .ToListAsync(cancellationToken: cancellationToken)
+            );
+
+            customsDeclarations.AddRange(
+                await dbContext
+                    .CustomsDeclarations.Where(x =>
+                        x.ImportPreNotificationIdentifiers.Any(y => identifiers.Contains(y))
+                        && !customsDeclarationIds.Contains(x.Id)
+                    )
+                    .ToListAsync(cancellationToken: cancellationToken)
+            );
+        }
+
+        return await IncludeIndirectLinks(
+            new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[]>(
+                customsDeclarations.ToArray(),
+                importPreNotifications.ToArray()
+            ),
+            currentDepth + 1,
+            maxDepth,
+            cancellationToken
         );
     }
 }

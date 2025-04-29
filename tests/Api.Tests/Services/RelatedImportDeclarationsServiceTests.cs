@@ -1,6 +1,7 @@
 using Defra.TradeImportsDataApi.Api.Endpoints.Search;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Api.Tests.Utils.InMemoryData;
+using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using FluentAssertions;
@@ -204,12 +205,85 @@ public class RelatedImportDeclarationsServiceTests
         var subject = new RelatedImportDeclarationsService(memoryDbContext);
 
         var response = await subject.Search(
-            new RelatedImportDeclarationsRequest() { ChedId = "1234567" },
+            new RelatedImportDeclarationsRequest() { ChedId = "1234510" },
             CancellationToken.None
         );
 
         response.Should().NotBeNull();
-        response.CustomsDeclaration.Length.Should().Be(0);
-        response.ImportPreNotifications.Length.Should().Be(0);
+        response.CustomsDeclaration.Length.Should().Be(1);
+        response.ImportPreNotifications.Length.Should().Be(2);
+    }
+
+    [Fact]
+    public async Task GivenSearchByChedId_WhenExists_AndHasIndirectNotification_ThenIndirectNotificationShouldBeReturned()
+    {
+        var memoryDbContext = new MemoryDbContext();
+        await InsertTestData(memoryDbContext);
+
+        var subject = new RelatedImportDeclarationsService(memoryDbContext);
+
+        var response = await subject.Search(
+            new RelatedImportDeclarationsRequest() { ChedId = "1234510" },
+            CancellationToken.None
+        );
+
+        response.Should().NotBeNull();
+        response.CustomsDeclaration.Length.Should().Be(3);
+        response.ImportPreNotifications.Length.Should().Be(4);
+    }
+
+    [Fact]
+    public async Task GivenSearchByChedId_WhenExists_AndHasIndirectNotification_AndHasMaxDepth_ThenIndirectNotificationShouldBeReturned()
+    {
+        var memoryDbContext = new MemoryDbContext();
+        await InsertTestData(memoryDbContext);
+
+        var subject = new RelatedImportDeclarationsService(memoryDbContext);
+
+        var response = await subject.Search(
+            new RelatedImportDeclarationsRequest() { ChedId = "1234510", MaxLinkDepth = 1 },
+            CancellationToken.None
+        );
+
+        response.Should().NotBeNull();
+        response.CustomsDeclaration.Length.Should().Be(2);
+        response.ImportPreNotifications.Length.Should().Be(2);
+    }
+
+    private async Task InsertTestData(MemoryDbContext memoryDbContext)
+    {
+        await memoryDbContext.ImportPreNotifications.Insert(CreateImportPreNotification("CHEDA.GB.2025.1234567"));
+        await memoryDbContext.ImportPreNotifications.Insert(CreateImportPreNotification("CHEDA.GB.2025.1234568"));
+        await memoryDbContext.ImportPreNotifications.Insert(CreateImportPreNotification("CHEDA.GB.2025.1234569"));
+        await memoryDbContext.ImportPreNotifications.Insert(CreateImportPreNotification("CHEDA.GB.2025.1234510"));
+
+        await memoryDbContext.CustomsDeclarations.Insert(CreateCustomsDeclaration("mrn1", ["1234569", "1234510"]));
+        await memoryDbContext.CustomsDeclarations.Insert(CreateCustomsDeclaration("mrn2", ["1234568", "1234569"]));
+        await memoryDbContext.CustomsDeclarations.Insert(CreateCustomsDeclaration("mrn3", ["1234567", "1234568"]));
+    }
+
+    private ImportPreNotificationEntity CreateImportPreNotification(string chedId)
+    {
+        return new ImportPreNotificationEntity()
+        {
+            Id = chedId,
+            CustomsDeclarationIdentifier = chedId.Split('.')[3],
+            ImportPreNotification = new ImportPreNotification(),
+            Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+            Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+            ETag = "etag",
+        };
+    }
+
+    private CustomsDeclarationEntity CreateCustomsDeclaration(string mrn, List<string> links)
+    {
+        return new CustomsDeclarationEntity()
+        {
+            Id = mrn,
+            ImportPreNotificationIdentifiers = links,
+            Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+            Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+            ETag = "etag",
+        };
     }
 }

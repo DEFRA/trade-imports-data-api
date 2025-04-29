@@ -12,4 +12,7 @@ public class RelatedImportDeclarationsRequest
 
     [FromQuery]
     public string? ChedId { get; set; }
+
+    [FromQuery]
+    public int MaxLinkDepth { get; set; } = 3;
 }
