@@ -26,12 +26,4 @@
   <ItemGroup>
     <EmbeddedResource Include="Endpoints\*\*.json" />
   </ItemGroup>
-  <ItemGroup>
-    <None Update="Endpoints\Search\RelatedImportDeclarationsTests.Search_WhenFound_ShouldReturnContent.verified.txt">
-      <DependentUpon>RelatedImportDeclarationsTests.cs</DependentUpon>
-    </None>
-    <None Update="Endpoints\Search\RelatedImportDeclarationsTests.Search_WhenFound_ShouldReturnContent_response.verified.txt">
-      <DependentUpon>RelatedImportDeclarationsTests.cs</DependentUpon>
-    </None>
-  </ItemGroup>
 </Project>
