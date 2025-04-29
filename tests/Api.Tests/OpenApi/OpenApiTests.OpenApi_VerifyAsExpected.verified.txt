@@ -1306,6 +1306,10 @@
               "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Errors.ErrorItem"
             },
             "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
