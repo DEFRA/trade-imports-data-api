@@ -4,7 +4,7 @@ using Defra.TradeImportsDataApi.Api.Endpoints.ImportPreNotifications;
 
 namespace Defra.TradeImportsDataApi.Api.Endpoints.Search;
 
-public record SearchResponse(
+public record RelatedImportDeclarationsResponse(
     [property: JsonPropertyName("customsDeclarations")] CustomsDeclarationResponse[] CustomsDeclarations,
     [property: JsonPropertyName("importPreNotifications")] ImportPreNotificationResponse[] ImportPreNotifications
 );

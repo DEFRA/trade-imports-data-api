@@ -18,7 +18,7 @@
     Method: {
       Method: GET
     },
-    RequestUri: http://localhost/search?mrn=Mrn1,
+    RequestUri: http://localhost/related-import-declarations?mrn=Mrn1,
     Headers: [
       {
         Authorization: [

@@ -127,7 +127,7 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
             options.Headers.Add(traceHeader);
     });
 
-    builder.Services.AddTransient<ISearchService, SearchService>();
+    builder.Services.AddTransient<IRelatedImportDeclarationsService, RelatedImportDeclarationsService>();
     builder.Services.AddTransient<IGmrService, GmrService>();
     builder.Services.AddTransient<IImportPreNotificationService, ImportPreNotificationService>();
     builder.Services.AddTransient<ICustomsDeclarationService, CustomsDeclarationService>();

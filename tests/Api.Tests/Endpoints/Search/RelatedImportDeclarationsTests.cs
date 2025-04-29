@@ -13,13 +13,18 @@ using Xunit.Abstractions;
 
 namespace Defra.TradeImportsDataApi.Api.Tests.Endpoints.Search;
 
-public class SearchTests : EndpointTestBase, IClassFixture<WireMockContext>
+public class RelatedImportDeclarationsTests : EndpointTestBase, IClassFixture<WireMockContext>
 {
-    private ISearchService MockSearchService { get; } = Substitute.For<ISearchService>();
+    private IRelatedImportDeclarationsService MockSearchService { get; } =
+        Substitute.For<IRelatedImportDeclarationsService>();
     private WireMockServer WireMock { get; }
     private readonly VerifySettings _settings;
 
-    public SearchTests(ApiWebApplicationFactory factory, ITestOutputHelper outputHelper, WireMockContext context)
+    public RelatedImportDeclarationsTests(
+        ApiWebApplicationFactory factory,
+        ITestOutputHelper outputHelper,
+        WireMockContext context
+    )
         : base(factory, outputHelper)
     {
         WireMock = context.Server;
@@ -35,7 +40,7 @@ public class SearchTests : EndpointTestBase, IClassFixture<WireMockContext>
     {
         base.ConfigureTestServices(services);
 
-        services.AddTransient<ISearchService>(_ => MockSearchService);
+        services.AddTransient<IRelatedImportDeclarationsService>(_ => MockSearchService);
     }
 
     [Fact]
@@ -44,7 +49,7 @@ public class SearchTests : EndpointTestBase, IClassFixture<WireMockContext>
         var client = CreateClient();
         var mrn = "Mrn1";
         MockSearchService
-            .Search(Arg.Any<SearchRequest>(), Arg.Any<CancellationToken>())
+            .Search(Arg.Any<RelatedImportDeclarationsRequest>(), Arg.Any<CancellationToken>())
             .Returns(
                 new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[]>(
                     new[]
@@ -73,7 +78,9 @@ public class SearchTests : EndpointTestBase, IClassFixture<WireMockContext>
                 )
             );
 
-        var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.Search.SearchByMrn(mrn));
+        var response = await client.GetAsync(
+            TradeImportsDataApi.Testing.Endpoints.RelatedImportDeclarations.SearchByMrn(mrn)
+        );
 
         await VerifyJson(await response.Content.ReadAsStringAsync(), _settings)
             .UseMethodName(nameof(Search_WhenFound_ShouldReturnContent));
@@ -85,7 +92,9 @@ public class SearchTests : EndpointTestBase, IClassFixture<WireMockContext>
     {
         var client = CreateClient(addDefaultAuthorizationHeader: false);
 
-        var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.Search.SearchByMrn("mrn"));
+        var response = await client.GetAsync(
+            TradeImportsDataApi.Testing.Endpoints.RelatedImportDeclarations.SearchByMrn("mrn")
+        );
 
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
@@ -95,7 +104,9 @@ public class SearchTests : EndpointTestBase, IClassFixture<WireMockContext>
     {
         var client = CreateClient(testUser: TestUser.WriteOnly);
 
-        var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.Search.SearchByMrn("mrn"));
+        var response = await client.GetAsync(
+            TradeImportsDataApi.Testing.Endpoints.RelatedImportDeclarations.SearchByMrn("mrn")
+        );
 
         response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
     }

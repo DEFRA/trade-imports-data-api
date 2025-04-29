@@ -11,13 +11,13 @@ public static class EndpointRouteBuilderExtensions
 {
     public static void MapSearchEndpoints(this IEndpointRouteBuilder app, bool isDevelopment)
     {
-        const string groupName = "Search";
-        var route = app.MapGet("search", Search)
-            .WithName("Search")
+        const string groupName = "related-import-declarations";
+        var route = app.MapGet("related-import-declarations", Search)
+            .WithName("related-import-declarations")
             .WithTags(groupName)
-            .WithSummary("Search")
-            .WithDescription("Search")
-            .Produces<SearchResponse>()
+            .WithSummary("related-import-declarations")
+            .WithDescription("related-import-declarations")
+            .Produces<RelatedImportDeclarationsResponse>()
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .RequireAuthorization(PolicyNames.Read);
 
@@ -32,19 +32,19 @@ public static class EndpointRouteBuilderExtensions
     }
 
     /// <param name="request"></param>
-    /// <param name="searchService"></param>
+    /// <param name="relatedImportDeclarationsService"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpGet]
     private static async Task<IResult> Search(
-        [AsParameters] SearchRequest request,
-        [FromServices] ISearchService searchService,
+        [AsParameters] RelatedImportDeclarationsRequest request,
+        [FromServices] IRelatedImportDeclarationsService relatedImportDeclarationsService,
         CancellationToken cancellationToken
     )
     {
-        var searchResults = await searchService.Search(request, cancellationToken);
+        var searchResults = await relatedImportDeclarationsService.Search(request, cancellationToken);
 
-        var response = new SearchResponse(
+        var response = new RelatedImportDeclarationsResponse(
             searchResults
                 .CustomsDeclaration.Select(x => new CustomsDeclarationResponse(
                     x.Id,
