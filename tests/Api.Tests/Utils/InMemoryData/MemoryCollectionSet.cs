@@ -4,7 +4,6 @@ using System.Linq.Expressions;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
 using MongoDB.Bson.Serialization.IdGenerators;
-using MongoDB.Driver;
 
 namespace Defra.TradeImportsDataApi.Api.Tests.Utils.InMemoryData;
 
