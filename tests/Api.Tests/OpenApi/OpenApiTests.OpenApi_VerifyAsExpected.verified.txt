@@ -713,6 +713,14 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "MaxLinkDepth",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
           }
         ],
         "responses": {
