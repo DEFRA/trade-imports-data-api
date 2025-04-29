@@ -13,23 +13,29 @@ public class RelatedImportDeclarationsService(IDbContext dbContext) : IRelatedIm
         ImportPreNotificationEntity[] ImportPreNotifications
     )> Search(RelatedImportDeclarationsRequest request, CancellationToken cancellationToken)
     {
+        var maxDepth = 3;
+        if (request.MaxLinkDepth.HasValue)
+        {
+            maxDepth = request.MaxLinkDepth.Value;
+        }
+
         if (!string.IsNullOrEmpty(request.Ducr))
         {
             return await StartFromCustomsDeclaration(
                 x => x.ClearanceRequest!.DeclarationUcr == request.Ducr,
-                request.MaxLinkDepth,
+                maxDepth,
                 cancellationToken
             );
         }
 
         if (!string.IsNullOrEmpty(request.Mrn))
         {
-            return await StartFromCustomsDeclaration(x => x.Id == request.Mrn, request.MaxLinkDepth, cancellationToken);
+            return await StartFromCustomsDeclaration(x => x.Id == request.Mrn, maxDepth, cancellationToken);
         }
 
         if (!string.IsNullOrEmpty(request.ChedId))
         {
-            return await StartFromImportPreNotification(request.ChedId, request.MaxLinkDepth, cancellationToken);
+            return await StartFromImportPreNotification(request.ChedId, maxDepth, cancellationToken);
         }
 
         return new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[]>([], []);
