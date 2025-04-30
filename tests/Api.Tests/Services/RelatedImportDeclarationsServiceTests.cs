@@ -300,7 +300,7 @@ public class RelatedImportDeclarationsServiceTests
         );
     }
 
-    private ImportPreNotificationEntity CreateImportPreNotification(string chedId)
+    private static ImportPreNotificationEntity CreateImportPreNotification(string chedId)
     {
         return new ImportPreNotificationEntity()
         {
@@ -313,7 +313,7 @@ public class RelatedImportDeclarationsServiceTests
         };
     }
 
-    private CustomsDeclarationEntity CreateCustomsDeclaration(string mrn, List<string> links)
+    private static CustomsDeclarationEntity CreateCustomsDeclaration(string mrn, List<string> links)
     {
         var documents = links
             .Select(x => new ImportDocument()
