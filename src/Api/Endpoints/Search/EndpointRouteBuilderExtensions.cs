@@ -11,7 +11,7 @@ public static class EndpointRouteBuilderExtensions
 {
     public static void MapSearchEndpoints(this IEndpointRouteBuilder app, bool isDevelopment)
     {
-        const string groupName = "related-import-declarations";
+        const string groupName = "RelatedImportDeclarations";
         var route = app.MapGet("related-import-declarations", Search)
             .WithName("related-import-declarations")
             .WithTags(groupName)
