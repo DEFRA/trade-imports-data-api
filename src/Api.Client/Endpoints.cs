@@ -23,11 +23,11 @@ internal static class Endpoints
 
     private static string BuildQueryString(object o)
     {
-        var properties =
-            (from p in o.GetType().GetProperties()
+        var properties = (
+            from p in o.GetType().GetProperties()
             where p.GetValue(o, null) != null
             select p.Name + "=" + HttpUtility.UrlEncode(p.GetValue(o, null)?.ToString())
-                ).ToList();
+        ).ToList();
 
         return properties.Any() ? $"?{string.Join("&", properties.ToArray())}" : string.Empty;
     }
