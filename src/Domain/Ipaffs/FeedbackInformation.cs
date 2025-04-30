@@ -12,7 +12,7 @@ public class FeedbackInformation
     /// </summary>
     [JsonPropertyName("authorityType")]
     [System.ComponentModel.Description("Type of authority")]
-    public FeedbackInformationAuthorityType? AuthorityType { get; set; }
+    public string? AuthorityType { get; set; }
 
     /// <summary>
     /// Did the consignment arrive

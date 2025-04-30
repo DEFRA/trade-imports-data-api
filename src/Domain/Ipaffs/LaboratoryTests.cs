@@ -21,7 +21,7 @@ public class LaboratoryTests
     /// </summary>
     [JsonPropertyName("testReason")]
     [System.ComponentModel.Description("Reason for test")]
-    public LaboratoryTestsTestReason? TestReason { get; set; }
+    public string? TestReason { get; set; }
 
     /// <summary>
     /// List of details of individual tests performed or to be performed

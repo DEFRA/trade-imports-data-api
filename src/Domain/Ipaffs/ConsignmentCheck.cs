@@ -47,7 +47,7 @@ public class ConsignmentCheck
     /// </summary>
     [JsonPropertyName("identityCheckType")]
     [System.ComponentModel.Description("Type of identity check performed")]
-    public ConsignmentCheckIdentityCheckType? IdentityCheckType { get; set; }
+    public string? IdentityCheckType { get; set; }
 
     /// <summary>
     /// Result of identity check
@@ -61,7 +61,7 @@ public class ConsignmentCheck
     /// </summary>
     [JsonPropertyName("identityCheckNotDoneReason")]
     [System.ComponentModel.Description("What was the reason for skipping identity check")]
-    public ConsignmentCheckIdentityCheckNotDoneReason? IdentityCheckNotDoneReason { get; set; }
+    public string? IdentityCheckNotDoneReason { get; set; }
 
     /// <summary>
     /// Was physical check done
@@ -82,7 +82,7 @@ public class ConsignmentCheck
     /// </summary>
     [JsonPropertyName("physicalCheckNotDoneReason")]
     [System.ComponentModel.Description("What was the reason for skipping physical check")]
-    public ConsignmentCheckPhysicalCheckNotDoneReason? PhysicalCheckNotDoneReason { get; set; }
+    public string? PhysicalCheckNotDoneReason { get; set; }
 
     /// <summary>
     /// Other reason to not do physical check

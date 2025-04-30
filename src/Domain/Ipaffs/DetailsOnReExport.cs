@@ -26,7 +26,7 @@ public class DetailsOnReExport
     /// </summary>
     [JsonPropertyName("transportType")]
     [System.ComponentModel.Description("Type of transport to be used")]
-    public DetailsOnReExportTransportType? TransportType { get; set; }
+    public string? TransportType { get; set; }
 
     /// <summary>
     /// Document issued for re-export

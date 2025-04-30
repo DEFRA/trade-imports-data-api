@@ -12,7 +12,7 @@ public class PartOne
     [System.ComponentModel.Description(
         "Used to indicate what type of EU Import the notification is - Live Animals, Product Of Animal Origin or High Risk Food Not Of Animal Origin"
     )]
-    public PartOneTypeOfImp? TypeOfImp { get; set; }
+    public string? TypeOfImp { get; set; }
 
     /// <summary>
     /// The individual who has submitted the notification
@@ -331,7 +331,7 @@ public class PartOne
     /// </summary>
     [JsonPropertyName("provideCtcMrn")]
     [System.ComponentModel.Description("When the NCTS MRN will be added for the Common Transit Convention (CTC)")]
-    public PartOneProvideCtcMrn? ProvideCtcMrn { get; set; }
+    public string? ProvideCtcMrn { get; set; }
 
     /// <summary>
     /// DateTime

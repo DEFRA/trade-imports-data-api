@@ -125,5 +125,5 @@ public class Commodities
     /// </summary>
     [JsonPropertyName("commodityIntendedFor")]
     [System.ComponentModel.Description("What the commodity is intended for")]
-    public CommoditiesCommodityIntendedFor? CommodityIntendedFor { get; set; }
+    public string? CommodityIntendedFor { get; set; }
 }

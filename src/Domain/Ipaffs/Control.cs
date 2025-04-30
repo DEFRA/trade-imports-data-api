@@ -33,5 +33,5 @@ public class Control
     /// </summary>
     [JsonPropertyName("consignmentLeave")]
     [System.ComponentModel.Description("Is the consignment leaving UK borders?")]
-    public ControlConsignmentLeave? ConsignmentLeave { get; set; }
+    public string? ConsignmentLeave { get; set; }
 }

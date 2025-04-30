@@ -89,7 +89,7 @@ public class Party
     /// </summary>
     [JsonPropertyName("type")]
     [System.ComponentModel.Description("Type of party")]
-    public PartyType? Type { get; set; }
+    public string? Type { get; set; }
 
     /// <summary>
     /// Approval number

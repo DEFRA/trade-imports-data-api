@@ -12,7 +12,7 @@ public class AccompanyingDocument
     /// </summary>
     [JsonPropertyName("documentType")]
     [System.ComponentModel.Description("Additional document type")]
-    public AccompanyingDocumentDocumentType? DocumentType { get; set; }
+    public string? DocumentType { get; set; }
 
     /// <summary>
     /// Additional document reference

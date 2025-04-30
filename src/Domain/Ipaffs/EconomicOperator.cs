@@ -19,14 +19,14 @@ public class EconomicOperator
     /// </summary>
     [JsonPropertyName("type")]
     [System.ComponentModel.Description("Type of organisation")]
-    public EconomicOperatorType? Type { get; set; }
+    public string? Type { get; set; }
 
     /// <summary>
     /// Status of organisation
     /// </summary>
     [JsonPropertyName("status")]
     [System.ComponentModel.Description("Status of organisation")]
-    public EconomicOperatorStatus? Status { get; set; }
+    public string? Status { get; set; }
 
     /// <summary>
     /// Name of organisation

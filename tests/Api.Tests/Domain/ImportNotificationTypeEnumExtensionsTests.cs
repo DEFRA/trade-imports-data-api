@@ -22,7 +22,7 @@ public class ImportNotificationTypeEnumExtensionsTests
     [InlineData("N853", ImportNotificationType.Cvedp)]
     [InlineData("9HCG", null)]
     [InlineData("INVALID", null)]
-    public void GetChedTypeTest(string documentCode, ImportNotificationType? expectedImportNotificationType)
+    public void GetChedTypeTest(string documentCode, string? expectedImportNotificationType)
     {
         new ImportDocument() { DocumentCode = documentCode }
             .GetChedType()

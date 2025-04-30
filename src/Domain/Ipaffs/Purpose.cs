@@ -19,7 +19,7 @@ public class Purpose
     /// </summary>
     [JsonPropertyName("internalMarketPurpose")]
     [System.ComponentModel.Description("Detailed purpose of internal market purpose group")]
-    public PurposeInternalMarketPurpose? InternalMarketPurpose { get; set; }
+    public string? InternalMarketPurpose { get; set; }
 
     /// <summary>
     /// Country that consignment is transshipped through
@@ -33,7 +33,7 @@ public class Purpose
     /// </summary>
     [JsonPropertyName("forNonConforming")]
     [System.ComponentModel.Description("Detailed purpose for non conforming purpose group")]
-    public PurposeForNonConforming? ForNonConforming { get; set; }
+    public string? ForNonConforming { get; set; }
 
     /// <summary>
     /// There are 3 types of registration number based on the purpose of consignment. Customs registration number, Free zone registration number and Shipping supplier registration number.
@@ -84,7 +84,7 @@ public class Purpose
     /// </summary>
     [JsonPropertyName("forImportOrAdmission")]
     [System.ComponentModel.Description("Specification of Import or admission purpose")]
-    public PurposeForImportOrAdmission? ForImportOrAdmission { get; set; }
+    public string? ForImportOrAdmission { get; set; }
 
     /// <summary>
     /// Exit date when import or admission
@@ -105,7 +105,7 @@ public class Purpose
     /// </summary>
     [JsonPropertyName("purposeGroup")]
     [System.ComponentModel.Description("Purpose group of consignment (general purpose)")]
-    public PurposePurposeGroup? PurposeGroup { get; set; }
+    public string? PurposeGroup { get; set; }
 
     /// <summary>
     /// DateTime

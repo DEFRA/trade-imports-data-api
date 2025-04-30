@@ -12,7 +12,7 @@ public class PartThree
     /// </summary>
     [JsonPropertyName("controlStatus")]
     [System.ComponentModel.Description("Control status enum")]
-    public PartThreeControlStatus? ControlStatus { get; set; }
+    public string? ControlStatus { get; set; }
 
     /// <summary>
     /// Control details

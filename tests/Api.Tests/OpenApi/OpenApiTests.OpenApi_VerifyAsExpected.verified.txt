@@ -1594,11 +1594,7 @@
         "type": "object",
         "properties": {
           "documentType": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.AccompanyingDocumentDocumentType"
-              }
-            ],
+            "type": "string",
             "description": "Additional document type",
             "nullable": true
           },
@@ -1649,43 +1645,6 @@
           }
         },
         "additionalProperties": false
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.AccompanyingDocumentDocumentType": {
-        "enum": [
-          "AirWaybill",
-          "BillOfLading",
-          "CargoManifest",
-          "CatchCertificate",
-          "CommercialDocument",
-          "CommercialInvoice",
-          "ConformityCertificate",
-          "ContainerManifest",
-          "CustomsDeclaration",
-          "Docom",
-          "HealthCertificate",
-          "HeatTreatmentCertificate",
-          "ImportPermit",
-          "InspectionCertificate",
-          "Itahc",
-          "JourneyLog",
-          "LaboratorySamplingResultsForAflatoxin",
-          "LatestVeterinaryHealthCertificate",
-          "LetterOfAuthority",
-          "LicenseOrAuthorisation",
-          "MycotoxinCertification",
-          "OriginCertificate",
-          "Other",
-          "PhytosanitaryCertificate",
-          "ProcessingStatement",
-          "ProofOfStorage",
-          "RailwayBill",
-          "SeaWaybill",
-          "VeterinaryHealthCertificate",
-          "ListOfIngredients",
-          "PackingList",
-          "RoadConsignmentNote"
-        ],
-        "type": "string"
       },
       "Defra.TradeImportsDataApi.Domain.Ipaffs.Address": {
         "type": "object",
@@ -1796,11 +1755,7 @@
             "nullable": true
           },
           "analysisType": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.ApplicantAnalysisType"
-              }
-            ],
+            "type": "string",
             "description": "Type of analysis",
             "nullable": true
           },
@@ -1816,11 +1771,7 @@
             "nullable": true
           },
           "conservationOfSample": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.ApplicantConservationOfSample"
-              }
-            ],
+            "type": "string",
             "description": "Conservation of sample",
             "nullable": true
           },
@@ -1841,22 +1792,6 @@
           }
         },
         "additionalProperties": false
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.ApplicantAnalysisType": {
-        "enum": [
-          "InitialAnalysis",
-          "CounterAnalysis",
-          "SecondExpertAnalysis"
-        ],
-        "type": "string"
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.ApplicantConservationOfSample": {
-        "enum": [
-          "Ambient",
-          "Chilled",
-          "Frozen"
-        ],
-        "type": "string"
       },
       "Defra.TradeImportsDataApi.Domain.Ipaffs.ApprovedEstablishment": {
         "type": "object",
@@ -1996,67 +1931,17 @@
         "type": "object",
         "properties": {
           "reason": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.ChedppNotAcceptableReasonReason"
-              }
-            ],
+            "type": "string",
             "description": "reason for refusal",
             "nullable": true
           },
           "commodityOrPackage": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.ChedppNotAcceptableReasonCommodityOrPackage"
-              }
-            ],
+            "type": "string",
             "description": "commodity or package",
             "nullable": true
           }
         },
         "additionalProperties": false
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.ChedppNotAcceptableReasonCommodityOrPackage": {
-        "enum": [
-          "C",
-          "P",
-          "Cp"
-        ],
-        "type": "string"
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.ChedppNotAcceptableReasonReason": {
-        "enum": [
-          "DocPhmdm",
-          "DocPhmdii",
-          "DocPa",
-          "DocPic",
-          "DocPill",
-          "DocPed",
-          "DocPmod",
-          "DocPfi",
-          "DocPnol",
-          "DocPcne",
-          "DocPadm",
-          "DocPadi",
-          "DocPpni",
-          "DocPf",
-          "DocPo",
-          "DocNcevd",
-          "DocNcpqefi",
-          "DocNcpqebec",
-          "DocNcts",
-          "DocNco",
-          "DocOrii",
-          "DocOrsr",
-          "OriOrrnu",
-          "PhyOrpp",
-          "PhyOrho",
-          "PhyIs",
-          "PhyOrsr",
-          "OthCnl",
-          "OthO"
-        ],
-        "type": "string"
       },
       "Defra.TradeImportsDataApi.Domain.Ipaffs.Commodities": {
         "type": "object",
@@ -2147,25 +2032,12 @@
             "nullable": true
           },
           "commodityIntendedFor": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.CommoditiesCommodityIntendedFor"
-              }
-            ],
+            "type": "string",
             "description": "What the commodity is intended for",
             "nullable": true
           }
         },
         "additionalProperties": false
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.CommoditiesCommodityIntendedFor": {
-        "enum": [
-          "Human",
-          "Feedingstuff",
-          "Further",
-          "Other"
-        ],
-        "type": "string"
       },
       "Defra.TradeImportsDataApi.Domain.Ipaffs.CommodityComplement": {
         "type": "object",
@@ -2290,47 +2162,27 @@
         "type": "object",
         "properties": {
           "riskDecision": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.CommodityRiskResultRiskDecision"
-              }
-            ],
+            "type": "string",
             "description": "CHED-A, CHED-D, CHED-P - what is the commodity complement risk decision",
             "nullable": true
           },
           "exitRiskDecision": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.CommodityRiskResultExitRiskDecision"
-              }
-            ],
+            "type": "string",
             "description": "Transit CHED - what is the commodity complement exit risk decision",
             "nullable": true
           },
           "hmiDecision": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.CommodityRiskResultHmiDecision"
-              }
-            ],
+            "type": "string",
             "description": "HMI decision required",
             "nullable": true
           },
           "phsiDecision": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.CommodityRiskResultPhsiDecision"
-              }
-            ],
+            "type": "string",
             "description": "PHSI decision required",
             "nullable": true
           },
           "phsiClassification": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.CommodityRiskResultPhsiClassification"
-              }
-            ],
+            "type": "string",
             "description": "PHSI classification",
             "nullable": true
           },
@@ -2381,45 +2233,6 @@
         },
         "additionalProperties": false
       },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.CommodityRiskResultExitRiskDecision": {
-        "enum": [
-          "Required",
-          "Notrequired",
-          "Inconclusive"
-        ],
-        "type": "string"
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.CommodityRiskResultHmiDecision": {
-        "enum": [
-          "Required",
-          "Notrequired"
-        ],
-        "type": "string"
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.CommodityRiskResultPhsiClassification": {
-        "enum": [
-          "Mandatory",
-          "Reduced",
-          "Controlled"
-        ],
-        "type": "string"
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.CommodityRiskResultPhsiDecision": {
-        "enum": [
-          "Required",
-          "Notrequired"
-        ],
-        "type": "string"
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.CommodityRiskResultRiskDecision": {
-        "enum": [
-          "Required",
-          "Notrequired",
-          "Inconclusive",
-          "ReenforcedCheck"
-        ],
-        "type": "string"
-      },
       "Defra.TradeImportsDataApi.Domain.Ipaffs.CommonUserCharge": {
         "type": "object",
         "properties": {
@@ -2460,11 +2273,7 @@
             "nullable": true
           },
           "identityCheckType": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.ConsignmentCheckIdentityCheckType"
-              }
-            ],
+            "type": "string",
             "description": "Type of identity check performed",
             "nullable": true
           },
@@ -2474,11 +2283,7 @@
             "nullable": true
           },
           "identityCheckNotDoneReason": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.ConsignmentCheckIdentityCheckNotDoneReason"
-              }
-            ],
+            "type": "string",
             "description": "What was the reason for skipping identity check",
             "nullable": true
           },
@@ -2493,11 +2298,7 @@
             "nullable": true
           },
           "physicalCheckNotDoneReason": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.ConsignmentCheckPhysicalCheckNotDoneReason"
-              }
-            ],
+            "type": "string",
             "description": "What was the reason for skipping physical check",
             "nullable": true
           },
@@ -2529,43 +2330,6 @@
           }
         },
         "additionalProperties": false
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.ConsignmentCheckIdentityCheckNotDoneReason": {
-        "enum": [
-          "ReducedChecksRegime",
-          "NotRequired"
-        ],
-        "type": "string"
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.ConsignmentCheckIdentityCheckType": {
-        "enum": [
-          "SealCheck",
-          "FullIdentityCheck",
-          "NotDone"
-        ],
-        "type": "string"
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.ConsignmentCheckPhysicalCheckNotDoneReason": {
-        "enum": [
-          "ReducedChecksRegime",
-          "Other"
-        ],
-        "type": "string"
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.ConsignmentDecision": {
-        "enum": [
-          "NonAcceptable",
-          "AcceptableForInternalMarket",
-          "AcceptableIfChanneled",
-          "AcceptableForTranshipment",
-          "AcceptableForTransit",
-          "AcceptableForTemporaryImport",
-          "AcceptableForSpecificWarehouse",
-          "AcceptableForPrivateImport",
-          "AcceptableForTransfer",
-          "HorseReEntry"
-        ],
-        "type": "string"
       },
       "Defra.TradeImportsDataApi.Domain.Ipaffs.ContactDetails": {
         "type": "object",
@@ -2624,11 +2388,7 @@
             "nullable": true
           },
           "consignmentLeave": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.ControlConsignmentLeave"
-              }
-            ],
+            "type": "string",
             "description": "Is the consignment leaving UK borders?",
             "nullable": true
           }
@@ -2673,32 +2433,12 @@
             "nullable": true
           },
           "iuuOption": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.ControlAuthorityIuuOption"
-              }
-            ],
+            "type": "string",
             "description": "Result of Illegal, Unreported and Unregulated (IUU) check",
             "nullable": true
           }
         },
         "additionalProperties": false
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.ControlAuthorityIuuOption": {
-        "enum": [
-          "Iuuok",
-          "Iuuna",
-          "IUUNotCompliant"
-        ],
-        "type": "string"
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.ControlConsignmentLeave": {
-        "enum": [
-          "Yes",
-          "No",
-          "ItHasBeenDestroyed"
-        ],
-        "type": "string"
       },
       "Defra.TradeImportsDataApi.Domain.Ipaffs.Decision": {
         "type": "object",
@@ -2709,74 +2449,42 @@
             "nullable": true
           },
           "notAcceptableAction": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.DecisionNotAcceptableAction"
-              }
-            ],
+            "type": "string",
             "description": "Filled if consignmentAcceptable is set to false",
             "nullable": true
           },
           "notAcceptableActionDestructionReason": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.DecisionNotAcceptableActionDestructionReason"
-              }
-            ],
+            "type": "string",
             "description": "Filled if not acceptable action is set to destruction",
             "nullable": true
           },
           "notAcceptableActionEntryRefusalReason": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.DecisionNotAcceptableActionEntryRefusalReason"
-              }
-            ],
+            "type": "string",
             "description": "Filled if not acceptable action is set to entry refusal",
             "nullable": true
           },
           "notAcceptableActionQuarantineImposedReason": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.DecisionNotAcceptableActionQuarantineImposedReason"
-              }
-            ],
+            "type": "string",
             "description": "Filled if not acceptable action is set to quarantine imposed",
             "nullable": true
           },
           "notAcceptableActionSpecialTreatmentReason": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.DecisionNotAcceptableActionSpecialTreatmentReason"
-              }
-            ],
+            "type": "string",
             "description": "Filled if not acceptable action is set to special treatment",
             "nullable": true
           },
           "notAcceptableActionIndustrialProcessingReason": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.DecisionNotAcceptableActionIndustrialProcessingReason"
-              }
-            ],
+            "type": "string",
             "description": "Filled if not acceptable action is set to industrial processing",
             "nullable": true
           },
           "notAcceptableActionReDispatchReason": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.DecisionNotAcceptableActionReDispatchReason"
-              }
-            ],
+            "type": "string",
             "description": "Filled if not acceptable action is set to re-dispatch",
             "nullable": true
           },
           "notAcceptableActionUseForOtherPurposesReason": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.DecisionNotAcceptableActionUseForOtherPurposesReason"
-              }
-            ],
+            "type": "string",
             "description": "Filled if not acceptable action is set to use for other purposes",
             "nullable": true
           },
@@ -2837,11 +2545,7 @@
             "nullable": true
           },
           "specificWarehouseNonConformingConsignment": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.DecisionSpecificWarehouseNonConformingConsignment"
-              }
-            ],
+            "type": "string",
             "description": "Filled if consignment is set to acceptable and decision type is Specific Warehouse",
             "nullable": true
           },
@@ -2851,38 +2555,22 @@
             "nullable": true
           },
           "decision": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.ConsignmentDecision"
-              }
-            ],
+            "type": "string",
             "description": "Detailed decision for consignment",
             "nullable": true
           },
           "freeCirculationPurpose": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.DecisionFreeCirculationPurpose"
-              }
-            ],
+            "type": "string",
             "description": "Decision over purpose of free circulation in country",
             "nullable": true
           },
           "definitiveImportPurpose": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.DecisionDefinitiveImportPurpose"
-              }
-            ],
+            "type": "string",
             "description": "Decision over purpose of definitive import",
             "nullable": true
           },
           "ifChanneledOption": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.DecisionIfChanneledOption"
-              }
-            ],
+            "type": "string",
             "description": "Decision channeled option based on (article8, article15)",
             "nullable": true
           },
@@ -2954,125 +2642,6 @@
         },
         "additionalProperties": false
       },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.DecisionDefinitiveImportPurpose": {
-        "enum": [
-          "Slaughter",
-          "Approvedbodies",
-          "Quarantine"
-        ],
-        "type": "string"
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.DecisionFreeCirculationPurpose": {
-        "enum": [
-          "AnimalFeedingStuff",
-          "HumanConsumption",
-          "PharmaceuticalUse",
-          "TechnicalUse",
-          "FurtherProcess",
-          "Other"
-        ],
-        "type": "string"
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.DecisionIfChanneledOption": {
-        "enum": [
-          "Article8",
-          "Article15"
-        ],
-        "type": "string"
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.DecisionNotAcceptableAction": {
-        "enum": [
-          "Slaughter",
-          "Reexport",
-          "Euthanasia",
-          "Redispatching",
-          "Destruction",
-          "Transformation",
-          "Other",
-          "EntryRefusal",
-          "QuarantineImposed",
-          "SpecialTreatment",
-          "IndustrialProcessing",
-          "ReDispatch",
-          "UseForOtherPurposes"
-        ],
-        "type": "string"
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.DecisionNotAcceptableActionDestructionReason": {
-        "enum": [
-          "ContaminatedProducts",
-          "InterceptedPart",
-          "PackagingMaterial",
-          "Other"
-        ],
-        "type": "string"
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.DecisionNotAcceptableActionEntryRefusalReason": {
-        "enum": [
-          "ContaminatedProducts",
-          "InterceptedPart",
-          "PackagingMaterial",
-          "MeansOfTransport",
-          "Other"
-        ],
-        "type": "string"
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.DecisionNotAcceptableActionIndustrialProcessingReason": {
-        "enum": [
-          "ContaminatedProducts",
-          "InterceptedPart",
-          "PackagingMaterial",
-          "Other"
-        ],
-        "type": "string"
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.DecisionNotAcceptableActionQuarantineImposedReason": {
-        "enum": [
-          "ContaminatedProducts",
-          "InterceptedPart",
-          "PackagingMaterial",
-          "Other"
-        ],
-        "type": "string"
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.DecisionNotAcceptableActionReDispatchReason": {
-        "enum": [
-          "ContaminatedProducts",
-          "InterceptedPart",
-          "PackagingMaterial",
-          "MeansOfTransport",
-          "Other"
-        ],
-        "type": "string"
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.DecisionNotAcceptableActionSpecialTreatmentReason": {
-        "enum": [
-          "ContaminatedProducts",
-          "InterceptedPart",
-          "PackagingMaterial",
-          "Other"
-        ],
-        "type": "string"
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.DecisionNotAcceptableActionUseForOtherPurposesReason": {
-        "enum": [
-          "ContaminatedProducts",
-          "InterceptedPart",
-          "PackagingMaterial",
-          "MeansOfTransport",
-          "Other"
-        ],
-        "type": "string"
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.DecisionSpecificWarehouseNonConformingConsignment": {
-        "enum": [
-          "CustomWarehouse",
-          "FreeZoneOrFreeWarehouse",
-          "ShipSupplier",
-          "Ship"
-        ],
-        "type": "string"
-      },
       "Defra.TradeImportsDataApi.Domain.Ipaffs.DetailsOnReExport": {
         "type": "object",
         "properties": {
@@ -3088,11 +2657,7 @@
             "nullable": true
           },
           "transportType": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.DetailsOnReExportTransportType"
-              }
-            ],
+            "type": "string",
             "description": "Type of transport to be used",
             "nullable": true
           },
@@ -3114,18 +2679,6 @@
         },
         "additionalProperties": false
       },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.DetailsOnReExportTransportType": {
-        "enum": [
-          "Rail",
-          "Plane",
-          "Ship",
-          "Road",
-          "Other",
-          "CShipRoad",
-          "CShipRail"
-        ],
-        "type": "string"
-      },
       "Defra.TradeImportsDataApi.Domain.Ipaffs.EconomicOperator": {
         "type": "object",
         "properties": {
@@ -3135,20 +2688,12 @@
             "nullable": true
           },
           "type": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.EconomicOperatorType"
-              }
-            ],
+            "type": "string",
             "description": "Type of organisation",
             "nullable": true
           },
           "status": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.EconomicOperatorStatus"
-              }
-            ],
+            "type": "string",
             "description": "Status of organisation",
             "nullable": true
           },
@@ -3190,41 +2735,11 @@
         },
         "additionalProperties": false
       },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.EconomicOperatorStatus": {
-        "enum": [
-          "Approved",
-          "Nonapproved",
-          "Suspended"
-        ],
-        "type": "string"
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.EconomicOperatorType": {
-        "enum": [
-          "Consignee",
-          "Destination",
-          "Exporter",
-          "Importer",
-          "Charity",
-          "CommercialTransporter",
-          "CommercialTransporterUserAdded",
-          "PrivateTransporter",
-          "TemporaryAddress",
-          "PremisesOfOrigin",
-          "OrganisationBranchAddress",
-          "Packer",
-          "Pod"
-        ],
-        "type": "string"
-      },
       "Defra.TradeImportsDataApi.Domain.Ipaffs.ExternalReference": {
         "type": "object",
         "properties": {
           "system": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.ExternalReferenceSystem"
-              }
-            ],
+            "type": "string",
             "description": "Identifier of the external system to which the reference relates",
             "nullable": true
           },
@@ -3251,24 +2766,11 @@
         },
         "additionalProperties": false
       },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.ExternalReferenceSystem": {
-        "enum": [
-          "Ecert",
-          "Ephyto",
-          "Enotification",
-          "Ncts"
-        ],
-        "type": "string"
-      },
       "Defra.TradeImportsDataApi.Domain.Ipaffs.FeedbackInformation": {
         "type": "object",
         "properties": {
           "authorityType": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.FeedbackInformationAuthorityType"
-              }
-            ],
+            "type": "string",
             "description": "Type of authority",
             "nullable": true
           },
@@ -3294,15 +2796,6 @@
           }
         },
         "additionalProperties": false
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.FeedbackInformationAuthorityType": {
-        "enum": [
-          "Exitbip",
-          "Finalbip",
-          "Localvetunit",
-          "Inspunit"
-        ],
-        "type": "string"
       },
       "Defra.TradeImportsDataApi.Domain.Ipaffs.IdentificationDetails": {
         "type": "object",
@@ -3354,33 +2847,6 @@
         },
         "additionalProperties": false
       },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.ImportNotificationStatus": {
-        "enum": [
-          "Draft",
-          "Submitted",
-          "Validated",
-          "Rejected",
-          "InProgress",
-          "Amend",
-          "Modify",
-          "Replaced",
-          "Cancelled",
-          "Deleted",
-          "PartiallyRejected",
-          "SplitConsignment"
-        ],
-        "type": "string"
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.ImportNotificationType": {
-        "enum": [
-          "Cveda",
-          "Cvedp",
-          "Chedpp",
-          "Ced",
-          "Imp"
-        ],
-        "type": "string"
-      },
       "Defra.TradeImportsDataApi.Domain.Ipaffs.ImportPreNotification": {
         "type": "object",
         "properties": {
@@ -3430,11 +2896,7 @@
             "nullable": true
           },
           "importNotificationType": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.ImportNotificationType"
-              }
-            ],
+            "type": "string",
             "description": "The Type of notification that has been submitted",
             "nullable": true
           },
@@ -3449,11 +2911,7 @@
             "nullable": true
           },
           "status": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.ImportNotificationStatus"
-              }
-            ],
+            "type": "string",
             "description": "Current status of the notification. When created by an importer, the notification has the status 'SUBMITTED'. Before submission of the notification it has the status 'DRAFT'. When the BIP starts validation of the notification it has the status 'IN PROGRESS' Once the BIP validates the notification, it gets the status 'VALIDATED'. 'AMEND' is set when the Part-1 user is modifying the notification. 'MODIFY' is set when Part-2 user is modifying the notification. Replaced - When the notification is replaced by another notification. Rejected - Notification moves to Rejected status when rejected by a Part-2 user. ",
             "nullable": true
           },
@@ -3602,20 +3060,12 @@
         "type": "object",
         "properties": {
           "type": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.InspectionCheckType"
-              }
-            ],
+            "type": "string",
             "description": "Type of check",
             "nullable": true
           },
           "status": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.InspectionCheckStatus"
-              }
-            ],
+            "type": "string",
             "description": "Status of the check",
             "nullable": true
           },
@@ -3642,27 +3092,6 @@
         },
         "additionalProperties": false
       },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.InspectionCheckStatus": {
-        "enum": [
-          "ToDo",
-          "Compliant",
-          "AutoCleared",
-          "NonCompliant",
-          "NotInspected",
-          "ToBeInspected",
-          "Hold"
-        ],
-        "type": "string"
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.InspectionCheckType": {
-        "enum": [
-          "PhsiDocument",
-          "PhsiIdentity",
-          "PhsiPhysical",
-          "Hmi"
-        ],
-        "type": "string"
-      },
       "Defra.TradeImportsDataApi.Domain.Ipaffs.InspectionOverride": {
         "type": "object",
         "properties": {
@@ -3688,14 +3117,6 @@
           }
         },
         "additionalProperties": false
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.InspectionRequired": {
-        "enum": [
-          "Required",
-          "Inconclusive",
-          "NotRequired"
-        ],
-        "type": "string"
       },
       "Defra.TradeImportsDataApi.Domain.Ipaffs.Inspector": {
         "type": "object",
@@ -3738,20 +3159,12 @@
         "type": "object",
         "properties": {
           "riskLevel": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.JourneyRiskCategorisationResultRiskLevel"
-              }
-            ],
+            "type": "string",
             "description": "Risk Level is defined using enum values High,Medium,Low",
             "nullable": true
           },
           "riskLevelMethod": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.JourneyRiskCategorisationResultRiskLevelMethod"
-              }
-            ],
+            "type": "string",
             "description": "Indicator of whether the risk level was determined by the system or by the user",
             "nullable": true
           },
@@ -3763,21 +3176,6 @@
           }
         },
         "additionalProperties": false
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.JourneyRiskCategorisationResultRiskLevel": {
-        "enum": [
-          "High",
-          "Medium",
-          "Low"
-        ],
-        "type": "string"
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.JourneyRiskCategorisationResultRiskLevelMethod": {
-        "enum": [
-          "System",
-          "User"
-        ],
-        "type": "string"
       },
       "Defra.TradeImportsDataApi.Domain.Ipaffs.KeyDataPair": {
         "type": "object",
@@ -3818,11 +3216,7 @@
             "nullable": true
           },
           "conclusion": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.LaboratoryTestResultConclusion"
-              }
-            ],
+            "type": "string",
             "description": "Conclusion of laboratory test",
             "nullable": true
           },
@@ -3835,15 +3229,6 @@
         },
         "additionalProperties": false
       },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.LaboratoryTestResultConclusion": {
-        "enum": [
-          "Satisfactory",
-          "NotSatisfactory",
-          "NotInterpretable",
-          "Pending"
-        ],
-        "type": "string"
-      },
       "Defra.TradeImportsDataApi.Domain.Ipaffs.LaboratoryTests": {
         "type": "object",
         "properties": {
@@ -3854,11 +3239,7 @@
             "nullable": true
           },
           "testReason": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.LaboratoryTestsTestReason"
-              }
-            ],
+            "type": "string",
             "description": "Reason for test",
             "nullable": true
           },
@@ -3873,26 +3254,11 @@
         },
         "additionalProperties": false
       },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.LaboratoryTestsTestReason": {
-        "enum": [
-          "Random",
-          "Suspicious",
-          "ReEnforced",
-          "IntensifiedControls",
-          "Required",
-          "LatentInfectionSampling"
-        ],
-        "type": "string"
-      },
       "Defra.TradeImportsDataApi.Domain.Ipaffs.MeansOfTransport": {
         "type": "object",
         "properties": {
           "type": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.MeansOfTransportType"
-              }
-            ],
+            "type": "string",
             "description": "Type of transport",
             "nullable": true
           },
@@ -3908,19 +3274,6 @@
           }
         },
         "additionalProperties": false
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.MeansOfTransportType": {
-        "enum": [
-          "Aeroplane",
-          "RoadVehicle",
-          "RailwayWagon",
-          "Ship",
-          "Other",
-          "RoadVehicleAeroplane",
-          "ShipRailwayWagon",
-          "ShipRoadVehicle"
-        ],
-        "type": "string"
       },
       "Defra.TradeImportsDataApi.Domain.Ipaffs.NominatedContact": {
         "type": "object",
@@ -4028,11 +3381,7 @@
         "type": "object",
         "properties": {
           "typeOfImp": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.PartOneTypeOfImp"
-              }
-            ],
+            "type": "string",
             "description": "Used to indicate what type of EU Import the notification is - Live Animals, Product Of Animal Origin or High Risk Food Not Of Animal Origin",
             "nullable": true
           },
@@ -4352,11 +3701,7 @@
             "nullable": true
           },
           "provideCtcMrn": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.PartOneProvideCtcMrn"
-              }
-            ],
+            "type": "string",
             "description": "When the NCTS MRN will be added for the Common Transit Convention (CTC)",
             "nullable": true
           },
@@ -4375,31 +3720,11 @@
         },
         "additionalProperties": false
       },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.PartOneProvideCtcMrn": {
-        "enum": [
-          "Yes",
-          "YesAddLater",
-          "No"
-        ],
-        "type": "string"
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.PartOneTypeOfImp": {
-        "enum": [
-          "A",
-          "P",
-          "D"
-        ],
-        "type": "string"
-      },
       "Defra.TradeImportsDataApi.Domain.Ipaffs.PartThree": {
         "type": "object",
         "properties": {
           "controlStatus": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.PartThreeControlStatus"
-              }
-            ],
+            "type": "string",
             "description": "Control status enum",
             "nullable": true
           },
@@ -4445,13 +3770,6 @@
           }
         },
         "additionalProperties": false
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.PartThreeControlStatus": {
-        "enum": [
-          "Required",
-          "Completed"
-        ],
-        "type": "string"
       },
       "Defra.TradeImportsDataApi.Domain.Ipaffs.PartTwo": {
         "type": "object",
@@ -4584,11 +3902,7 @@
             "nullable": true
           },
           "inspectionRequired": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.InspectionRequired"
-              }
-            ],
+            "type": "string",
             "description": "Inspection required",
             "nullable": true
           },
@@ -4673,11 +3987,7 @@
             "nullable": true
           },
           "type": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.PartyType"
-              }
-            ],
+            "type": "string",
             "description": "Type of party",
             "nullable": true
           },
@@ -4703,13 +4013,6 @@
           }
         },
         "additionalProperties": false
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.PartyType": {
-        "enum": [
-          "CommercialTransporter",
-          "PrivateTransporter"
-        ],
-        "type": "string"
       },
       "Defra.TradeImportsDataApi.Domain.Ipaffs.Phsi": {
         "type": "object",
@@ -4782,11 +4085,7 @@
             "nullable": true
           },
           "internalMarketPurpose": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.PurposeInternalMarketPurpose"
-              }
-            ],
+            "type": "string",
             "description": "Detailed purpose of internal market purpose group",
             "nullable": true
           },
@@ -4796,11 +4095,7 @@
             "nullable": true
           },
           "forNonConforming": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.PurposeForNonConforming"
-              }
-            ],
+            "type": "string",
             "description": "Detailed purpose for non conforming purpose group",
             "nullable": true
           },
@@ -4838,11 +4133,7 @@
             "nullable": true
           },
           "forImportOrAdmission": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.PurposeForImportOrAdmission"
-              }
-            ],
+            "type": "string",
             "description": "Specification of Import or admission purpose",
             "nullable": true
           },
@@ -4858,11 +4149,7 @@
             "nullable": true
           },
           "purposeGroup": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.PurposePurposeGroup"
-              }
-            ],
+            "type": "string",
             "description": "Purpose group of consignment (general purpose)",
             "nullable": true
           },
@@ -4874,60 +4161,6 @@
           }
         },
         "additionalProperties": false
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.PurposeForImportOrAdmission": {
-        "enum": [
-          "DefinitiveImport",
-          "HorsesReEntry",
-          "TemporaryAdmissionHorses"
-        ],
-        "type": "string"
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.PurposeForNonConforming": {
-        "enum": [
-          "CustomsWarehouse",
-          "FreeZoneOrFreeWarehouse",
-          "ShipSupplier",
-          "Ship"
-        ],
-        "type": "string"
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.PurposeInternalMarketPurpose": {
-        "enum": [
-          "AnimalFeedingStuff",
-          "HumanConsumption",
-          "PharmaceuticalUse",
-          "TechnicalUse",
-          "Other",
-          "CommercialSale",
-          "CommercialSaleOrChangeOfOwnership",
-          "Rescue",
-          "Breeding",
-          "Research",
-          "RacingOrCompetition",
-          "ApprovedPremisesOrBody",
-          "CompanionAnimalNotForResaleOrRehoming",
-          "Production",
-          "Slaughter",
-          "Fattening",
-          "GameRestocking",
-          "RegisteredHorses"
-        ],
-        "type": "string"
-      },
-      "Defra.TradeImportsDataApi.Domain.Ipaffs.PurposePurposeGroup": {
-        "enum": [
-          "ForImport",
-          "ForNONConformingConsignments",
-          "ForTranshipmentTo",
-          "ForTransitTo3rdCountry",
-          "ForReImport",
-          "ForPrivateImport",
-          "ForTransferTo",
-          "ForImportReConformityCheck",
-          "ForImportNonInternalMarket"
-        ],
-        "type": "string"
       },
       "Defra.TradeImportsDataApi.Domain.Ipaffs.Route": {
         "type": "object",

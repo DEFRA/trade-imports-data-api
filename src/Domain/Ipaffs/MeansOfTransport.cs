@@ -12,7 +12,7 @@ public class MeansOfTransport
     /// </summary>
     [JsonPropertyName("type")]
     [System.ComponentModel.Description("Type of transport")]
-    public MeansOfTransportType? Type { get; set; }
+    public string? Type { get; set; }
 
     /// <summary>
     /// Document for transport

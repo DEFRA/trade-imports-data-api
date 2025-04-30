@@ -19,56 +19,56 @@ public class Decision
     /// </summary>
     [JsonPropertyName("notAcceptableAction")]
     [System.ComponentModel.Description("Filled if consignmentAcceptable is set to false")]
-    public DecisionNotAcceptableAction? NotAcceptableAction { get; set; }
+    public string? NotAcceptableAction { get; set; }
 
     /// <summary>
     /// Filled if not acceptable action is set to destruction
     /// </summary>
     [JsonPropertyName("notAcceptableActionDestructionReason")]
     [System.ComponentModel.Description("Filled if not acceptable action is set to destruction")]
-    public DecisionNotAcceptableActionDestructionReason? NotAcceptableActionDestructionReason { get; set; }
+    public string? NotAcceptableActionDestructionReason { get; set; }
 
     /// <summary>
     /// Filled if not acceptable action is set to entry refusal
     /// </summary>
     [JsonPropertyName("notAcceptableActionEntryRefusalReason")]
     [System.ComponentModel.Description("Filled if not acceptable action is set to entry refusal")]
-    public DecisionNotAcceptableActionEntryRefusalReason? NotAcceptableActionEntryRefusalReason { get; set; }
+    public string? NotAcceptableActionEntryRefusalReason { get; set; }
 
     /// <summary>
     /// Filled if not acceptable action is set to quarantine imposed
     /// </summary>
     [JsonPropertyName("notAcceptableActionQuarantineImposedReason")]
     [System.ComponentModel.Description("Filled if not acceptable action is set to quarantine imposed")]
-    public DecisionNotAcceptableActionQuarantineImposedReason? NotAcceptableActionQuarantineImposedReason { get; set; }
+    public string? NotAcceptableActionQuarantineImposedReason { get; set; }
 
     /// <summary>
     /// Filled if not acceptable action is set to special treatment
     /// </summary>
     [JsonPropertyName("notAcceptableActionSpecialTreatmentReason")]
     [System.ComponentModel.Description("Filled if not acceptable action is set to special treatment")]
-    public DecisionNotAcceptableActionSpecialTreatmentReason? NotAcceptableActionSpecialTreatmentReason { get; set; }
+    public string? NotAcceptableActionSpecialTreatmentReason { get; set; }
 
     /// <summary>
     /// Filled if not acceptable action is set to industrial processing
     /// </summary>
     [JsonPropertyName("notAcceptableActionIndustrialProcessingReason")]
     [System.ComponentModel.Description("Filled if not acceptable action is set to industrial processing")]
-    public DecisionNotAcceptableActionIndustrialProcessingReason? NotAcceptableActionIndustrialProcessingReason { get; set; }
+    public string? NotAcceptableActionIndustrialProcessingReason { get; set; }
 
     /// <summary>
     /// Filled if not acceptable action is set to re-dispatch
     /// </summary>
     [JsonPropertyName("notAcceptableActionReDispatchReason")]
     [System.ComponentModel.Description("Filled if not acceptable action is set to re-dispatch")]
-    public DecisionNotAcceptableActionReDispatchReason? NotAcceptableActionReDispatchReason { get; set; }
+    public string? NotAcceptableActionReDispatchReason { get; set; }
 
     /// <summary>
     /// Filled if not acceptable action is set to use for other purposes
     /// </summary>
     [JsonPropertyName("notAcceptableActionUseForOtherPurposesReason")]
     [System.ComponentModel.Description("Filled if not acceptable action is set to use for other purposes")]
-    public DecisionNotAcceptableActionUseForOtherPurposesReason? NotAcceptableActionUseForOtherPurposesReason { get; set; }
+    public string? NotAcceptableActionUseForOtherPurposesReason { get; set; }
 
     /// <summary>
     /// Filled when notAcceptableAction is equal to destruction
@@ -140,7 +140,7 @@ public class Decision
     [System.ComponentModel.Description(
         "Filled if consignment is set to acceptable and decision type is Specific Warehouse"
     )]
-    public DecisionSpecificWarehouseNonConformingConsignment? SpecificWarehouseNonConformingConsignment { get; set; }
+    public string? SpecificWarehouseNonConformingConsignment { get; set; }
 
     /// <summary>
     /// Deadline when consignment has to leave borders
@@ -154,28 +154,28 @@ public class Decision
     /// </summary>
     [JsonPropertyName("decision")]
     [System.ComponentModel.Description("Detailed decision for consignment")]
-    public ConsignmentDecision? ConsignmentDecision { get; set; }
+    public string? ConsignmentDecision { get; set; }
 
     /// <summary>
     /// Decision over purpose of free circulation in country
     /// </summary>
     [JsonPropertyName("freeCirculationPurpose")]
     [System.ComponentModel.Description("Decision over purpose of free circulation in country")]
-    public DecisionFreeCirculationPurpose? FreeCirculationPurpose { get; set; }
+    public string? FreeCirculationPurpose { get; set; }
 
     /// <summary>
     /// Decision over purpose of definitive import
     /// </summary>
     [JsonPropertyName("definitiveImportPurpose")]
     [System.ComponentModel.Description("Decision over purpose of definitive import")]
-    public DecisionDefinitiveImportPurpose? DefinitiveImportPurpose { get; set; }
+    public string? DefinitiveImportPurpose { get; set; }
 
     /// <summary>
     /// Decision channeled option based on (article8, article15)
     /// </summary>
     [JsonPropertyName("ifChanneledOption")]
     [System.ComponentModel.Description("Decision channeled option based on (article8, article15)")]
-    public DecisionIfChanneledOption? IfChanneledOption { get; set; }
+    public string? IfChanneledOption { get; set; }
 
     /// <summary>
     /// Custom warehouse registered number

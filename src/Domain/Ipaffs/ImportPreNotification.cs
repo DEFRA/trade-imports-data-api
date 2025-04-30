@@ -58,7 +58,7 @@ public class ImportPreNotification
     /// </summary>
     [JsonPropertyName("importNotificationType")]
     [System.ComponentModel.Description("The Type of notification that has been submitted")]
-    public ImportNotificationType? ImportNotificationType { get; set; }
+    public string? ImportNotificationType { get; set; }
 
     /// <summary>
     /// Reference number of notification that was replaced by this one
@@ -81,7 +81,7 @@ public class ImportPreNotification
     [System.ComponentModel.Description(
         "Current status of the notification. When created by an importer, the notification has the status 'SUBMITTED'. Before submission of the notification it has the status 'DRAFT'. When the BIP starts validation of the notification it has the status 'IN PROGRESS' Once the BIP validates the notification, it gets the status 'VALIDATED'. 'AMEND' is set when the Part-1 user is modifying the notification. 'MODIFY' is set when Part-2 user is modifying the notification. Replaced - When the notification is replaced by another notification. Rejected - Notification moves to Rejected status when rejected by a Part-2 user. "
     )]
-    public ImportNotificationStatus? Status { get; set; }
+    public string? Status { get; set; }
 
     /// <summary>
     /// Present if the consignment has been split

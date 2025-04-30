@@ -54,5 +54,5 @@ public class ControlAuthority
     /// </summary>
     [JsonPropertyName("iuuOption")]
     [System.ComponentModel.Description("Result of Illegal, Unreported and Unregulated (IUU) check")]
-    public ControlAuthorityIuuOption? IuuOption { get; set; }
+    public string? IuuOption { get; set; }
 }

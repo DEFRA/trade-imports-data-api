@@ -140,7 +140,7 @@ public class PartTwo
     /// </summary>
     [JsonPropertyName("inspectionRequired")]
     [System.ComponentModel.Description("Inspection required")]
-    public InspectionRequired? InspectionRequired { get; set; }
+    public string? InspectionRequired { get; set; }
 
     /// <summary>
     /// Details about the manual inspection override

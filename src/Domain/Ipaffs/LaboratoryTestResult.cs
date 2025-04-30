@@ -40,7 +40,7 @@ public class LaboratoryTestResult
     /// </summary>
     [JsonPropertyName("conclusion")]
     [System.ComponentModel.Description("Conclusion of laboratory test")]
-    public LaboratoryTestResultConclusion? Conclusion { get; set; }
+    public string? Conclusion { get; set; }
 
     /// <summary>
     /// Date of lab test created in IPAFFS

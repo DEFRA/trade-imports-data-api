@@ -4,7 +4,7 @@ namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
 
 public static class ImportNotificationTypeEnumExtensions
 {
-    public static ImportNotificationType? GetChedType(this string documentCode)
+    public static string? GetChedType(this string documentCode)
     {
         return documentCode switch
         {
@@ -12,12 +12,11 @@ public static class ImportNotificationTypeEnumExtensions
             "N852" or "C678" => ImportNotificationType.Ced,
             "C640" => ImportNotificationType.Cveda,
             "C641" or "C673" or "N853" => ImportNotificationType.Cvedp,
-            "9HCG" => null,
             _ => null,
         };
     }
 
-    public static ImportNotificationType? GetChedType(this ImportDocument document)
+    public static string? GetChedType(this ImportDocument document)
     {
         return document?.DocumentCode?.GetChedType();
     }
