@@ -4,15 +4,15 @@ namespace Defra.TradeImportsDataApi.Api.Endpoints.Search;
 
 public class RelatedImportDeclarationsRequest
 {
-    [FromQuery]
+    [FromQuery(Name = "mrn")]
     public string? Mrn { get; set; }
 
-    [FromQuery]
+    [FromQuery(Name = "ducr")]
     public string? Ducr { get; set; }
 
-    [FromQuery]
+    [FromQuery(Name = "chedId")]
     public string? ChedId { get; set; }
 
-    [FromQuery]
+    [FromQuery(Name = "maxLinkDepth")]
     public int? MaxLinkDepth { get; set; } = 3;
 }
