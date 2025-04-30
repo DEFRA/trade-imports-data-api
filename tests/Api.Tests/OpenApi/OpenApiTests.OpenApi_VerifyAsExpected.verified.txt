@@ -687,35 +687,35 @@
     "/related-import-declarations": {
       "get": {
         "tags": [
-          "related-import-declarations"
+          "RelatedImportDeclarations"
         ],
         "summary": "related-import-declarations",
         "description": "related-import-declarations",
         "operationId": "related-import-declarations",
         "parameters": [
           {
-            "name": "Mrn",
+            "name": "mrn",
             "in": "query",
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "Ducr",
+            "name": "ducr",
             "in": "query",
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "ChedId",
+            "name": "chedId",
             "in": "query",
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "MaxLinkDepth",
+            "name": "maxLinkDepth",
             "in": "query",
             "schema": {
               "type": "integer",
