@@ -29,7 +29,7 @@ public class GetTests : WireMockTestBase<WireMockContext>
     }
 
     [Fact]
-    public async Task WhenNotFound_ShouldBeNull()
+    public async Task WhenNotFound_ShouldBeEmpty()
     {
         WireMock
             .Given(Request.Create().WithPath("/related-import-declarations").UsingGet())
