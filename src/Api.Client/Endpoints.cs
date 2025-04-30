@@ -1,3 +1,5 @@
+using System.Web;
+
 namespace Defra.TradeImportsDataApi.Api.Client;
 
 internal static class Endpoints
@@ -15,4 +17,18 @@ internal static class Endpoints
         $"/customs-declarations/{mrn}/import-pre-notifications";
 
     public static string ProcessingErrors(string mrn) => $"/processing-errors/{mrn}";
+
+    public static string RelatedImportDeclarations(RelatedImportDeclarationsRequest request) =>
+        $"/related-import-declarations{BuildQueryString(request)}";
+
+    private static string BuildQueryString(object o)
+    {
+        var properties =
+            (from p in o.GetType().GetProperties()
+            where p.GetValue(o, null) != null
+            select p.Name + "=" + HttpUtility.UrlEncode(p.GetValue(o, null)?.ToString())
+                ).ToList();
+
+        return properties.Any() ? $"?{string.Join("&", properties.ToArray())}" : string.Empty;
+    }
 }

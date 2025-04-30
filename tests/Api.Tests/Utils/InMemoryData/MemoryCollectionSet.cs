@@ -43,6 +43,7 @@ public class MemoryCollectionSet<T> : IMongoCollectionSet<T>
     public Task Insert(T item, CancellationToken cancellationToken = default)
     {
         item.ETag = BsonObjectIdGenerator.Instance.GenerateId(null, null).ToString()!;
+        item.OnSave();
         data.Add(item);
         return Task.CompletedTask;
     }
@@ -84,6 +85,7 @@ public class MemoryCollectionSet<T> : IMongoCollectionSet<T>
         }
 
         item.ETag = BsonObjectIdGenerator.Instance.GenerateId(null, null).ToString()!;
+        item.OnSave();
         data[data.IndexOf(existingItem)] = item;
         return Task.CompletedTask;
     }

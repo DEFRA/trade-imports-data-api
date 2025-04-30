@@ -42,4 +42,9 @@ public interface ITradeImportsDataApiClient
         string? etag,
         CancellationToken cancellationToken
     );
+
+    Task<RelatedImportDeclarationsResponse> RelatedImportDeclarations(
+        RelatedImportDeclarationsRequest request,
+        CancellationToken cancellationToken
+    );
 }

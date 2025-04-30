@@ -162,6 +162,18 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
         response.EnsureSuccessStatusCode();
     }
 
+    public async Task<RelatedImportDeclarationsResponse> RelatedImportDeclarations(
+        RelatedImportDeclarationsRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        var response = await Get(Endpoints.RelatedImportDeclarations(request), cancellationToken);
+
+        response.EnsureSuccessStatusCode();
+
+        return await Deserialize<RelatedImportDeclarationsResponse>(response, cancellationToken);
+    }
+
     private static async Task<T> Deserialize<T>(HttpResponseMessage response, CancellationToken cancellationToken)
     {
         await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
