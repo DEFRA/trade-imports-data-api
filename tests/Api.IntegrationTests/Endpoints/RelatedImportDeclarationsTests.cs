@@ -15,7 +15,7 @@ public class RelatedImportDeclarationsTests : IntegrationTestBase
         await InsertTestData();
 
         var response = await client.RelatedImportDeclarations(
-            new RelatedImportDeclarationsRequest() { ChedId = "1234510", MaxLinkDepth = 1 },
+            new RelatedImportDeclarationsRequest() { ChedId = "3333333", MaxLinkDepth = 1 },
             CancellationToken.None
         );
 
@@ -32,7 +32,7 @@ public class RelatedImportDeclarationsTests : IntegrationTestBase
         await InsertTestData();
 
         var response = await client.RelatedImportDeclarations(
-            new RelatedImportDeclarationsRequest() { ChedId = "1234510" },
+            new RelatedImportDeclarationsRequest() { ChedId = "3333333" },
             CancellationToken.None
         );
 
@@ -78,13 +78,13 @@ public class RelatedImportDeclarationsTests : IntegrationTestBase
     private async Task InsertTestData()
     {
         await Task.WhenAll(
-            CreateImportPreNotification("CHEDA.GB.2025.1234567"),
-            CreateImportPreNotification("CHEDA.GB.2025.1234568"),
-            CreateImportPreNotification("CHEDA.GB.2025.1234569"),
-            CreateImportPreNotification("CHEDA.GB.2025.1234510"),
-            CreateCustomsDeclaration("mrn1", "ducr1", ["GBCVD2025.1234569", "GBCVD2025.1234510"]),
-            CreateCustomsDeclaration("mrn2", "ducr2", ["GBCVD2025.1234568", "GBCVD2025.1234569"]),
-            CreateCustomsDeclaration("mrn3", "ducr3", ["GBCVD2025.1234567", "GBCVD2025.1234568"])
+            CreateImportPreNotification("CHEDA.GB.2025.5555555"),
+            CreateImportPreNotification("CHEDA.GB.2025.4444444"),
+            CreateImportPreNotification("CHEDA.GB.2025.6666666"),
+            CreateImportPreNotification("CHEDA.GB.2025.3333333"),
+            CreateCustomsDeclaration("mrn1", "ducr1", ["GBCVD2025.6666666", "GBCVD2025.3333333"]),
+            CreateCustomsDeclaration("mrn2", "ducr2", ["GBCVD2025.4444444", "GBCVD2025.6666666"]),
+            CreateCustomsDeclaration("mrn3", "ducr3", ["GBCVD2025.5555555", "GBCVD2025.4444444"])
         );
     }
 
