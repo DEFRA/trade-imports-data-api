@@ -1393,15 +1393,6 @@
         },
         "additionalProperties": false
       },
-      "Defra.TradeImportsDataApi.Domain.Gvms.Direction": {
-        "enum": [
-          "UkInbound",
-          "UkOutbound",
-          "GbToNi",
-          "NiToGb"
-        ],
-        "type": "string"
-      },
       "Defra.TradeImportsDataApi.Domain.Gvms.Gmr": {
         "type": "object",
         "properties": {
@@ -1416,11 +1407,7 @@
             "nullable": true
           },
           "state": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Gvms.State"
-              }
-            ],
+            "type": "string",
             "description": "The state of the GMR",
             "nullable": true
           },
@@ -1444,20 +1431,12 @@
             "nullable": true
           },
           "direction": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Gvms.Direction"
-              }
-            ],
+            "type": "string",
             "description": "The direction of the movement - into or out of the UK, or between Great Britain and Northern Ireland",
             "nullable": true
           },
           "haulierType": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Gvms.HaulierType"
-              }
-            ],
+            "type": "string",
             "description": "The type of haulier moving the goods",
             "nullable": true
           },
@@ -1522,17 +1501,6 @@
         },
         "additionalProperties": false
       },
-      "Defra.TradeImportsDataApi.Domain.Gvms.HaulierType": {
-        "enum": [
-          "Standard",
-          "FpoAsn",
-          "FpoOther",
-          "NatoMod",
-          "Rmg",
-          "Etoe"
-        ],
-        "type": "string"
-      },
       "Defra.TradeImportsDataApi.Domain.Gvms.PlannedCrossing": {
         "type": "object",
         "properties": {
@@ -1568,17 +1536,6 @@
           }
         },
         "additionalProperties": false
-      },
-      "Defra.TradeImportsDataApi.Domain.Gvms.State": {
-        "enum": [
-          "NotFinalisable",
-          "Open",
-          "Finalised",
-          "CheckedIn",
-          "Embarked",
-          "Completed"
-        ],
-        "type": "string"
       },
       "Defra.TradeImportsDataApi.Domain.Gvms.Transits": {
         "type": "object",

@@ -39,14 +39,14 @@ public class GmrTests : IntegrationTestBase
 
         await client.PutGmr(
             gmrId,
-            new Gmr { Id = gmrId, State = State.Finalised },
+            new Gmr { Id = gmrId, State = State.Completed },
             result.ETag,
             CancellationToken.None
         );
 
         var result2 = await client.GetGmr(gmrId, CancellationToken.None);
         result2.Should().NotBeNull();
-        result2.Gmr.State.Should().Be(State.Finalised);
+        result2.Gmr.State.Should().Be(State.Completed);
         result2.Created.Should().Be(result.Created);
         result2.Updated.Should().BeAfter(result.Updated);
     }

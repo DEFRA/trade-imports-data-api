@@ -1,19 +1,10 @@
-using System.Text.Json.Serialization;
-
 namespace Defra.TradeImportsDataApi.Domain.Gvms;
 
-[JsonConverter(typeof(JsonStringEnumConverter))]
-public enum State
+public static class State
 {
-    NotFinalisable,
-
-    Open,
-
-    Finalised,
-
-    CheckedIn,
-
-    Embarked,
-
-    Completed,
+    public const string NotFinalisable = "NOT_FINALISABLE";
+    public const string Open = "OPEN";
+    public const string CheckedIn = "CHECKED_IN";
+    public const string Embarked = "EMBARKED";
+    public const string Completed = "COMPLETED";
 }
