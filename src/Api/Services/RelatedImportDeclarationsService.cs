@@ -155,8 +155,10 @@ public class RelatedImportDeclarationsService(IDbContext dbContext) : IRelatedIm
         );
 
         // bail out of the recursive loop if there are no records loaded
-        if (response.Item1.Length == data.CustomsDeclaration.Length &&
-            response.Item2.Length == data.ImportPreNotifications.Length)
+        if (
+            response.Item1.Length == data.CustomsDeclaration.Length
+            && response.Item2.Length == data.ImportPreNotifications.Length
+        )
         {
             return response;
         }
