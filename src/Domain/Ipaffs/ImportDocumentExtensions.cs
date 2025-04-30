@@ -2,11 +2,11 @@ using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 
 namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
 
-public static class ImportNotificationTypeEnumExtensions
+public static class ImportDocumentExtensions
 {
-    public static string? GetChedType(this string documentCode)
+    public static string? GetChedType(this ImportDocument document)
     {
-        return documentCode switch
+        return document.DocumentCode switch
         {
             "9115" or "C633" or "N002" or "N851" or "C085" => ImportNotificationType.Chedpp,
             "N852" or "C678" => ImportNotificationType.Ced,
@@ -14,10 +14,5 @@ public static class ImportNotificationTypeEnumExtensions
             "C641" or "C673" or "N853" => ImportNotificationType.Cvedp,
             _ => null,
         };
-    }
-
-    public static string? GetChedType(this ImportDocument document)
-    {
-        return document?.DocumentCode?.GetChedType();
     }
 }

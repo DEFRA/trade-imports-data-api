@@ -6,7 +6,7 @@ using FluentAssertions;
 
 namespace Defra.TradeImportsDataApi.Api.Tests.Domain;
 
-public class ImportNotificationTypeEnumExtensionsTests
+public class ImportDocumentExtensionsTests
 {
     [Theory]
     [InlineData("9115", ImportNotificationType.Chedpp)]
@@ -24,7 +24,7 @@ public class ImportNotificationTypeEnumExtensionsTests
     [InlineData("INVALID", null)]
     public void GetChedTypeTest(string documentCode, string? expectedImportNotificationType)
     {
-        new ImportDocument() { DocumentCode = documentCode }
+        new ImportDocument { DocumentCode = documentCode }
             .GetChedType()
             .Should()
             .Be(expectedImportNotificationType);
