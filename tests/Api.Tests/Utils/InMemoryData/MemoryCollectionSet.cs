@@ -3,7 +3,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
-using MongoDB.Bson.Serialization.IdGenerators;
 
 namespace Defra.TradeImportsDataApi.Api.Tests.Utils.InMemoryData;
 
@@ -30,6 +29,11 @@ public class MemoryCollectionSet<T> : IMongoCollectionSet<T>
 
     public int PendingChanges => 0;
 
+    internal void AddTestData(T item)
+    {
+        data.Add(item);
+    }
+
     public Task<T?> Find(string id, CancellationToken cancellationToken = default)
     {
         return Task.FromResult(data.Find(x => x.Id == id));
@@ -42,10 +46,7 @@ public class MemoryCollectionSet<T> : IMongoCollectionSet<T>
 
     public Task Insert(T item, CancellationToken cancellationToken = default)
     {
-        item.ETag = BsonObjectIdGenerator.Instance.GenerateId(null, null).ToString()!;
-        item.OnSave();
-        data.Add(item);
-        return Task.CompletedTask;
+        throw new NotImplementedException();
     }
 
     [SuppressMessage(
@@ -55,15 +56,12 @@ public class MemoryCollectionSet<T> : IMongoCollectionSet<T>
     )]
     public Task Update(T item, CancellationToken cancellationToken = default)
     {
-        return Update(item, item.ETag, cancellationToken);
+        throw new NotImplementedException();
     }
 
-    public async Task Update(List<T> items, CancellationToken cancellationToken = default)
+    public Task Update(List<T> items, CancellationToken cancellationToken = default)
     {
-        foreach (var item in items)
-        {
-            await Update(item, cancellationToken);
-        }
+        throw new NotImplementedException();
     }
 
     [SuppressMessage(
@@ -73,25 +71,11 @@ public class MemoryCollectionSet<T> : IMongoCollectionSet<T>
     )]
     public Task Update(T item, string etag, CancellationToken cancellationToken = default)
     {
-        etag = etag ?? item.ETag;
-
-        var existingItem = data.Find(x => x.Id == item.Id);
-        if (existingItem == null)
-            return Task.CompletedTask;
-
-        if ((existingItem.ETag) != etag)
-        {
-            throw new ConcurrencyException(item.Id!, etag);
-        }
-
-        item.ETag = BsonObjectIdGenerator.Instance.GenerateId(null, null).ToString()!;
-        item.OnSave();
-        data[data.IndexOf(existingItem)] = item;
-        return Task.CompletedTask;
+        throw new NotImplementedException();
     }
 
     public Task PersistAsync(CancellationToken cancellationToken)
     {
-        return Task.CompletedTask;
+        throw new NotImplementedException();
     }
 }

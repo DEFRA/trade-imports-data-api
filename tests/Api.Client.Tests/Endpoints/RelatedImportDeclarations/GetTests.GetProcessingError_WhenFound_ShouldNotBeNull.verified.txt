@@ -1,9 +1,0 @@
-﻿{
-  MovementReferenceNumber: mrn,
-  ProcessingError: {
-    Notifications: null
-  },
-  Created: 2025-04-07 11:00 Utc,
-  Updated: 2025-04-07 11:15 Utc,
-  ETag: "etag"
-}

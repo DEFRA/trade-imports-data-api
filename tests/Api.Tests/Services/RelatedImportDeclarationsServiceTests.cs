@@ -28,7 +28,7 @@ public class RelatedImportDeclarationsServiceTests
         const string mrn = "mrn";
         var memoryDbContext = new MemoryDbContext();
 
-        await memoryDbContext.CustomsDeclarations.Insert(
+        memoryDbContext.CustomsDeclarations.AddTestData(
             new()
             {
                 Id = mrn,
@@ -58,7 +58,7 @@ public class RelatedImportDeclarationsServiceTests
         const string mrn = "mrn";
         var memoryDbContext = new MemoryDbContext();
 
-        await memoryDbContext.CustomsDeclarations.Insert(
+        memoryDbContext.CustomsDeclarations.AddTestData(
             new()
             {
                 Id = mrn,
@@ -87,7 +87,7 @@ public class RelatedImportDeclarationsServiceTests
             }
         );
 
-        await memoryDbContext.ImportPreNotifications.Insert(
+        memoryDbContext.ImportPreNotifications.AddTestData(
             new()
             {
                 Id = "CHEDA.GB.2025.1234567",
@@ -115,7 +115,7 @@ public class RelatedImportDeclarationsServiceTests
     {
         var memoryDbContext = new MemoryDbContext();
 
-        await memoryDbContext.CustomsDeclarations.Insert(
+        memoryDbContext.CustomsDeclarations.AddTestData(
             new()
             {
                 Id = "mrn",
@@ -144,7 +144,7 @@ public class RelatedImportDeclarationsServiceTests
     {
         var memoryDbContext = new MemoryDbContext();
 
-        await memoryDbContext.CustomsDeclarations.Insert(
+        memoryDbContext.CustomsDeclarations.AddTestData(
             new()
             {
                 Id = "mrn",
@@ -173,7 +173,7 @@ public class RelatedImportDeclarationsServiceTests
             }
         );
 
-        await memoryDbContext.ImportPreNotifications.Insert(
+        memoryDbContext.ImportPreNotifications.AddTestData(
             new()
             {
                 Id = "CHEDA.GB.2025.1234567",
@@ -205,7 +205,7 @@ public class RelatedImportDeclarationsServiceTests
     {
         var memoryDbContext = new MemoryDbContext();
 
-        await memoryDbContext.ImportPreNotifications.Insert(
+        memoryDbContext.ImportPreNotifications.AddTestData(
             new()
             {
                 Id = "CHEDA.GB.2025.1234567",
@@ -250,7 +250,7 @@ public class RelatedImportDeclarationsServiceTests
     public async Task GivenSearchByChedId_WhenExists_AndHasIndirectNotification_ThenIndirectNotificationShouldBeReturned()
     {
         var memoryDbContext = new MemoryDbContext();
-        await InsertTestData(memoryDbContext);
+        InsertTestData(memoryDbContext);
 
         var subject = new RelatedImportDeclarationsService(memoryDbContext);
 
@@ -268,7 +268,7 @@ public class RelatedImportDeclarationsServiceTests
     public async Task GivenSearchByChedId_WhenExists_AndHasIndirectNotification_AndHasMaxDepth_ThenIndirectNotificationShouldBeReturned()
     {
         var memoryDbContext = new MemoryDbContext();
-        await InsertTestData(memoryDbContext);
+        InsertTestData(memoryDbContext);
 
         var subject = new RelatedImportDeclarationsService(memoryDbContext);
 
@@ -282,20 +282,20 @@ public class RelatedImportDeclarationsServiceTests
         response.ImportPreNotifications.Length.Should().Be(2);
     }
 
-    private async Task InsertTestData(MemoryDbContext memoryDbContext)
+    private void InsertTestData(MemoryDbContext memoryDbContext)
     {
-        await memoryDbContext.ImportPreNotifications.Insert(CreateImportPreNotification("CHEDA.GB.2025.1234567"));
-        await memoryDbContext.ImportPreNotifications.Insert(CreateImportPreNotification("CHEDA.GB.2025.1234568"));
-        await memoryDbContext.ImportPreNotifications.Insert(CreateImportPreNotification("CHEDA.GB.2025.1234569"));
-        await memoryDbContext.ImportPreNotifications.Insert(CreateImportPreNotification("CHEDA.GB.2025.1234510"));
+        memoryDbContext.ImportPreNotifications.AddTestData(CreateImportPreNotification("CHEDA.GB.2025.1234567"));
+        memoryDbContext.ImportPreNotifications.AddTestData(CreateImportPreNotification("CHEDA.GB.2025.1234568"));
+        memoryDbContext.ImportPreNotifications.AddTestData(CreateImportPreNotification("CHEDA.GB.2025.1234569"));
+        memoryDbContext.ImportPreNotifications.AddTestData(CreateImportPreNotification("CHEDA.GB.2025.1234510"));
 
-        await memoryDbContext.CustomsDeclarations.Insert(
+        memoryDbContext.CustomsDeclarations.AddTestData(
             CreateCustomsDeclaration("mrn1", ["GBCVD2025.1234569", "GBCVD2025.1234510"])
         );
-        await memoryDbContext.CustomsDeclarations.Insert(
+        memoryDbContext.CustomsDeclarations.AddTestData(
             CreateCustomsDeclaration("mrn2", ["GBCVD2025.1234568", "GBCVD2025.1234569"])
         );
-        await memoryDbContext.CustomsDeclarations.Insert(
+        memoryDbContext.CustomsDeclarations.AddTestData(
             CreateCustomsDeclaration("mrn3", ["GBCVD2025.1234567", "GBCVD2025.1234568"])
         );
     }
