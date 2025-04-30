@@ -15,6 +15,6 @@ public class MemoryDbContext : IDbContext
 
     public Task SaveChangesAsync(CancellationToken cancellation = default)
     {
-        return Task.CompletedTask;
+        throw new NotImplementedException();
     }
 }

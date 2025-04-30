@@ -28,7 +28,7 @@ public class RelatedImportDeclarationsServiceTests
         const string mrn = "mrn";
         var memoryDbContext = new MemoryDbContext();
 
-        await memoryDbContext.CustomsDeclarations.Insert(
+        memoryDbContext.CustomsDeclarations.AddTestData(
             new()
             {
                 Id = mrn,
@@ -58,23 +58,40 @@ public class RelatedImportDeclarationsServiceTests
         const string mrn = "mrn";
         var memoryDbContext = new MemoryDbContext();
 
-        await memoryDbContext.CustomsDeclarations.Insert(
+        memoryDbContext.CustomsDeclarations.AddTestData(
             new()
             {
                 Id = mrn,
-                ImportPreNotificationIdentifiers = ["123"],
-                ClearanceRequest = new ClearanceRequest(),
+                ImportPreNotificationIdentifiers = ["1234567"],
+                ClearanceRequest = new ClearanceRequest()
+                {
+                    DeclarationUcr = "ducr123",
+                    Commodities =
+                    [
+                        new Commodity()
+                        {
+                            Documents = new[]
+                            {
+                                new ImportDocument()
+                                {
+                                    DocumentCode = "C640",
+                                    DocumentReference = new ImportDocumentReference("CHEDA.GB.2025.1234567"),
+                                },
+                            },
+                        },
+                    ],
+                },
                 Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
                 Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
                 ETag = "etag",
             }
         );
 
-        await memoryDbContext.ImportPreNotifications.Insert(
+        memoryDbContext.ImportPreNotifications.AddTestData(
             new()
             {
-                Id = mrn,
-                CustomsDeclarationIdentifier = "123",
+                Id = "CHEDA.GB.2025.1234567",
+                CustomsDeclarationIdentifier = "1234567",
                 ImportPreNotification = new ImportPreNotification(),
                 Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
                 Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
@@ -99,7 +116,7 @@ public class RelatedImportDeclarationsServiceTests
     {
         var memoryDbContext = new MemoryDbContext();
 
-        await memoryDbContext.CustomsDeclarations.Insert(
+        memoryDbContext.CustomsDeclarations.AddTestData(
             new()
             {
                 Id = "mrn",
@@ -128,23 +145,40 @@ public class RelatedImportDeclarationsServiceTests
     {
         var memoryDbContext = new MemoryDbContext();
 
-        await memoryDbContext.CustomsDeclarations.Insert(
+        memoryDbContext.CustomsDeclarations.AddTestData(
             new()
             {
                 Id = "mrn",
-                ImportPreNotificationIdentifiers = ["123"],
-                ClearanceRequest = new ClearanceRequest() { DeclarationUcr = "ducr123" },
+                ImportPreNotificationIdentifiers = ["1234567"],
+                ClearanceRequest = new ClearanceRequest()
+                {
+                    DeclarationUcr = "ducr123",
+                    Commodities =
+                    [
+                        new Commodity()
+                        {
+                            Documents = new[]
+                            {
+                                new ImportDocument()
+                                {
+                                    DocumentCode = "C640",
+                                    DocumentReference = new ImportDocumentReference("CHEDA.GB.2025.1234567"),
+                                },
+                            },
+                        },
+                    ],
+                },
                 Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
                 Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
                 ETag = "etag",
             }
         );
 
-        await memoryDbContext.ImportPreNotifications.Insert(
+        memoryDbContext.ImportPreNotifications.AddTestData(
             new()
             {
-                Id = "mrn",
-                CustomsDeclarationIdentifier = "123",
+                Id = "CHEDA.GB.2025.1234567",
+                CustomsDeclarationIdentifier = "1234567",
                 ImportPreNotification = new ImportPreNotification(),
                 Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
                 Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
@@ -173,7 +207,7 @@ public class RelatedImportDeclarationsServiceTests
     {
         var memoryDbContext = new MemoryDbContext();
 
-        await memoryDbContext.ImportPreNotifications.Insert(
+        memoryDbContext.ImportPreNotifications.AddTestData(
             new()
             {
                 Id = "CHEDA.GB.2025.1234567",
@@ -218,7 +252,7 @@ public class RelatedImportDeclarationsServiceTests
     public async Task GivenSearchByChedId_WhenExists_AndHasIndirectNotification_ThenIndirectNotificationShouldBeReturned()
     {
         var memoryDbContext = new MemoryDbContext();
-        await InsertTestData(memoryDbContext);
+        InsertTestData(memoryDbContext);
 
         var subject = new RelatedImportDeclarationsService(memoryDbContext);
 
@@ -236,7 +270,7 @@ public class RelatedImportDeclarationsServiceTests
     public async Task GivenSearchByChedId_WhenExists_AndHasIndirectNotification_AndHasMaxDepth_ThenIndirectNotificationShouldBeReturned()
     {
         var memoryDbContext = new MemoryDbContext();
-        await InsertTestData(memoryDbContext);
+        InsertTestData(memoryDbContext);
 
         var subject = new RelatedImportDeclarationsService(memoryDbContext);
 
@@ -250,19 +284,19 @@ public class RelatedImportDeclarationsServiceTests
         response.ImportPreNotifications.Length.Should().Be(2);
     }
 
-    private async Task InsertTestData(MemoryDbContext memoryDbContext)
+    private static void InsertTestData(MemoryDbContext memoryDbContext)
     {
-        await memoryDbContext.ImportPreNotifications.Insert(CreateImportPreNotification("CHEDA.GB.2025.1234567"));
-        await memoryDbContext.ImportPreNotifications.Insert(CreateImportPreNotification("CHEDA.GB.2025.1234568"));
-        await memoryDbContext.ImportPreNotifications.Insert(CreateImportPreNotification("CHEDA.GB.2025.1234569"));
-        await memoryDbContext.ImportPreNotifications.Insert(CreateImportPreNotification("CHEDA.GB.2025.1234510"));
+        memoryDbContext.ImportPreNotifications.AddTestData(CreateImportPreNotification("CHEDA.GB.2025.1234567"));
+        memoryDbContext.ImportPreNotifications.AddTestData(CreateImportPreNotification("CHEDA.GB.2025.1234568"));
+        memoryDbContext.ImportPreNotifications.AddTestData(CreateImportPreNotification("CHEDA.GB.2025.1234569"));
+        memoryDbContext.ImportPreNotifications.AddTestData(CreateImportPreNotification("CHEDA.GB.2025.1234510"));
 
-        await memoryDbContext.CustomsDeclarations.Insert(CreateCustomsDeclaration("mrn1", ["1234569", "1234510"]));
-        await memoryDbContext.CustomsDeclarations.Insert(CreateCustomsDeclaration("mrn2", ["1234568", "1234569"]));
-        await memoryDbContext.CustomsDeclarations.Insert(CreateCustomsDeclaration("mrn3", ["1234567", "1234568"]));
+        memoryDbContext.CustomsDeclarations.AddTestData(CreateCustomsDeclaration("mrn1", ["1234569", "1234510"]));
+        memoryDbContext.CustomsDeclarations.AddTestData(CreateCustomsDeclaration("mrn2", ["1234568", "1234569"]));
+        memoryDbContext.CustomsDeclarations.AddTestData(CreateCustomsDeclaration("mrn3", ["1234567", "1234568"]));
     }
 
-    private ImportPreNotificationEntity CreateImportPreNotification(string chedId)
+    private static ImportPreNotificationEntity CreateImportPreNotification(string chedId)
     {
         return new ImportPreNotificationEntity()
         {
@@ -275,12 +309,20 @@ public class RelatedImportDeclarationsServiceTests
         };
     }
 
-    private CustomsDeclarationEntity CreateCustomsDeclaration(string mrn, List<string> links)
+    private static CustomsDeclarationEntity CreateCustomsDeclaration(string mrn, List<string> links)
     {
+        var documents = links
+            .Select(x => new ImportDocument()
+            {
+                DocumentReference = new ImportDocumentReference(x),
+                DocumentCode = "C640",
+            })
+            .ToArray();
         return new CustomsDeclarationEntity()
         {
             Id = mrn,
             ImportPreNotificationIdentifiers = links,
+            ClearanceRequest = new ClearanceRequest() { Commodities = [new Commodity() { Documents = documents }] },
             Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
             Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
             ETag = "etag",

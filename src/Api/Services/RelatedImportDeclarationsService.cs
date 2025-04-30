@@ -149,6 +149,20 @@ public class RelatedImportDeclarationsService(IDbContext dbContext) : IRelatedIm
             );
         }
 
+        var response = new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[]>(
+            customsDeclarations.ToArray(),
+            importPreNotifications.ToArray()
+        );
+
+        // bail out of the recursive loop if there are no records loaded
+        if (
+            response.Item1.Length == data.CustomsDeclaration.Length
+            && response.Item2.Length == data.ImportPreNotifications.Length
+        )
+        {
+            return response;
+        }
+
         return await IncludeIndirectLinks(
             new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[]>(
                 customsDeclarations.ToArray(),
