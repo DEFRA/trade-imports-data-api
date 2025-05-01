@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Defra.TradeImportsDataApi.Domain.Attributes;
 
 namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
 
@@ -154,6 +155,16 @@ public class Decision
     /// </summary>
     [JsonPropertyName("decision")]
     [System.ComponentModel.Description("Detailed decision for consignment")]
+    [PossibleValue("Non Acceptable")]
+    [PossibleValue("Acceptable for Internal Market")]
+    [PossibleValue("Acceptable if Channeled")]
+    [PossibleValue("Acceptable for Transhipment")]
+    [PossibleValue("Acceptable for Transit")]
+    [PossibleValue("Acceptable for Temporary Import")]
+    [PossibleValue("Acceptable for Specific Warehouse")]
+    [PossibleValue("Acceptable for Private Import")]
+    [PossibleValue("Acceptable for Transfer")]
+    [PossibleValue("Horse Re-entry")]
     public string? ConsignmentDecision { get; set; }
 
     /// <summary>

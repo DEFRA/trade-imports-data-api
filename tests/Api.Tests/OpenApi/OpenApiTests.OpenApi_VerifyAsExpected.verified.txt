@@ -2527,8 +2527,20 @@
             "nullable": true
           },
           "decision": {
+            "enum": [
+              "Non Acceptable",
+              "Acceptable for Internal Market",
+              "Acceptable if Channeled",
+              "Acceptable for Transhipment",
+              "Acceptable for Transit",
+              "Acceptable for Temporary Import",
+              "Acceptable for Specific Warehouse",
+              "Acceptable for Private Import",
+              "Acceptable for Transfer",
+              "Horse Re-entry"
+            ],
             "type": "string",
-            "description": "Detailed decision for consignment",
+            "description": "Detailed decision for consignment. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "freeCirculationPurpose": {
@@ -2874,8 +2886,15 @@
             "nullable": true
           },
           "importNotificationType": {
+            "enum": [
+              "CVEDA",
+              "CVEDP",
+              "CHEDPP",
+              "CED",
+              "IMP"
+            ],
             "type": "string",
-            "description": "The Type of notification that has been submitted",
+            "description": "The Type of notification that has been submitted. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "replaces": {
@@ -2889,8 +2908,23 @@
             "nullable": true
           },
           "status": {
+            "enum": [
+              "DRAFT",
+              "SUBMITTED",
+              "VALIDATED",
+              "REJECTED",
+              "IN_PROGRESS",
+              "AMEND",
+              "MODIFY",
+              "REPLACED",
+              "CANCELLED",
+              "DELETED",
+              "PARTIALLY_REJECTED",
+              "SPLIT_CONSIGNMENT",
+              "SUBMITTED,IN_PROGRESS,MODIFY"
+            ],
             "type": "string",
-            "description": "Current status of the notification. When created by an importer, the notification has the status 'SUBMITTED'. Before submission of the notification it has the status 'DRAFT'. When the BIP starts validation of the notification it has the status 'IN PROGRESS' Once the BIP validates the notification, it gets the status 'VALIDATED'. 'AMEND' is set when the Part-1 user is modifying the notification. 'MODIFY' is set when Part-2 user is modifying the notification. Replaced - When the notification is replaced by another notification. Rejected - Notification moves to Rejected status when rejected by a Part-2 user.",
+            "description": "Current status of the notification. When created by an importer, the notification has the status 'SUBMITTED'. Before submission of the notification it has the status 'DRAFT'. When the BIP starts validation of the notification it has the status 'IN PROGRESS' Once the BIP validates the notification, it gets the status 'VALIDATED'. 'AMEND' is set when the Part-1 user is modifying the notification. 'MODIFY' is set when Part-2 user is modifying the notification. Replaced - When the notification is replaced by another notification. Rejected - Notification moves to Rejected status when rejected by a Part-2 user. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "splitConsignment": {

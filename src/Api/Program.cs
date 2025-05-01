@@ -8,6 +8,7 @@ using Defra.TradeImportsDataApi.Api.Endpoints.ImportPreNotifications;
 using Defra.TradeImportsDataApi.Api.Endpoints.ProcessingErrors;
 using Defra.TradeImportsDataApi.Api.Endpoints.Search;
 using Defra.TradeImportsDataApi.Api.Health;
+using Defra.TradeImportsDataApi.Api.OpenApi;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Api.Utils;
 using Defra.TradeImportsDataApi.Api.Utils.Logging;
@@ -99,6 +100,7 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
         );
         c.IncludeXmlComments(Assembly.GetExecutingAssembly());
         c.IncludeXmlComments(typeof(ImportPreNotification).Assembly);
+        c.SchemaFilter<PossibleValueSchemaFilter>();
         c.CustomSchemaIds(x => x.FullName);
         c.UseAllOfToExtendReferenceSchemas();
         c.SwaggerDoc(
