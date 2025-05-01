@@ -108,6 +108,11 @@ public class Decision
     /// </summary>
     [JsonPropertyName("notAcceptableActionUseForOtherPurposesReason")]
     [System.ComponentModel.Description("Filled if not acceptable action is set to use for other purposes")]
+    [PossibleValue("ContaminatedProducts")]
+    [PossibleValue("InterceptedPart")]
+    [PossibleValue("PackagingMaterial")]
+    [PossibleValue("MeansOfTransport")]
+    [PossibleValue("Other")]
     public string? NotAcceptableActionUseForOtherPurposesReason { get; set; }
 
     /// <summary>

@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Defra.TradeImportsDataApi.Domain.Attributes;
 
 namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
 
@@ -12,6 +13,38 @@ public class AccompanyingDocument
     /// </summary>
     [JsonPropertyName("documentType")]
     [System.ComponentModel.Description("Additional document type")]
+    [PossibleValue("airWaybill")]
+    [PossibleValue("billOfLading")]
+    [PossibleValue("cargoManifest")]
+    [PossibleValue("catchCertificate")]
+    [PossibleValue("commercialDocument")]
+    [PossibleValue("commercialInvoice")]
+    [PossibleValue("conformityCertificate")]
+    [PossibleValue("containerManifest")]
+    [PossibleValue("customsDeclaration")]
+    [PossibleValue("docom")]
+    [PossibleValue("healthCertificate")]
+    [PossibleValue("heatTreatmentCertificate")]
+    [PossibleValue("importPermit")]
+    [PossibleValue("inspectionCertificate")]
+    [PossibleValue("itahc")]
+    [PossibleValue("journeyLog")]
+    [PossibleValue("laboratorySamplingResultsForAflatoxin")]
+    [PossibleValue("latestVeterinaryHealthCertificate")]
+    [PossibleValue("letterOfAuthority")]
+    [PossibleValue("licenseOrAuthorisation")]
+    [PossibleValue("mycotoxinCertification")]
+    [PossibleValue("originCertificate")]
+    [PossibleValue("other")]
+    [PossibleValue("phytosanitaryCertificate")]
+    [PossibleValue("processingStatement")]
+    [PossibleValue("proofOfStorage")]
+    [PossibleValue("railwayBill")]
+    [PossibleValue("seaWaybill")]
+    [PossibleValue("veterinaryHealthCertificate")]
+    [PossibleValue("listOfIngredients")]
+    [PossibleValue("packingList")]
+    [PossibleValue("roadConsignmentNote")]
     public string? DocumentType { get; set; }
 
     /// <summary>

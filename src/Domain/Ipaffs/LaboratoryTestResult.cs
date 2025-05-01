@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Defra.TradeImportsDataApi.Domain.Attributes;
 
 namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
 
@@ -40,6 +41,10 @@ public class LaboratoryTestResult
     /// </summary>
     [JsonPropertyName("conclusion")]
     [System.ComponentModel.Description("Conclusion of laboratory test")]
+    [PossibleValue("Satisfactory")]
+    [PossibleValue("Not satisfactory")]
+    [PossibleValue("Not interpretable")]
+    [PossibleValue("Pending")]
     public string? Conclusion { get; set; }
 
     /// <summary>

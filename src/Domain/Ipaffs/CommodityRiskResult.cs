@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Defra.TradeImportsDataApi.Domain.Attributes;
 
 namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
 
@@ -12,6 +13,10 @@ public class CommodityRiskResult
     /// </summary>
     [JsonPropertyName("riskDecision")]
     [System.ComponentModel.Description("CHED-A, CHED-D, CHED-P - what is the commodity complement risk decision")]
+    [PossibleValue("REQUIRED")]
+    [PossibleValue("NOTREQUIRED")]
+    [PossibleValue("INCONCLUSIVE")]
+    [PossibleValue("REENFORCED_CHECK")]
     public string? RiskDecision { get; set; }
 
     /// <summary>
@@ -19,6 +24,9 @@ public class CommodityRiskResult
     /// </summary>
     [JsonPropertyName("exitRiskDecision")]
     [System.ComponentModel.Description("Transit CHED - what is the commodity complement exit risk decision")]
+    [PossibleValue("REQUIRED")]
+    [PossibleValue("NOTREQUIRED")]
+    [PossibleValue("INCONCLUSIVE")]
     public string? ExitRiskDecision { get; set; }
 
     /// <summary>
@@ -26,6 +34,8 @@ public class CommodityRiskResult
     /// </summary>
     [JsonPropertyName("hmiDecision")]
     [System.ComponentModel.Description("HMI decision required")]
+    [PossibleValue("REQUIRED")]
+    [PossibleValue("NOTREQUIRED")]
     public string? HmiDecision { get; set; }
 
     /// <summary>
@@ -33,6 +43,8 @@ public class CommodityRiskResult
     /// </summary>
     [JsonPropertyName("phsiDecision")]
     [System.ComponentModel.Description("PHSI decision required")]
+    [PossibleValue("REQUIRED")]
+    [PossibleValue("NOTREQUIRED")]
     public string? PhsiDecision { get; set; }
 
     /// <summary>
@@ -40,6 +52,9 @@ public class CommodityRiskResult
     /// </summary>
     [JsonPropertyName("phsiClassification")]
     [System.ComponentModel.Description("PHSI classification")]
+    [PossibleValue("Mandatory")]
+    [PossibleValue("Reduced")]
+    [PossibleValue("Controlled")]
     public string? PhsiClassification { get; set; }
 
     /// <summary>

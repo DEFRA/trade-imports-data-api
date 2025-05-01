@@ -1552,8 +1552,42 @@
         "type": "object",
         "properties": {
           "documentType": {
+            "enum": [
+              "airWaybill",
+              "billOfLading",
+              "cargoManifest",
+              "catchCertificate",
+              "commercialDocument",
+              "commercialInvoice",
+              "conformityCertificate",
+              "containerManifest",
+              "customsDeclaration",
+              "docom",
+              "healthCertificate",
+              "heatTreatmentCertificate",
+              "importPermit",
+              "inspectionCertificate",
+              "itahc",
+              "journeyLog",
+              "laboratorySamplingResultsForAflatoxin",
+              "latestVeterinaryHealthCertificate",
+              "letterOfAuthority",
+              "licenseOrAuthorisation",
+              "mycotoxinCertification",
+              "originCertificate",
+              "other",
+              "phytosanitaryCertificate",
+              "processingStatement",
+              "proofOfStorage",
+              "railwayBill",
+              "seaWaybill",
+              "veterinaryHealthCertificate",
+              "listOfIngredients",
+              "packingList",
+              "roadConsignmentNote"
+            ],
             "type": "string",
-            "description": "Additional document type",
+            "description": "Additional document type. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "documentReference": {
@@ -1715,8 +1749,13 @@
             "nullable": true
           },
           "analysisType": {
+            "enum": [
+              "Initial analysis",
+              "Counter analysis",
+              "Second expert analysis"
+            ],
             "type": "string",
-            "description": "Type of analysis",
+            "description": "Type of analysis. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "numberOfSamples": {
@@ -1731,8 +1770,13 @@
             "nullable": true
           },
           "conservationOfSample": {
+            "enum": [
+              "Ambient",
+              "Chilled",
+              "Frozen"
+            ],
             "type": "string",
-            "description": "Conservation of sample",
+            "description": "Conservation of sample. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "inspector": {
@@ -1895,13 +1939,49 @@
         "type": "object",
         "properties": {
           "reason": {
+            "enum": [
+              "doc-phmdm",
+              "doc-phmdii",
+              "doc-pa",
+              "doc-pic",
+              "doc-pill",
+              "doc-ped",
+              "doc-pmod",
+              "doc-pfi",
+              "doc-pnol",
+              "doc-pcne",
+              "doc-padm",
+              "doc-padi",
+              "doc-ppni",
+              "doc-pf",
+              "doc-po",
+              "doc-ncevd",
+              "doc-ncpqefi",
+              "doc-ncpqebec",
+              "doc-ncts",
+              "doc-nco",
+              "doc-orii",
+              "doc-orsr",
+              "ori-orrnu",
+              "phy-orpp",
+              "phy-orho",
+              "phy-is",
+              "phy-orsr",
+              "oth-cnl",
+              "oth-o"
+            ],
             "type": "string",
-            "description": "reason for refusal",
+            "description": "reason for refusal. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "commodityOrPackage": {
+            "enum": [
+              "c",
+              "p",
+              "cp"
+            ],
             "type": "string",
-            "description": "commodity or package",
+            "description": "commodity or package. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           }
         },
@@ -2135,28 +2215,52 @@
         "type": "object",
         "properties": {
           "riskDecision": {
+            "enum": [
+              "REQUIRED",
+              "NOTREQUIRED",
+              "INCONCLUSIVE",
+              "REENFORCED_CHECK"
+            ],
             "type": "string",
-            "description": "CHED-A, CHED-D, CHED-P - what is the commodity complement risk decision",
+            "description": "CHED-A, CHED-D, CHED-P - what is the commodity complement risk decision. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "exitRiskDecision": {
+            "enum": [
+              "REQUIRED",
+              "NOTREQUIRED",
+              "INCONCLUSIVE"
+            ],
             "type": "string",
-            "description": "Transit CHED - what is the commodity complement exit risk decision",
+            "description": "Transit CHED - what is the commodity complement exit risk decision. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "hmiDecision": {
+            "enum": [
+              "REQUIRED",
+              "NOTREQUIRED"
+            ],
             "type": "string",
-            "description": "HMI decision required",
+            "description": "HMI decision required. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "phsiDecision": {
+            "enum": [
+              "REQUIRED",
+              "NOTREQUIRED"
+            ],
             "type": "string",
-            "description": "PHSI decision required",
+            "description": "PHSI decision required. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "phsiClassification": {
+            "enum": [
+              "Mandatory",
+              "Reduced",
+              "Controlled"
+            ],
             "type": "string",
-            "description": "PHSI classification",
+            "description": "PHSI classification. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "phsi": {
@@ -2538,8 +2642,15 @@
             "nullable": true
           },
           "notAcceptableActionUseForOtherPurposesReason": {
+            "enum": [
+              "ContaminatedProducts",
+              "InterceptedPart",
+              "PackagingMaterial",
+              "MeansOfTransport",
+              "Other"
+            ],
             "type": "string",
-            "description": "Filled if not acceptable action is set to use for other purposes",
+            "description": "Filled if not acceptable action is set to use for other purposes. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "notAcceptableDestructionReason": {
@@ -3387,8 +3498,14 @@
             "nullable": true
           },
           "conclusion": {
+            "enum": [
+              "Satisfactory",
+              "Not satisfactory",
+              "Not interpretable",
+              "Pending"
+            ],
             "type": "string",
-            "description": "Conclusion of laboratory test",
+            "description": "Conclusion of laboratory test. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "labTestCreatedOn": {
@@ -4132,8 +4249,13 @@
             "nullable": true
           },
           "inspectionRequired": {
+            "enum": [
+              "Required",
+              "Inconclusive",
+              "Not required"
+            ],
             "type": "string",
-            "description": "Inspection required",
+            "description": "Inspection required. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "inspectionOverride": {
@@ -4323,8 +4445,28 @@
             "nullable": true
           },
           "internalMarketPurpose": {
+            "enum": [
+              "Animal Feeding Stuff",
+              "Human Consumption",
+              "Pharmaceutical Use",
+              "Technical Use",
+              "Other",
+              "Commercial Sale",
+              "Commercial sale or change of ownership",
+              "Rescue",
+              "Breeding",
+              "Research",
+              "Racing or Competition",
+              "Approved Premises or Body",
+              "Companion Animal not for Resale or Rehoming",
+              "Production",
+              "Slaughter",
+              "Fattening",
+              "Game Restocking",
+              "Registered Horses"
+            ],
             "type": "string",
-            "description": "Detailed purpose of internal market purpose group",
+            "description": "Detailed purpose of internal market purpose group. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "thirdCountryTranshipment": {
