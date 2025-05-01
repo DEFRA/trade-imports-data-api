@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Defra.TradeImportsDataApi.Domain.Attributes;
 
 namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
 
@@ -89,6 +90,8 @@ public class Party
     /// </summary>
     [JsonPropertyName("type")]
     [System.ComponentModel.Description("Type of party")]
+    [PossibleValue("Commercial transporter")]
+    [PossibleValue("Private transporter")]
     public string? Type { get; set; }
 
     /// <summary>

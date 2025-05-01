@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Defra.TradeImportsDataApi.Domain.Attributes;
 
 namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
 
@@ -33,5 +34,8 @@ public class Control
     /// </summary>
     [JsonPropertyName("consignmentLeave")]
     [System.ComponentModel.Description("Is the consignment leaving UK borders?")]
+    [PossibleValue("YES")]
+    [PossibleValue("NO")]
+    [PossibleValue("It has been destroyed")]
     public string? ConsignmentLeave { get; set; }
 }

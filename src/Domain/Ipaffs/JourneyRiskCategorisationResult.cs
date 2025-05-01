@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Defra.TradeImportsDataApi.Domain.Attributes;
 using Defra.TradeImportsDataApi.Domain.Json;
 
 namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
@@ -13,6 +14,9 @@ public class JourneyRiskCategorisationResult
     /// </summary>
     [JsonPropertyName("riskLevel")]
     [System.ComponentModel.Description("Risk Level is defined using enum values High,Medium,Low")]
+    [PossibleValue("High")]
+    [PossibleValue("Medium")]
+    [PossibleValue("Low")]
     public string? RiskLevel { get; set; }
 
     /// <summary>
@@ -22,6 +26,8 @@ public class JourneyRiskCategorisationResult
     [System.ComponentModel.Description(
         "Indicator of whether the risk level was determined by the system or by the user"
     )]
+    [PossibleValue("System")]
+    [PossibleValue("User")]
     public string? RiskLevelMethod { get; set; }
 
     /// <summary>

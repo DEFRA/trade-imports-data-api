@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Defra.TradeImportsDataApi.Domain.Attributes;
 
 namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
 
@@ -47,6 +48,9 @@ public class ConsignmentCheck
     /// </summary>
     [JsonPropertyName("identityCheckType")]
     [System.ComponentModel.Description("Type of identity check performed")]
+    [PossibleValue("Seal Check")]
+    [PossibleValue("Full Identity Check")]
+    [PossibleValue("Not Done")]
     public string? IdentityCheckType { get; set; }
 
     /// <summary>
@@ -61,6 +65,8 @@ public class ConsignmentCheck
     /// </summary>
     [JsonPropertyName("identityCheckNotDoneReason")]
     [System.ComponentModel.Description("What was the reason for skipping identity check")]
+    [PossibleValue("Reduced checks regime")]
+    [PossibleValue("Not required")]
     public string? IdentityCheckNotDoneReason { get; set; }
 
     /// <summary>
@@ -82,6 +88,8 @@ public class ConsignmentCheck
     /// </summary>
     [JsonPropertyName("physicalCheckNotDoneReason")]
     [System.ComponentModel.Description("What was the reason for skipping physical check")]
+    [PossibleValue("Reduced checks regime")]
+    [PossibleValue("Other")]
     public string? PhysicalCheckNotDoneReason { get; set; }
 
     /// <summary>

@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Defra.TradeImportsDataApi.Domain.Attributes;
 
 namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
 
@@ -12,6 +13,10 @@ public class FeedbackInformation
     /// </summary>
     [JsonPropertyName("authorityType")]
     [System.ComponentModel.Description("Type of authority")]
+    [PossibleValue("exitbip")]
+    [PossibleValue("finalbip")]
+    [PossibleValue("localvetunit")]
+    [PossibleValue("inspunit")]
     public string? AuthorityType { get; set; }
 
     /// <summary>

@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Defra.TradeImportsDataApi.Domain.Attributes;
 
 namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
 
@@ -33,6 +34,10 @@ public class Purpose
     /// </summary>
     [JsonPropertyName("forNonConforming")]
     [System.ComponentModel.Description("Detailed purpose for non conforming purpose group")]
+    [PossibleValue("Customs Warehouse")]
+    [PossibleValue("Free Zone or Free Warehouse")]
+    [PossibleValue("Ship Supplier")]
+    [PossibleValue("Ship")]
     public string? ForNonConforming { get; set; }
 
     /// <summary>
@@ -84,6 +89,9 @@ public class Purpose
     /// </summary>
     [JsonPropertyName("forImportOrAdmission")]
     [System.ComponentModel.Description("Specification of Import or admission purpose")]
+    [PossibleValue("Definitive import")]
+    [PossibleValue("Horses Re-entry")]
+    [PossibleValue("Temporary admission horses")]
     public string? ForImportOrAdmission { get; set; }
 
     /// <summary>
@@ -105,6 +113,14 @@ public class Purpose
     /// </summary>
     [JsonPropertyName("purposeGroup")]
     [System.ComponentModel.Description("Purpose group of consignment (general purpose)")]
+    [PossibleValue("For Import")]
+    [PossibleValue("For NON-Conforming Consignments")]
+    [PossibleValue("For Transhipment to")]
+    [PossibleValue("For Transit to 3rd Country")]
+    [PossibleValue("For Re-Import")]
+    [PossibleValue("For Private Import")]
+    [PossibleValue("For Transfer To")]
+    [PossibleValue("For Import Re-Conformity Check")]
     public string? PurposeGroup { get; set; }
 
     /// <summary>

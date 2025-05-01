@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Defra.TradeImportsDataApi.Domain.Attributes;
 using Defra.TradeImportsDataApi.Domain.Json;
 
 namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
@@ -12,6 +13,9 @@ public class PartOne
     [System.ComponentModel.Description(
         "Used to indicate what type of EU Import the notification is - Live Animals, Product Of Animal Origin or High Risk Food Not Of Animal Origin"
     )]
+    [PossibleValue("A")]
+    [PossibleValue("P")]
+    [PossibleValue("D")]
     public string? TypeOfImp { get; set; }
 
     /// <summary>
@@ -147,6 +151,24 @@ public class PartOne
     /// </summary>
     [JsonPropertyName("purpose")]
     [System.ComponentModel.Description("Purpose of consignment details")]
+    [PossibleValue("Animal Feeding Stuff")]
+    [PossibleValue("Human Consumption")]
+    [PossibleValue("Pharmaceutical Use")]
+    [PossibleValue("Technical Use")]
+    [PossibleValue("Other")]
+    [PossibleValue("Commercial Sale")]
+    [PossibleValue("Commercial sale or change of ownership")]
+    [PossibleValue("Rescue")]
+    [PossibleValue("Breeding")]
+    [PossibleValue("Research")]
+    [PossibleValue("Racing or Competition")]
+    [PossibleValue("Approved Premises or Body")]
+    [PossibleValue("Companion Animal not for Resale or Rehoming")]
+    [PossibleValue("Production")]
+    [PossibleValue("Slaughter")]
+    [PossibleValue("Fattening")]
+    [PossibleValue("Game Restocking")]
+    [PossibleValue("Registered Horses")]
     public Purpose? Purpose { get; set; }
 
     /// <summary>
@@ -331,6 +353,9 @@ public class PartOne
     /// </summary>
     [JsonPropertyName("provideCtcMrn")]
     [System.ComponentModel.Description("When the NCTS MRN will be added for the Common Transit Convention (CTC)")]
+    [PossibleValue("YES")]
+    [PossibleValue("YES_ADD_LATER")]
+    [PossibleValue("NO")]
     public string? ProvideCtcMrn { get; set; }
 
     /// <summary>

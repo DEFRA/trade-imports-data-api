@@ -70,7 +70,7 @@ public class ImportPreNotification
     /// Reference number of notification that was replaced by this one
     /// </summary>
     [JsonPropertyName("replaces")]
-    [System.ComponentModel.Description("Reference number of notification that was replaced by this one")]
+    [System.ComponentModel.Description("Reference number of notification that was replaced by this one another test")]
     public string? Replaces { get; set; }
 
     /// <summary>

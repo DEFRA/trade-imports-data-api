@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Defra.TradeImportsDataApi.Domain.Attributes;
 
 namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
 
@@ -26,6 +27,13 @@ public class DetailsOnReExport
     /// </summary>
     [JsonPropertyName("transportType")]
     [System.ComponentModel.Description("Type of transport to be used")]
+    [PossibleValue("rail")]
+    [PossibleValue("plane")]
+    [PossibleValue("ship")]
+    [PossibleValue("road")]
+    [PossibleValue("other")]
+    [PossibleValue("c_ship_road")]
+    [PossibleValue("c_ship_rail")]
     public string? TransportType { get; set; }
 
     /// <summary>

@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Defra.TradeImportsDataApi.Domain.Attributes;
 
 namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
 
@@ -12,6 +13,14 @@ public class MeansOfTransport
     /// </summary>
     [JsonPropertyName("type")]
     [System.ComponentModel.Description("Type of transport")]
+    [PossibleValue("Aeroplane")]
+    [PossibleValue("Road Vehicle")]
+    [PossibleValue("Railway Wagon")]
+    [PossibleValue("Ship")]
+    [PossibleValue("Other")]
+    [PossibleValue("Road vehicle Aeroplane")]
+    [PossibleValue("Ship Railway wagon")]
+    [PossibleValue("Ship Road vehicle")]
     public string? Type { get; set; }
 
     /// <summary>

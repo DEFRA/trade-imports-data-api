@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Defra.TradeImportsDataApi.Domain.Attributes;
 
 namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
 
@@ -19,6 +20,19 @@ public class EconomicOperator
     /// </summary>
     [JsonPropertyName("type")]
     [System.ComponentModel.Description("Type of organisation")]
+    [PossibleValue("consignee")]
+    [PossibleValue("destination")]
+    [PossibleValue("exporter")]
+    [PossibleValue("importer")]
+    [PossibleValue("charity")]
+    [PossibleValue("commercial transporter")]
+    [PossibleValue("commercial transporter - user added")]
+    [PossibleValue("private transporter")]
+    [PossibleValue("temporary address")]
+    [PossibleValue("premises of origin")]
+    [PossibleValue("organisation branch address")]
+    [PossibleValue("packer")]
+    [PossibleValue("pod")]
     public string? Type { get; set; }
 
     /// <summary>
@@ -26,6 +40,9 @@ public class EconomicOperator
     /// </summary>
     [JsonPropertyName("status")]
     [System.ComponentModel.Description("Status of organisation")]
+    [PossibleValue("approved")]
+    [PossibleValue("nonapproved")]
+    [PossibleValue("suspended")]
     public string? Status { get; set; }
 
     /// <summary>

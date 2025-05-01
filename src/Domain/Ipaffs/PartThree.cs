@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Defra.TradeImportsDataApi.Domain.Attributes;
 
 namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
 
@@ -12,6 +13,8 @@ public class PartThree
     /// </summary>
     [JsonPropertyName("controlStatus")]
     [System.ComponentModel.Description("Control status enum")]
+    [PossibleValue("REQUIRED")]
+    [PossibleValue("COMPLETED")]
     public string? ControlStatus { get; set; }
 
     /// <summary>

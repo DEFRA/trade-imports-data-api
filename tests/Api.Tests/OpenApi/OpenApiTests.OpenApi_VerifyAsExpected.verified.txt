@@ -1997,8 +1997,14 @@
             "nullable": true
           },
           "commodityIntendedFor": {
+            "enum": [
+              "human",
+              "feedingstuff",
+              "further",
+              "other"
+            ],
             "type": "string",
-            "description": "What the commodity is intended for",
+            "description": "What the commodity is intended for. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           }
         },
@@ -2241,8 +2247,13 @@
             "nullable": true
           },
           "identityCheckType": {
+            "enum": [
+              "Seal Check",
+              "Full Identity Check",
+              "Not Done"
+            ],
             "type": "string",
-            "description": "Type of identity check performed",
+            "description": "Type of identity check performed. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "identityCheckResult": {
@@ -2251,8 +2262,12 @@
             "nullable": true
           },
           "identityCheckNotDoneReason": {
+            "enum": [
+              "Reduced checks regime",
+              "Not required"
+            ],
             "type": "string",
-            "description": "What was the reason for skipping identity check",
+            "description": "What was the reason for skipping identity check. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "physicalCheckDone": {
@@ -2266,8 +2281,12 @@
             "nullable": true
           },
           "physicalCheckNotDoneReason": {
+            "enum": [
+              "Reduced checks regime",
+              "Other"
+            ],
             "type": "string",
-            "description": "What was the reason for skipping physical check",
+            "description": "What was the reason for skipping physical check. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "physicalCheckOtherText": {
@@ -2358,8 +2377,13 @@
             "nullable": true
           },
           "consignmentLeave": {
+            "enum": [
+              "YES",
+              "NO",
+              "It has been destroyed"
+            ],
             "type": "string",
-            "description": "Is the consignment leaving UK borders?",
+            "description": "Is the consignment leaving UK borders?. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           }
         },
@@ -2404,8 +2428,13 @@
             "nullable": true
           },
           "iuuOption": {
+            "enum": [
+              "IUUOK",
+              "IUUNA",
+              "IUUNotCompliant"
+            ],
             "type": "string",
-            "description": "Result of Illegal, Unreported and Unregulated (IUU) check",
+            "description": "Result of Illegal, Unreported and Unregulated (IUU) check. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           }
         },
@@ -2421,38 +2450,91 @@
             "nullable": true
           },
           "notAcceptableAction": {
+            "enum": [
+              "slaughter",
+              "reexport",
+              "euthanasia",
+              "redispatching",
+              "destruction",
+              "transformation",
+              "other",
+              "entry-refusal",
+              "quarantine-imposed",
+              "special-treatment",
+              "industrial-processing",
+              "re-dispatch",
+              "use-for-other-purposes"
+            ],
             "type": "string",
-            "description": "Filled if consignmentAcceptable is set to false",
+            "description": "Filled if consignmentAcceptable is set to false. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "notAcceptableActionDestructionReason": {
+            "enum": [
+              "ContaminatedProducts",
+              "InterceptedPart",
+              "PackagingMaterial",
+              "Other"
+            ],
             "type": "string",
-            "description": "Filled if not acceptable action is set to destruction",
+            "description": "Filled if not acceptable action is set to destruction. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "notAcceptableActionEntryRefusalReason": {
+            "enum": [
+              "ContaminatedProducts",
+              "InterceptedPart",
+              "PackagingMaterial",
+              "MeansOfTransport",
+              "Other"
+            ],
             "type": "string",
-            "description": "Filled if not acceptable action is set to entry refusal",
+            "description": "Filled if not acceptable action is set to entry refusal. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "notAcceptableActionQuarantineImposedReason": {
+            "enum": [
+              "ContaminatedProducts",
+              "InterceptedPart",
+              "PackagingMaterial",
+              "Other"
+            ],
             "type": "string",
-            "description": "Filled if not acceptable action is set to quarantine imposed",
+            "description": "Filled if not acceptable action is set to quarantine imposed. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "notAcceptableActionSpecialTreatmentReason": {
+            "enum": [
+              "ContaminatedProducts",
+              "InterceptedPart",
+              "PackagingMaterial",
+              "Other"
+            ],
             "type": "string",
-            "description": "Filled if not acceptable action is set to special treatment",
+            "description": "Filled if not acceptable action is set to special treatment. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "notAcceptableActionIndustrialProcessingReason": {
+            "enum": [
+              "ContaminatedProducts",
+              "InterceptedPart",
+              "PackagingMaterial",
+              "Other"
+            ],
             "type": "string",
-            "description": "Filled if not acceptable action is set to industrial processing",
+            "description": "Filled if not acceptable action is set to industrial processing. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "notAcceptableActionReDispatchReason": {
+            "enum": [
+              "ContaminatedProducts",
+              "InterceptedPart",
+              "PackagingMaterial",
+              "MeansOfTransport",
+              "Other"
+            ],
             "type": "string",
-            "description": "Filled if not acceptable action is set to re-dispatch",
+            "description": "Filled if not acceptable action is set to re-dispatch. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "notAcceptableActionUseForOtherPurposesReason": {
@@ -2517,8 +2599,14 @@
             "nullable": true
           },
           "specificWarehouseNonConformingConsignment": {
+            "enum": [
+              "CustomWarehouse",
+              "FreeZoneOrFreeWarehouse",
+              "ShipSupplier",
+              "Ship"
+            ],
             "type": "string",
-            "description": "Filled if consignment is set to acceptable and decision type is Specific Warehouse",
+            "description": "Filled if consignment is set to acceptable and decision type is Specific Warehouse. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "temporaryDeadline": {
@@ -2544,18 +2632,35 @@
             "nullable": true
           },
           "freeCirculationPurpose": {
+            "enum": [
+              "Animal Feeding Stuff",
+              "Human Consumption",
+              "Pharmaceutical Use",
+              "Technical Use",
+              "Further Process",
+              "Other"
+            ],
             "type": "string",
-            "description": "Decision over purpose of free circulation in country",
+            "description": "Decision over purpose of free circulation in country. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "definitiveImportPurpose": {
+            "enum": [
+              "slaughter",
+              "approvedbodies",
+              "quarantine"
+            ],
             "type": "string",
-            "description": "Decision over purpose of definitive import",
+            "description": "Decision over purpose of definitive import. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "ifChanneledOption": {
+            "enum": [
+              "article8",
+              "article15"
+            ],
             "type": "string",
-            "description": "Decision channeled option based on (article8, article15)",
+            "description": "Decision channeled option based on (article8, article15). Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "customWarehouseRegisteredNumber": {
@@ -2642,8 +2747,17 @@
             "nullable": true
           },
           "transportType": {
+            "enum": [
+              "rail",
+              "plane",
+              "ship",
+              "road",
+              "other",
+              "c_ship_road",
+              "c_ship_rail"
+            ],
             "type": "string",
-            "description": "Type of transport to be used",
+            "description": "Type of transport to be used. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "document": {
@@ -2674,13 +2788,33 @@
             "nullable": true
           },
           "type": {
+            "enum": [
+              "consignee",
+              "destination",
+              "exporter",
+              "importer",
+              "charity",
+              "commercial transporter",
+              "commercial transporter - user added",
+              "private transporter",
+              "temporary address",
+              "premises of origin",
+              "organisation branch address",
+              "packer",
+              "pod"
+            ],
             "type": "string",
-            "description": "Type of organisation",
+            "description": "Type of organisation. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "status": {
+            "enum": [
+              "approved",
+              "nonapproved",
+              "suspended"
+            ],
             "type": "string",
-            "description": "Status of organisation",
+            "description": "Status of organisation. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "companyName": {
@@ -2726,8 +2860,14 @@
         "type": "object",
         "properties": {
           "system": {
+            "enum": [
+              "E-CERT",
+              "E-PHYTO",
+              "E-NOTIFICATION",
+              "NCTS"
+            ],
             "type": "string",
-            "description": "Identifier of the external system to which the reference relates",
+            "description": "Identifier of the external system to which the reference relates. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "reference": {
@@ -2758,8 +2898,14 @@
         "type": "object",
         "properties": {
           "authorityType": {
+            "enum": [
+              "exitbip",
+              "finalbip",
+              "localvetunit",
+              "inspunit"
+            ],
             "type": "string",
-            "description": "Type of authority",
+            "description": "Type of authority. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "consignmentArrival": {
@@ -3174,13 +3320,22 @@
         "type": "object",
         "properties": {
           "riskLevel": {
+            "enum": [
+              "High",
+              "Medium",
+              "Low"
+            ],
             "type": "string",
-            "description": "Risk Level is defined using enum values High,Medium,Low",
+            "description": "Risk Level is defined using enum values High,Medium,Low. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "riskLevelMethod": {
+            "enum": [
+              "System",
+              "User"
+            ],
             "type": "string",
-            "description": "Indicator of whether the risk level was determined by the system or by the user",
+            "description": "Indicator of whether the risk level was determined by the system or by the user. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "riskLevelSetFor": {
@@ -3256,8 +3411,16 @@
             "nullable": true
           },
           "testReason": {
+            "enum": [
+              "Random",
+              "Suspicious",
+              "Re-enforced",
+              "Intensified controls",
+              "Required",
+              "Latent infection sampling"
+            ],
             "type": "string",
-            "description": "Reason for test",
+            "description": "Reason for test. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "singleLaboratoryTests": {
@@ -3276,8 +3439,18 @@
         "type": "object",
         "properties": {
           "type": {
+            "enum": [
+              "Aeroplane",
+              "Road Vehicle",
+              "Railway Wagon",
+              "Ship",
+              "Other",
+              "Road vehicle Aeroplane",
+              "Ship Railway wagon",
+              "Ship Road vehicle"
+            ],
             "type": "string",
-            "description": "Type of transport",
+            "description": "Type of transport. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "document": {
@@ -3403,8 +3576,13 @@
         "type": "object",
         "properties": {
           "typeOfImp": {
+            "enum": [
+              "A",
+              "P",
+              "D"
+            ],
             "type": "string",
-            "description": "Used to indicate what type of EU Import the notification is - Live Animals, Product Of Animal Origin or High Risk Food Not Of Animal Origin",
+            "description": "Used to indicate what type of EU Import the notification is - Live Animals, Product Of Animal Origin or High Risk Food Not Of Animal Origin. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "personResponsible": {
@@ -3537,12 +3715,32 @@
             "nullable": true
           },
           "purpose": {
+            "enum": [
+              "Animal Feeding Stuff",
+              "Human Consumption",
+              "Pharmaceutical Use",
+              "Technical Use",
+              "Other",
+              "Commercial Sale",
+              "Commercial sale or change of ownership",
+              "Rescue",
+              "Breeding",
+              "Research",
+              "Racing or Competition",
+              "Approved Premises or Body",
+              "Companion Animal not for Resale or Rehoming",
+              "Production",
+              "Slaughter",
+              "Fattening",
+              "Game Restocking",
+              "Registered Horses"
+            ],
             "allOf": [
               {
                 "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.Purpose"
               }
             ],
-            "description": "Purpose of consignment details",
+            "description": "Purpose of consignment details. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "pointOfEntry": {
@@ -3723,8 +3921,13 @@
             "nullable": true
           },
           "provideCtcMrn": {
+            "enum": [
+              "YES",
+              "YES_ADD_LATER",
+              "NO"
+            ],
             "type": "string",
-            "description": "When the NCTS MRN will be added for the Common Transit Convention (CTC)",
+            "description": "When the NCTS MRN will be added for the Common Transit Convention (CTC). Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "arrivesAt": {
@@ -3746,8 +3949,12 @@
         "type": "object",
         "properties": {
           "controlStatus": {
+            "enum": [
+              "REQUIRED",
+              "COMPLETED"
+            ],
             "type": "string",
-            "description": "Control status enum",
+            "description": "Control status enum. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "control": {
@@ -4011,8 +4218,12 @@
             "nullable": true
           },
           "type": {
+            "enum": [
+              "Commercial transporter",
+              "Private transporter"
+            ],
             "type": "string",
-            "description": "Type of party",
+            "description": "Type of party. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "approvalNumber": {
@@ -4122,8 +4333,14 @@
             "nullable": true
           },
           "forNonConforming": {
+            "enum": [
+              "Customs Warehouse",
+              "Free Zone or Free Warehouse",
+              "Ship Supplier",
+              "Ship"
+            ],
             "type": "string",
-            "description": "Detailed purpose for non conforming purpose group",
+            "description": "Detailed purpose for non conforming purpose group. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "regNumber": {
@@ -4160,8 +4377,13 @@
             "nullable": true
           },
           "forImportOrAdmission": {
+            "enum": [
+              "Definitive import",
+              "Horses Re-entry",
+              "Temporary admission horses"
+            ],
             "type": "string",
-            "description": "Specification of Import or admission purpose",
+            "description": "Specification of Import or admission purpose. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "exitDate": {
@@ -4176,8 +4398,18 @@
             "nullable": true
           },
           "purposeGroup": {
+            "enum": [
+              "For Import",
+              "For NON-Conforming Consignments",
+              "For Transhipment to",
+              "For Transit to 3rd Country",
+              "For Re-Import",
+              "For Private Import",
+              "For Transfer To",
+              "For Import Re-Conformity Check"
+            ],
             "type": "string",
-            "description": "Purpose group of consignment (general purpose)",
+            "description": "Purpose group of consignment (general purpose). Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "estimatedArrivesAtPortOfExit": {

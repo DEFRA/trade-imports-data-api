@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Defra.TradeImportsDataApi.Domain.Attributes;
 using Defra.TradeImportsDataApi.Domain.Json;
 
 namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
@@ -21,6 +22,12 @@ public class LaboratoryTests
     /// </summary>
     [JsonPropertyName("testReason")]
     [System.ComponentModel.Description("Reason for test")]
+    [PossibleValue("Random")]
+    [PossibleValue("Suspicious")]
+    [PossibleValue("Re-enforced")]
+    [PossibleValue("Intensified controls")]
+    [PossibleValue("Required")]
+    [PossibleValue("Latent infection sampling")]
     public string? TestReason { get; set; }
 
     /// <summary>

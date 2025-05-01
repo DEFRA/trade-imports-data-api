@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Defra.TradeImportsDataApi.Domain.Attributes;
 
 namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
 
@@ -125,5 +126,9 @@ public class Commodities
     /// </summary>
     [JsonPropertyName("commodityIntendedFor")]
     [System.ComponentModel.Description("What the commodity is intended for")]
+    [PossibleValue("human")]
+    [PossibleValue("feedingstuff")]
+    [PossibleValue("further")]
+    [PossibleValue("other")]
     public string? CommodityIntendedFor { get; set; }
 }
