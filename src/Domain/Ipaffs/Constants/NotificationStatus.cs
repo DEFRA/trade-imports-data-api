@@ -1,6 +1,6 @@
-namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
+namespace Defra.TradeImportsDataApi.Domain.Ipaffs.Constants;
 
-public static class ImportNotificationStatus
+public static class NotificationStatus
 {
     public const string Draft = "DRAFT";
     public const string Submitted = "SUBMITTED";
@@ -13,10 +13,8 @@ public static class ImportNotificationStatus
     public const string Cancelled = "CANCELLED";
     public const string Deleted = "DELETED";
     public const string PartiallyRejected = "PARTIALLY_REJECTED";
-
-    // Currently ignored are:
-    // SPLIT_CONSIGNMENT
-    // SUBMITTED,IN_PROGRESS,MODIFY
+    public const string SplitConsignment = "SPLIT_CONSIGNMENT";
+    public const string SubmittedInProgressModify = "SUBMITTED,IN_PROGRESS,MODIFY";
 
     public static bool IsDraft(string? status) => Equals(Draft, status);
 
@@ -39,6 +37,10 @@ public static class ImportNotificationStatus
     public static bool IsDeleted(string? status) => Equals(Deleted, status);
 
     public static bool IsPartiallyRejected(string? status) => Equals(PartiallyRejected, status);
+
+    public static bool IsSplitConsignment(string? status) => Equals(SplitConsignment, status);
+
+    public static bool IsSubmittedInProgressModify(string? status) => Equals(SubmittedInProgressModify, status);
 
     private static bool Equals(string status1, string? status2) =>
         status1.Equals(status2, StringComparison.OrdinalIgnoreCase);

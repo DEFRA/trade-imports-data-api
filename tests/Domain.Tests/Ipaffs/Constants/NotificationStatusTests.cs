@@ -1,9 +1,10 @@
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
+using Defra.TradeImportsDataApi.Domain.Ipaffs.Constants;
 using FluentAssertions;
 
-namespace Defra.TradeImportsDataApi.Domain.Tests.Ipaffs;
+namespace Defra.TradeImportsDataApi.Domain.Tests.Ipaffs.Constants;
 
-public class ImportNotificationStatusTests
+public class NotificationStatusTests
 {
     [Theory]
     [InlineData("DRAFT", true)]
@@ -11,8 +12,7 @@ public class ImportNotificationStatusTests
     [InlineData(null, false)]
     public void WhenDraft_ThenMatch(string? status, bool expected)
     {
-        ImportNotificationStatus.IsDraft(status).Should().Be(expected);
-
+        NotificationStatus.IsDraft(status).Should().Be(expected);
         new ImportPreNotification { Status = status }
             .StatusIsDraft()
             .Should()
@@ -25,8 +25,7 @@ public class ImportNotificationStatusTests
     [InlineData(null, false)]
     public void WhenSubmitted_ThenMatch(string? status, bool expected)
     {
-        ImportNotificationStatus.IsSubmitted(status).Should().Be(expected);
-
+        NotificationStatus.IsSubmitted(status).Should().Be(expected);
         new ImportPreNotification { Status = status }
             .StatusIsSubmitted()
             .Should()
@@ -39,8 +38,7 @@ public class ImportNotificationStatusTests
     [InlineData(null, false)]
     public void WhenValidated_ThenMatch(string? status, bool expected)
     {
-        ImportNotificationStatus.IsValidated(status).Should().Be(expected);
-
+        NotificationStatus.IsValidated(status).Should().Be(expected);
         new ImportPreNotification { Status = status }
             .StatusIsValidated()
             .Should()
@@ -53,24 +51,9 @@ public class ImportNotificationStatusTests
     [InlineData(null, false)]
     public void WhenRejected_ThenMatch(string? status, bool expected)
     {
-        ImportNotificationStatus.IsRejected(status).Should().Be(expected);
-
+        NotificationStatus.IsRejected(status).Should().Be(expected);
         new ImportPreNotification { Status = status }
             .StatusIsRejected()
-            .Should()
-            .Be(expected);
-    }
-
-    [Theory]
-    [InlineData("CANCELLED", true)]
-    [InlineData("cancelled", true)]
-    [InlineData(null, false)]
-    public void WhenCancelled_ThenMatch(string? status, bool expected)
-    {
-        ImportNotificationStatus.IsCancelled(status).Should().Be(expected);
-
-        new ImportPreNotification { Status = status }
-            .StatusIsCancelled()
             .Should()
             .Be(expected);
     }
@@ -81,8 +64,7 @@ public class ImportNotificationStatusTests
     [InlineData(null, false)]
     public void WhenInProgress_ThenMatch(string? status, bool expected)
     {
-        ImportNotificationStatus.IsInProgress(status).Should().Be(expected);
-
+        NotificationStatus.IsInProgress(status).Should().Be(expected);
         new ImportPreNotification { Status = status }
             .StatusIsInProgress()
             .Should()
@@ -95,8 +77,7 @@ public class ImportNotificationStatusTests
     [InlineData(null, false)]
     public void WhenAmend_ThenMatch(string? status, bool expected)
     {
-        ImportNotificationStatus.IsAmend(status).Should().Be(expected);
-
+        NotificationStatus.IsAmend(status).Should().Be(expected);
         new ImportPreNotification { Status = status }
             .StatusIsAmend()
             .Should()
@@ -109,8 +90,7 @@ public class ImportNotificationStatusTests
     [InlineData(null, false)]
     public void WhenModify_ThenMatch(string? status, bool expected)
     {
-        ImportNotificationStatus.IsModify(status).Should().Be(expected);
-
+        NotificationStatus.IsModify(status).Should().Be(expected);
         new ImportPreNotification { Status = status }
             .StatusIsModify()
             .Should()
@@ -123,10 +103,22 @@ public class ImportNotificationStatusTests
     [InlineData(null, false)]
     public void WhenReplaced_ThenMatch(string? status, bool expected)
     {
-        ImportNotificationStatus.IsReplaced(status).Should().Be(expected);
-
+        NotificationStatus.IsReplaced(status).Should().Be(expected);
         new ImportPreNotification { Status = status }
             .StatusIsReplaced()
+            .Should()
+            .Be(expected);
+    }
+
+    [Theory]
+    [InlineData("CANCELLED", true)]
+    [InlineData("cancelled", true)]
+    [InlineData(null, false)]
+    public void WhenCancelled_ThenMatch(string? status, bool expected)
+    {
+        NotificationStatus.IsCancelled(status).Should().Be(expected);
+        new ImportPreNotification { Status = status }
+            .StatusIsCancelled()
             .Should()
             .Be(expected);
     }
@@ -137,8 +129,7 @@ public class ImportNotificationStatusTests
     [InlineData(null, false)]
     public void WhenDeleted_ThenMatch(string? status, bool expected)
     {
-        ImportNotificationStatus.IsDeleted(status).Should().Be(expected);
-
+        NotificationStatus.IsDeleted(status).Should().Be(expected);
         new ImportPreNotification { Status = status }
             .StatusIsDeleted()
             .Should()
@@ -151,10 +142,35 @@ public class ImportNotificationStatusTests
     [InlineData(null, false)]
     public void WhenPartiallyRejected_ThenMatch(string? status, bool expected)
     {
-        ImportNotificationStatus.IsPartiallyRejected(status).Should().Be(expected);
-
+        NotificationStatus.IsPartiallyRejected(status).Should().Be(expected);
         new ImportPreNotification { Status = status }
             .StatusIsPartiallyRejected()
+            .Should()
+            .Be(expected);
+    }
+
+    [Theory]
+    [InlineData("SPLIT_CONSIGNMENT", true)]
+    [InlineData("split_consignment", true)]
+    [InlineData(null, false)]
+    public void WhenSplitConsignment_ThenMatch(string? status, bool expected)
+    {
+        NotificationStatus.IsSplitConsignment(status).Should().Be(expected);
+        new ImportPreNotification { Status = status }
+            .StatusIsIsSplitConsignment()
+            .Should()
+            .Be(expected);
+    }
+
+    [Theory]
+    [InlineData("SUBMITTED,IN_PROGRESS,MODIFY", true)]
+    [InlineData("submitted,in_progress,modify", true)]
+    [InlineData(null, false)]
+    public void WhenSubmittedInProgressModify_ThenMatch(string? status, bool expected)
+    {
+        NotificationStatus.IsSubmittedInProgressModify(status).Should().Be(expected);
+        new ImportPreNotification { Status = status }
+            .StatusIsSubmittedInProgressModify()
             .Should()
             .Be(expected);
     }
