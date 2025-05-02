@@ -1,6 +1,6 @@
 namespace Defra.TradeImportsDataApi.Domain.Ipaffs.Constants;
 
-public static class ConsignmentCheckIdentityCheckResult
+public static class ConsignmentCheckResult
 {
     public const string Satisfactory = "Satisfactory";
     public const string SatisfactoryFollowingOfficialIntervention = "Satisfactory following official intervention";

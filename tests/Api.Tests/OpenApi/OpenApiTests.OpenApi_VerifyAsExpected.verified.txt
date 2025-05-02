@@ -2326,23 +2326,55 @@
         "type": "object",
         "properties": {
           "euStandard": {
+            "enum": [
+              "Satisfactory",
+              "Satisfactory following official intervention",
+              "Not Satisfactory",
+              "Not Done",
+              "Derogation",
+              "Not Set"
+            ],
             "type": "string",
-            "description": "Does it conform EU standards",
+            "description": "Does it conform EU standards. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "additionalGuarantees": {
+            "enum": [
+              "Satisfactory",
+              "Satisfactory following official intervention",
+              "Not Satisfactory",
+              "Not Done",
+              "Derogation",
+              "Not Set"
+            ],
             "type": "string",
-            "description": "Result of additional guarantees",
+            "description": "Result of additional guarantees. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "documentCheckResult": {
+            "enum": [
+              "Satisfactory",
+              "Satisfactory following official intervention",
+              "Not Satisfactory",
+              "Not Done",
+              "Derogation",
+              "Not Set"
+            ],
             "type": "string",
-            "description": "Result of document check",
+            "description": "Result of document check. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "nationalRequirements": {
+            "enum": [
+              "Satisfactory",
+              "Satisfactory following official intervention",
+              "Not Satisfactory",
+              "Not Done",
+              "Derogation",
+              "Not Set"
+            ],
             "type": "string",
-            "description": "Result of national requirements check",
+            "description": "Result of national requirements check. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "identityCheckDone": {
@@ -2361,8 +2393,16 @@
             "nullable": true
           },
           "identityCheckResult": {
+            "enum": [
+              "Satisfactory",
+              "Satisfactory following official intervention",
+              "Not Satisfactory",
+              "Not Done",
+              "Derogation",
+              "Not Set"
+            ],
             "type": "string",
-            "description": "Result of identity check",
+            "description": "Result of identity check. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "identityCheckNotDoneReason": {
@@ -2380,8 +2420,16 @@
             "nullable": true
           },
           "physicalCheckResult": {
+            "enum": [
+              "Satisfactory",
+              "Satisfactory following official intervention",
+              "Not Satisfactory",
+              "Not Done",
+              "Derogation",
+              "Not Set"
+            ],
             "type": "string",
-            "description": "Result of physical check",
+            "description": "Result of physical check. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "physicalCheckNotDoneReason": {
@@ -2399,8 +2447,16 @@
             "nullable": true
           },
           "welfareCheck": {
+            "enum": [
+              "Satisfactory",
+              "Satisfactory following official intervention",
+              "Not Satisfactory",
+              "Not Done",
+              "Derogation",
+              "Not Set"
+            ],
             "type": "string",
-            "description": "Welfare check",
+            "description": "Welfare check. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
           "numberOfAnimalsChecked": {
@@ -2415,8 +2471,16 @@
             "nullable": true
           },
           "laboratoryCheckResult": {
+            "enum": [
+              "Satisfactory",
+              "Satisfactory following official intervention",
+              "Not Satisfactory",
+              "Not Done",
+              "Derogation",
+              "Not Set"
+            ],
             "type": "string",
-            "description": "Result of laboratory tests",
+            "description": "Result of laboratory tests. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           }
         },

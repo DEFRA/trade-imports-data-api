@@ -3,7 +3,7 @@ using FluentAssertions;
 
 namespace Defra.TradeImportsDataApi.Domain.Tests.Ipaffs.Constants;
 
-public class ConsignmentCheckPhysicalCheckResultTests
+public class ConsignmentCheckResultTests
 {
     [Theory]
     [InlineData("Satisfactory", true)]
@@ -11,7 +11,7 @@ public class ConsignmentCheckPhysicalCheckResultTests
     [InlineData(null, false)]
     public void WhenSatisfactory_ThenMatch(string? status, bool expected)
     {
-        ConsignmentCheckPhysicalCheckResult.IsSatisfactory(status).Should().Be(expected);
+        ConsignmentCheckResult.IsSatisfactory(status).Should().Be(expected);
     }
 
     [Theory]
@@ -20,7 +20,7 @@ public class ConsignmentCheckPhysicalCheckResultTests
     [InlineData(null, false)]
     public void WhenSatisfactoryFollowingOfficialIntervention_ThenMatch(string? status, bool expected)
     {
-        ConsignmentCheckPhysicalCheckResult.IsSatisfactoryFollowingOfficialIntervention(status).Should().Be(expected);
+        ConsignmentCheckResult.IsSatisfactoryFollowingOfficialIntervention(status).Should().Be(expected);
     }
 
     [Theory]
@@ -29,7 +29,7 @@ public class ConsignmentCheckPhysicalCheckResultTests
     [InlineData(null, false)]
     public void WhenNotSatisfactory_ThenMatch(string? status, bool expected)
     {
-        ConsignmentCheckPhysicalCheckResult.IsNotSatisfactory(status).Should().Be(expected);
+        ConsignmentCheckResult.IsNotSatisfactory(status).Should().Be(expected);
     }
 
     [Theory]
@@ -38,7 +38,7 @@ public class ConsignmentCheckPhysicalCheckResultTests
     [InlineData(null, false)]
     public void WhenNotDone_ThenMatch(string? status, bool expected)
     {
-        ConsignmentCheckPhysicalCheckResult.IsNotDone(status).Should().Be(expected);
+        ConsignmentCheckResult.IsNotDone(status).Should().Be(expected);
     }
 
     [Theory]
@@ -47,7 +47,7 @@ public class ConsignmentCheckPhysicalCheckResultTests
     [InlineData(null, false)]
     public void WhenDerogation_ThenMatch(string? status, bool expected)
     {
-        ConsignmentCheckPhysicalCheckResult.IsDerogation(status).Should().Be(expected);
+        ConsignmentCheckResult.IsDerogation(status).Should().Be(expected);
     }
 
     [Theory]
@@ -56,6 +56,6 @@ public class ConsignmentCheckPhysicalCheckResultTests
     [InlineData(null, false)]
     public void WhenNotSet_ThenMatch(string? status, bool expected)
     {
-        ConsignmentCheckPhysicalCheckResult.IsNotSet(status).Should().Be(expected);
+        ConsignmentCheckResult.IsNotSet(status).Should().Be(expected);
     }
 }

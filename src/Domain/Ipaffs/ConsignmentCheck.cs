@@ -13,6 +13,12 @@ public class ConsignmentCheck
     /// </summary>
     [JsonPropertyName("euStandard")]
     [System.ComponentModel.Description("Does it conform EU standards")]
+    [PossibleValue("Satisfactory")]
+    [PossibleValue("Satisfactory following official intervention")]
+    [PossibleValue("Not Satisfactory")]
+    [PossibleValue("Not Done")]
+    [PossibleValue("Derogation")]
+    [PossibleValue("Not Set")]
     public string? EuStandard { get; set; }
 
     /// <summary>
@@ -20,6 +26,12 @@ public class ConsignmentCheck
     /// </summary>
     [JsonPropertyName("additionalGuarantees")]
     [System.ComponentModel.Description("Result of additional guarantees")]
+    [PossibleValue("Satisfactory")]
+    [PossibleValue("Satisfactory following official intervention")]
+    [PossibleValue("Not Satisfactory")]
+    [PossibleValue("Not Done")]
+    [PossibleValue("Derogation")]
+    [PossibleValue("Not Set")]
     public string? AdditionalGuarantees { get; set; }
 
     /// <summary>
@@ -27,6 +39,12 @@ public class ConsignmentCheck
     /// </summary>
     [JsonPropertyName("documentCheckResult")]
     [System.ComponentModel.Description("Result of document check")]
+    [PossibleValue("Satisfactory")]
+    [PossibleValue("Satisfactory following official intervention")]
+    [PossibleValue("Not Satisfactory")]
+    [PossibleValue("Not Done")]
+    [PossibleValue("Derogation")]
+    [PossibleValue("Not Set")]
     public string? DocumentCheckResult { get; set; }
 
     /// <summary>
@@ -34,6 +52,12 @@ public class ConsignmentCheck
     /// </summary>
     [JsonPropertyName("nationalRequirements")]
     [System.ComponentModel.Description("Result of national requirements check")]
+    [PossibleValue("Satisfactory")]
+    [PossibleValue("Satisfactory following official intervention")]
+    [PossibleValue("Not Satisfactory")]
+    [PossibleValue("Not Done")]
+    [PossibleValue("Derogation")]
+    [PossibleValue("Not Set")]
     public string? NationalRequirements { get; set; }
 
     /// <summary>
@@ -58,6 +82,12 @@ public class ConsignmentCheck
     /// </summary>
     [JsonPropertyName("identityCheckResult")]
     [System.ComponentModel.Description("Result of identity check")]
+    [PossibleValue("Satisfactory")]
+    [PossibleValue("Satisfactory following official intervention")]
+    [PossibleValue("Not Satisfactory")]
+    [PossibleValue("Not Done")]
+    [PossibleValue("Derogation")]
+    [PossibleValue("Not Set")]
     public string? IdentityCheckResult { get; set; }
 
     /// <summary>
@@ -81,6 +111,12 @@ public class ConsignmentCheck
     /// </summary>
     [JsonPropertyName("physicalCheckResult")]
     [System.ComponentModel.Description("Result of physical check")]
+    [PossibleValue("Satisfactory")]
+    [PossibleValue("Satisfactory following official intervention")]
+    [PossibleValue("Not Satisfactory")]
+    [PossibleValue("Not Done")]
+    [PossibleValue("Derogation")]
+    [PossibleValue("Not Set")]
     public string? PhysicalCheckResult { get; set; }
 
     /// <summary>
@@ -104,6 +140,12 @@ public class ConsignmentCheck
     /// </summary>
     [JsonPropertyName("welfareCheck")]
     [System.ComponentModel.Description("Welfare check")]
+    [PossibleValue("Satisfactory")]
+    [PossibleValue("Satisfactory following official intervention")]
+    [PossibleValue("Not Satisfactory")]
+    [PossibleValue("Not Done")]
+    [PossibleValue("Derogation")]
+    [PossibleValue("Not Set")]
     public string? WelfareCheck { get; set; }
 
     /// <summary>
@@ -125,5 +167,11 @@ public class ConsignmentCheck
     /// </summary>
     [JsonPropertyName("laboratoryCheckResult")]
     [System.ComponentModel.Description("Result of laboratory tests")]
+    [PossibleValue("Satisfactory")]
+    [PossibleValue("Satisfactory following official intervention")]
+    [PossibleValue("Not Satisfactory")]
+    [PossibleValue("Not Done")]
+    [PossibleValue("Derogation")]
+    [PossibleValue("Not Set")]
     public string? LaboratoryCheckResult { get; set; }
 }
