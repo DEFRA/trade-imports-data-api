@@ -2,19 +2,19 @@ namespace Defra.TradeImportsDataApi.Domain.Ipaffs.Constants;
 
 public static class DecisionNotAcceptableActionUseForOtherPurposesReason
 {
-    public const string Contaminatedproducts = "ContaminatedProducts";
-    public const string Interceptedpart = "InterceptedPart";
-    public const string Packagingmaterial = "PackagingMaterial";
-    public const string Meansoftransport = "MeansOfTransport";
+    public const string ContaminatedProducts = "ContaminatedProducts";
+    public const string InterceptedPart = "InterceptedPart";
+    public const string PackagingMaterial = "PackagingMaterial";
+    public const string MeansOfTransport = "MeansOfTransport";
     public const string Other = "Other";
 
-    public static bool IsContaminatedproducts(string? status) => Equals(Contaminatedproducts, status);
+    public static bool IsContaminatedProducts(string? status) => Equals(ContaminatedProducts, status);
 
-    public static bool IsInterceptedpart(string? status) => Equals(Interceptedpart, status);
+    public static bool IsInterceptedPart(string? status) => Equals(InterceptedPart, status);
 
-    public static bool IsPackagingmaterial(string? status) => Equals(Packagingmaterial, status);
+    public static bool IsPackagingMaterial(string? status) => Equals(PackagingMaterial, status);
 
-    public static bool IsMeansoftransport(string? status) => Equals(Meansoftransport, status);
+    public static bool IsMeansOfTransport(string? status) => Equals(MeansOfTransport, status);
 
     public static bool IsOther(string? status) => Equals(Other, status);
 

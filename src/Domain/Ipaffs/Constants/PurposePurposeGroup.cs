@@ -1,3 +1,4 @@
+// ReSharper disable InconsistentNaming
 namespace Defra.TradeImportsDataApi.Domain.Ipaffs.Constants;
 
 public static class PurposePurposeGroup

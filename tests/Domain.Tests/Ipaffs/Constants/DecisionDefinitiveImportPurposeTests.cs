@@ -18,9 +18,9 @@ public class DecisionDefinitiveImportPurposeTests
     [InlineData("approvedbodies", true)]
     [InlineData("APPROVEDBODIES", true)]
     [InlineData(null, false)]
-    public void WhenApprovedbodies_ThenMatch(string? status, bool expected)
+    public void WhenApprovedBodies_ThenMatch(string? status, bool expected)
     {
-        DecisionDefinitiveImportPurpose.IsApprovedbodies(status).Should().Be(expected);
+        DecisionDefinitiveImportPurpose.IsApprovedBodies(status).Should().Be(expected);
     }
 
     [Theory]

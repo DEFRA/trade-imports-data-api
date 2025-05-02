@@ -9,27 +9,27 @@ public class DecisionNotAcceptableActionQuarantineImposedReasonTests
     [InlineData("ContaminatedProducts", true)]
     [InlineData("contaminatedproducts", true)]
     [InlineData(null, false)]
-    public void WhenContaminatedproducts_ThenMatch(string? status, bool expected)
+    public void WhenContaminatedProducts_ThenMatch(string? status, bool expected)
     {
-        DecisionNotAcceptableActionQuarantineImposedReason.IsContaminatedproducts(status).Should().Be(expected);
+        DecisionNotAcceptableActionQuarantineImposedReason.IsContaminatedProducts(status).Should().Be(expected);
     }
 
     [Theory]
     [InlineData("InterceptedPart", true)]
     [InlineData("interceptedpart", true)]
     [InlineData(null, false)]
-    public void WhenInterceptedpart_ThenMatch(string? status, bool expected)
+    public void WhenInterceptedPart_ThenMatch(string? status, bool expected)
     {
-        DecisionNotAcceptableActionQuarantineImposedReason.IsInterceptedpart(status).Should().Be(expected);
+        DecisionNotAcceptableActionQuarantineImposedReason.IsInterceptedPart(status).Should().Be(expected);
     }
 
     [Theory]
     [InlineData("PackagingMaterial", true)]
     [InlineData("packagingmaterial", true)]
     [InlineData(null, false)]
-    public void WhenPackagingmaterial_ThenMatch(string? status, bool expected)
+    public void WhenPackagingMaterial_ThenMatch(string? status, bool expected)
     {
-        DecisionNotAcceptableActionQuarantineImposedReason.IsPackagingmaterial(status).Should().Be(expected);
+        DecisionNotAcceptableActionQuarantineImposedReason.IsPackagingMaterial(status).Should().Be(expected);
     }
 
     [Theory]

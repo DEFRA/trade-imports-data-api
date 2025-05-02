@@ -9,27 +9,27 @@ public class DecisionSpecificWarehouseNonConformingConsignmentTests
     [InlineData("CustomWarehouse", true)]
     [InlineData("customwarehouse", true)]
     [InlineData(null, false)]
-    public void WhenCustomwarehouse_ThenMatch(string? status, bool expected)
+    public void WhenCustomWarehouse_ThenMatch(string? status, bool expected)
     {
-        DecisionSpecificWarehouseNonConformingConsignment.IsCustomwarehouse(status).Should().Be(expected);
+        DecisionSpecificWarehouseNonConformingConsignment.IsCustomWarehouse(status).Should().Be(expected);
     }
 
     [Theory]
     [InlineData("FreeZoneOrFreeWarehouse", true)]
     [InlineData("freezoneorfreewarehouse", true)]
     [InlineData(null, false)]
-    public void WhenFreezoneorfreewarehouse_ThenMatch(string? status, bool expected)
+    public void WhenFreeZoneOrFreeWarehouse_ThenMatch(string? status, bool expected)
     {
-        DecisionSpecificWarehouseNonConformingConsignment.IsFreezoneorfreewarehouse(status).Should().Be(expected);
+        DecisionSpecificWarehouseNonConformingConsignment.IsFreeZoneOrFreeWarehouse(status).Should().Be(expected);
     }
 
     [Theory]
     [InlineData("ShipSupplier", true)]
     [InlineData("shipsupplier", true)]
     [InlineData(null, false)]
-    public void WhenShipsupplier_ThenMatch(string? status, bool expected)
+    public void WhenShipSupplier_ThenMatch(string? status, bool expected)
     {
-        DecisionSpecificWarehouseNonConformingConsignment.IsShipsupplier(status).Should().Be(expected);
+        DecisionSpecificWarehouseNonConformingConsignment.IsShipSupplier(status).Should().Be(expected);
     }
 
     [Theory]

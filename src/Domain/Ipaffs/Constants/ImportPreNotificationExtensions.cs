@@ -3,41 +3,41 @@ namespace Defra.TradeImportsDataApi.Domain.Ipaffs.Constants;
 public static class ImportPreNotificationExtensions
 {
     public static bool StatusIsDraft(this ImportPreNotification notification) =>
-        NotificationStatus.IsDraft(notification.Status);
+        ImportNotificationStatus.IsDraft(notification.Status);
 
     public static bool StatusIsSubmitted(this ImportPreNotification notification) =>
-        NotificationStatus.IsSubmitted(notification.Status);
+        ImportNotificationStatus.IsSubmitted(notification.Status);
 
     public static bool StatusIsValidated(this ImportPreNotification notification) =>
-        NotificationStatus.IsValidated(notification.Status);
+        ImportNotificationStatus.IsValidated(notification.Status);
 
     public static bool StatusIsRejected(this ImportPreNotification notification) =>
-        NotificationStatus.IsRejected(notification.Status);
+        ImportNotificationStatus.IsRejected(notification.Status);
 
     public static bool StatusIsInProgress(this ImportPreNotification notification) =>
-        NotificationStatus.IsInProgress(notification.Status);
+        ImportNotificationStatus.IsInProgress(notification.Status);
 
     public static bool StatusIsAmend(this ImportPreNotification notification) =>
-        NotificationStatus.IsAmend(notification.Status);
+        ImportNotificationStatus.IsAmend(notification.Status);
 
     public static bool StatusIsModify(this ImportPreNotification notification) =>
-        NotificationStatus.IsModify(notification.Status);
+        ImportNotificationStatus.IsModify(notification.Status);
 
     public static bool StatusIsReplaced(this ImportPreNotification notification) =>
-        NotificationStatus.IsReplaced(notification.Status);
+        ImportNotificationStatus.IsReplaced(notification.Status);
 
     public static bool StatusIsCancelled(this ImportPreNotification notification) =>
-        NotificationStatus.IsCancelled(notification.Status);
+        ImportNotificationStatus.IsCancelled(notification.Status);
 
     public static bool StatusIsDeleted(this ImportPreNotification notification) =>
-        NotificationStatus.IsDeleted(notification.Status);
+        ImportNotificationStatus.IsDeleted(notification.Status);
 
     public static bool StatusIsPartiallyRejected(this ImportPreNotification notification) =>
-        NotificationStatus.IsPartiallyRejected(notification.Status);
+        ImportNotificationStatus.IsPartiallyRejected(notification.Status);
 
     public static bool StatusIsIsSplitConsignment(this ImportPreNotification notification) =>
-        NotificationStatus.IsSplitConsignment(notification.Status);
+        ImportNotificationStatus.IsSplitConsignment(notification.Status);
 
     public static bool StatusIsSubmittedInProgressModify(this ImportPreNotification notification) =>
-        NotificationStatus.IsSubmittedInProgressModify(notification.Status);
+        ImportNotificationStatus.IsSubmittedInProgressModify(notification.Status);
 }

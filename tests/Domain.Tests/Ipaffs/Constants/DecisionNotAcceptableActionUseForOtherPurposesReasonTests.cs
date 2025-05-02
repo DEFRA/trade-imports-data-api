@@ -9,36 +9,36 @@ public class DecisionNotAcceptableActionUseForOtherPurposesReasonTests
     [InlineData("ContaminatedProducts", true)]
     [InlineData("contaminatedproducts", true)]
     [InlineData(null, false)]
-    public void WhenContaminatedproducts_ThenMatch(string? status, bool expected)
+    public void WhenContaminatedProducts_ThenMatch(string? status, bool expected)
     {
-        DecisionNotAcceptableActionUseForOtherPurposesReason.IsContaminatedproducts(status).Should().Be(expected);
+        DecisionNotAcceptableActionUseForOtherPurposesReason.IsContaminatedProducts(status).Should().Be(expected);
     }
 
     [Theory]
     [InlineData("InterceptedPart", true)]
     [InlineData("interceptedpart", true)]
     [InlineData(null, false)]
-    public void WhenInterceptedpart_ThenMatch(string? status, bool expected)
+    public void WhenInterceptedPart_ThenMatch(string? status, bool expected)
     {
-        DecisionNotAcceptableActionUseForOtherPurposesReason.IsInterceptedpart(status).Should().Be(expected);
+        DecisionNotAcceptableActionUseForOtherPurposesReason.IsInterceptedPart(status).Should().Be(expected);
     }
 
     [Theory]
     [InlineData("PackagingMaterial", true)]
     [InlineData("packagingmaterial", true)]
     [InlineData(null, false)]
-    public void WhenPackagingmaterial_ThenMatch(string? status, bool expected)
+    public void WhenPackagingMaterial_ThenMatch(string? status, bool expected)
     {
-        DecisionNotAcceptableActionUseForOtherPurposesReason.IsPackagingmaterial(status).Should().Be(expected);
+        DecisionNotAcceptableActionUseForOtherPurposesReason.IsPackagingMaterial(status).Should().Be(expected);
     }
 
     [Theory]
     [InlineData("MeansOfTransport", true)]
     [InlineData("meansoftransport", true)]
     [InlineData(null, false)]
-    public void WhenMeansoftransport_ThenMatch(string? status, bool expected)
+    public void WhenMeansOfTransport_ThenMatch(string? status, bool expected)
     {
-        DecisionNotAcceptableActionUseForOtherPurposesReason.IsMeansoftransport(status).Should().Be(expected);
+        DecisionNotAcceptableActionUseForOtherPurposesReason.IsMeansOfTransport(status).Should().Be(expected);
     }
 
     [Theory]

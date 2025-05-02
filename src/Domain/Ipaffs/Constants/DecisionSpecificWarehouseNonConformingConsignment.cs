@@ -2,16 +2,16 @@ namespace Defra.TradeImportsDataApi.Domain.Ipaffs.Constants;
 
 public static class DecisionSpecificWarehouseNonConformingConsignment
 {
-    public const string Customwarehouse = "CustomWarehouse";
-    public const string Freezoneorfreewarehouse = "FreeZoneOrFreeWarehouse";
-    public const string Shipsupplier = "ShipSupplier";
+    public const string CustomWarehouse = "CustomWarehouse";
+    public const string FreeZoneOrFreeWarehouse = "FreeZoneOrFreeWarehouse";
+    public const string ShipSupplier = "ShipSupplier";
     public const string Ship = "Ship";
 
-    public static bool IsCustomwarehouse(string? status) => Equals(Customwarehouse, status);
+    public static bool IsCustomWarehouse(string? status) => Equals(CustomWarehouse, status);
 
-    public static bool IsFreezoneorfreewarehouse(string? status) => Equals(Freezoneorfreewarehouse, status);
+    public static bool IsFreeZoneOrFreeWarehouse(string? status) => Equals(FreeZoneOrFreeWarehouse, status);
 
-    public static bool IsShipsupplier(string? status) => Equals(Shipsupplier, status);
+    public static bool IsShipSupplier(string? status) => Equals(ShipSupplier, status);
 
     public static bool IsShip(string? status) => Equals(Ship, status);
 

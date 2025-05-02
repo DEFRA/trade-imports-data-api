@@ -9,27 +9,27 @@ public class DecisionNotAcceptableActionDestructionReasonTests
     [InlineData("ContaminatedProducts", true)]
     [InlineData("contaminatedproducts", true)]
     [InlineData(null, false)]
-    public void WhenContaminatedproducts_ThenMatch(string? status, bool expected)
+    public void WhenContaminatedProducts_ThenMatch(string? status, bool expected)
     {
-        DecisionNotAcceptableActionDestructionReason.IsContaminatedproducts(status).Should().Be(expected);
+        DecisionNotAcceptableActionDestructionReason.IsContaminatedProducts(status).Should().Be(expected);
     }
 
     [Theory]
     [InlineData("InterceptedPart", true)]
     [InlineData("interceptedpart", true)]
     [InlineData(null, false)]
-    public void WhenInterceptedpart_ThenMatch(string? status, bool expected)
+    public void WhenInterceptedPart_ThenMatch(string? status, bool expected)
     {
-        DecisionNotAcceptableActionDestructionReason.IsInterceptedpart(status).Should().Be(expected);
+        DecisionNotAcceptableActionDestructionReason.IsInterceptedPart(status).Should().Be(expected);
     }
 
     [Theory]
     [InlineData("PackagingMaterial", true)]
     [InlineData("packagingmaterial", true)]
     [InlineData(null, false)]
-    public void WhenPackagingmaterial_ThenMatch(string? status, bool expected)
+    public void WhenPackagingMaterial_ThenMatch(string? status, bool expected)
     {
-        DecisionNotAcceptableActionDestructionReason.IsPackagingmaterial(status).Should().Be(expected);
+        DecisionNotAcceptableActionDestructionReason.IsPackagingMaterial(status).Should().Be(expected);
     }
 
     [Theory]

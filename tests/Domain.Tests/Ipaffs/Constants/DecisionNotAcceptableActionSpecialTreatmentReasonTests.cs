@@ -9,27 +9,27 @@ public class DecisionNotAcceptableActionSpecialTreatmentReasonTests
     [InlineData("ContaminatedProducts", true)]
     [InlineData("contaminatedproducts", true)]
     [InlineData(null, false)]
-    public void WhenContaminatedproducts_ThenMatch(string? status, bool expected)
+    public void WhenContaminatedProducts_ThenMatch(string? status, bool expected)
     {
-        DecisionNotAcceptableActionSpecialTreatmentReason.IsContaminatedproducts(status).Should().Be(expected);
+        DecisionNotAcceptableActionSpecialTreatmentReason.IsContaminatedProducts(status).Should().Be(expected);
     }
 
     [Theory]
     [InlineData("InterceptedPart", true)]
     [InlineData("interceptedpart", true)]
     [InlineData(null, false)]
-    public void WhenInterceptedpart_ThenMatch(string? status, bool expected)
+    public void WhenInterceptedPart_ThenMatch(string? status, bool expected)
     {
-        DecisionNotAcceptableActionSpecialTreatmentReason.IsInterceptedpart(status).Should().Be(expected);
+        DecisionNotAcceptableActionSpecialTreatmentReason.IsInterceptedPart(status).Should().Be(expected);
     }
 
     [Theory]
     [InlineData("PackagingMaterial", true)]
     [InlineData("packagingmaterial", true)]
     [InlineData(null, false)]
-    public void WhenPackagingmaterial_ThenMatch(string? status, bool expected)
+    public void WhenPackagingMaterial_ThenMatch(string? status, bool expected)
     {
-        DecisionNotAcceptableActionSpecialTreatmentReason.IsPackagingmaterial(status).Should().Be(expected);
+        DecisionNotAcceptableActionSpecialTreatmentReason.IsPackagingMaterial(status).Should().Be(expected);
     }
 
     [Theory]

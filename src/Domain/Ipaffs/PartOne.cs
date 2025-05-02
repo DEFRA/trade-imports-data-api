@@ -151,24 +151,6 @@ public class PartOne
     /// </summary>
     [JsonPropertyName("purpose")]
     [System.ComponentModel.Description("Purpose of consignment details")]
-    [PossibleValue("Animal Feeding Stuff")]
-    [PossibleValue("Human Consumption")]
-    [PossibleValue("Pharmaceutical Use")]
-    [PossibleValue("Technical Use")]
-    [PossibleValue("Other")]
-    [PossibleValue("Commercial Sale")]
-    [PossibleValue("Commercial sale or change of ownership")]
-    [PossibleValue("Rescue")]
-    [PossibleValue("Breeding")]
-    [PossibleValue("Research")]
-    [PossibleValue("Racing or Competition")]
-    [PossibleValue("Approved Premises or Body")]
-    [PossibleValue("Companion Animal not for Resale or Rehoming")]
-    [PossibleValue("Production")]
-    [PossibleValue("Slaughter")]
-    [PossibleValue("Fattening")]
-    [PossibleValue("Game Restocking")]
-    [PossibleValue("Registered Horses")]
     public Purpose? Purpose { get; set; }
 
     /// <summary>

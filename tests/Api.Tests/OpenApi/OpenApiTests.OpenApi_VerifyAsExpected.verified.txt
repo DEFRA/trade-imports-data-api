@@ -3832,32 +3832,12 @@
             "nullable": true
           },
           "purpose": {
-            "enum": [
-              "Animal Feeding Stuff",
-              "Human Consumption",
-              "Pharmaceutical Use",
-              "Technical Use",
-              "Other",
-              "Commercial Sale",
-              "Commercial sale or change of ownership",
-              "Rescue",
-              "Breeding",
-              "Research",
-              "Racing or Competition",
-              "Approved Premises or Body",
-              "Companion Animal not for Resale or Rehoming",
-              "Production",
-              "Slaughter",
-              "Fattening",
-              "Game Restocking",
-              "Registered Horses"
-            ],
             "allOf": [
               {
                 "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.Purpose"
               }
             ],
-            "description": "Purpose of consignment details. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Purpose of consignment details",
             "nullable": true
           },
           "pointOfEntry": {

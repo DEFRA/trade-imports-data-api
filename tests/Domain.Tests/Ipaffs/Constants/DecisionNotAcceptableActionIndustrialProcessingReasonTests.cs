@@ -9,27 +9,27 @@ public class DecisionNotAcceptableActionIndustrialProcessingReasonTests
     [InlineData("ContaminatedProducts", true)]
     [InlineData("contaminatedproducts", true)]
     [InlineData(null, false)]
-    public void WhenContaminatedproducts_ThenMatch(string? status, bool expected)
+    public void WhenContaminatedProducts_ThenMatch(string? status, bool expected)
     {
-        DecisionNotAcceptableActionIndustrialProcessingReason.IsContaminatedproducts(status).Should().Be(expected);
+        DecisionNotAcceptableActionIndustrialProcessingReason.IsContaminatedProducts(status).Should().Be(expected);
     }
 
     [Theory]
     [InlineData("InterceptedPart", true)]
     [InlineData("interceptedpart", true)]
     [InlineData(null, false)]
-    public void WhenInterceptedpart_ThenMatch(string? status, bool expected)
+    public void WhenInterceptedPart_ThenMatch(string? status, bool expected)
     {
-        DecisionNotAcceptableActionIndustrialProcessingReason.IsInterceptedpart(status).Should().Be(expected);
+        DecisionNotAcceptableActionIndustrialProcessingReason.IsInterceptedPart(status).Should().Be(expected);
     }
 
     [Theory]
     [InlineData("PackagingMaterial", true)]
     [InlineData("packagingmaterial", true)]
     [InlineData(null, false)]
-    public void WhenPackagingmaterial_ThenMatch(string? status, bool expected)
+    public void WhenPackagingMaterial_ThenMatch(string? status, bool expected)
     {
-        DecisionNotAcceptableActionIndustrialProcessingReason.IsPackagingmaterial(status).Should().Be(expected);
+        DecisionNotAcceptableActionIndustrialProcessingReason.IsPackagingMaterial(status).Should().Be(expected);
     }
 
     [Theory]

@@ -9,36 +9,36 @@ public class DecisionNotAcceptableActionReDispatchReasonTests
     [InlineData("ContaminatedProducts", true)]
     [InlineData("contaminatedproducts", true)]
     [InlineData(null, false)]
-    public void WhenContaminatedproducts_ThenMatch(string? status, bool expected)
+    public void WhenContaminatedProducts_ThenMatch(string? status, bool expected)
     {
-        DecisionNotAcceptableActionReDispatchReason.IsContaminatedproducts(status).Should().Be(expected);
+        DecisionNotAcceptableActionReDispatchReason.IsContaminatedProducts(status).Should().Be(expected);
     }
 
     [Theory]
     [InlineData("InterceptedPart", true)]
     [InlineData("interceptedpart", true)]
     [InlineData(null, false)]
-    public void WhenInterceptedpart_ThenMatch(string? status, bool expected)
+    public void WhenInterceptedPart_ThenMatch(string? status, bool expected)
     {
-        DecisionNotAcceptableActionReDispatchReason.IsInterceptedpart(status).Should().Be(expected);
+        DecisionNotAcceptableActionReDispatchReason.IsInterceptedPart(status).Should().Be(expected);
     }
 
     [Theory]
     [InlineData("PackagingMaterial", true)]
     [InlineData("packagingmaterial", true)]
     [InlineData(null, false)]
-    public void WhenPackagingmaterial_ThenMatch(string? status, bool expected)
+    public void WhenPackagingMaterial_ThenMatch(string? status, bool expected)
     {
-        DecisionNotAcceptableActionReDispatchReason.IsPackagingmaterial(status).Should().Be(expected);
+        DecisionNotAcceptableActionReDispatchReason.IsPackagingMaterial(status).Should().Be(expected);
     }
 
     [Theory]
     [InlineData("MeansOfTransport", true)]
     [InlineData("meansoftransport", true)]
     [InlineData(null, false)]
-    public void WhenMeansoftransport_ThenMatch(string? status, bool expected)
+    public void WhenMeansOfTransport_ThenMatch(string? status, bool expected)
     {
-        DecisionNotAcceptableActionReDispatchReason.IsMeansoftransport(status).Should().Be(expected);
+        DecisionNotAcceptableActionReDispatchReason.IsMeansOfTransport(status).Should().Be(expected);
     }
 
     [Theory]
