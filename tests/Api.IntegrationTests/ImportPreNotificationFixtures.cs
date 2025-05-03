@@ -9,6 +9,9 @@ public static class ImportPreNotificationFixtures
     public static ImportPreNotification CreateFromSample(Type anchor, string filename)
     {
         var body = EmbeddedResource.GetBody(anchor, filename);
-        return JsonSerializer.Deserialize<ImportPreNotification>(body, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true})!;
+        return JsonSerializer.Deserialize<ImportPreNotification>(
+            body,
+            new JsonSerializerOptions() { PropertyNameCaseInsensitive = true }
+        )!;
     }
 }

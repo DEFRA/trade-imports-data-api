@@ -17,12 +17,7 @@ public class ImportPreNotificationTests : SqsTestBase
         var result = await client.GetImportPreNotification(chedRef, CancellationToken.None);
         result.Should().BeNull();
 
-        await client.PutImportPreNotification(
-            chedRef,
-            body,
-            null,
-            CancellationToken.None
-        );
+        await client.PutImportPreNotification(chedRef, body, null, CancellationToken.None);
 
         result = await client.GetImportPreNotification(chedRef, CancellationToken.None);
         result.Should().NotBeNull();
@@ -160,6 +155,4 @@ public class ImportPreNotificationTests : SqsTestBase
             await AsyncWaiter.WaitForAsync(async () => (await GetQueueAttributes()).ApproximateNumberOfMessages == 1)
         );
     }
-
-
 }
