@@ -10,6 +10,7 @@ public class ImportPreNotificationTests : SqsTestBase
     [Fact]
     public async Task WhenDoesNotExist_ShouldCreateAndRead()
     {
+        var body = ImportPreNotificationFixtures.CreateFromSample(GetType(), "ImportPreNotificationTests_Sample.json");
         var client = CreateDataApiClient();
         var chedRef = ImportPreNotificationIdGenerator.Generate();
 
@@ -18,7 +19,7 @@ public class ImportPreNotificationTests : SqsTestBase
 
         await client.PutImportPreNotification(
             chedRef,
-            new ImportPreNotification { ReferenceNumber = chedRef, Version = 1 },
+            body,
             null,
             CancellationToken.None
         );
@@ -159,4 +160,6 @@ public class ImportPreNotificationTests : SqsTestBase
             await AsyncWaiter.WaitForAsync(async () => (await GetQueueAttributes()).ApproximateNumberOfMessages == 1)
         );
     }
+
+
 }
