@@ -3,7 +3,6 @@ using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.Gvms;
-using Defra.TradeImportsDataApi.Domain.Gvms.Constants;
 using FluentAssertions;
 using NSubstitute;
 
@@ -47,14 +46,14 @@ public class GmrServiceTests
                 new GmrEntity
                 {
                     Id = id,
-                    Gmr = new Gmr { State = State.Open },
+                    Gmr = new Gmr { State = "OPEN" },
                 }
             );
         var subject = new GmrService(mockDbContext);
         var entity = new GmrEntity
         {
             Id = id,
-            Gmr = new Gmr { State = State.Completed },
+            Gmr = new Gmr { State = "COMPLETED" },
         };
 
         await subject.Update(entity, "etag", CancellationToken.None);

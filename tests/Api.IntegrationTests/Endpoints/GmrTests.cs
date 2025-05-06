@@ -1,5 +1,4 @@
 using Defra.TradeImportsDataApi.Domain.Gvms;
-using Defra.TradeImportsDataApi.Domain.Gvms.Constants;
 using FluentAssertions;
 
 namespace Defra.TradeImportsDataApi.Api.IntegrationTests.Endpoints;
@@ -30,24 +29,19 @@ public class GmrTests : IntegrationTestBase
         var result = await client.GetGmr(gmrId, CancellationToken.None);
         result.Should().BeNull();
 
-        await client.PutGmr(gmrId, new Gmr { Id = gmrId, State = State.Open }, null, CancellationToken.None);
+        await client.PutGmr(gmrId, new Gmr { Id = gmrId, State = "OPEN" }, null, CancellationToken.None);
 
         result = await client.GetGmr(gmrId, CancellationToken.None);
         result.Should().NotBeNull();
-        result.Gmr.State.Should().Be(State.Open);
+        result.Gmr.State.Should().Be("OPEN");
         result.Created.Should().BeAfter(DateTime.MinValue);
         result.Updated.Should().BeAfter(DateTime.MinValue);
 
-        await client.PutGmr(
-            gmrId,
-            new Gmr { Id = gmrId, State = State.Completed },
-            result.ETag,
-            CancellationToken.None
-        );
+        await client.PutGmr(gmrId, new Gmr { Id = gmrId, State = "COMPLETED" }, result.ETag, CancellationToken.None);
 
         var result2 = await client.GetGmr(gmrId, CancellationToken.None);
         result2.Should().NotBeNull();
-        result2.Gmr.State.Should().Be(State.Completed);
+        result2.Gmr.State.Should().Be("COMPLETED");
         result2.Created.Should().Be(result.Created);
         result2.Updated.Should().BeAfter(result.Updated);
     }
