@@ -1,4 +1,6 @@
-namespace Defra.TradeImportsDataApi.Domain.Ipaffs.Constants;
+using Defra.TradeImportsDataApi.Domain.Ipaffs.Constants;
+
+namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
 
 public static class ImportPreNotificationExtensions
 {
