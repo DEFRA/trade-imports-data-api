@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Defra.TradeImportsDataApi.Domain.Attributes;
 using Defra.TradeImportsDataApi.Domain.Json;
 
 namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
@@ -55,7 +56,10 @@ public class Applicant
     /// </summary>
     [JsonPropertyName("analysisType")]
     [System.ComponentModel.Description("Type of analysis")]
-    public ApplicantAnalysisType? AnalysisType { get; set; }
+    [PossibleValue("Initial analysis")]
+    [PossibleValue("Counter analysis")]
+    [PossibleValue("Second expert analysis")]
+    public string? AnalysisType { get; set; }
 
     /// <summary>
     /// Number of samples analysed
@@ -76,7 +80,10 @@ public class Applicant
     /// </summary>
     [JsonPropertyName("conservationOfSample")]
     [System.ComponentModel.Description("Conservation of sample")]
-    public ApplicantConservationOfSample? ConservationOfSample { get; set; }
+    [PossibleValue("Ambient")]
+    [PossibleValue("Chilled")]
+    [PossibleValue("Frozen")]
+    public string? ConservationOfSample { get; set; }
 
     /// <summary>
     /// inspector

@@ -9,14 +9,14 @@ public class InspectionCheck
     /// </summary>
     [JsonPropertyName("type")]
     [System.ComponentModel.Description("Type of check")]
-    public InspectionCheckType? Type { get; set; }
+    public string? Type { get; set; }
 
     /// <summary>
     /// Status of the check
     /// </summary>
     [JsonPropertyName("status")]
     [System.ComponentModel.Description("Status of the check")]
-    public InspectionCheckStatus? Status { get; set; }
+    public string? Status { get; set; }
 
     /// <summary>
     /// Reason for the status if applicable

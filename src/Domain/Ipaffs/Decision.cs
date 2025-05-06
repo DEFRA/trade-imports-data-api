@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Defra.TradeImportsDataApi.Domain.Attributes;
 
 namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
 
@@ -19,56 +20,100 @@ public class Decision
     /// </summary>
     [JsonPropertyName("notAcceptableAction")]
     [System.ComponentModel.Description("Filled if consignmentAcceptable is set to false")]
-    public DecisionNotAcceptableAction? NotAcceptableAction { get; set; }
+    [PossibleValue("slaughter")]
+    [PossibleValue("reexport")]
+    [PossibleValue("euthanasia")]
+    [PossibleValue("redispatching")]
+    [PossibleValue("destruction")]
+    [PossibleValue("transformation")]
+    [PossibleValue("other")]
+    [PossibleValue("entry-refusal")]
+    [PossibleValue("quarantine-imposed")]
+    [PossibleValue("special-treatment")]
+    [PossibleValue("industrial-processing")]
+    [PossibleValue("re-dispatch")]
+    [PossibleValue("use-for-other-purposes")]
+    public string? NotAcceptableAction { get; set; }
 
     /// <summary>
     /// Filled if not acceptable action is set to destruction
     /// </summary>
     [JsonPropertyName("notAcceptableActionDestructionReason")]
     [System.ComponentModel.Description("Filled if not acceptable action is set to destruction")]
-    public DecisionNotAcceptableActionDestructionReason? NotAcceptableActionDestructionReason { get; set; }
+    [PossibleValue("ContaminatedProducts")]
+    [PossibleValue("InterceptedPart")]
+    [PossibleValue("PackagingMaterial")]
+    [PossibleValue("Other")]
+    public string? NotAcceptableActionDestructionReason { get; set; }
 
     /// <summary>
     /// Filled if not acceptable action is set to entry refusal
     /// </summary>
     [JsonPropertyName("notAcceptableActionEntryRefusalReason")]
     [System.ComponentModel.Description("Filled if not acceptable action is set to entry refusal")]
-    public DecisionNotAcceptableActionEntryRefusalReason? NotAcceptableActionEntryRefusalReason { get; set; }
+    [PossibleValue("ContaminatedProducts")]
+    [PossibleValue("InterceptedPart")]
+    [PossibleValue("PackagingMaterial")]
+    [PossibleValue("MeansOfTransport")]
+    [PossibleValue("Other")]
+    public string? NotAcceptableActionEntryRefusalReason { get; set; }
 
     /// <summary>
     /// Filled if not acceptable action is set to quarantine imposed
     /// </summary>
     [JsonPropertyName("notAcceptableActionQuarantineImposedReason")]
     [System.ComponentModel.Description("Filled if not acceptable action is set to quarantine imposed")]
-    public DecisionNotAcceptableActionQuarantineImposedReason? NotAcceptableActionQuarantineImposedReason { get; set; }
+    [PossibleValue("ContaminatedProducts")]
+    [PossibleValue("InterceptedPart")]
+    [PossibleValue("PackagingMaterial")]
+    [PossibleValue("Other")]
+    public string? NotAcceptableActionQuarantineImposedReason { get; set; }
 
     /// <summary>
     /// Filled if not acceptable action is set to special treatment
     /// </summary>
     [JsonPropertyName("notAcceptableActionSpecialTreatmentReason")]
     [System.ComponentModel.Description("Filled if not acceptable action is set to special treatment")]
-    public DecisionNotAcceptableActionSpecialTreatmentReason? NotAcceptableActionSpecialTreatmentReason { get; set; }
+    [PossibleValue("ContaminatedProducts")]
+    [PossibleValue("InterceptedPart")]
+    [PossibleValue("PackagingMaterial")]
+    [PossibleValue("Other")]
+    public string? NotAcceptableActionSpecialTreatmentReason { get; set; }
 
     /// <summary>
     /// Filled if not acceptable action is set to industrial processing
     /// </summary>
     [JsonPropertyName("notAcceptableActionIndustrialProcessingReason")]
     [System.ComponentModel.Description("Filled if not acceptable action is set to industrial processing")]
-    public DecisionNotAcceptableActionIndustrialProcessingReason? NotAcceptableActionIndustrialProcessingReason { get; set; }
+    [PossibleValue("ContaminatedProducts")]
+    [PossibleValue("InterceptedPart")]
+    [PossibleValue("PackagingMaterial")]
+    [PossibleValue("Other")]
+    public string? NotAcceptableActionIndustrialProcessingReason { get; set; }
 
     /// <summary>
     /// Filled if not acceptable action is set to re-dispatch
     /// </summary>
     [JsonPropertyName("notAcceptableActionReDispatchReason")]
     [System.ComponentModel.Description("Filled if not acceptable action is set to re-dispatch")]
-    public DecisionNotAcceptableActionReDispatchReason? NotAcceptableActionReDispatchReason { get; set; }
+    [PossibleValue("ContaminatedProducts")]
+    [PossibleValue("InterceptedPart")]
+    [PossibleValue("PackagingMaterial")]
+    [PossibleValue("MeansOfTransport")]
+    [PossibleValue("Other")]
+    public string? NotAcceptableActionReDispatchReason { get; set; }
 
     /// <summary>
     /// Filled if not acceptable action is set to use for other purposes
     /// </summary>
     [JsonPropertyName("notAcceptableActionUseForOtherPurposesReason")]
     [System.ComponentModel.Description("Filled if not acceptable action is set to use for other purposes")]
-    public DecisionNotAcceptableActionUseForOtherPurposesReason? NotAcceptableActionUseForOtherPurposesReason { get; set; }
+    [PossibleValue("ContaminatedProducts")]
+    [PossibleValue("InterceptedPart")]
+    [PossibleValue("PackagingMaterial")]
+    [PossibleValue("MeansOfTransport")]
+    [PossibleValue("Other")]
+    public string? NotAcceptableActionUseForOtherPurposesReason { get; set; }
 
     /// <summary>
     /// Filled when notAcceptableAction is equal to destruction
@@ -140,7 +185,11 @@ public class Decision
     [System.ComponentModel.Description(
         "Filled if consignment is set to acceptable and decision type is Specific Warehouse"
     )]
-    public DecisionSpecificWarehouseNonConformingConsignment? SpecificWarehouseNonConformingConsignment { get; set; }
+    [PossibleValue("CustomWarehouse")]
+    [PossibleValue("FreeZoneOrFreeWarehouse")]
+    [PossibleValue("ShipSupplier")]
+    [PossibleValue("Ship")]
+    public string? SpecificWarehouseNonConformingConsignment { get; set; }
 
     /// <summary>
     /// Deadline when consignment has to leave borders
@@ -154,28 +203,49 @@ public class Decision
     /// </summary>
     [JsonPropertyName("decision")]
     [System.ComponentModel.Description("Detailed decision for consignment")]
-    public ConsignmentDecision? ConsignmentDecision { get; set; }
+    [PossibleValue("Non Acceptable")]
+    [PossibleValue("Acceptable for Internal Market")]
+    [PossibleValue("Acceptable if Channeled")]
+    [PossibleValue("Acceptable for Transhipment")]
+    [PossibleValue("Acceptable for Transit")]
+    [PossibleValue("Acceptable for Temporary Import")]
+    [PossibleValue("Acceptable for Specific Warehouse")]
+    [PossibleValue("Acceptable for Private Import")]
+    [PossibleValue("Acceptable for Transfer")]
+    [PossibleValue("Horse Re-entry")]
+    public string? ConsignmentDecision { get; set; }
 
     /// <summary>
     /// Decision over purpose of free circulation in country
     /// </summary>
     [JsonPropertyName("freeCirculationPurpose")]
     [System.ComponentModel.Description("Decision over purpose of free circulation in country")]
-    public DecisionFreeCirculationPurpose? FreeCirculationPurpose { get; set; }
+    [PossibleValue("Animal Feeding Stuff")]
+    [PossibleValue("Human Consumption")]
+    [PossibleValue("Pharmaceutical Use")]
+    [PossibleValue("Technical Use")]
+    [PossibleValue("Further Process")]
+    [PossibleValue("Other")]
+    public string? FreeCirculationPurpose { get; set; }
 
     /// <summary>
     /// Decision over purpose of definitive import
     /// </summary>
     [JsonPropertyName("definitiveImportPurpose")]
     [System.ComponentModel.Description("Decision over purpose of definitive import")]
-    public DecisionDefinitiveImportPurpose? DefinitiveImportPurpose { get; set; }
+    [PossibleValue("slaughter")]
+    [PossibleValue("approvedbodies")]
+    [PossibleValue("quarantine")]
+    public string? DefinitiveImportPurpose { get; set; }
 
     /// <summary>
     /// Decision channeled option based on (article8, article15)
     /// </summary>
     [JsonPropertyName("ifChanneledOption")]
     [System.ComponentModel.Description("Decision channeled option based on (article8, article15)")]
-    public DecisionIfChanneledOption? IfChanneledOption { get; set; }
+    [PossibleValue("article8")]
+    [PossibleValue("article15")]
+    public string? IfChanneledOption { get; set; }
 
     /// <summary>
     /// Custom warehouse registered number

@@ -37,6 +37,7 @@ COPY tests/Testing/Testing.csproj tests/Testing/Testing.csproj
 COPY tests/Api.Tests/Api.Tests.csproj tests/Api.Tests/Api.Tests.csproj
 COPY tests/Api.IntegrationTests/Api.IntegrationTests.csproj tests/Api.IntegrationTests/Api.IntegrationTests.csproj
 COPY tests/Data.Tests/Data.Tests.csproj tests/Data.Tests/Data.Tests.csproj
+COPY tests/Domain.Tests/Domain.Tests.csproj tests/Domain.Tests/Domain.Tests.csproj
 COPY Defra.TradeImportsDataApi.sln Defra.TradeImportsDataApi.sln
 COPY Directory.Build.props Directory.Build.props
 
@@ -51,6 +52,7 @@ COPY tests/Testing tests/Testing
 COPY tests/Api.Tests tests/Api.Tests
 COPY tests/Api.IntegrationTests tests/Api.IntegrationTests
 COPY tests/Data.Tests tests/Data.Tests
+COPY tests/Domain.Tests tests/Domain.Tests
 
 RUN dotnet csharpier check .
 

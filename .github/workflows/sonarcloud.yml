@@ -68,4 +68,5 @@ jobs:
           ./.sonar/coverage/dotnet-coverage collect "dotnet test tests/Api.Client.Tests" -f xml -o "coverage.Api.Client.Tests.xml"
           ./.sonar/coverage/dotnet-coverage collect "dotnet test tests/Api.Tests" -f xml -o "coverage.Api.Tests.xml"
           ./.sonar/coverage/dotnet-coverage collect "dotnet test tests/Data.Tests" -f xml -o "coverage.Data.Tests.xml"
+          ./.sonar/coverage/dotnet-coverage collect "dotnet test tests/Domain.Tests" -f xml -o "coverage.Domain.Tests.xml"
           ./.sonar/scanner/dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"

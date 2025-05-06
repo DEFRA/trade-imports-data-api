@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Defra.TradeImportsDataApi.Domain.Attributes;
 
 namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
 
@@ -140,7 +141,10 @@ public class PartTwo
     /// </summary>
     [JsonPropertyName("inspectionRequired")]
     [System.ComponentModel.Description("Inspection required")]
-    public InspectionRequired? InspectionRequired { get; set; }
+    [PossibleValue("Required")]
+    [PossibleValue("Inconclusive")]
+    [PossibleValue("Not required")]
+    public string? InspectionRequired { get; set; }
 
     /// <summary>
     /// Details about the manual inspection override

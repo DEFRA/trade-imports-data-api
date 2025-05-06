@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Defra.TradeImportsDataApi.Domain.Attributes;
 
 namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
 
@@ -58,13 +59,18 @@ public class ImportPreNotification
     /// </summary>
     [JsonPropertyName("importNotificationType")]
     [System.ComponentModel.Description("The Type of notification that has been submitted")]
-    public ImportNotificationType? ImportNotificationType { get; set; }
+    [PossibleValue("CVEDA")]
+    [PossibleValue("CVEDP")]
+    [PossibleValue("CHEDPP")]
+    [PossibleValue("CED")]
+    [PossibleValue("IMP")]
+    public string? ImportNotificationType { get; set; }
 
     /// <summary>
     /// Reference number of notification that was replaced by this one
     /// </summary>
     [JsonPropertyName("replaces")]
-    [System.ComponentModel.Description("Reference number of notification that was replaced by this one")]
+    [System.ComponentModel.Description("Reference number of notification that was replaced by this one another test")]
     public string? Replaces { get; set; }
 
     /// <summary>
@@ -75,13 +81,26 @@ public class ImportPreNotification
     public string? ReplacedBy { get; set; }
 
     /// <summary>
-    /// Current status of the notification. When created by an importer, the notification has the status &#x27;SUBMITTED&#x27;. Before submission of the notification it has the status &#x27;DRAFT&#x27;. When the BIP starts validation of the notification it has the status &#x27;IN PROGRESS&#x27; Once the BIP validates the notification, it gets the status &#x27;VALIDATED&#x27;. &#x27;AMEND&#x27; is set when the Part-1 user is modifying the notification. &#x27;MODIFY&#x27; is set when Part-2 user is modifying the notification. Replaced - When the notification is replaced by another notification. Rejected - Notification moves to Rejected status when rejected by a Part-2 user.
+    /// Current status of the notification. When created by an importer, the notification has the status 'SUBMITTED'. Before submission of the notification it has the status 'DRAFT'. When the BIP starts validation of the notification it has the status 'IN PROGRESS' Once the BIP validates the notification, it gets the status 'VALIDATED'. 'AMEND' is set when the Part-1 user is modifying the notification. 'MODIFY' is set when Part-2 user is modifying the notification. Replaced - When the notification is replaced by another notification. Rejected - Notification moves to Rejected status when rejected by a Part-2 user.
     /// </summary>
     [JsonPropertyName("status")]
     [System.ComponentModel.Description(
-        "Current status of the notification. When created by an importer, the notification has the status 'SUBMITTED'. Before submission of the notification it has the status 'DRAFT'. When the BIP starts validation of the notification it has the status 'IN PROGRESS' Once the BIP validates the notification, it gets the status 'VALIDATED'. 'AMEND' is set when the Part-1 user is modifying the notification. 'MODIFY' is set when Part-2 user is modifying the notification. Replaced - When the notification is replaced by another notification. Rejected - Notification moves to Rejected status when rejected by a Part-2 user. "
+        "Current status of the notification. When created by an importer, the notification has the status 'SUBMITTED'. Before submission of the notification it has the status 'DRAFT'. When the BIP starts validation of the notification it has the status 'IN PROGRESS' Once the BIP validates the notification, it gets the status 'VALIDATED'. 'AMEND' is set when the Part-1 user is modifying the notification. 'MODIFY' is set when Part-2 user is modifying the notification. Replaced - When the notification is replaced by another notification. Rejected - Notification moves to Rejected status when rejected by a Part-2 user."
     )]
-    public ImportNotificationStatus? Status { get; set; }
+    [PossibleValue("DRAFT")]
+    [PossibleValue("SUBMITTED")]
+    [PossibleValue("VALIDATED")]
+    [PossibleValue("REJECTED")]
+    [PossibleValue("IN_PROGRESS")]
+    [PossibleValue("AMEND")]
+    [PossibleValue("MODIFY")]
+    [PossibleValue("REPLACED")]
+    [PossibleValue("CANCELLED")]
+    [PossibleValue("DELETED")]
+    [PossibleValue("PARTIALLY_REJECTED")]
+    [PossibleValue("SPLIT_CONSIGNMENT")]
+    [PossibleValue("SUBMITTED,IN_PROGRESS,MODIFY")]
+    public string? Status { get; set; }
 
     /// <summary>
     /// Present if the consignment has been split

@@ -1,12 +1,13 @@
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
+using Defra.TradeImportsDataApi.Domain.Ipaffs.Constants;
 using FluentAssertions;
 
 // ReSharper disable InconsistentNaming
 
 namespace Defra.TradeImportsDataApi.Api.Tests.Domain;
 
-public class ImportNotificationTypeEnumExtensionsTests
+public class ImportDocumentExtensionsTests
 {
     [Theory]
     [InlineData("9115", ImportNotificationType.Chedpp)]
@@ -22,11 +23,11 @@ public class ImportNotificationTypeEnumExtensionsTests
     [InlineData("N853", ImportNotificationType.Cvedp)]
     [InlineData("9HCG", null)]
     [InlineData("INVALID", null)]
-    public void GetChedTypeTest(string documentCode, ImportNotificationType? expectedImportNotificationType)
+    public void GetChedTypeTest(string documentCode, string? expectedType)
     {
-        new ImportDocument() { DocumentCode = documentCode }
+        new ImportDocument { DocumentCode = documentCode }
             .GetChedType()
             .Should()
-            .Be(expectedImportNotificationType);
+            .Be(expectedType);
     }
 }

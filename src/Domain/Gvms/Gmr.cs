@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Defra.TradeImportsDataApi.Domain.Attributes;
 
 namespace Defra.TradeImportsDataApi.Domain.Gvms;
 
@@ -27,7 +28,12 @@ public class Gmr
     /// </summary>
     [JsonPropertyName("state")]
     [System.ComponentModel.Description("The state of the GMR")]
-    public State? State { get; set; }
+    [PossibleValue("NOT_FINALISABLE")]
+    [PossibleValue("OPEN")]
+    [PossibleValue("CHECKED_IN")]
+    [PossibleValue("EMBARKED")]
+    [PossibleValue("COMPLETED")]
+    public string? State { get; set; }
 
     /// <summary>
     /// If set to true, indicates that the vehicle requires a customs inspection.  If set to false, indicates that the vehicle does not require a customs inspection.  If not set, indicates the customs inspection decision has not yet been made or is not applicable.  For outbound GMRs, this indicates that the vehicle must present at an inspection facility prior to checking-in at the port.  For Office of Transit inspections for inbound GMRs, a decision may be made to inspect subsequent to a notification that inspection is not required.  In this event a notification will be sent that changes inspectionRequired from false to true.  If this happens after leaving the port of arrival, the inspection should be carried out at the next transit office e.g. the office of destination.
@@ -61,14 +67,24 @@ public class Gmr
     [System.ComponentModel.Description(
         "The direction of the movement - into or out of the UK, or between Great Britain and Northern Ireland"
     )]
-    public Direction? Direction { get; set; }
+    [PossibleValue("UK_INBOUND")]
+    [PossibleValue("UK_OUTBOUND")]
+    [PossibleValue("GB_TO_NI")]
+    [PossibleValue("NI_TO_GB")]
+    public string? Direction { get; set; }
 
     /// <summary>
     /// The type of haulier moving the goods
     /// </summary>
     [JsonPropertyName("haulierType")]
     [System.ComponentModel.Description("The type of haulier moving the goods")]
-    public HaulierType? HaulierType { get; set; }
+    [PossibleValue("STANDARD")]
+    [PossibleValue("FPO_ASN")]
+    [PossibleValue("FPO_OTHER")]
+    [PossibleValue("NATO_MOD")]
+    [PossibleValue("RMG")]
+    [PossibleValue("ETOE")]
+    public string? HaulierType { get; set; }
 
     /// <summary>
     /// Set to true if the vehicle will not be accompanying the trailer(s) during the crossing, or if the vehicle is carrying a container that will be detached and loaded for the crossing.

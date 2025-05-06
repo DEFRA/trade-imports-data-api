@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Defra.TradeImportsDataApi.Domain.Attributes;
 
 namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
 
@@ -12,7 +13,11 @@ public class ExternalReference
     /// </summary>
     [JsonPropertyName("system")]
     [System.ComponentModel.Description("Identifier of the external system to which the reference relates")]
-    public ExternalReferenceSystem? System { get; set; }
+    [PossibleValue("E-CERT")]
+    [PossibleValue("E-PHYTO")]
+    [PossibleValue("E-NOTIFICATION")]
+    [PossibleValue("NCTS")]
+    public string? System { get; set; }
 
     /// <summary>
     /// Reference which is added to the notification when either sent to the downstream system or received from it

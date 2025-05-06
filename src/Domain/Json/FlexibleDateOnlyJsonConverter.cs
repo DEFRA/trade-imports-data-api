@@ -18,7 +18,7 @@ public class FlexibleDateOnlyJsonConverterAttribute : JsonConverterAttribute
 /// For example, occasionally we've seen IPAFFS AccompanyingDocument where DocumentIssueDate includes time info,
 /// when most examples don't
 /// One of our example documents
-// Samples/NoAuditLogForMovementUpdate/IPAFFS/CHEDP/2024/12/26/CHEDP_GB_2024_031218000001-81b1a60c-5800-41eb-84fc-f73cb99585ef.json
+/// Samples/NoAuditLogForMovementUpdate/IPAFFS/CHEDP/2024/12/26/CHEDP_GB_2024_031218000001-81b1a60c-5800-41eb-84fc-f73cb99585ef.json
 /// </summary>
 public class FlexibleDateOnlyJsonConverter : JsonConverter<DateOnly?>
 {

@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Defra.TradeImportsDataApi.Domain.Attributes;
 
 namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
 
@@ -12,6 +13,12 @@ public class ConsignmentCheck
     /// </summary>
     [JsonPropertyName("euStandard")]
     [System.ComponentModel.Description("Does it conform EU standards")]
+    [PossibleValue("Satisfactory")]
+    [PossibleValue("Satisfactory following official intervention")]
+    [PossibleValue("Not Satisfactory")]
+    [PossibleValue("Not Done")]
+    [PossibleValue("Derogation")]
+    [PossibleValue("Not Set")]
     public string? EuStandard { get; set; }
 
     /// <summary>
@@ -19,6 +26,12 @@ public class ConsignmentCheck
     /// </summary>
     [JsonPropertyName("additionalGuarantees")]
     [System.ComponentModel.Description("Result of additional guarantees")]
+    [PossibleValue("Satisfactory")]
+    [PossibleValue("Satisfactory following official intervention")]
+    [PossibleValue("Not Satisfactory")]
+    [PossibleValue("Not Done")]
+    [PossibleValue("Derogation")]
+    [PossibleValue("Not Set")]
     public string? AdditionalGuarantees { get; set; }
 
     /// <summary>
@@ -26,6 +39,12 @@ public class ConsignmentCheck
     /// </summary>
     [JsonPropertyName("documentCheckResult")]
     [System.ComponentModel.Description("Result of document check")]
+    [PossibleValue("Satisfactory")]
+    [PossibleValue("Satisfactory following official intervention")]
+    [PossibleValue("Not Satisfactory")]
+    [PossibleValue("Not Done")]
+    [PossibleValue("Derogation")]
+    [PossibleValue("Not Set")]
     public string? DocumentCheckResult { get; set; }
 
     /// <summary>
@@ -33,6 +52,12 @@ public class ConsignmentCheck
     /// </summary>
     [JsonPropertyName("nationalRequirements")]
     [System.ComponentModel.Description("Result of national requirements check")]
+    [PossibleValue("Satisfactory")]
+    [PossibleValue("Satisfactory following official intervention")]
+    [PossibleValue("Not Satisfactory")]
+    [PossibleValue("Not Done")]
+    [PossibleValue("Derogation")]
+    [PossibleValue("Not Set")]
     public string? NationalRequirements { get; set; }
 
     /// <summary>
@@ -47,13 +72,22 @@ public class ConsignmentCheck
     /// </summary>
     [JsonPropertyName("identityCheckType")]
     [System.ComponentModel.Description("Type of identity check performed")]
-    public ConsignmentCheckIdentityCheckType? IdentityCheckType { get; set; }
+    [PossibleValue("Seal Check")]
+    [PossibleValue("Full Identity Check")]
+    [PossibleValue("Not Done")]
+    public string? IdentityCheckType { get; set; }
 
     /// <summary>
     /// Result of identity check
     /// </summary>
     [JsonPropertyName("identityCheckResult")]
     [System.ComponentModel.Description("Result of identity check")]
+    [PossibleValue("Satisfactory")]
+    [PossibleValue("Satisfactory following official intervention")]
+    [PossibleValue("Not Satisfactory")]
+    [PossibleValue("Not Done")]
+    [PossibleValue("Derogation")]
+    [PossibleValue("Not Set")]
     public string? IdentityCheckResult { get; set; }
 
     /// <summary>
@@ -61,7 +95,9 @@ public class ConsignmentCheck
     /// </summary>
     [JsonPropertyName("identityCheckNotDoneReason")]
     [System.ComponentModel.Description("What was the reason for skipping identity check")]
-    public ConsignmentCheckIdentityCheckNotDoneReason? IdentityCheckNotDoneReason { get; set; }
+    [PossibleValue("Reduced checks regime")]
+    [PossibleValue("Not required")]
+    public string? IdentityCheckNotDoneReason { get; set; }
 
     /// <summary>
     /// Was physical check done
@@ -75,6 +111,12 @@ public class ConsignmentCheck
     /// </summary>
     [JsonPropertyName("physicalCheckResult")]
     [System.ComponentModel.Description("Result of physical check")]
+    [PossibleValue("Satisfactory")]
+    [PossibleValue("Satisfactory following official intervention")]
+    [PossibleValue("Not Satisfactory")]
+    [PossibleValue("Not Done")]
+    [PossibleValue("Derogation")]
+    [PossibleValue("Not Set")]
     public string? PhysicalCheckResult { get; set; }
 
     /// <summary>
@@ -82,7 +124,9 @@ public class ConsignmentCheck
     /// </summary>
     [JsonPropertyName("physicalCheckNotDoneReason")]
     [System.ComponentModel.Description("What was the reason for skipping physical check")]
-    public ConsignmentCheckPhysicalCheckNotDoneReason? PhysicalCheckNotDoneReason { get; set; }
+    [PossibleValue("Reduced checks regime")]
+    [PossibleValue("Other")]
+    public string? PhysicalCheckNotDoneReason { get; set; }
 
     /// <summary>
     /// Other reason to not do physical check
@@ -96,6 +140,12 @@ public class ConsignmentCheck
     /// </summary>
     [JsonPropertyName("welfareCheck")]
     [System.ComponentModel.Description("Welfare check")]
+    [PossibleValue("Satisfactory")]
+    [PossibleValue("Satisfactory following official intervention")]
+    [PossibleValue("Not Satisfactory")]
+    [PossibleValue("Not Done")]
+    [PossibleValue("Derogation")]
+    [PossibleValue("Not Set")]
     public string? WelfareCheck { get; set; }
 
     /// <summary>
@@ -117,5 +167,11 @@ public class ConsignmentCheck
     /// </summary>
     [JsonPropertyName("laboratoryCheckResult")]
     [System.ComponentModel.Description("Result of laboratory tests")]
+    [PossibleValue("Satisfactory")]
+    [PossibleValue("Satisfactory following official intervention")]
+    [PossibleValue("Not Satisfactory")]
+    [PossibleValue("Not Done")]
+    [PossibleValue("Derogation")]
+    [PossibleValue("Not Set")]
     public string? LaboratoryCheckResult { get; set; }
 }

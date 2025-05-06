@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Defra.TradeImportsDataApi.Domain.Attributes;
 
 namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
 
@@ -19,7 +20,25 @@ public class Purpose
     /// </summary>
     [JsonPropertyName("internalMarketPurpose")]
     [System.ComponentModel.Description("Detailed purpose of internal market purpose group")]
-    public PurposeInternalMarketPurpose? InternalMarketPurpose { get; set; }
+    [PossibleValue("Animal Feeding Stuff")]
+    [PossibleValue("Human Consumption")]
+    [PossibleValue("Pharmaceutical Use")]
+    [PossibleValue("Technical Use")]
+    [PossibleValue("Other")]
+    [PossibleValue("Commercial Sale")]
+    [PossibleValue("Commercial sale or change of ownership")]
+    [PossibleValue("Rescue")]
+    [PossibleValue("Breeding")]
+    [PossibleValue("Research")]
+    [PossibleValue("Racing or Competition")]
+    [PossibleValue("Approved Premises or Body")]
+    [PossibleValue("Companion Animal not for Resale or Rehoming")]
+    [PossibleValue("Production")]
+    [PossibleValue("Slaughter")]
+    [PossibleValue("Fattening")]
+    [PossibleValue("Game Restocking")]
+    [PossibleValue("Registered Horses")]
+    public string? InternalMarketPurpose { get; set; }
 
     /// <summary>
     /// Country that consignment is transshipped through
@@ -33,7 +52,11 @@ public class Purpose
     /// </summary>
     [JsonPropertyName("forNonConforming")]
     [System.ComponentModel.Description("Detailed purpose for non conforming purpose group")]
-    public PurposeForNonConforming? ForNonConforming { get; set; }
+    [PossibleValue("Customs Warehouse")]
+    [PossibleValue("Free Zone or Free Warehouse")]
+    [PossibleValue("Ship Supplier")]
+    [PossibleValue("Ship")]
+    public string? ForNonConforming { get; set; }
 
     /// <summary>
     /// There are 3 types of registration number based on the purpose of consignment. Customs registration number, Free zone registration number and Shipping supplier registration number.
@@ -84,7 +107,10 @@ public class Purpose
     /// </summary>
     [JsonPropertyName("forImportOrAdmission")]
     [System.ComponentModel.Description("Specification of Import or admission purpose")]
-    public PurposeForImportOrAdmission? ForImportOrAdmission { get; set; }
+    [PossibleValue("Definitive import")]
+    [PossibleValue("Horses Re-entry")]
+    [PossibleValue("Temporary admission horses")]
+    public string? ForImportOrAdmission { get; set; }
 
     /// <summary>
     /// Exit date when import or admission
@@ -105,7 +131,15 @@ public class Purpose
     /// </summary>
     [JsonPropertyName("purposeGroup")]
     [System.ComponentModel.Description("Purpose group of consignment (general purpose)")]
-    public PurposePurposeGroup? PurposeGroup { get; set; }
+    [PossibleValue("For Import")]
+    [PossibleValue("For NON-Conforming Consignments")]
+    [PossibleValue("For Transhipment to")]
+    [PossibleValue("For Transit to 3rd Country")]
+    [PossibleValue("For Re-Import")]
+    [PossibleValue("For Private Import")]
+    [PossibleValue("For Transfer To")]
+    [PossibleValue("For Import Re-Conformity Check")]
+    public string? PurposeGroup { get; set; }
 
     /// <summary>
     /// DateTime

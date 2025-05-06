@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Defra.TradeImportsDataApi.Domain.Attributes;
 
 namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
 
@@ -12,35 +13,49 @@ public class CommodityRiskResult
     /// </summary>
     [JsonPropertyName("riskDecision")]
     [System.ComponentModel.Description("CHED-A, CHED-D, CHED-P - what is the commodity complement risk decision")]
-    public CommodityRiskResultRiskDecision? RiskDecision { get; set; }
+    [PossibleValue("REQUIRED")]
+    [PossibleValue("NOTREQUIRED")]
+    [PossibleValue("INCONCLUSIVE")]
+    [PossibleValue("REENFORCED_CHECK")]
+    public string? RiskDecision { get; set; }
 
     /// <summary>
     /// Transit CHED - what is the commodity complement exit risk decision
     /// </summary>
     [JsonPropertyName("exitRiskDecision")]
     [System.ComponentModel.Description("Transit CHED - what is the commodity complement exit risk decision")]
-    public CommodityRiskResultExitRiskDecision? ExitRiskDecision { get; set; }
+    [PossibleValue("REQUIRED")]
+    [PossibleValue("NOTREQUIRED")]
+    [PossibleValue("INCONCLUSIVE")]
+    public string? ExitRiskDecision { get; set; }
 
     /// <summary>
     /// HMI decision required
     /// </summary>
     [JsonPropertyName("hmiDecision")]
     [System.ComponentModel.Description("HMI decision required")]
-    public CommodityRiskResultHmiDecision? HmiDecision { get; set; }
+    [PossibleValue("REQUIRED")]
+    [PossibleValue("NOTREQUIRED")]
+    public string? HmiDecision { get; set; }
 
     /// <summary>
     /// PHSI decision required
     /// </summary>
     [JsonPropertyName("phsiDecision")]
     [System.ComponentModel.Description("PHSI decision required")]
-    public CommodityRiskResultPhsiDecision? PhsiDecision { get; set; }
+    [PossibleValue("REQUIRED")]
+    [PossibleValue("NOTREQUIRED")]
+    public string? PhsiDecision { get; set; }
 
     /// <summary>
     /// PHSI classification
     /// </summary>
     [JsonPropertyName("phsiClassification")]
     [System.ComponentModel.Description("PHSI classification")]
-    public CommodityRiskResultPhsiClassification? PhsiClassification { get; set; }
+    [PossibleValue("Mandatory")]
+    [PossibleValue("Reduced")]
+    [PossibleValue("Controlled")]
+    public string? PhsiClassification { get; set; }
 
     /// <summary>
     /// PHSI Decision Breakdown

@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Defra.TradeImportsDataApi.Domain.Attributes;
 
 namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
 
@@ -54,5 +55,8 @@ public class ControlAuthority
     /// </summary>
     [JsonPropertyName("iuuOption")]
     [System.ComponentModel.Description("Result of Illegal, Unreported and Unregulated (IUU) check")]
-    public ControlAuthorityIuuOption? IuuOption { get; set; }
+    [PossibleValue("IUUOK")]
+    [PossibleValue("IUUNA")]
+    [PossibleValue("IUUNotCompliant")]
+    public string? IuuOption { get; set; }
 }

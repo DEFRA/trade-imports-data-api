@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Defra.TradeImportsDataApi.Domain.Attributes;
 using Defra.TradeImportsDataApi.Domain.Json;
 
 namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
@@ -12,7 +13,10 @@ public class PartOne
     [System.ComponentModel.Description(
         "Used to indicate what type of EU Import the notification is - Live Animals, Product Of Animal Origin or High Risk Food Not Of Animal Origin"
     )]
-    public PartOneTypeOfImp? TypeOfImp { get; set; }
+    [PossibleValue("A")]
+    [PossibleValue("P")]
+    [PossibleValue("D")]
+    public string? TypeOfImp { get; set; }
 
     /// <summary>
     /// The individual who has submitted the notification
@@ -331,7 +335,10 @@ public class PartOne
     /// </summary>
     [JsonPropertyName("provideCtcMrn")]
     [System.ComponentModel.Description("When the NCTS MRN will be added for the Common Transit Convention (CTC)")]
-    public PartOneProvideCtcMrn? ProvideCtcMrn { get; set; }
+    [PossibleValue("YES")]
+    [PossibleValue("YES_ADD_LATER")]
+    [PossibleValue("NO")]
+    public string? ProvideCtcMrn { get; set; }
 
     /// <summary>
     /// DateTime
