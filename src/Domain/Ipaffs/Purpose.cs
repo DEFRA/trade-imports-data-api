@@ -127,6 +127,13 @@ public class Purpose
     public string? FinalBip { get; set; }
 
     /// <summary>
+    /// Place of departure
+    /// </summary>
+    [JsonPropertyName("pointOfExit")]
+    [System.ComponentModel.Description("Place of departure")]
+    public string? PointOfExit { get; set; }
+
+    /// <summary>
     /// Purpose group of consignment (general purpose)
     /// </summary>
     [JsonPropertyName("purposeGroup")]

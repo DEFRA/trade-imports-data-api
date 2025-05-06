@@ -35,6 +35,13 @@ public class ConsignmentCheck
     public string? AdditionalGuarantees { get; set; }
 
     /// <summary>
+    /// Additional details for document check
+    /// </summary>
+    [JsonPropertyName("documentCheckAdditionalDetails")]
+    [System.ComponentModel.Description("Additional details for document check")]
+    public string? DocumentCheckAdditionalDetails { get; set; }
+
+    /// <summary>
     /// Result of document check
     /// </summary>
     [JsonPropertyName("documentCheckResult")]
@@ -97,6 +104,7 @@ public class ConsignmentCheck
     [System.ComponentModel.Description("What was the reason for skipping identity check")]
     [PossibleValue("Reduced checks regime")]
     [PossibleValue("Not required")]
+    [PossibleValue("Chilled equine semen facilitation scheme")]
     public string? IdentityCheckNotDoneReason { get; set; }
 
     /// <summary>

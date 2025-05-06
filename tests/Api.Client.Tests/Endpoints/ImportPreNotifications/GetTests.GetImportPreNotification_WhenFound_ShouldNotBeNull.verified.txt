@@ -25,6 +25,7 @@
     AgencyOrganisationId: null,
     RiskDecisionLockedOn: null,
     IsRiskDecisionLocked: null,
+    IsAutoClearanceExempted: null,
     IsBulkUploadInProgress: null,
     RequestId: null,
     IsCdsFullMatched: null,

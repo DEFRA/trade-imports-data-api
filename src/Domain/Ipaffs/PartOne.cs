@@ -238,6 +238,15 @@ public class PartOne
     public SealContainer[]? SealsContainers { get; set; }
 
     /// <summary>
+    /// Whether the importer wishes to store transporter contact details
+    /// </summary>
+    [JsonPropertyName("storeTransporterContact")]
+    [System.ComponentModel.Description("Whether the importer wishes to store transporter contact details")]
+    [PossibleValue("YES")]
+    [PossibleValue("NO")]
+    public string? StoreTransporterContact { get; set; }
+
+    /// <summary>
     /// Date and time when the notification was submitted
     /// </summary>
     [JsonPropertyName("submittedOn")]

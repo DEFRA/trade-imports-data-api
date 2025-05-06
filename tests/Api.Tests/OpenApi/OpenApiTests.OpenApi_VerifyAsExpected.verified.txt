@@ -1608,7 +1608,7 @@
               "roadConsignmentNote"
             ],
             "type": "string",
-            "description": "Additional document type. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Additional document type. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "documentReference": {
@@ -1776,7 +1776,7 @@
               "Second expert analysis"
             ],
             "type": "string",
-            "description": "Type of analysis. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Type of analysis. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "numberOfSamples": {
@@ -1797,7 +1797,7 @@
               "Frozen"
             ],
             "type": "string",
-            "description": "Conservation of sample. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Conservation of sample. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "inspector": {
@@ -1992,7 +1992,7 @@
               "oth-o"
             ],
             "type": "string",
-            "description": "reason for refusal. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "reason for refusal. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "commodityOrPackage": {
@@ -2002,7 +2002,7 @@
               "cp"
             ],
             "type": "string",
-            "description": "commodity or package. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "commodity or package. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           }
         },
@@ -2105,7 +2105,7 @@
               "other"
             ],
             "type": "string",
-            "description": "What the commodity is intended for. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "What the commodity is intended for. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           }
         },
@@ -2243,7 +2243,7 @@
               "REENFORCED_CHECK"
             ],
             "type": "string",
-            "description": "CHED-A, CHED-D, CHED-P - what is the commodity complement risk decision. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "CHED-A, CHED-D, CHED-P - what is the commodity complement risk decision. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "exitRiskDecision": {
@@ -2253,7 +2253,7 @@
               "INCONCLUSIVE"
             ],
             "type": "string",
-            "description": "Transit CHED - what is the commodity complement exit risk decision. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Transit CHED - what is the commodity complement exit risk decision. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "hmiDecision": {
@@ -2262,7 +2262,7 @@
               "NOTREQUIRED"
             ],
             "type": "string",
-            "description": "HMI decision required. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "HMI decision required. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "phsiDecision": {
@@ -2271,7 +2271,7 @@
               "NOTREQUIRED"
             ],
             "type": "string",
-            "description": "PHSI decision required. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "PHSI decision required. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "phsiClassification": {
@@ -2281,7 +2281,7 @@
               "Controlled"
             ],
             "type": "string",
-            "description": "PHSI classification. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "PHSI classification. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "phsi": {
@@ -2356,7 +2356,7 @@
               "Not Set"
             ],
             "type": "string",
-            "description": "Does it conform EU standards. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Does it conform EU standards. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "additionalGuarantees": {
@@ -2369,7 +2369,12 @@
               "Not Set"
             ],
             "type": "string",
-            "description": "Result of additional guarantees. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Result of additional guarantees. Possible values taken from IPAFFS schema version 17.5.",
+            "nullable": true
+          },
+          "documentCheckAdditionalDetails": {
+            "type": "string",
+            "description": "Additional details for document check",
             "nullable": true
           },
           "documentCheckResult": {
@@ -2382,7 +2387,7 @@
               "Not Set"
             ],
             "type": "string",
-            "description": "Result of document check. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Result of document check. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "nationalRequirements": {
@@ -2395,7 +2400,7 @@
               "Not Set"
             ],
             "type": "string",
-            "description": "Result of national requirements check. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Result of national requirements check. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "identityCheckDone": {
@@ -2410,7 +2415,7 @@
               "Not Done"
             ],
             "type": "string",
-            "description": "Type of identity check performed. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Type of identity check performed. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "identityCheckResult": {
@@ -2423,16 +2428,17 @@
               "Not Set"
             ],
             "type": "string",
-            "description": "Result of identity check. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Result of identity check. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "identityCheckNotDoneReason": {
             "enum": [
               "Reduced checks regime",
-              "Not required"
+              "Not required",
+              "Chilled equine semen facilitation scheme"
             ],
             "type": "string",
-            "description": "What was the reason for skipping identity check. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "What was the reason for skipping identity check. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "physicalCheckDone": {
@@ -2450,7 +2456,7 @@
               "Not Set"
             ],
             "type": "string",
-            "description": "Result of physical check. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Result of physical check. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "physicalCheckNotDoneReason": {
@@ -2459,7 +2465,7 @@
               "Other"
             ],
             "type": "string",
-            "description": "What was the reason for skipping physical check. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "What was the reason for skipping physical check. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "physicalCheckOtherText": {
@@ -2477,7 +2483,7 @@
               "Not Set"
             ],
             "type": "string",
-            "description": "Welfare check. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Welfare check. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "numberOfAnimalsChecked": {
@@ -2501,7 +2507,7 @@
               "Not Set"
             ],
             "type": "string",
-            "description": "Result of laboratory tests. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Result of laboratory tests. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           }
         },
@@ -2572,7 +2578,7 @@
               "It has been destroyed"
             ],
             "type": "string",
-            "description": "Is the consignment leaving UK borders?. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Is the consignment leaving UK borders?. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           }
         },
@@ -2623,7 +2629,7 @@
               "IUUNotCompliant"
             ],
             "type": "string",
-            "description": "Result of Illegal, Unreported and Unregulated (IUU) check. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Result of Illegal, Unreported and Unregulated (IUU) check. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           }
         },
@@ -2655,7 +2661,7 @@
               "use-for-other-purposes"
             ],
             "type": "string",
-            "description": "Filled if consignmentAcceptable is set to false. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Filled if consignmentAcceptable is set to false. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "notAcceptableActionDestructionReason": {
@@ -2666,7 +2672,7 @@
               "Other"
             ],
             "type": "string",
-            "description": "Filled if not acceptable action is set to destruction. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Filled if not acceptable action is set to destruction. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "notAcceptableActionEntryRefusalReason": {
@@ -2678,7 +2684,7 @@
               "Other"
             ],
             "type": "string",
-            "description": "Filled if not acceptable action is set to entry refusal. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Filled if not acceptable action is set to entry refusal. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "notAcceptableActionQuarantineImposedReason": {
@@ -2689,7 +2695,7 @@
               "Other"
             ],
             "type": "string",
-            "description": "Filled if not acceptable action is set to quarantine imposed. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Filled if not acceptable action is set to quarantine imposed. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "notAcceptableActionSpecialTreatmentReason": {
@@ -2700,7 +2706,7 @@
               "Other"
             ],
             "type": "string",
-            "description": "Filled if not acceptable action is set to special treatment. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Filled if not acceptable action is set to special treatment. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "notAcceptableActionIndustrialProcessingReason": {
@@ -2711,7 +2717,7 @@
               "Other"
             ],
             "type": "string",
-            "description": "Filled if not acceptable action is set to industrial processing. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Filled if not acceptable action is set to industrial processing. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "notAcceptableActionReDispatchReason": {
@@ -2723,7 +2729,7 @@
               "Other"
             ],
             "type": "string",
-            "description": "Filled if not acceptable action is set to re-dispatch. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Filled if not acceptable action is set to re-dispatch. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "notAcceptableActionUseForOtherPurposesReason": {
@@ -2735,7 +2741,7 @@
               "Other"
             ],
             "type": "string",
-            "description": "Filled if not acceptable action is set to use for other purposes. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Filled if not acceptable action is set to use for other purposes. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "notAcceptableDestructionReason": {
@@ -2802,7 +2808,7 @@
               "Ship"
             ],
             "type": "string",
-            "description": "Filled if consignment is set to acceptable and decision type is Specific Warehouse. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Filled if consignment is set to acceptable and decision type is Specific Warehouse. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "temporaryDeadline": {
@@ -2824,7 +2830,7 @@
               "Horse Re-entry"
             ],
             "type": "string",
-            "description": "Detailed decision for consignment. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Detailed decision for consignment. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "freeCirculationPurpose": {
@@ -2837,7 +2843,7 @@
               "Other"
             ],
             "type": "string",
-            "description": "Decision over purpose of free circulation in country. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Decision over purpose of free circulation in country. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "definitiveImportPurpose": {
@@ -2847,7 +2853,7 @@
               "quarantine"
             ],
             "type": "string",
-            "description": "Decision over purpose of definitive import. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Decision over purpose of definitive import. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "ifChanneledOption": {
@@ -2856,7 +2862,7 @@
               "article15"
             ],
             "type": "string",
-            "description": "Decision channeled option based on (article8, article15). Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Decision channeled option based on (article8, article15). Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "customWarehouseRegisteredNumber": {
@@ -2953,7 +2959,7 @@
               "c_ship_rail"
             ],
             "type": "string",
-            "description": "Type of transport to be used. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Type of transport to be used. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "document": {
@@ -3000,7 +3006,7 @@
               "pod"
             ],
             "type": "string",
-            "description": "Type of organisation. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Type of organisation. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "status": {
@@ -3010,7 +3016,7 @@
               "suspended"
             ],
             "type": "string",
-            "description": "Status of organisation. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Status of organisation. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "companyName": {
@@ -3063,7 +3069,7 @@
               "NCTS"
             ],
             "type": "string",
-            "description": "Identifier of the external system to which the reference relates. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Identifier of the external system to which the reference relates. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "reference": {
@@ -3101,7 +3107,7 @@
               "inspunit"
             ],
             "type": "string",
-            "description": "Type of authority. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Type of authority. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "consignmentArrival": {
@@ -3236,7 +3242,7 @@
               "IMP"
             ],
             "type": "string",
-            "description": "The Type of notification that has been submitted. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "The Type of notification that has been submitted. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "replaces": {
@@ -3266,7 +3272,7 @@
               "SUBMITTED,IN_PROGRESS,MODIFY"
             ],
             "type": "string",
-            "description": "Current status of the notification. When created by an importer, the notification has the status 'SUBMITTED'. Before submission of the notification it has the status 'DRAFT'. When the BIP starts validation of the notification it has the status 'IN PROGRESS' Once the BIP validates the notification, it gets the status 'VALIDATED'. 'AMEND' is set when the Part-1 user is modifying the notification. 'MODIFY' is set when Part-2 user is modifying the notification. Replaced - When the notification is replaced by another notification. Rejected - Notification moves to Rejected status when rejected by a Part-2 user. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Current status of the notification. When created by an importer, the notification has the status 'SUBMITTED'. Before submission of the notification it has the status 'DRAFT'. When the BIP starts validation of the notification it has the status 'IN PROGRESS' Once the BIP validates the notification, it gets the status 'VALIDATED'. 'AMEND' is set when the Part-1 user is modifying the notification. 'MODIFY' is set when Part-2 user is modifying the notification. Replaced - When the notification is replaced by another notification. Rejected - Notification moves to Rejected status when rejected by a Part-2 user. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "splitConsignment": {
@@ -3364,6 +3370,11 @@
           "isRiskDecisionLocked": {
             "type": "boolean",
             "description": "is the risk decision locked?",
+            "nullable": true
+          },
+          "isAutoClearanceExempted": {
+            "type": "boolean",
+            "description": "Boolean flag that indicates whether CHED is exempted from autoclearance",
             "nullable": true
           },
           "isBulkUploadInProgress": {
@@ -3522,7 +3533,7 @@
               "Low"
             ],
             "type": "string",
-            "description": "Risk Level is defined using enum values High,Medium,Low. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Risk Level is defined using enum values High,Medium,Low. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "riskLevelMethod": {
@@ -3531,7 +3542,7 @@
               "User"
             ],
             "type": "string",
-            "description": "Indicator of whether the risk level was determined by the system or by the user. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Indicator of whether the risk level was determined by the system or by the user. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "riskLevelSetFor": {
@@ -3590,7 +3601,7 @@
               "Pending"
             ],
             "type": "string",
-            "description": "Conclusion of laboratory test. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Conclusion of laboratory test. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "labTestCreatedOn": {
@@ -3622,7 +3633,7 @@
               "Latent infection sampling"
             ],
             "type": "string",
-            "description": "Reason for test. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Reason for test. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "singleLaboratoryTests": {
@@ -3652,7 +3663,7 @@
               "Ship Road vehicle"
             ],
             "type": "string",
-            "description": "Type of transport. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Type of transport. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "document": {
@@ -3784,7 +3795,7 @@
               "D"
             ],
             "type": "string",
-            "description": "Used to indicate what type of EU Import the notification is - Live Animals, Product Of Animal Origin or High Risk Food Not Of Animal Origin. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Used to indicate what type of EU Import the notification is - Live Animals, Product Of Animal Origin or High Risk Food Not Of Animal Origin. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "personResponsible": {
@@ -4009,6 +4020,15 @@
             "description": "Array that contains pair of seal number and container number",
             "nullable": true
           },
+          "storeTransporterContact": {
+            "enum": [
+              "YES",
+              "NO"
+            ],
+            "type": "string",
+            "description": "Whether the importer wishes to store transporter contact details. Possible values taken from IPAFFS schema version 17.5.",
+            "nullable": true
+          },
           "submittedOn": {
             "type": "string",
             "description": "Date and time when the notification was submitted",
@@ -4109,7 +4129,7 @@
               "NO"
             ],
             "type": "string",
-            "description": "When the NCTS MRN will be added for the Common Transit Convention (CTC). Possible values taken from IPAFFS schema version 15.9.",
+            "description": "When the NCTS MRN will be added for the Common Transit Convention (CTC). Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "arrivesAt": {
@@ -4136,7 +4156,7 @@
               "COMPLETED"
             ],
             "type": "string",
-            "description": "Control status enum. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Control status enum. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "control": {
@@ -4320,7 +4340,7 @@
               "Not required"
             ],
             "type": "string",
-            "description": "Inspection required. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Inspection required. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "inspectionOverride": {
@@ -4410,7 +4430,7 @@
               "Private transporter"
             ],
             "type": "string",
-            "description": "Type of party. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Type of party. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "approvalNumber": {
@@ -4531,7 +4551,7 @@
               "Registered Horses"
             ],
             "type": "string",
-            "description": "Detailed purpose of internal market purpose group. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Detailed purpose of internal market purpose group. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "thirdCountryTranshipment": {
@@ -4547,7 +4567,7 @@
               "Ship"
             ],
             "type": "string",
-            "description": "Detailed purpose for non conforming purpose group. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Detailed purpose for non conforming purpose group. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "regNumber": {
@@ -4590,7 +4610,7 @@
               "Temporary admission horses"
             ],
             "type": "string",
-            "description": "Specification of Import or admission purpose. Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Specification of Import or admission purpose. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "exitDate": {
@@ -4602,6 +4622,11 @@
           "finalBip": {
             "type": "string",
             "description": "Final Border Inspection Post",
+            "nullable": true
+          },
+          "pointOfExit": {
+            "type": "string",
+            "description": "Place of departure",
             "nullable": true
           },
           "purposeGroup": {
@@ -4616,7 +4641,7 @@
               "For Import Re-Conformity Check"
             ],
             "type": "string",
-            "description": "Purpose group of consignment (general purpose). Possible values taken from IPAFFS schema version 15.9.",
+            "description": "Purpose group of consignment (general purpose). Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
           "estimatedArrivesAtPortOfExit": {

@@ -10,7 +10,7 @@ public class PossibleValueSchemaFilter : ISchemaFilter
 {
     private static readonly Dictionary<string, string> s_systemVersionMap = new()
     {
-        { "IPAFFS", "15.9" },
+        { "IPAFFS", "17.5" },
         { "GVMS", "v1.0 (private beta)" },
     };
 
