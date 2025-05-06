@@ -144,7 +144,7 @@ public class CommodityComplement
     public bool? IsCdsMatched { get; set; }
 
     [JsonPropertyName("additionalData")]
-    public IDictionary<string, object>? AdditionalData { get; set; }
+    public KeyDataPair[]? AdditionalData { get; set; }
 
     [JsonPropertyName("riskAssesment")]
     public CommodityRiskResult? RiskAssesment { get; set; }

@@ -1325,7 +1325,20 @@
         "speciesFamily": "SpeciesFamilyee5444da-0bf1-4b35-8257-3ef5fbe0cb6b",
         "speciesCommonName": "SpeciesCommonNameb18de881-23fb-4cc1-97aa-9f1b9f989290",
         "isCdsMatched": true,
-        "additionalData": {},
+        "additionalData": [
+          {
+            "key": "keya8f8d934-d762-4ca7-8936-1c1f96659100",
+            "data": "data4fe11cf4-397b-4c99-a3cf-bf0fe85dec1"
+          },
+          {
+            "key": "keyde4f2a92-1827-4c82-bb8f-c37349d251d4",
+            "data": "data4fe11cf4-397b-4c99-a3cf-bf0fe85dec1"
+          },
+          {
+            "key": "key4fe11cf4-397b-4c99-a3cf-bf0fe85dec1c",
+            "data": "data4fe11cf4-397b-4c99-a3cf-bf0fe85dec1c"
+          }
+        ],
         "riskAssesment": {
           "riskDecision": "Required",
           "exitRiskDecision": "Required",
@@ -1391,7 +1404,20 @@
         "speciesFamily": "SpeciesFamilyfaad2c43-1220-445d-bc8b-7c8e9c03865f",
         "speciesCommonName": "SpeciesCommonName22afa31d-1a0b-4d45-b5ae-f3837a5de7a4",
         "isCdsMatched": true,
-        "additionalData": {},
+        "additionalData": [
+          {
+            "key": "keya8f8d934-d762-4ca7-8936-1c1f96659100",
+            "data": "data4fe11cf4-397b-4c99-a3cf-bf0fe85dec1"
+          },
+          {
+            "key": "keyde4f2a92-1827-4c82-bb8f-c37349d251d4",
+            "data": "data4fe11cf4-397b-4c99-a3cf-bf0fe85dec1"
+          },
+          {
+            "key": "key4fe11cf4-397b-4c99-a3cf-bf0fe85dec1c",
+            "data": "data4fe11cf4-397b-4c99-a3cf-bf0fe85dec1c"
+          }
+        ],
         "riskAssesment": {
           "riskDecision": "Notrequired",
           "exitRiskDecision": "Notrequired",
@@ -1457,7 +1483,20 @@
         "speciesFamily": "SpeciesFamily8d8670f8-5b0b-4886-bd03-609ef2675277",
         "speciesCommonName": "SpeciesCommonNameb6184813-5c42-4ccc-a2a0-affdcbeaf6ec",
         "isCdsMatched": true,
-        "additionalData": {},
+        "additionalData": [
+          {
+            "key": "keya8f8d934-d762-4ca7-8936-1c1f96659100",
+            "data": "data4fe11cf4-397b-4c99-a3cf-bf0fe85dec1"
+          },
+          {
+            "key": "keyde4f2a92-1827-4c82-bb8f-c37349d251d4",
+            "data": "data4fe11cf4-397b-4c99-a3cf-bf0fe85dec1"
+          },
+          {
+            "key": "key4fe11cf4-397b-4c99-a3cf-bf0fe85dec1c",
+            "data": "data4fe11cf4-397b-4c99-a3cf-bf0fe85dec1c"
+          }
+        ],
         "riskAssesment": {
           "riskDecision": "Inconclusive",
           "exitRiskDecision": "Inconclusive",

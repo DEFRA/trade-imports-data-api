@@ -1,0 +1,254 @@
+{
+  "IpaffsId": 4194492,
+  "Etag": "00000000043C1660",
+  "ReferenceNumber": "CHEDPP.GB.2024.5194492",
+  "UpdatedSource": "2024-11-24",
+  "LastUpdatedBy": {
+    "DisplayName": "b960cda9180fe306ec4691edce6ed6bbbe26424670e77078ac31f889fa5ea419",
+    "UserId": "Guid_1"
+  },
+  "ImportNotificationType": "Chedpp",
+  "Status": "InProgress",
+  "PartOne": {
+    "PersonResponsible": {
+      "Name": "c91b1e77f4d64ef1fb982524a786483f5be4d3393664b8abccd61c7ed81330fa",
+      "CompanyId": "Guid_2",
+      "ContactId": "Guid_3",
+      "CompanyName": "419c4d2874684c58c2429fbc281a7accdb63b447703b98249c73ec48a545ca4e",
+      "Addresses": [
+        "bf4227af78e742aca0eddd71616de5ccd04c3ec85547d194355fb23b9f252971",
+        "ef2d2183722cc5ea358ca0c281f4714d5f3d01be51c274024be7ba950bffe938",
+        "cb29b5b5cb165e24a262eb5a5fcd7d1f910e2ea8354827c0b17becbf7f1f9f84",
+        "47fe17ce1714143d2c3e39d3000760d4be7072e61f229f46a47986adfe2d2f27",
+        "65c0575c76b78ef9e6c46ff0bf0ddc1622f9f5644bbca3c73ca01c202df6d91e",
+        "b4043b0b8297e379bc559ab33b6ae9c7a9b4ef6519d3baee53270f0c0dd3d960"
+      ],
+      "Country": "GB",
+      "TracesId": 1001,
+      "Phone": "f3c2d053fee804925a9c4925166edf92b0dd3bc6f3408baf27296e19b526bca3",
+      "Email": "748494e51b3a382532618f495f601f196df797d8b9b44eb70ef93bcfedd86422"
+    },
+    "Consignor": {
+      "Id": "Guid_4",
+      "Type": "Exporter",
+      "Status": "Nonapproved",
+      "CompanyName": "a6c61915e8228beb7841d2c997cef5b2dc24fc657fedd2456aa8cf212603dc4f",
+      "Address": {
+        "City": "2b90c13170e642ff6a0f553e88532d891399326a335a543af9b4ddce094fd05e",
+        "AddressLine1": "6a3bd35fb22e108b1e520c2c4e3ace7043f57afea30af0cec581beef0680a1ff",
+        "PostalZipCode": "9203419f3d0364844a36b254c667181967255460116fe20c0a51b06f98ac4788",
+        "CountryIsoCode": "KE",
+        "Email": "b02c7f508eb7ac55b9f9c27a6e7d77d22c1cae8ce5d6b37b267a3a660d9dc953",
+        "Telephone": "0b8d7184f6f6ae75f64caab27497bf711267d17323e362ee854bc6ddabb5cb92"
+      },
+      "TracesId": 10221705
+    },
+    "Consignee": {
+      "Id": "Guid_2",
+      "Type": "Consignee",
+      "CompanyName": "419c4d2874684c58c2429fbc281a7accdb63b447703b98249c73ec48a545ca4e",
+      "Address": {
+        "City": "47fe17ce1714143d2c3e39d3000760d4be7072e61f229f46a47986adfe2d2f27",
+        "AddressLine1": "bf4227af78e742aca0eddd71616de5ccd04c3ec85547d194355fb23b9f252971",
+        "AddressLine2": "ef2d2183722cc5ea358ca0c281f4714d5f3d01be51c274024be7ba950bffe938",
+        "PostalZipCode": "65c0575c76b78ef9e6c46ff0bf0ddc1622f9f5644bbca3c73ca01c202df6d91e",
+        "CountryIsoCode": "GB",
+        "Email": "748494e51b3a382532618f495f601f196df797d8b9b44eb70ef93bcfedd86422",
+        "Telephone": "f3c2d053fee804925a9c4925166edf92b0dd3bc6f3408baf27296e19b526bca3"
+      },
+      "TracesId": 10221732
+    },
+    "Importer": {
+      "Id": "Guid_2",
+      "Type": "Importer",
+      "CompanyName": "419c4d2874684c58c2429fbc281a7accdb63b447703b98249c73ec48a545ca4e",
+      "Address": {
+        "City": "47fe17ce1714143d2c3e39d3000760d4be7072e61f229f46a47986adfe2d2f27",
+        "AddressLine1": "bf4227af78e742aca0eddd71616de5ccd04c3ec85547d194355fb23b9f252971",
+        "AddressLine2": "ef2d2183722cc5ea358ca0c281f4714d5f3d01be51c274024be7ba950bffe938",
+        "PostalZipCode": "65c0575c76b78ef9e6c46ff0bf0ddc1622f9f5644bbca3c73ca01c202df6d91e",
+        "CountryIsoCode": "GB",
+        "Email": "748494e51b3a382532618f495f601f196df797d8b9b44eb70ef93bcfedd86422",
+        "Telephone": "f3c2d053fee804925a9c4925166edf92b0dd3bc6f3408baf27296e19b526bca3"
+      },
+      "TracesId": 10221732
+    },
+    "PlaceOfDestination": {
+      "Id": "Guid_2",
+      "Type": "Destination",
+      "CompanyName": "419c4d2874684c58c2429fbc281a7accdb63b447703b98249c73ec48a545ca4e",
+      "Address": {
+        "City": "47fe17ce1714143d2c3e39d3000760d4be7072e61f229f46a47986adfe2d2f27",
+        "AddressLine1": "bf4227af78e742aca0eddd71616de5ccd04c3ec85547d194355fb23b9f252971",
+        "AddressLine2": "ef2d2183722cc5ea358ca0c281f4714d5f3d01be51c274024be7ba950bffe938",
+        "PostalZipCode": "65c0575c76b78ef9e6c46ff0bf0ddc1622f9f5644bbca3c73ca01c202df6d91e",
+        "CountryIsoCode": "GB",
+        "Email": "748494e51b3a382532618f495f601f196df797d8b9b44eb70ef93bcfedd86422",
+        "Telephone": "f3c2d053fee804925a9c4925166edf92b0dd3bc6f3408baf27296e19b526bca3"
+      },
+      "TracesId": 10221732
+    },
+    "IsGvmsRoute": false,
+    "Purpose": {
+      "PurposeGroup": "ForImport"
+    },
+    "PointOfEntry": "CONPNT",
+    "PointOfEntryControlPoint": "IPGBNHR6",
+    "MeansOfTransport": {},
+    "MeansOfTransportFromEntryPoint": {
+      "Type": "Aeroplane",
+      "Document": "125-14531123",
+      "Id": "BA064"
+    },
+    "VeterinaryInformation": {
+      "AccompanyingDocuments": [
+        {
+          "DocumentType": "PhytosanitaryCertificate",
+          "DocumentReference": "KEPHIS/EXP/2024/1111111",
+          "DocumentIssuedOn": "2024-11-22",
+          "AttachmentId": "Guid_5",
+          "AttachmentFilename": "1877862.pdf",
+          "AttachmentContentType": "application/pdf",
+          "UploadUserId": "Guid_6",
+          "UploadOrganisationId": "Guid_7"
+        },
+        {
+          "DocumentType": "AirWaybill",
+          "DocumentReference": "125-11111111",
+          "DocumentIssuedOn": "2024-11-23",
+          "AttachmentId": "Guid_8",
+          "AttachmentFilename": "125-14531123.pdf",
+          "AttachmentContentType": "application/pdf",
+          "UploadUserId": "Guid_6",
+          "UploadOrganisationId": "Guid_7"
+        }
+      ]
+    },
+    "ImporterLocalReferenceNumber": "111111",
+    "SubmittedOn": "2024-11-23",
+    "SubmittedBy": {
+      "DisplayName": "278eb2582153c57163668257c27e09f4b2d7b6a330c90668b2013c23024d668f",
+      "UserId": "Guid_6"
+    },
+    "ComplexCommoditySelected": true,
+    "ContactDetails": {
+      "Name": "Dave",
+      "Telephone": "01111111111",
+      "Email": "dave@theimporter",
+      "Agent": "Dave"
+    },
+    "ProvideCtcMrn": "No",
+    "ArrivesAt": "2024-11-23"
+  },
+  "PartTwo": {
+    "ControlAuthority": {
+      "OfficialVeterinarian": {
+        "FirstName": "84a4b19e19aa4e2a562ae0286b1e188ef4f4f9a98a92b8730d20a1e0f2882523",
+        "LastName": "6562ae2f1cfb3d4f482f8185875eca296a85bfcd4dac3a09ba2162023395aac5",
+        "Email": "c19f9bb5a41dbf1c2576f967a2a8208c957f3188861dfc687bb0a4c5beaa71aa",
+        "Phone": "902322b102aeb478028f7680104536eb36a1e5f0468c21b58a743ed1f3636d08",
+        "Signed": "2024-11-23"
+      }
+    },
+    "InspectionRequired": "Required"
+  },
+  "PartThree": {},
+  "AgencyOrganisationId": "Guid_7",
+  "RiskDecisionLockedOn": "2024-11-24",
+  "IsRiskDecisionLocked": false,
+  "ChedTypeVersion": 1,
+  "CommoditiesSummary": {
+    "ConsignedCountryInChargeGroup": false,
+    "TotalGrossWeight": 65.0,
+    "TotalNetWeight": 59.5,
+    "NumberOfPackages": 17,
+    "IncludeNonAblactedAnimals": false,
+    "CountryOfOrigin": "KE",
+    "CountryOfOriginIsPodCountry": false,
+    "ConsignedCountry": "KE"
+  },
+  "Commodities": [
+    {
+      "CommodityDescription": "Other",
+      "CommodityId": "06021090",
+      "ComplementId": 3,
+      "ComplementName": "Pelargonium",
+      "EppoCode": "PELSS",
+      "SpeciesId": "1345841",
+      "SpeciesName": "Pelargonium",
+      "SpeciesNomination": "Pelargonium",
+      "AdditionalData": [
+        {
+          "key": "regulatory_authority",
+          "data": "PHSI"
+        },
+        {
+          "key": "requires_finished_or_propagated_data",
+          "data": "true"
+        },
+        {
+          "key": "propagation",
+          "data": "Plant"
+        },
+        {
+          "key": "type_package",
+          "data": "Carton"
+        },
+        {
+          "key": "commodity_group",
+          "data": "Plants for Planting"
+        },
+        {
+          "key": "netweight",
+          "data": "42"
+        },
+        {
+          "key": "number_package",
+          "data": "12"
+        },
+        {
+          "key": "quantity",
+          "data": "22700"
+        },
+        {
+          "key": "type_quantity",
+          "data": "Pieces"
+        },
+        {
+          "key": "finished_or_propagated",
+          "data": "Propagated"
+        }
+      ],
+      "RiskAssesment": {
+        "HmiDecision": "Notrequired",
+        "PhsiDecision": "Required",
+        "PhsiClassification": "Mandatory",
+        "Phsi": {
+          "DocumentCheck": true,
+          "IdentityCheck": true,
+          "PhysicalCheck": true
+        },
+        "UniqueId": "Guid_9",
+        "EppoCode": "PELSS",
+        "IsWoody": true,
+        "IndoorOutdoor": "Outdoor",
+        "Propagation": "Plant",
+        "PhsiRuleType": "Consignment"
+      },
+      "Checks": [
+        {
+          "Type": "PhsiDocument",
+          "Status": "Compliant"
+        },
+        {
+          "Type": "PhsiIdentity",
+          "Status": "ToDo"
+        },
+        {
+          "Type": "PhsiPhysical",
+          "Status": "ToDo"
+        }
+      ]
+    }
+  ]
+}

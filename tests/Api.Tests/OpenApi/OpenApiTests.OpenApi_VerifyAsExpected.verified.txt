@@ -2262,8 +2262,10 @@
             "nullable": true
           },
           "additionalData": {
-            "type": "object",
-            "additionalProperties": { },
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.KeyDataPair"
+            },
             "nullable": true
           },
           "riskAssesment": {
@@ -3776,6 +3778,20 @@
           "User"
         ],
         "type": "string"
+      },
+      "Defra.TradeImportsDataApi.Domain.Ipaffs.KeyDataPair": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "nullable": true
+          },
+          "data": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
       },
       "Defra.TradeImportsDataApi.Domain.Ipaffs.LaboratoryTestResult": {
         "type": "object",
