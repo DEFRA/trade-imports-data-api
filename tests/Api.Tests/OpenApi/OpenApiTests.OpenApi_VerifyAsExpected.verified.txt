@@ -1407,8 +1407,15 @@
             "nullable": true
           },
           "state": {
+            "enum": [
+              "NOT_FINALISABLE",
+              "OPEN",
+              "CHECKED_IN",
+              "EMBARKED",
+              "COMPLETED"
+            ],
             "type": "string",
-            "description": "The state of the GMR",
+            "description": "The state of the GMR. Possible values taken from GVMS schema version v1.0 (private beta).",
             "nullable": true
           },
           "inspectionRequired": {
@@ -1431,13 +1438,27 @@
             "nullable": true
           },
           "direction": {
+            "enum": [
+              "UK_INBOUND",
+              "UK_OUTBOUND",
+              "GB_TO_NI",
+              "NI_TO_GB"
+            ],
             "type": "string",
-            "description": "The direction of the movement - into or out of the UK, or between Great Britain and Northern Ireland",
+            "description": "The direction of the movement - into or out of the UK, or between Great Britain and Northern Ireland. Possible values taken from GVMS schema version v1.0 (private beta).",
             "nullable": true
           },
           "haulierType": {
+            "enum": [
+              "STANDARD",
+              "FPO_ASN",
+              "FPO_OTHER",
+              "NATO_MOD",
+              "RMG",
+              "ETOE"
+            ],
             "type": "string",
-            "description": "The type of haulier moving the goods",
+            "description": "The type of haulier moving the goods. Possible values taken from GVMS schema version v1.0 (private beta).",
             "nullable": true
           },
           "isUnaccompanied": {

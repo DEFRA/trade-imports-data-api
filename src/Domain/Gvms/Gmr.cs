@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Defra.TradeImportsDataApi.Domain.Attributes;
 
 namespace Defra.TradeImportsDataApi.Domain.Gvms;
 
@@ -27,6 +28,11 @@ public class Gmr
     /// </summary>
     [JsonPropertyName("state")]
     [System.ComponentModel.Description("The state of the GMR")]
+    [PossibleValue("NOT_FINALISABLE")]
+    [PossibleValue("OPEN")]
+    [PossibleValue("CHECKED_IN")]
+    [PossibleValue("EMBARKED")]
+    [PossibleValue("COMPLETED")]
     public string? State { get; set; }
 
     /// <summary>
@@ -61,6 +67,10 @@ public class Gmr
     [System.ComponentModel.Description(
         "The direction of the movement - into or out of the UK, or between Great Britain and Northern Ireland"
     )]
+    [PossibleValue("UK_INBOUND")]
+    [PossibleValue("UK_OUTBOUND")]
+    [PossibleValue("GB_TO_NI")]
+    [PossibleValue("NI_TO_GB")]
     public string? Direction { get; set; }
 
     /// <summary>
@@ -68,6 +78,12 @@ public class Gmr
     /// </summary>
     [JsonPropertyName("haulierType")]
     [System.ComponentModel.Description("The type of haulier moving the goods")]
+    [PossibleValue("STANDARD")]
+    [PossibleValue("FPO_ASN")]
+    [PossibleValue("FPO_OTHER")]
+    [PossibleValue("NATO_MOD")]
+    [PossibleValue("RMG")]
+    [PossibleValue("ETOE")]
     public string? HaulierType { get; set; }
 
     /// <summary>

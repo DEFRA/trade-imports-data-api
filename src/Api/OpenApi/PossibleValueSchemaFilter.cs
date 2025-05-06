@@ -8,7 +8,11 @@ namespace Defra.TradeImportsDataApi.Api.OpenApi;
 // ReSharper disable once ClassNeverInstantiated.Global
 public class PossibleValueSchemaFilter : ISchemaFilter
 {
-    private static readonly Dictionary<string, string> s_systemVersionMap = new() { { "IPAFFS", "15.9" } };
+    private static readonly Dictionary<string, string> s_systemVersionMap = new()
+    {
+        { "IPAFFS", "15.9" },
+        { "GVMS", "v1.0 (private beta)" },
+    };
 
     public void Apply(OpenApiSchema schema, SchemaFilterContext context)
     {
