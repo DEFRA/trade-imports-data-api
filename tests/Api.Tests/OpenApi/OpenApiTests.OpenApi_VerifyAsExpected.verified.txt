@@ -2372,6 +2372,11 @@
             "description": "Result of additional guarantees. Possible values taken from IPAFFS schema version 15.9.",
             "nullable": true
           },
+          "documentCheckAdditionalDetails": {
+            "type": "string",
+            "description": "Additional details for document check",
+            "nullable": true
+          },
           "documentCheckResult": {
             "enum": [
               "Satisfactory",
@@ -2429,7 +2434,8 @@
           "identityCheckNotDoneReason": {
             "enum": [
               "Reduced checks regime",
-              "Not required"
+              "Not required",
+              "Chilled equine semen facilitation scheme"
             ],
             "type": "string",
             "description": "What was the reason for skipping identity check. Possible values taken from IPAFFS schema version 15.9.",
@@ -3366,6 +3372,11 @@
             "description": "is the risk decision locked?",
             "nullable": true
           },
+          "isAutoClearanceExempted": {
+            "type": "boolean",
+            "description": "Boolean flag that indicates whether CHED is exempted from autoclearance",
+            "nullable": true
+          },
           "isBulkUploadInProgress": {
             "type": "boolean",
             "description": "Boolean flag that indicates whether a bulk upload is in progress",
@@ -4009,6 +4020,15 @@
             "description": "Array that contains pair of seal number and container number",
             "nullable": true
           },
+          "storeTransporterContact": {
+            "enum": [
+              "YES",
+              "NO"
+            ],
+            "type": "string",
+            "description": "Whether the importer wishes to store transporter contact details. Possible values taken from IPAFFS schema version 15.9.",
+            "nullable": true
+          },
           "submittedOn": {
             "type": "string",
             "description": "Date and time when the notification was submitted",
@@ -4602,6 +4622,11 @@
           "finalBip": {
             "type": "string",
             "description": "Final Border Inspection Post",
+            "nullable": true
+          },
+          "pointOfExit": {
+            "type": "string",
+            "description": "Place of departure",
             "nullable": true
           },
           "purposeGroup": {

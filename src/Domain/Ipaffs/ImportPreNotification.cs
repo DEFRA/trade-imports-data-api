@@ -203,6 +203,13 @@ public class ImportPreNotification
     public bool? IsRiskDecisionLocked { get; set; }
 
     /// <summary>
+    /// Boolean flag that indicates whether CHED is exempted from autoclearance
+    /// </summary>
+    [JsonPropertyName("isAutoClearanceExempted")]
+    [System.ComponentModel.Description("Boolean flag that indicates whether CHED is exempted from autoclearance")]
+    public bool? IsAutoClearanceExempted { get; set; }
+
+    /// <summary>
     /// Boolean flag that indicates whether a bulk upload is in progress
     /// </summary>
     [JsonPropertyName("isBulkUploadInProgress")]

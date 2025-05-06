@@ -408,6 +408,7 @@
         "forImportOrAdmission": "DefinitiveImport",
         "exitDate": "2026-04-20",
         "finalBip": "FinalBipf4d6e420-4a3a-45bc-9a48-ada0f9f114ac",
+        "pointOfExit": "ABCD",
         "purposeGroup": "ForImport",
         "estimatedArrivesAtPortOfExit": "2024-03-24T14:24:11.6099305"
       },
@@ -722,6 +723,7 @@
           "resealedSealNumber": "ResealedSealNumber43c3cb7e-cfc5-400b-a9ed-da14f99bfc80"
         }
       ],
+      "storeTransporterContact": "Yes",
       "submittedOn": "2025-09-27T12:54:30.846547",
       "submittedBy": {
         "displayName": "DisplayName5d26fb67-c248-4d89-a0c6-b58a16955fa8",
@@ -881,6 +883,7 @@
       "consignmentCheck": {
         "euStandard": "EuStandardea5348f9-ce8b-46b5-aa21-702fec5120e7",
         "additionalGuarantees": "AdditionalGuarantees4372d709-5fb9-4971-9309-3d9aa29d8488",
+        "documentCheckAdditionalDetails": "DocumentCheckAdditionalDetails7a6a698f-261d-469a-809f-6666566e5656",
         "documentCheckResult": "DocumentCheckResult51f75165-9e52-41d2-8782-897b25703bd1",
         "nationalRequirements": "NationalRequirements0a0e3ee0-8b25-4b95-96c7-521ae1c0d636",
         "identityCheckDone": false,
@@ -1281,6 +1284,7 @@
     "agencyOrganisationId": "AgencyOrganisationId6aa4589e-a726-4e16-b4f3-9cfdc2105049",
     "riskDecisionLockedOn": "2025-01-12T11:09:04.8256615",
     "isRiskDecisionLocked": true,
+    "isAutoClearanceExempted": true,
     "isBulkUploadInProgress": false,
     "requestId": "RequestId1282ba0a-8f4f-41b3-862a-87efe8741a4e",
     "isCdsFullMatched": true,
