@@ -1,4 +1,5 @@
 using Defra.TradeImportsDataApi.Domain.Gvms;
+using Defra.TradeImportsDataApi.Domain.Gvms.Constants;
 using FluentAssertions;
 
 namespace Defra.TradeImportsDataApi.Api.IntegrationTests.Endpoints;

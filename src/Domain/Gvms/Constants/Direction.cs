@@ -1,4 +1,4 @@
-namespace Defra.TradeImportsDataApi.Domain.Gvms;
+namespace Defra.TradeImportsDataApi.Domain.Gvms.Constants;
 
 public static class Direction
 {

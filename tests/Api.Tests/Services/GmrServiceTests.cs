@@ -3,6 +3,7 @@ using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.Gvms;
+using Defra.TradeImportsDataApi.Domain.Gvms.Constants;
 using FluentAssertions;
 using NSubstitute;
 
