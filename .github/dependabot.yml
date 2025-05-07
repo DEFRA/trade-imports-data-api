@@ -10,7 +10,6 @@ updates:
       timezone: "Europe/London"
     # Single PR for patch and minor
     # Major will be one update per PR
-    # AWS SDK updates no matter what update type
     groups:
       patch:
         update-types:
@@ -18,9 +17,6 @@ updates:
       minor:
         update-types:
           - "minor"
-      aws-sdk:
-        patterns:
-          - "AWSSDK.*"
     allow:
       - dependency-type: direct
 
