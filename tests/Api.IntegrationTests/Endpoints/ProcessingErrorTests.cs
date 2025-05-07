@@ -1,10 +1,11 @@
 using Defra.TradeImportsDataApi.Domain.Errors;
 using Defra.TradeImportsDataApi.Domain.ProcessingErrors;
 using FluentAssertions;
+using Xunit.Abstractions;
 
 namespace Defra.TradeImportsDataApi.Api.IntegrationTests.Endpoints;
 
-public class ProcessingErrorTests : SqsTestBase
+public class ProcessingErrorTests(ITestOutputHelper testOutputHelper) : SqsTestBase(testOutputHelper)
 {
     [Fact]
     public async Task WhenDoesNotExist_ShouldCreateAndRead()

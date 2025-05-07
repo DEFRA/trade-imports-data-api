@@ -1,10 +1,11 @@
 using Amazon.Runtime;
 using Amazon.SQS;
 using Amazon.SQS.Model;
+using Xunit.Abstractions;
 
 namespace Defra.TradeImportsDataApi.Api.IntegrationTests.Endpoints;
 
-public class SqsTestBase : IntegrationTestBase
+public class SqsTestBase(ITestOutputHelper testOutputHelper) : IntegrationTestBase
 {
     private const string QueueUrl =
         "http://sqs.eu-west-2.127.0.0.1:4566/000000000000/trade_imports_data_upserted_queue";
@@ -16,7 +17,15 @@ public class SqsTestBase : IntegrationTestBase
 
     private Task<ReceiveMessageResponse> ReceiveMessage()
     {
-        return _sqsClient.ReceiveMessageAsync(QueueUrl, CancellationToken.None);
+        return _sqsClient.ReceiveMessageAsync(
+            new ReceiveMessageRequest
+            {
+                QueueUrl = QueueUrl,
+                MaxNumberOfMessages = 10,
+                WaitTimeSeconds = 0,
+            },
+            CancellationToken.None
+        );
     }
 
     protected Task<GetQueueAttributesResponse> GetQueueAttributes()
@@ -32,8 +41,18 @@ public class SqsTestBase : IntegrationTestBase
         Assert.True(
             await AsyncWaiter.WaitForAsync(async () =>
             {
-                await ReceiveMessage();
-                return (await GetQueueAttributes()).ApproximateNumberOfMessages == 0;
+                var response = await ReceiveMessage();
+
+                foreach (var message in response.Messages)
+                {
+                    testOutputHelper?.WriteLine("Drain message: {0} {1}", message.MessageId, message.Body);
+                }
+
+                var approximateNumberOfMessages = (await GetQueueAttributes()).ApproximateNumberOfMessages;
+
+                testOutputHelper?.WriteLine("ApproximateNumberOfMessages: {0}", approximateNumberOfMessages);
+
+                return approximateNumberOfMessages == 0;
             })
         );
     }
