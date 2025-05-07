@@ -1,10 +1,11 @@
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using FluentAssertions;
+using Xunit.Abstractions;
 
 namespace Defra.TradeImportsDataApi.Api.IntegrationTests.Endpoints;
 
-public class CustomsDeclarationTests : SqsTestBase
+public class CustomsDeclarationTests(ITestOutputHelper testOutputHelper) : SqsTestBase(testOutputHelper)
 {
     [Fact]
     public async Task WhenDoesNotExist_ShouldCreateAndRead()
