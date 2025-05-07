@@ -17,7 +17,7 @@
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.MongoDb" Version="9.0.0" />
     <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.400" />
-    <PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.7.400.138" />
+    <PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.7.400.147" />
     <PackageReference Include="Elastic.CommonSchema.Serilog" Version="8.12.3" />
     <PackageReference Include="Elastic.Serilog.Enrichers.Web" Version="8.12.3" />
     <PackageReference Include="Microsoft.AspNetCore.HeaderPropagation" Version="9.0.4" />
