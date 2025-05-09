@@ -1,9 +1,11 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 namespace Defra.TradeImportsDataApi.Api.Health;
 
+[ExcludeFromCodeCoverage]
 public static class WebApplicationExtensions
 {
     private static readonly JsonSerializerOptions s_options = new();
@@ -18,6 +20,12 @@ public static class WebApplicationExtensions
                 new HealthCheckOptions { Predicate = healthCheck => healthCheck.Tags.Contains(Ready) }
             )
             .AllowAnonymous();
+
+        app.MapHealthChecks(
+                "/health/authorized",
+                new HealthCheckOptions { Predicate = healthCheck => healthCheck.Tags.Contains(Ready) }
+            )
+            .RequireAuthorization();
 
         app.MapHealthChecks(
                 "/health/all",
@@ -41,12 +49,12 @@ public static class WebApplicationExtensions
                             {
                                 jsonWriter.WriteStartObject(entry.Key);
                                 jsonWriter.WriteString("status", entry.Value.Status.ToString());
-                                jsonWriter.WriteString("description", entry.Value.Description);
+
+                                if (entry.Value.Description != null)
+                                    jsonWriter.WriteString("description", entry.Value.Description);
 
                                 if (entry.Value.Exception != null)
-                                {
                                     jsonWriter.WriteString("exception", entry.Value.Exception.Message);
-                                }
 
                                 if (entry.Value.Data.Any())
                                 {
