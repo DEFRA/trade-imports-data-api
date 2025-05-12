@@ -11,6 +11,7 @@ public class PossibleValueSchemaFilter : ISchemaFilter
     private static readonly Dictionary<string, string> s_systemVersionMap = new()
     {
         { "IPAFFS", "17.5" },
+        { "Finalisation", "v1" },
         { "GVMS", "v1.0 (private beta)" },
     };
 
@@ -20,28 +21,31 @@ public class PossibleValueSchemaFilter : ISchemaFilter
             context.MemberInfo?.CustomAttributes.Where(x => x.AttributeType == typeof(PossibleValueAttribute)).ToList()
             ?? [];
 
-        if (possibleValues.Count != 0)
+        if (possibleValues.Count == 0)
+            return;
+
+        var system = s_systemVersionMap.Keys.FirstOrDefault(x =>
+            context.MemberInfo?.DeclaringType?.FullName?.Contains(x, StringComparison.OrdinalIgnoreCase) ?? false
+        );
+
+        if (string.IsNullOrEmpty(system))
+            throw new InvalidOperationException("Unable to determine system version.");
+
+        if (!string.IsNullOrEmpty(schema.Description) && !schema.Description.EndsWith('.'))
+            schema.Description += ".";
+
+        if (!string.IsNullOrEmpty(schema.Description) && !schema.Description.EndsWith(' '))
+            schema.Description += " ";
+
+        schema.Description += $"Possible values taken from {system} schema version {s_systemVersionMap[system]}.";
+
+        foreach (
+            var description in possibleValues
+                .Select(possibleValue => possibleValue.ConstructorArguments.FirstOrDefault().Value?.ToString())
+                .Where(description => !string.IsNullOrWhiteSpace(description))
+        )
         {
-            var system = s_systemVersionMap.Keys.FirstOrDefault(x =>
-                context.MemberInfo?.DeclaringType?.FullName?.Contains(x, StringComparison.OrdinalIgnoreCase) ?? false
-            );
-
-            if (string.IsNullOrEmpty(system))
-                throw new InvalidOperationException("Unable to determine system version.");
-
-            if (!string.IsNullOrEmpty(schema.Description) && !schema.Description.EndsWith('.'))
-                schema.Description += ".";
-
-            schema.Description += $" Possible values taken from {system} schema version {s_systemVersionMap[system]}.";
-
-            foreach (
-                var description in possibleValues
-                    .Select(possibleValue => possibleValue.ConstructorArguments.FirstOrDefault().Value?.ToString())
-                    .Where(description => !string.IsNullOrWhiteSpace(description))
-            )
-            {
-                schema.Enum.Add(new OpenApiString(description));
-            }
+            schema.Enum.Add(new OpenApiString(description));
         }
     }
 }

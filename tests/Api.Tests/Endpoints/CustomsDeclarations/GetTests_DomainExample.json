@@ -337,7 +337,7 @@
     "messageSentAt": "2024-02-17T21:10:57.6342229",
     "externalVersion": 232,
     "decisionNumber": 231,
-    "finalState": 0,
+    "finalState": "0",
     "isManualRelease": true
   },
   "InboundError": {

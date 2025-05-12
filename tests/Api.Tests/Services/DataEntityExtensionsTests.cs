@@ -145,7 +145,7 @@ public class DataEntityExtensionsTests
             Finalisation = new Finalisation
             {
                 ExternalVersion = 0,
-                FinalState = FinalState.Cleared,
+                FinalState = "0",
                 IsManualRelease = false,
             },
         };
@@ -179,7 +179,7 @@ public class DataEntityExtensionsTests
             Finalisation = new Finalisation
             {
                 ExternalVersion = 0,
-                FinalState = FinalState.Cleared,
+                FinalState = "0",
                 IsManualRelease = false,
             },
             InboundError = new InboundError(),
