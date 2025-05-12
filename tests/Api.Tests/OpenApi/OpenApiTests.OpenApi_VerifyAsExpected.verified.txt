@@ -1177,19 +1177,6 @@
         },
         "additionalProperties": false
       },
-      "Defra.TradeImportsDataApi.Domain.CustomsDeclaration.FinalState": {
-        "enum": [
-          0,
-          1,
-          2,
-          3,
-          4,
-          5,
-          6
-        ],
-        "type": "integer",
-        "format": "int32"
-      },
       "Defra.TradeImportsDataApi.Domain.CustomsDeclaration.Finalisation": {
         "required": [
           "externalVersion",
@@ -1216,11 +1203,18 @@
             "nullable": true
           },
           "finalState": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.CustomsDeclaration.FinalState"
-              }
-            ]
+            "enum": [
+              "0",
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6"
+            ],
+            "type": "string",
+            "description": "Possible values taken from Finalisation schema version v1.",
+            "nullable": true
           },
           "isManualRelease": {
             "type": "boolean"
