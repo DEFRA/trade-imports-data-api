@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using Defra.TradeImportsDataApi.Api.Authentication;
 using Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations;
 using Defra.TradeImportsDataApi.Api.Exceptions;
@@ -14,11 +13,11 @@ namespace Defra.TradeImportsDataApi.Api.Endpoints.ImportPreNotifications;
 
 public static class EndpointRouteBuilderExtensions
 {
-    public static void MapImportPreNotificationEndpoints(this IEndpointRouteBuilder app, bool isDevelopment)
+    public static void MapImportPreNotificationEndpoints(this IEndpointRouteBuilder app)
     {
         const string groupName = "ImportPreNotifications";
 
-        var route = app.MapGet("import-pre-notifications/{chedId}/", Get)
+        app.MapGet("import-pre-notifications/{chedId}/", Get)
             .WithName("GetImportPreNotificationByChedId")
             .WithTags(groupName)
             .WithSummary("Get ImportPreNotification")
@@ -28,9 +27,7 @@ public static class EndpointRouteBuilderExtensions
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .RequireAuthorization(PolicyNames.Read);
 
-        AllowAnonymousForDevelopment(isDevelopment, route);
-
-        route = app.MapGet("import-pre-notifications/{chedId}/customs-declarations", GetCustomsDeclarations)
+        app.MapGet("import-pre-notifications/{chedId}/customs-declarations", GetCustomsDeclarations)
             .WithName("GetCustomsDeclarationsByChedId")
             .WithTags(groupName)
             .WithSummary("Get CustomsDeclarations by CHED ID")
@@ -40,9 +37,7 @@ public static class EndpointRouteBuilderExtensions
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .RequireAuthorization(PolicyNames.Read);
 
-        AllowAnonymousForDevelopment(isDevelopment, route);
-
-        route = app.MapPut("import-pre-notifications/{chedId}/", Put)
+        app.MapPut("import-pre-notifications/{chedId}/", Put)
             .WithName("PutImportPreNotification")
             .WithTags(groupName)
             .WithSummary("Put ImportPreNotification")
@@ -54,15 +49,6 @@ public static class EndpointRouteBuilderExtensions
             .ProducesProblem(StatusCodes.Status409Conflict)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .RequireAuthorization(PolicyNames.Write);
-
-        AllowAnonymousForDevelopment(isDevelopment, route);
-    }
-
-    [ExcludeFromCodeCoverage]
-    private static void AllowAnonymousForDevelopment(bool isDevelopment, RouteHandlerBuilder route)
-    {
-        if (isDevelopment)
-            route.AllowAnonymous();
     }
 
     /// <param name="chedId" example="CHEDA.GB.2024.1020304">CHED ID</param>

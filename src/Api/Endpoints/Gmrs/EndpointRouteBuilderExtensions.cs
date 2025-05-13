@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using Defra.TradeImportsDataApi.Api.Authentication;
 using Defra.TradeImportsDataApi.Api.Exceptions;
 using Defra.TradeImportsDataApi.Api.Extensions;
@@ -12,11 +11,11 @@ namespace Defra.TradeImportsDataApi.Api.Endpoints.Gmrs;
 
 public static class EndpointRouteBuilderExtensions
 {
-    public static void MapGmrEndpoints(this IEndpointRouteBuilder app, bool isDevelopment)
+    public static void MapGmrEndpoints(this IEndpointRouteBuilder app)
     {
         const string groupName = "Gmrs";
 
-        var route = app.MapGet("gmrs/{gmrId}/", Get)
+        app.MapGet("gmrs/{gmrId}/", Get)
             .WithName("GmrsByGmrId")
             .WithTags(groupName)
             .WithSummary("Get Gmr")
@@ -26,9 +25,7 @@ public static class EndpointRouteBuilderExtensions
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .RequireAuthorization(PolicyNames.Read);
 
-        AllowAnonymousForDevelopment(isDevelopment, route);
-
-        route = app.MapPut("gmrs/{gmrId}/", Put)
+        app.MapPut("gmrs/{gmrId}/", Put)
             .WithName("PutGmr")
             .WithTags(groupName)
             .WithSummary("Put Gmr")
@@ -39,15 +36,6 @@ public static class EndpointRouteBuilderExtensions
             .ProducesProblem(StatusCodes.Status409Conflict)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .RequireAuthorization(PolicyNames.Write);
-
-        AllowAnonymousForDevelopment(isDevelopment, route);
-    }
-
-    [ExcludeFromCodeCoverage]
-    private static void AllowAnonymousForDevelopment(bool isDevelopment, RouteHandlerBuilder route)
-    {
-        if (isDevelopment)
-            route.AllowAnonymous();
     }
 
     /// <param name="gmrId">GMR ID</param>

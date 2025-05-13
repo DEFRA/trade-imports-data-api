@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using Defra.TradeImportsDataApi.Api.Authentication;
 using Defra.TradeImportsDataApi.Api.Endpoints.ImportPreNotifications;
 using Defra.TradeImportsDataApi.Api.Exceptions;
@@ -13,11 +12,11 @@ namespace Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations;
 
 public static class EndpointRouteBuilderExtensions
 {
-    public static void MapCustomsDeclarationEndpoints(this IEndpointRouteBuilder app, bool isDevelopment)
+    public static void MapCustomsDeclarationEndpoints(this IEndpointRouteBuilder app)
     {
         const string groupName = "CustomsDeclarations";
 
-        var route = app.MapGet("customs-declarations/{mrn}/", Get)
+        app.MapGet("customs-declarations/{mrn}/", Get)
             .WithName("CustomsDeclarationByMrn")
             .WithTags(groupName)
             .WithSummary("Get CustomsDeclaration")
@@ -27,9 +26,7 @@ public static class EndpointRouteBuilderExtensions
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .RequireAuthorization(PolicyNames.Read);
 
-        AllowAnonymousForDevelopment(isDevelopment, route);
-
-        route = app.MapGet("customs-declarations/{mrn}/import-pre-notifications", GetImportPreNotifications)
+        app.MapGet("customs-declarations/{mrn}/import-pre-notifications", GetImportPreNotifications)
             .WithName("ImportPreNotificationsByMrn")
             .WithTags(groupName)
             .WithSummary("Get ImportPreNotifications by MRN")
@@ -39,9 +36,7 @@ public static class EndpointRouteBuilderExtensions
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .RequireAuthorization(PolicyNames.Read);
 
-        AllowAnonymousForDevelopment(isDevelopment, route);
-
-        route = app.MapPut("customs-declarations/{mrn}/", Put)
+        app.MapPut("customs-declarations/{mrn}/", Put)
             .WithName("PutCustomsDeclaration")
             .WithTags(groupName)
             .WithSummary("Put CustomsDeclaration")
@@ -53,15 +48,6 @@ public static class EndpointRouteBuilderExtensions
             .ProducesProblem(StatusCodes.Status409Conflict)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .RequireAuthorization(PolicyNames.Write);
-
-        AllowAnonymousForDevelopment(isDevelopment, route);
-    }
-
-    [ExcludeFromCodeCoverage]
-    private static void AllowAnonymousForDevelopment(bool isDevelopment, RouteHandlerBuilder route)
-    {
-        if (isDevelopment)
-            route.AllowAnonymous();
     }
 
     /// <param name="mrn">MRN</param>

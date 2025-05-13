@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using Defra.TradeImportsDataApi.Api.Authentication;
 using Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations;
 using Defra.TradeImportsDataApi.Api.Endpoints.ImportPreNotifications;
@@ -9,10 +8,11 @@ namespace Defra.TradeImportsDataApi.Api.Endpoints.Search;
 
 public static class EndpointRouteBuilderExtensions
 {
-    public static void MapSearchEndpoints(this IEndpointRouteBuilder app, bool isDevelopment)
+    public static void MapSearchEndpoints(this IEndpointRouteBuilder app)
     {
         const string groupName = "RelatedImportDeclarations";
-        var route = app.MapGet("related-import-declarations", Search)
+
+        app.MapGet("related-import-declarations", Search)
             .WithName("related-import-declarations")
             .WithTags(groupName)
             .WithSummary("related-import-declarations")
@@ -20,15 +20,6 @@ public static class EndpointRouteBuilderExtensions
             .Produces<RelatedImportDeclarationsResponse>()
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .RequireAuthorization(PolicyNames.Read);
-
-        AllowAnonymousForDevelopment(isDevelopment, route);
-    }
-
-    [ExcludeFromCodeCoverage]
-    private static void AllowAnonymousForDevelopment(bool isDevelopment, RouteHandlerBuilder route)
-    {
-        if (isDevelopment)
-            route.AllowAnonymous();
     }
 
     /// <param name="request"></param>

@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using Defra.TradeImportsDataApi.Api.Authentication;
 using Defra.TradeImportsDataApi.Api.Exceptions;
 using Defra.TradeImportsDataApi.Api.Extensions;
@@ -12,11 +11,11 @@ namespace Defra.TradeImportsDataApi.Api.Endpoints.ProcessingErrors;
 
 public static class EndpointRouteBuilderExtensions
 {
-    public static void MapProcessingErrorEndpoints(this IEndpointRouteBuilder app, bool isDevelopment)
+    public static void MapProcessingErrorEndpoints(this IEndpointRouteBuilder app)
     {
         const string groupName = "ProcessingErrors";
 
-        var route = app.MapGet("processing-errors/{mrn}/", Get)
+        app.MapGet("processing-errors/{mrn}/", Get)
             .WithName("ProcessingErrorByMrn")
             .WithTags(groupName)
             .WithSummary("Get ProcessingError")
@@ -26,9 +25,7 @@ public static class EndpointRouteBuilderExtensions
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .RequireAuthorization(PolicyNames.Read);
 
-        AllowAnonymousForDevelopment(isDevelopment, route);
-
-        route = app.MapPut("processing-errors/{mrn}/", Put)
+        app.MapPut("processing-errors/{mrn}/", Put)
             .WithName("PutProcessingError")
             .WithTags(groupName)
             .WithSummary("Put ProcessingError")
@@ -40,15 +37,6 @@ public static class EndpointRouteBuilderExtensions
             .ProducesProblem(StatusCodes.Status409Conflict)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .RequireAuthorization(PolicyNames.Write);
-
-        AllowAnonymousForDevelopment(isDevelopment, route);
-    }
-
-    [ExcludeFromCodeCoverage]
-    private static void AllowAnonymousForDevelopment(bool isDevelopment, RouteHandlerBuilder route)
-    {
-        if (isDevelopment)
-            route.AllowAnonymous();
     }
 
     /// <param name="mrn">MRN</param>

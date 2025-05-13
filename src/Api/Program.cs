@@ -149,17 +149,16 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
 static WebApplication BuildWebApplication(WebApplicationBuilder builder)
 {
     var app = builder.Build();
-    var isDevelopment = app.Environment.IsDevelopment();
 
     app.UseHeaderPropagation();
     app.UseAuthentication();
     app.UseAuthorization();
     app.MapHealth();
-    app.MapGmrEndpoints(isDevelopment);
-    app.MapImportPreNotificationEndpoints(isDevelopment);
-    app.MapCustomsDeclarationEndpoints(isDevelopment);
-    app.MapProcessingErrorEndpoints(isDevelopment);
-    app.MapSearchEndpoints(isDevelopment);
+    app.MapGmrEndpoints();
+    app.MapImportPreNotificationEndpoints();
+    app.MapCustomsDeclarationEndpoints();
+    app.MapProcessingErrorEndpoints();
+    app.MapSearchEndpoints();
     app.UseSwagger(options =>
     {
         options.RouteTemplate = "/.well-known/openapi/{documentName}/openapi.json";
