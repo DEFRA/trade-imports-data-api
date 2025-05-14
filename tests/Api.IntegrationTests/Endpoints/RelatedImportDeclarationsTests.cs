@@ -49,7 +49,7 @@ public class RelatedImportDeclarationsTests : IntegrationTestBase
         await InsertTestData();
 
         var response = await client.RelatedImportDeclarations(
-            new RelatedImportDeclarationsRequest() { Mrn = "mrn1" },
+            new RelatedImportDeclarationsRequest() { Mrn = "mRn1" },
             CancellationToken.None
         );
 
@@ -66,7 +66,7 @@ public class RelatedImportDeclarationsTests : IntegrationTestBase
         await InsertTestData();
 
         var response = await client.RelatedImportDeclarations(
-            new RelatedImportDeclarationsRequest() { Ducr = "ducr1" },
+            new RelatedImportDeclarationsRequest() { Ducr = "dUCr1" },
             CancellationToken.None
         );
 
