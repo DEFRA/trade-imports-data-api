@@ -22,7 +22,7 @@ public class RelatedImportDeclarationsService(IDbContext dbContext) : IRelatedIm
         if (!string.IsNullOrEmpty(request.Ducr))
         {
             return await StartFromCustomsDeclaration(
-                x => x.ClearanceRequest!.DeclarationUcr == request.Ducr,
+                x => x.ClearanceRequest!.DeclarationUcr!.ToLowerInvariant() == request.Ducr.ToLowerInvariant(),
                 maxDepth,
                 cancellationToken
             );
@@ -30,7 +30,7 @@ public class RelatedImportDeclarationsService(IDbContext dbContext) : IRelatedIm
 
         if (!string.IsNullOrEmpty(request.Mrn))
         {
-            return await StartFromCustomsDeclaration(x => x.Id == request.Mrn, maxDepth, cancellationToken);
+            return await StartFromCustomsDeclaration(x => x.Id.ToLowerInvariant() == request.Mrn.ToLowerInvariant(), maxDepth, cancellationToken);
         }
 
         if (!string.IsNullOrEmpty(request.ChedId))
