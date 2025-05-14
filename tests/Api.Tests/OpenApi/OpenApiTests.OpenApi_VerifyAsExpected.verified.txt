@@ -1950,6 +1950,23 @@
         "additionalProperties": false,
         "description": "Catch certificate details for uploaded attachment"
       },
+      "Defra.TradeImportsDataApi.Domain.Ipaffs.CatchCertificates": {
+        "type": "object",
+        "properties": {
+          "certificateNumber": {
+            "type": "string",
+            "description": "The catch certificate number",
+            "nullable": true
+          },
+          "weight": {
+            "type": "number",
+            "description": "The catch certificate weight number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "Defra.TradeImportsDataApi.Domain.Ipaffs.ChedppNotAcceptableReason": {
         "type": "object",
         "properties": {
@@ -2101,6 +2118,45 @@
             "type": "string",
             "description": "What the commodity is intended for. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
+          },
+          "commodityComplement": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.CommodityComplement"
+            },
+            "description": "Holder for additional parameters of a commodity",
+            "nullable": true
+          },
+          "complementParameterSet": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.ComplementParameterSet"
+            },
+            "description": "Additional data for commodityComplement part containing such data as net weight",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Defra.TradeImportsDataApi.Domain.Ipaffs.CommodityCheck": {
+        "type": "object",
+        "properties": {
+          "uniqueComplementId": {
+            "type": "string",
+            "description": "UUID used to match the commodityChecks to the commodityComplement",
+            "nullable": true
+          },
+          "checks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.InspectionCheck"
+            },
+            "nullable": true
+          },
+          "validityPeriod": {
+            "type": "integer",
+            "description": "Manually entered validity period, allowed if risk decision is INSPECTION_REQUIRED and HMI check status 'Compliant' or 'Not inspected'",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -2197,29 +2253,6 @@
           "isCdsMatched": {
             "type": "boolean",
             "description": "Has commodity been matched with corresponding CDS declaration",
-            "nullable": true
-          },
-          "additionalData": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.KeyDataPair"
-            },
-            "nullable": true
-          },
-          "riskAssesment": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.CommodityRiskResult"
-              }
-            ],
-            "description": "Result of the risk assessment of a commodity",
-            "nullable": true
-          },
-          "checks": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.InspectionCheck"
-            },
             "nullable": true
           }
         },
@@ -2332,6 +2365,49 @@
           "wasSentToTradeCharge": {
             "type": "boolean",
             "description": "Indicates whether the last applicable change was successfully send over the interface to Trade Charge",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Defra.TradeImportsDataApi.Domain.Ipaffs.ComplementParameterSet": {
+        "type": "object",
+        "properties": {
+          "uniqueComplementID": {
+            "type": "string",
+            "description": "UUID used to match commodityComplement to its complementParameter set. CHEDPP only",
+            "nullable": true
+          },
+          "complementID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "speciesID": {
+            "type": "string",
+            "nullable": true
+          },
+          "keyDataPair": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.KeyDataPair"
+            },
+            "nullable": true
+          },
+          "catchCertificates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.CatchCertificates"
+            },
+            "description": "Catch certificate details",
+            "nullable": true
+          },
+          "identifiers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.Identifiers"
+            },
+            "description": "Data used to identify the complements inside an IMP consignment",
             "nullable": true
           }
         },
@@ -3144,6 +3220,40 @@
         },
         "additionalProperties": false
       },
+      "Defra.TradeImportsDataApi.Domain.Ipaffs.Identifiers": {
+        "type": "object",
+        "properties": {
+          "speciesNumber": {
+            "type": "integer",
+            "description": "Number used to identify which item the identifiers are related to",
+            "format": "int32",
+            "nullable": true
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "List of identifiers and their keys",
+            "nullable": true
+          },
+          "isPlaceOfDestinationThePermanentAddress": {
+            "type": "boolean",
+            "description": "Is the place of destination the permanent address?",
+            "nullable": true
+          },
+          "permanentAddress": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.EconomicOperator"
+              }
+            ],
+            "description": "Permanent address of the species",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "Defra.TradeImportsDataApi.Domain.Ipaffs.ImpactOfTransportOnAnimals": {
         "type": "object",
         "properties": {
@@ -3283,6 +3393,15 @@
             "description": "Is this notification a child of a split consignment?",
             "nullable": true
           },
+          "riskAssessment": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.RiskAssessmentResult"
+              }
+            ],
+            "description": "Result of risk assessment by the risk scorer",
+            "nullable": true
+          },
           "journeyRiskCategorisation": {
             "allOf": [
               {
@@ -3395,21 +3514,6 @@
           "isGMRMatched": {
             "type": "boolean",
             "description": "Indicates whether a CHED has been matched with a GVMS GMR via DMP",
-            "nullable": true
-          },
-          "commoditiesSummary": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.Commodities"
-              }
-            ],
-            "nullable": true
-          },
-          "commodities": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.CommodityComplement"
-            },
             "nullable": true
           }
         },
@@ -3921,6 +4025,14 @@
             "description": "Is GVMS route?",
             "nullable": true
           },
+          "commodities": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.Commodities"
+              }
+            ],
+            "nullable": true
+          },
           "purpose": {
             "allOf": [
               {
@@ -4317,6 +4429,13 @@
             "description": "Accompanying documents",
             "nullable": true
           },
+          "commodityChecks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.CommodityCheck"
+            },
+            "nullable": true
+          },
           "phsiAutoCleared": {
             "type": "boolean",
             "description": "Have the PHSI regulated commodities been auto cleared?",
@@ -4647,6 +4766,27 @@
         },
         "additionalProperties": false,
         "description": "Purpose of consignment details"
+      },
+      "Defra.TradeImportsDataApi.Domain.Ipaffs.RiskAssessmentResult": {
+        "type": "object",
+        "properties": {
+          "commodityResults": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.CommodityRiskResult"
+            },
+            "description": "List of risk assessed commodities",
+            "nullable": true
+          },
+          "assessedOn": {
+            "type": "string",
+            "description": "Date and time of assessment",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Result of risk assessment by the risk scorer"
       },
       "Defra.TradeImportsDataApi.Domain.Ipaffs.Route": {
         "type": "object",

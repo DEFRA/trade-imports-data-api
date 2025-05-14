@@ -242,6 +242,527 @@
       "otherIdentifier": "OtherIdentifier5e1ef764-a5a1-4482-aab3-66614a242467",
       "tracesId": 126
     },
+    "commodities": {
+      "gmsDeclarationAccepted": true,
+      "consignedCountryInChargeGroup": false,
+      "totalGrossWeight": 175,
+      "totalNetWeight": 54,
+      "totalGrossVolume": 254,
+      "totalGrossVolumeUnit": "TotalGrossVolumeUnitb0b287bb-74db-4252-aee7-bbfb21624d8b",
+      "numberOfPackages": 165,
+      "temperature": "Temperature9357edfa-c460-4d73-be69-69ba4c3d2faf",
+      "numberOfAnimals": 176,
+      "includeNonAblactedAnimals": true,
+      "countryOfOrigin": "CountryOfOrigin9e022b9b-6359-453c-af55-dfe5f0687443",
+      "countryOfOriginIsPodCountry": false,
+      "isLowRiskArticle72Country": true,
+      "regionOfOrigin": "RegionOfOrigine7bb1a24-b314-47f4-8444-8ef7da9d2ad0",
+      "consignedCountry": "ConsignedCountry976dc794-15b4-4fc8-913e-2d9ccabdf074",
+      "animalsCertifiedAs": "AnimalsCertifiedAsd2c13069-70ca-413f-8594-22adc972aaea",
+      "commodityIntendedFor": "CommodityIntendedFor962e814e-b37d-453a-b446-f6940844437c",
+      "commodityComplement": [
+        {
+          "uniqueComplementId": "UniqueComplementId72a740f7-1e10-4ef8-9839-36c64019abd7",
+          "commodityDescription": "CommodityDescriptionb3a07d91-4273-4654-938d-029b9e96ccd0",
+          "commodityId": "CommodityId883131bc-4733-4cad-a473-fa07be0e054f",
+          "complementId": 129,
+          "complementName": "ComplementNamec2d79c67-362d-4f77-a303-65c1adfbeea1",
+          "eppoCode": "EppoCode4b023661-2f49-45a2-9f7d-a408df192503",
+          "isWoodPackaging": false,
+          "speciesId": "SpeciesId5dbfdd8e-3a88-491a-9b26-18cdaba9207f",
+          "speciesName": "SpeciesNamec37556c5-8151-4e47-9597-35172bd44f51",
+          "speciesNomination": "SpeciesNominatione8a283df-b0c7-4cdc-9c07-36adc69f9a66",
+          "speciesTypeName": "SpeciesTypeName30c95b41-8c70-4143-b7ae-511581024aeb",
+          "speciesType": "SpeciesType388e8f5f-448b-42e9-8c6e-7fe6c7e80912",
+          "speciesClassName": "SpeciesClassNamef4369632-3f19-470f-af92-0aaee462dd3c",
+          "speciesClass": "SpeciesClass8ec04a19-b3c9-4b8c-9d4b-84393ead7bdf",
+          "speciesFamilyName": "SpeciesFamilyNamed512291a-2c22-47bd-bd29-16e126db4f5a",
+          "speciesFamily": "SpeciesFamilyac821e8e-91be-4be9-a1f6-2c6b7eed47cd",
+          "speciesCommonName": "SpeciesCommonName9a2180b8-7e55-40de-b9b2-c1b60333ea0d",
+          "isCdsMatched": true
+        },
+        {
+          "uniqueComplementId": "UniqueComplementId8e852d71-4b65-4810-acd1-e22c9bf48174",
+          "commodityDescription": "CommodityDescription0a76f9a8-13c1-4391-9aa8-55f6bab0b1a4",
+          "commodityId": "CommodityIdd99c80ad-4881-4eb7-866e-c78784412ca8",
+          "complementId": 100,
+          "complementName": "ComplementName8d0053f8-57b1-453c-85c4-2557de1bcfdf",
+          "eppoCode": "EppoCodea273202d-5df5-4834-b92f-ac36edc724f2",
+          "isWoodPackaging": false,
+          "speciesId": "SpeciesId2ffa1d6f-6f38-4cf7-b70c-55918bbbf462",
+          "speciesName": "SpeciesName06eee619-e3b4-45a5-95c3-2feea30d1f4f",
+          "speciesNomination": "SpeciesNominationa7a67aa6-193d-4aa3-b2ac-114fb72c0442",
+          "speciesTypeName": "SpeciesTypeName78802667-4b37-4a68-bf24-b6484b2e97f5",
+          "speciesType": "SpeciesType55fabe93-81cc-4b85-8af1-347765936e99",
+          "speciesClassName": "SpeciesClassNamebb5a95d8-4e4d-4848-92fe-84d98c721a02",
+          "speciesClass": "SpeciesClass3c64336f-b25a-4815-ae4f-27ea49c9b77e",
+          "speciesFamilyName": "SpeciesFamilyName4c1dd2b2-2ae4-4d22-b9ca-69c1003810f5",
+          "speciesFamily": "SpeciesFamily56bdda10-5140-45fb-99c9-d2bb633d0682",
+          "speciesCommonName": "SpeciesCommonName24a17efc-e1f1-42f9-8566-b7e78b98e029",
+          "isCdsMatched": true
+        },
+        {
+          "uniqueComplementId": "UniqueComplementIdc97f3c42-24c0-4251-843f-afc3079f2b73",
+          "commodityDescription": "CommodityDescription166a21d4-f3ba-46fb-b11f-c1aceb842d92",
+          "commodityId": "CommodityIda18c7651-03eb-4098-9071-5625f0b1f6c0",
+          "complementId": 162,
+          "complementName": "ComplementName71195b61-5509-4fb3-a39e-c21e1bf2f6be",
+          "eppoCode": "EppoCode037c6c93-fdbe-4008-baed-ce1d3709cf39",
+          "isWoodPackaging": false,
+          "speciesId": "SpeciesId8106b5ac-cbaa-4f9d-a1f2-d31b5982f80b",
+          "speciesName": "SpeciesNamed545ef75-8a3c-492c-83fb-0aa5bd46f959",
+          "speciesNomination": "SpeciesNomination36adb758-32ca-4da0-a461-98b09ce8bad6",
+          "speciesTypeName": "SpeciesTypeNamecd9d7682-912e-4dca-a52f-395cd364e208",
+          "speciesType": "SpeciesTypeec587c89-4b89-4cdd-a0b2-212cd150b1ec",
+          "speciesClassName": "SpeciesClassName9e9c87b2-511a-4543-bc4d-71b72fa0e26e",
+          "speciesClass": "SpeciesClass2af27b47-096e-4767-bcb0-d16f921b7601",
+          "speciesFamilyName": "SpeciesFamilyNamea1ad8d97-44f3-4ec8-8964-600384848ce6",
+          "speciesFamily": "SpeciesFamilyd0a73a49-28b9-430d-8b40-af69138c8756",
+          "speciesCommonName": "SpeciesCommonName7d428ff8-2e59-489d-b414-370207596568",
+          "isCdsMatched": true
+        }
+      ],
+      "complementParameterSet": [
+        {
+          "uniqueComplementID": "UniqueComplementId5af8b2f7-ca18-4b7c-8d16-efef795f85d9",
+          "complementID": 91,
+          "speciesID": "SpeciesId2093d16d-b5a0-4ab0-8b82-aaa2eeea3a4c",
+          "keyDataPair": [
+            {
+              "key": "Keyed9013c9-e1bf-4c03-bf23-bf6fcbb33a33",
+              "data": "Data2d429fc5-095a-4daf-b9ff-8852b695822f"
+            },
+            {
+              "key": "Keyb6c4a3ac-3e8b-49b7-a6a8-2059bd99eba4",
+              "data": "Datadd739072-2c8e-40de-9cd7-2f9af348ad9b"
+            },
+            {
+              "key": "Keyee95e371-1b17-4013-ae53-742427049017",
+              "data": "Datad52d200f-1613-4400-a613-cccc7bb12f14"
+            }
+          ],
+          "catchCertificates": [
+            {
+              "certificateNumber": "CertificateNumberc0a1b355-b55a-4258-8efa-2b6b525e7b56",
+              "weight": 153
+            },
+            {
+              "certificateNumber": "CertificateNumber1e85705c-b93a-4211-aa3b-4b1b9cca61d2",
+              "weight": 79
+            },
+            {
+              "certificateNumber": "CertificateNumberc09150e1-4c21-4578-a128-3904427e6e8a",
+              "weight": 45
+            }
+          ],
+          "identifiers": [
+            {
+              "speciesNumber": 82,
+              "data": {
+                "key5bea45a9-f0d0-4df0-8556-4334d9a866e5": "value3c30d054-0c23-426e-9577-a5850c8c8051",
+                "keyab2ce276-7da2-4130-9978-a3d472eac3a8": "value57ec5091-d75a-4bfe-9f4e-fe18e2ac4b17",
+                "key81fa419d-ca15-4324-aa57-236af4dd5cca": "valuecd697b81-0ab0-46de-bf75-ae581cf22300"
+              },
+              "isPlaceOfDestinationThePermanentAddress": false,
+              "permanentAddress": {
+                "id": "Id14cf0d77-034f-41f2-a1c7-ec097db28c9e",
+                "type": "Type50376d23-ad7d-4403-8fb5-3ee8c46690da",
+                "status": "Status79c2d21b-c31f-4f04-9ed1-3aa6a311058b",
+                "companyName": "CompanyName5ff86963-48cd-493f-bdb2-a6dc2fdb90a8",
+                "individualName": "IndividualName9724eb8e-6718-4cf5-a0ef-06e6eb3a9b98",
+                "address": {
+                  "street": "Street9b326cfa-7dc5-4cb0-b26a-c73f027089f0",
+                  "city": "Cityee4137e9-99ec-49ec-93bd-634b5d0eb09e",
+                  "country": "Country75949fd0-3ed3-47b8-b140-fd582ddfbba4",
+                  "postalCode": "PostalCode6f76e7bc-161e-49b1-b0f5-e375c1c3842c",
+                  "addressLine1": "AddressLine13334dec3-0074-4a56-9dca-b76ca10f4c05",
+                  "addressLine2": "AddressLine26feff3bc-36be-432e-9c89-b28971aa6a43",
+                  "addressLine3": "AddressLine3ff595fed-a3a0-480c-a9b5-417690d50cf5",
+                  "postalZipCode": "PostalZipCode283a9e67-0509-49cf-a74b-95361641cb05",
+                  "countryIsoCode": "CountryIsoCodec59b4ef7-7108-4aeb-aa83-c28491fe44df",
+                  "email": "Email18f82232-5fa1-4223-a3f1-836e31cf5cb1",
+                  "ukTelephone": "UkTelephone51d2e02c-648f-4071-97be-25db1f5a1282",
+                  "telephone": "Telephone3338f88f-cf3d-4a64-96ba-44b2f2b84489",
+                  "internationalTelephone": {
+                    "countryCode": "CountryCode40f83c94-df26-465c-9a6f-4a1a7f7fa02c",
+                    "subscriberNumber": "SubscriberNumber67952eec-b389-47e6-bd99-65cb7ff3d4c9"
+                  }
+                },
+                "approvalNumber": "ApprovalNumbere038e2ca-ec53-47c3-9dfa-25ba73494eac",
+                "otherIdentifier": "OtherIdentifier531751aa-00c4-45b0-a566-c4cd1f6be86d",
+                "tracesId": 97
+              }
+            },
+            {
+              "speciesNumber": 156,
+              "data": {
+                "key50cdd04c-da6d-4d6b-b615-3d3acf361148": "valuee05bdfd6-0dc5-4e8e-9df4-a88b9ee55dff",
+                "keye20081ae-1522-4e34-bbf9-601f653d2e1f": "valued0562511-8c42-43ea-9415-58ec7aa75baa",
+                "key606ee928-a302-4114-9ef1-197dc9a99af7": "value4d18acb2-da4f-4031-8b3e-3aca7610e4ea"
+              },
+              "isPlaceOfDestinationThePermanentAddress": true,
+              "permanentAddress": {
+                "id": "Id577535f9-84d9-40fd-ba03-bb6b9dac1747",
+                "type": "Typeb1901fac-43dc-4aab-bf1e-7f0192eb41ee",
+                "status": "Status62e4b259-4543-4bf3-a42e-aa5a0368e1e0",
+                "companyName": "CompanyName9446333e-8701-4519-aa0d-60add0929b39",
+                "individualName": "IndividualNamec153ecf2-0edb-42ec-8bcc-16f6ce6745b2",
+                "address": {
+                  "street": "Street96a89dec-ad5f-4007-878d-91e264ec79d2",
+                  "city": "City4a00b5a7-4a70-49be-a00b-bdfc680214dd",
+                  "country": "Country343ce051-5adb-4726-88b2-9b38ad8b92d6",
+                  "postalCode": "PostalCodea003f5d0-205d-40b6-8c23-a2a96168a2b1",
+                  "addressLine1": "AddressLine1bb9efb7a-3caf-4537-8c9f-24f369e4a15c",
+                  "addressLine2": "AddressLine21accbcb2-f644-4c81-b1fd-5cabeb14ae12",
+                  "addressLine3": "AddressLine303ef123b-12f8-48e3-a04d-a63c1f729719",
+                  "postalZipCode": "PostalZipCode426de5a4-7cf1-4f02-adee-9fc21b6d7793",
+                  "countryIsoCode": "CountryIsoCode42cf1cc5-01bb-439d-8bbe-6e38fce21eef",
+                  "email": "Email0c66664c-731a-432e-a6ba-cd3d1ccb4f80",
+                  "ukTelephone": "UkTelephonebc72e222-e223-44ff-9d8d-089944097f73",
+                  "telephone": "Telephone5a3bfc00-3dcd-4e0b-b23e-2c7f33a57b83",
+                  "internationalTelephone": {
+                    "countryCode": "CountryCode9c7ecf4d-a55c-4b69-8462-aded349d08e4",
+                    "subscriberNumber": "SubscriberNumberb17b9330-b1cc-4c12-8d90-131e362cfc22"
+                  }
+                },
+                "approvalNumber": "ApprovalNumbere4a4efcc-7d14-4bd2-b8cc-ac8132bfc1ac",
+                "otherIdentifier": "OtherIdentifier74b9eb50-bb4f-4c37-a417-ff86f1565e64",
+                "tracesId": 141
+              }
+            },
+            {
+              "speciesNumber": 34,
+              "data": {
+                "keydd0c615b-794c-4072-9b3d-d29228a0d215": "valueb587ce9e-5156-443f-a54d-a83016484315",
+                "keyd21048a5-728e-4e65-859f-dcfedf2bd3d2": "value7b4ee300-a35a-4cea-9b3f-60bc089bef55",
+                "key44a3ebe4-e0c6-4f7a-803f-faff8508c406": "valuea146b201-9e25-48f4-8287-7ec6836ded03"
+              },
+              "isPlaceOfDestinationThePermanentAddress": false,
+              "permanentAddress": {
+                "id": "Ida5442e8a-10b5-4b70-a0d7-9932309d2056",
+                "type": "Typea89c7082-bfd4-4ada-a5ed-a287de5dc8a3",
+                "status": "Status07674e9b-fffc-4aae-874b-92a5862dffe2",
+                "companyName": "CompanyName15b0e6c7-56b6-4136-9a5b-dfa4f14d6c8f",
+                "individualName": "IndividualName7f128dd6-79a5-40b5-886e-38a0f30b0b09",
+                "address": {
+                  "street": "Street5c4c3310-46ef-4f6e-a6cc-6095d3eaac24",
+                  "city": "Citye858d398-1ab7-454f-bc8a-92f538a94cfd",
+                  "country": "Country5ac8a8f3-b0d1-42ee-88ed-60be67be9add",
+                  "postalCode": "PostalCode8dc7ba8f-3b58-46ce-9e4f-c61b69b63e8a",
+                  "addressLine1": "AddressLine10992ce5e-f1f3-421f-8897-12501708d668",
+                  "addressLine2": "AddressLine25b36efde-5b0f-4b9a-a3f4-e000b400fa83",
+                  "addressLine3": "AddressLine356d6e6ca-d5da-4805-8117-c096b52fc984",
+                  "postalZipCode": "PostalZipCode0caa4a2b-ee79-45f2-ac67-c439c4ce6994",
+                  "countryIsoCode": "CountryIsoCodebee6678c-9e1c-4be4-a328-ef778db56a81",
+                  "email": "Emailf6c2e2eb-1f08-488f-95de-84ab4901177f",
+                  "ukTelephone": "UkTelephoned92a14b8-c6c0-45e7-ade1-3d6fdcb9878e",
+                  "telephone": "Telephone6cc5e39e-5654-4ea2-978e-8b937944ad3d",
+                  "internationalTelephone": {
+                    "countryCode": "CountryCode275bb201-332d-4708-ad03-b67ff45f020f",
+                    "subscriberNumber": "SubscriberNumberaf44458c-cc5a-4e42-b433-679e9ac01293"
+                  }
+                },
+                "approvalNumber": "ApprovalNumbercada20eb-be73-4df1-874e-3f13090bc336",
+                "otherIdentifier": "OtherIdentifier590e1e46-da6d-4052-82b7-43a0fc6bcf83",
+                "tracesId": 22
+              }
+            }
+          ]
+        },
+        {
+          "uniqueComplementID": "UniqueComplementId37897b59-d49a-4876-8340-3209080614ba",
+          "complementID": 193,
+          "speciesID": "SpeciesIda200fe39-3f74-436d-9008-a02f94f0d4c4",
+          "keyDataPair": [
+            {
+              "key": "Keycf63d369-f44d-4ee3-8d14-0412c7cf90a4",
+              "data": "Datae0741c23-2c6b-40a0-ae51-9bceeeba2eba"
+            },
+            {
+              "key": "Key4eb2b507-8cab-40c2-9c70-b10c410f2120",
+              "data": "Data0fd57a7a-5d3e-498f-9854-dfe33a0b63b5"
+            },
+            {
+              "key": "Key080499e9-6685-438b-b85c-d8c551e8fe4f",
+              "data": "Data706d4745-a1c3-40a0-a54e-cef0f9d880b3"
+            }
+          ],
+          "catchCertificates": [
+            {
+              "certificateNumber": "CertificateNumber49a74d20-9c46-4c6d-98b3-07924cf8cd8f",
+              "weight": 152
+            },
+            {
+              "certificateNumber": "CertificateNumber37252262-2c35-428e-b6c6-7ad75729cff2",
+              "weight": 6
+            },
+            {
+              "certificateNumber": "CertificateNumber57db4846-eccb-49bd-8b95-376445169b70",
+              "weight": 3
+            }
+          ],
+          "identifiers": [
+            {
+              "speciesNumber": 147,
+              "data": {
+                "key9c4e8c8c-f254-4c35-a3aa-eec4bde609d8": "valueb881d0bb-7a8a-41d9-a76f-d1c5d348a612",
+                "keyd00a51f1-4514-4d1f-a9a8-b0a702ed9270": "value1aee3917-fd52-407c-861d-b8e25aaf996f",
+                "key78df512e-1477-4312-8036-e3d44d7017a1": "valuebf0d64a4-a75f-4bed-940f-2473b0243d56"
+              },
+              "isPlaceOfDestinationThePermanentAddress": true,
+              "permanentAddress": {
+                "id": "Id7f3d82ef-24e3-44b0-9364-d48eb8b45ca7",
+                "type": "Type03de4ae1-feee-4487-a4e2-1729680e20c9",
+                "status": "Status239adfa3-7ad5-4427-af99-0a94e5142498",
+                "companyName": "CompanyNamecfd9b570-5e1b-4142-882f-0f57b856ee00",
+                "individualName": "IndividualName74ac71df-13a3-4e4d-ac03-7e39d4a1d10c",
+                "address": {
+                  "street": "Street7ea9c1ba-c612-41eb-aee2-e53cdd99f76e",
+                  "city": "City7ad2f52b-89e8-4e9c-831c-7b0d488f8883",
+                  "country": "Countrya51298d3-99cd-4a01-b830-2586b8d02f93",
+                  "postalCode": "PostalCode767289c6-4353-4076-895a-2a714a53eb12",
+                  "addressLine1": "AddressLine182a9ba05-4afc-4117-b2a0-cf6f116a765f",
+                  "addressLine2": "AddressLine27eb8764f-ad35-4277-b3b2-0d1cb33611b0",
+                  "addressLine3": "AddressLine3f97cfc15-46d0-4c39-b24f-5627f2de2b78",
+                  "postalZipCode": "PostalZipCodea22a254c-dfda-4274-a772-7bc73b6559d6",
+                  "countryIsoCode": "CountryIsoCode1d371506-2469-42be-8981-3bee6a340ecb",
+                  "email": "Emaildf997702-49ce-46c2-bd5b-4ca79bf91701",
+                  "ukTelephone": "UkTelephone6e82fbe1-52f5-4b7e-aac9-f50f1559b883",
+                  "telephone": "Telephone04a473ee-a0cd-4014-bf14-489013a664ae",
+                  "internationalTelephone": {
+                    "countryCode": "CountryCode2fcc003f-9768-4f96-a522-edfae8a09a3f",
+                    "subscriberNumber": "SubscriberNumber3862532c-24a2-4915-a386-0ee48f063e94"
+                  }
+                },
+                "approvalNumber": "ApprovalNumber1dd5e51e-d188-44a4-a334-b8f935ef6da0",
+                "otherIdentifier": "OtherIdentifierda646c76-c595-4d2d-9a84-739601e55f35",
+                "tracesId": 59
+              }
+            },
+            {
+              "speciesNumber": 253,
+              "data": {
+                "keyebb83375-6487-4c90-8ec2-096719ae402a": "valueb8545399-d57d-4664-93c3-f48cff64b138",
+                "keyec99d777-2fb5-4489-8bb9-f3efc0506aac": "valuebf9a5280-e9bc-4b49-a6c3-44106321fc93",
+                "keyc9513a4f-0e0c-40f8-9e66-20e6628c2871": "value18a8fb88-bbd7-492d-b9d1-f061323aaabd"
+              },
+              "isPlaceOfDestinationThePermanentAddress": false,
+              "permanentAddress": {
+                "id": "Idb8335fa8-3b23-4123-a765-36383104ecdd",
+                "type": "Typefdad6a43-d9d9-4d54-9eb1-83c5e5dd1976",
+                "status": "Status7b5840d7-5810-471d-820e-90540dabca65",
+                "companyName": "CompanyName37c5a766-ef7f-4a6e-a2d1-be0b1fbc7a41",
+                "individualName": "IndividualNamee850b854-e823-407a-8516-261294d18447",
+                "address": {
+                  "street": "Streetbab5aff9-85fb-4813-a378-34c5cc5343ca",
+                  "city": "City76be0ca1-2d1e-4f72-b9f2-b8bcd7496aad",
+                  "country": "Countrya3b4a0b1-adef-4bfb-890a-1a6f20c8f60a",
+                  "postalCode": "PostalCodee548f74d-72e2-4b9d-89f3-9297fadae749",
+                  "addressLine1": "AddressLine17bae79cd-fae7-4410-ab6d-bbcf02a59393",
+                  "addressLine2": "AddressLine273c393ef-4d52-4d88-9f5b-f18f1a20ad88",
+                  "addressLine3": "AddressLine3eda3768d-08d8-406b-bb21-d7ba77255f70",
+                  "postalZipCode": "PostalZipCode47ed2b3d-861c-42f2-bfd8-2eec47c40adf",
+                  "countryIsoCode": "CountryIsoCode27b881bf-5dd2-49e4-bcdc-ae33c8fcbe3f",
+                  "email": "Email53ece549-618d-4715-a543-5ed32ef98eb2",
+                  "ukTelephone": "UkTelephone3aba588f-d185-4443-ab43-4494dd496b20",
+                  "telephone": "Telephone7248866f-4120-482c-ae35-b23b945cbde3",
+                  "internationalTelephone": {
+                    "countryCode": "CountryCodeda5a8300-c097-4b17-ad1e-03ba6728ad02",
+                    "subscriberNumber": "SubscriberNumberef526303-1fa0-4543-b42d-ea5002cc8ef7"
+                  }
+                },
+                "approvalNumber": "ApprovalNumber963a30d8-ae11-42bb-8137-2a45b5194f0d",
+                "otherIdentifier": "OtherIdentifierb4d7a6c0-e97f-4377-858d-a1ccb50a3a48",
+                "tracesId": 196
+              }
+            },
+            {
+              "speciesNumber": 197,
+              "data": {
+                "keya34df2cd-4c3b-43ad-aa39-82eb0ac75584": "valuef6467e07-442b-40d3-b851-6450e19a96f4",
+                "keyc7d7ffec-8744-4e1a-9934-7239aa09ed1b": "valueb18b54c4-5563-4dd5-a3fd-35c6818a3d72",
+                "key8f00408e-218d-4d70-93f4-ce12dc711996": "value369e7c84-9b7d-42c1-bfbb-fb9efc8e0071"
+              },
+              "isPlaceOfDestinationThePermanentAddress": true,
+              "permanentAddress": {
+                "id": "Id407bee0c-67a9-4a09-85cb-8b2f90e51168",
+                "type": "Type8c817a46-eb9c-4919-b197-d59a19e82f97",
+                "status": "Statusae299ff7-276b-4c2b-8b75-661446b2a4ee",
+                "companyName": "CompanyName9c17cd13-a5b7-410b-8876-29bdf8f4fcc4",
+                "individualName": "IndividualName244cd3d0-800d-4d50-ab89-4211010775e6",
+                "address": {
+                  "street": "Street2dd4e1b6-c10a-4cd5-a4cb-55552ce62dc7",
+                  "city": "Cityeeff0257-d939-43bd-b0b9-cfc808a3eeea",
+                  "country": "Country4a2a3117-d777-493b-be90-16227864ef10",
+                  "postalCode": "PostalCode6ae561f4-dcc8-4683-bcb5-9826b7f15e34",
+                  "addressLine1": "AddressLine13c37859f-f651-41a2-ab37-552fb9478b30",
+                  "addressLine2": "AddressLine22d5dc831-8aba-45a9-92bf-e00c49b245a2",
+                  "addressLine3": "AddressLine35b58560f-bfd4-487c-b1b7-562a75a918bd",
+                  "postalZipCode": "PostalZipCode4979f5b5-affe-48f5-91ea-61b664dc84d6",
+                  "countryIsoCode": "CountryIsoCode3695d722-c076-4dfb-97ef-e9acef013b44",
+                  "email": "Emailb4fdb5b8-2d17-4f4e-aa97-3784aaa30fd9",
+                  "ukTelephone": "UkTelephoneb90ef73e-792f-429e-baea-c36f69b8de5d",
+                  "telephone": "Telephone4fd437b8-e578-41d1-be07-816f865d3798",
+                  "internationalTelephone": {
+                    "countryCode": "CountryCodec6907f98-93e9-4ae4-a35e-6c428c35ff48",
+                    "subscriberNumber": "SubscriberNumbercf698030-7ab8-4043-9c0e-34c4498a5de4"
+                  }
+                },
+                "approvalNumber": "ApprovalNumberf3c3f294-60d7-4f68-83b8-5c4c983e015f",
+                "otherIdentifier": "OtherIdentifier076b37c8-8cd6-48fc-81a3-3059cb52ccec",
+                "tracesId": 220
+              }
+            }
+          ]
+        },
+        {
+          "uniqueComplementID": "UniqueComplementId9ead528a-587c-481f-9d8c-2b6aa9b3a94f",
+          "complementID": 244,
+          "speciesID": "SpeciesId07ccde4c-d1d4-4265-a999-2a3f6b912318",
+          "keyDataPair": [
+            {
+              "key": "Key4d02b1e5-e35c-4810-8f04-d8867cb444b2",
+              "data": "Data38eccdbd-d9f7-4904-9fc3-041cc77247ec"
+            },
+            {
+              "key": "Key67b79919-851d-4b20-8da4-c79ebaf5a1db",
+              "data": "Datad9f29802-ae6d-47c2-a732-71e8f5f5f3cc"
+            },
+            {
+              "key": "Key2a486834-1c34-4528-9da4-156b73199b6a",
+              "data": "Data9393f492-2ff7-4704-997b-b570170cc76c"
+            }
+          ],
+          "catchCertificates": [
+            {
+              "certificateNumber": "CertificateNumber4e7d5101-12c4-4df1-b9eb-081119a27541",
+              "weight": 137
+            },
+            {
+              "certificateNumber": "CertificateNumberd8c54dc0-7764-4d3b-9d6d-aa5735dfd1bc",
+              "weight": 138
+            },
+            {
+              "certificateNumber": "CertificateNumberd30c5df0-aba5-4746-aad6-92ba36ec683a",
+              "weight": 132
+            }
+          ],
+          "identifiers": [
+            {
+              "speciesNumber": 145,
+              "data": {
+                "key3d1fb4ad-64ff-4dfc-be9e-89a68c00b94b": "valued90e553b-f9e6-4932-9805-4b079b190036",
+                "key2fbf0bba-97d9-4b0c-b3bd-ecb521983c76": "value0101ed44-38e9-4f76-8315-8d2576335e19",
+                "key9179de20-6565-4d74-b6a5-102bd7626f18": "value20520a38-ace6-4b7c-86e2-022153a65469"
+              },
+              "isPlaceOfDestinationThePermanentAddress": false,
+              "permanentAddress": {
+                "id": "Ida4e82c9c-f91c-4293-aed8-ee53e59a22fd",
+                "type": "Typedf2428c0-a7ac-422d-8f36-6fe8b6dfbc77",
+                "status": "Status51f93ee1-7136-4987-be5f-6c8b9f1602a7",
+                "companyName": "CompanyName8e313f59-aad1-479a-8b1e-9d0a2c1f8716",
+                "individualName": "IndividualNameba687457-ec50-4d2a-829b-728286e06b98",
+                "address": {
+                  "street": "Street0f12f6a2-9c45-4baa-abff-71cf381193d4",
+                  "city": "City15def4b2-254d-4ae7-afe6-b2d3d9b19ea9",
+                  "country": "Countryf9ef2fb2-8b4a-4301-a0a5-6e8f82508472",
+                  "postalCode": "PostalCode40cf84a4-fd6c-4184-81e1-e7c7e37dac05",
+                  "addressLine1": "AddressLine186a2fec8-fedd-49a5-8c87-996fc7e8c736",
+                  "addressLine2": "AddressLine259ee8625-9711-4e15-a142-f6ddbae9f869",
+                  "addressLine3": "AddressLine331d13c89-757d-471f-9294-3cfd4c380b6f",
+                  "postalZipCode": "PostalZipCode2c9f7916-67d9-49dc-b975-ba20bab9a51f",
+                  "countryIsoCode": "CountryIsoCodef31c6a39-a32c-4235-ac58-0a810043a7b9",
+                  "email": "Emailb0868747-24f0-4275-a50d-0951dd52118d",
+                  "ukTelephone": "UkTelephone8902435a-de29-4639-882e-218f82bf76fd",
+                  "telephone": "Telephone31208ee0-b12e-497b-9087-54a16c18f122",
+                  "internationalTelephone": {
+                    "countryCode": "CountryCodecd05cb8a-7923-41b1-a66d-592432355d62",
+                    "subscriberNumber": "SubscriberNumber0042fd76-6224-4203-8fa9-44ea2833b732"
+                  }
+                },
+                "approvalNumber": "ApprovalNumber0661cd4e-1491-49e6-88bd-7da7ef5f2afd",
+                "otherIdentifier": "OtherIdentifier10313bb7-ec12-4e86-8763-5400f11de571",
+                "tracesId": 239
+              }
+            },
+            {
+              "speciesNumber": 177,
+              "data": {
+                "keyf7e936c3-af20-4429-819b-659842417ac6": "value7a5fb043-78ab-418a-ad9f-fcbd208c35ea",
+                "keyf8358c40-8282-4f0c-907c-ee4d3f5a5dab": "value020f6b3c-d192-4bfd-8f7a-9deede09b895",
+                "key8638db02-eafd-4499-bc93-f83f1eeeb7ec": "valued79fce08-cd4e-41cb-ac4d-504139c18544"
+              },
+              "isPlaceOfDestinationThePermanentAddress": true,
+              "permanentAddress": {
+                "id": "Idb7b37358-59ed-43de-9b48-6ba074c278cb",
+                "type": "Type9bb0021d-8f85-497b-9e61-9c5c9f7f5667",
+                "status": "Status0af6de94-438e-4158-8cd1-db875f585aee",
+                "companyName": "CompanyName976a3d23-5ced-4690-a1eb-5433d5333826",
+                "individualName": "IndividualName0b8a38a3-2e80-41f0-976a-3efef28a3603",
+                "address": {
+                  "street": "Street98c7456a-c985-45e3-ba6f-9089fc3dae83",
+                  "city": "City9e519f33-7739-4bcb-be03-48154aac0e91",
+                  "country": "Countrye3b58653-5413-40bf-8422-2e230e12facb",
+                  "postalCode": "PostalCode070f5c40-c912-411e-896d-66c41d77019d",
+                  "addressLine1": "AddressLine1031a72f4-c919-488d-ba20-72b2ca5ecf3a",
+                  "addressLine2": "AddressLine238346a08-55a6-4b9e-8e33-f562bb202306",
+                  "addressLine3": "AddressLine39e272dc2-054f-450d-853b-03ecd06b086e",
+                  "postalZipCode": "PostalZipCode1d0874fe-d547-4bd0-b6de-c9ef4ac76422",
+                  "countryIsoCode": "CountryIsoCode8baef9cd-cc04-44d9-958b-ba9ad0c9d4b1",
+                  "email": "Email8c3dbb68-c56d-4bd9-9fc8-022e001a19bb",
+                  "ukTelephone": "UkTelephonee234e039-aa72-450d-8aed-a8a87b67a1e1",
+                  "telephone": "Telephonef97db20d-418d-4960-863e-8cd9c548a9cc",
+                  "internationalTelephone": {
+                    "countryCode": "CountryCode0e0d4856-068b-4a1c-ada4-4b0d507001da",
+                    "subscriberNumber": "SubscriberNumber4da1a030-aa0b-482b-a474-051615158785"
+                  }
+                },
+                "approvalNumber": "ApprovalNumber7e6ea597-c0c9-4aa9-ae81-65b4f9be7684",
+                "otherIdentifier": "OtherIdentifierb9e710b8-a22e-4a30-9327-711af8f99d92",
+                "tracesId": 74
+              }
+            },
+            {
+              "speciesNumber": 61,
+              "data": {
+                "key4f31af1a-7516-4792-9c44-c66d22f76f80": "value71bbb24c-2e78-4d0f-8944-72634a3f896b",
+                "keyb2af90d5-06e0-4db3-80ad-e8200f2211e4": "value6f377ed8-89f2-4029-b0d1-7523a678506c",
+                "keyc058df31-5086-4326-9978-11e0757aadee": "valuec9416a7a-563b-4cf3-9eb9-2b5029258f84"
+              },
+              "isPlaceOfDestinationThePermanentAddress": false,
+              "permanentAddress": {
+                "id": "Idb174bf8c-5aa8-4650-a51a-aca7efddce1b",
+                "type": "Type06d4ec32-bb59-4373-af8a-c6eff60fa95a",
+                "status": "Status66277a3e-4157-44b4-a800-a1726bc041b7",
+                "companyName": "CompanyNamedeb9bb4f-9bc0-4107-96e1-2a89ff02def5",
+                "individualName": "IndividualName158366e5-ac5a-4f1c-be11-665c1dc44b30",
+                "address": {
+                  "street": "Street850f9452-98b3-4a78-8fde-e75a365a1db2",
+                  "city": "City32a2ea6e-c66a-4545-9a98-5a46785ae37e",
+                  "country": "Country6aa73c2d-ea24-41cb-b114-58ab33a0a85d",
+                  "postalCode": "PostalCoded88fe703-3dab-44cd-b606-1f8579cf16f5",
+                  "addressLine1": "AddressLine1a3eb64b1-0f14-447e-a866-aefb88d70772",
+                  "addressLine2": "AddressLine2713dd6a9-68bf-4e6f-b95e-bf9fc2cb21a7",
+                  "addressLine3": "AddressLine3542c848c-5b65-467d-8169-3a183d665f20",
+                  "postalZipCode": "PostalZipCodea8a1b404-c925-4e5d-b4b4-82f78fa85262",
+                  "countryIsoCode": "CountryIsoCodedd3069d7-86dc-4f4e-90e1-e10edf443dd7",
+                  "email": "Email19b1546f-e1fb-41c2-b64a-5f60c721cde6",
+                  "ukTelephone": "UkTelephone028f486c-a155-4867-a2fc-8f8d5da88dcc",
+                  "telephone": "Telephone239233fc-ebbe-40d4-bd57-bb7e168cdc8d",
+                  "internationalTelephone": {
+                    "countryCode": "CountryCodee8d0bc0f-410f-4d13-80e2-5bb18186aa32",
+                    "subscriberNumber": "SubscriberNumber43352466-9d87-4323-ad2f-49e8cda36970"
+                  }
+                },
+                "approvalNumber": "ApprovalNumberad7659b0-bc23-4687-862b-8d284757958d",
+                "otherIdentifier": "OtherIdentifier19f52642-e821-48b2-8120-38cabb295633",
+                "tracesId": 18
+              }
+            }
+          ]
+        }
+      ]
+    },
     "pod": {
       "id": "Id29fa2bcc-3a21-4258-b0e9-11f0b489e597",
       "type": "CommercialTransporterUserAdded",
@@ -560,6 +1081,20 @@
           }
         }
       ],
+      "commodityChecks": [
+        {
+          "checkCode": "CheckCoded85c7ca4-1d45-4c72-a9b4-6d2ddc50c4b7",
+          "departmentCode": "DepartmentCode609b8889-5bc7-47cb-802e-df5c2f6170b5"
+        },
+        {
+          "checkCode": "CheckCode30b9938c-0094-4c04-b4d1-9f4945d2876d",
+          "departmentCode": "DepartmentCode236e6600-1d8f-4ca3-85db-3ebbf04f8396"
+        },
+        {
+          "checkCode": "CheckCode0f32c012-d423-485d-96e2-6849898081c2",
+          "departmentCode": "DepartmentCodefa9f7ddc-01e9-48d6-a47e-25bf6a9affb4"
+        }
+      ],
       "catchCertificateAttachments": [
         {
           "attachmentId": "AttachmentId4a25a5f4-aefc-4c0e-ad86-9950ac5ac6bb",
@@ -729,6 +1264,98 @@
       "userId": "UserId018f19a9-4689-4092-a75b-dc90c47f200b",
       "isControlUser": false
     },
+    "commodityChecks": [
+      {
+        "uniqueComplementId": "UniqueComplementId02259544-5165-48ce-b1c3-fd38eb15a750",
+        "checks": [
+          {
+            "type": "Typeac488c36-1540-4185-a1ca-d52e434eb7d9",
+            "status": "Statusa353d2ff-94b3-4e8d-beac-6fcae1e22e68",
+            "reason": "Reasoncf4c396e-8145-4f79-969d-e2d581735d49",
+            "otherReason": "OtherReasond6249f6a-1f09-4b07-a72b-adaad62e071c",
+            "isSelectedForChecks": true,
+            "hasChecksComplete": false
+          },
+          {
+            "type": "Typee412c8f6-3c8e-4a29-9a57-399eb44271cf",
+            "status": "Statusc01a55bb-2fc8-46c9-b493-5d2b2f224a67",
+            "reason": "Reasonf02855ac-9474-4659-b303-66eeebfc03ca",
+            "otherReason": "OtherReasone1892377-1d86-4202-bf62-943bcdfbb9d3",
+            "isSelectedForChecks": true,
+            "hasChecksComplete": false
+          },
+          {
+            "type": "Type6547ee19-c7f3-4349-bc7a-fea05ca46a4a",
+            "status": "Statusb1bc25e5-aea5-44df-8f9d-a46c85990ff9",
+            "reason": "Reasonfb55c174-106a-499a-9ed8-6c84848f8a51",
+            "otherReason": "OtherReason3dd87955-e507-4b7b-9afa-5694c6922bc1",
+            "isSelectedForChecks": true,
+            "hasChecksComplete": false
+          }
+        ],
+        "validityPeriod": 65
+      },
+      {
+        "uniqueComplementId": "UniqueComplementId7beb3c4a-456f-49fb-ab48-4ccc058d9ad2",
+        "checks": [
+          {
+            "type": "Type50bc6d83-ddcf-49a1-84ee-0156afa09661",
+            "status": "Statusc3404de9-970c-4268-a059-76ad11b21d52",
+            "reason": "Reason2fb8f95d-afa5-4960-98e7-5d87fa80d3c7",
+            "otherReason": "OtherReason7f3151a5-67da-4d25-8af5-4bc986132362",
+            "isSelectedForChecks": true,
+            "hasChecksComplete": false
+          },
+          {
+            "type": "Type7f6b8eab-27a5-46d5-aed8-9539454bd634",
+            "status": "Statusd4c90da2-e6a7-43f1-9120-266bf8c987c3",
+            "reason": "Reasonb92686e3-55e6-4db2-9bdd-f2b9c13679ca",
+            "otherReason": "OtherReasonc2a8add5-2c68-4590-b992-7e8f640ad1a5",
+            "isSelectedForChecks": true,
+            "hasChecksComplete": false
+          },
+          {
+            "type": "Typea7d61696-a19d-411b-a2ea-64f3e39d44f8",
+            "status": "Statusa55777bf-cfe5-4121-a3b4-e80bcf4c93ad",
+            "reason": "Reason711cb50d-f8e7-4dc2-9eb3-7e2d979af602",
+            "otherReason": "OtherReason9f6d3cfc-a375-4c79-a681-7bc91e09d1f6",
+            "isSelectedForChecks": true,
+            "hasChecksComplete": false
+          }
+        ],
+        "validityPeriod": 118
+      },
+      {
+        "uniqueComplementId": "UniqueComplementId4b5c90dd-de9d-472f-a856-ba8b335abae9",
+        "checks": [
+          {
+            "type": "Type37553545-0827-4415-9224-42799bdb8f21",
+            "status": "Status79cc22fd-810a-4617-8ff0-59069f9e4081",
+            "reason": "Reason710a25a2-782c-4df8-8c78-3dc48f65a476",
+            "otherReason": "OtherReasonbe6b24a7-9ab3-484e-9d03-c3b36e7a6284",
+            "isSelectedForChecks": true,
+            "hasChecksComplete": false
+          },
+          {
+            "type": "Type61eb336d-51ba-48fa-a07a-672ad4954137",
+            "status": "Status551b2d34-0d39-4f0d-b66d-781633e30e4d",
+            "reason": "Reasonff10341d-6218-408f-ae36-520d2d7ce3a1",
+            "otherReason": "OtherReasonb110d336-1db0-4b95-a8d7-2835571da3dd",
+            "isSelectedForChecks": true,
+            "hasChecksComplete": false
+          },
+          {
+            "type": "Type2b979715-5ea1-4009-b84e-e93c7eff4386",
+            "status": "Status9cf5e63a-f40a-4bba-bc3a-271399bb1d94",
+            "reason": "Reasonb49c4f7e-206a-45d3-b6d4-4595dfb243b7",
+            "otherReason": "OtherReasone6a6851e-9d73-4129-bba4-6b4e7e37acac",
+            "isSelectedForChecks": true,
+            "hasChecksComplete": false
+          }
+        ],
+        "validityPeriod": 37
+      }
+    ],
     "consignmentValidations": [
       {
         "field": "Fieldca03145e-3cf3-44ee-a43c-c5fefaa49331",
@@ -1289,262 +1916,66 @@
   "isCdsFullMatched": true,
   "chedTypeVersion": 44,
   "isGMRMatched": false,
-  "commoditiesSummary": {
-    "gmsDeclarationAccepted": true,
-    "consignedCountryInChargeGroup": false,
-    "totalGrossWeight": 183,
-    "totalNetWeight": 121,
-    "totalGrossVolume": 14,
-    "totalGrossVolumeUnit": "TotalGrossVolumeUnit41d78b56-e81c-4fc8-ad8b-2503549f231c",
-    "numberOfPackages": 145,
-    "temperature": "Temperatureb96b560f-362a-46bf-b12b-01f00ea4cb61",
-    "numberOfAnimals": 10,
-    "includeNonAblactedAnimals": true,
-    "countryOfOrigin": "CountryOfOrigin2d0ab64d-2d2a-4ee6-a9f4-5946ead2adbc",
-    "countryOfOriginIsPodCountry": false,
-    "isLowRiskArticle72Country": true,
-    "regionOfOrigin": "RegionOfOrigin6f384449-7d46-453a-a64c-c5d4ee2c0b30",
-    "consignedCountry": "ConsignedCountry4167de93-b7e5-4bed-8874-00cab284d69b",
-    "animalsCertifiedAs": "AnimalsCertifiedAs4110a15f-4c3c-4e0f-a0f7-c78daf987da8",
-    "commodityIntendedFor": "Human"
-  },
-  "commodities": [
-    {
-      "uniqueComplementId": "UniqueComplementId6927571b-ef9c-41bf-8c3c-c95b2d018d9b",
-      "commodityDescription": "CommodityDescription717ba80a-67d1-4990-b449-c87d2e417dd6",
-      "commodityId": "CommodityId5e96d92a-fad6-46c3-babb-9d977e7c9cf9",
-      "complementId": 205,
-      "complementName": "ComplementName02a19279-48f0-4265-ad76-458d1b930ca9",
-      "eppoCode": "EppoCodeb6d5992b-c673-46d6-8abf-af6bb5561392",
-      "isWoodPackaging": false,
-      "speciesId": "SpeciesId2913a022-4d90-451d-80a4-e4a33bc44551",
-      "speciesName": "SpeciesNamee93de11a-e2e2-4cea-aba4-15471dd30280",
-      "speciesNomination": "SpeciesNomination7867f664-b02d-499a-960b-1188e3b22c7a",
-      "speciesTypeName": "SpeciesTypeName2afbede5-09d7-4314-be82-8292d40307c9",
-      "speciesType": "SpeciesType1bc0a365-d851-4f51-ac32-bb2fe7a700a9",
-      "speciesClassName": "SpeciesClassNamef8086142-8715-4821-a799-edf1ffd8a000",
-      "speciesClass": "SpeciesClass80980a04-2b79-4467-a20e-a8a0f1d3985c",
-      "speciesFamilyName": "SpeciesFamilyName3b8cce20-61d6-406d-bb10-9f10e826f297",
-      "speciesFamily": "SpeciesFamilyee5444da-0bf1-4b35-8257-3ef5fbe0cb6b",
-      "speciesCommonName": "SpeciesCommonNameb18de881-23fb-4cc1-97aa-9f1b9f989290",
-      "isCdsMatched": true,
-      "additionalData": [
-        {
-          "key": "keya8f8d934-d762-4ca7-8936-1c1f96659100",
-          "data": "data4fe11cf4-397b-4c99-a3cf-bf0fe85dec1"
-        },
-		{
-          "key": "keyde4f2a92-1827-4c82-bb8f-c37349d251d4",
-          "data": "data4fe11cf4-397b-4c99-a3cf-bf0fe85dec1"
-        },
-		{
-          "key": "key4fe11cf4-397b-4c99-a3cf-bf0fe85dec1c",
-          "data": "data4fe11cf4-397b-4c99-a3cf-bf0fe85dec1c"
-        }
-	  ],
-      "riskAssesment": {
-        "riskDecision": "Required",
-        "exitRiskDecision": "Required",
-        "hmiDecision": "Required",
-        "phsiDecision": "Required",
-        "phsiClassification": "Mandatory",
+  "riskAssessment": {
+    "commodityResults": [
+      {
+        "riskDecision": "RiskDecisioncc87d9ce-038f-417a-a243-62b4331f6cbf",
+        "exitRiskDecision": "ExitRiskDecision6bab64d0-ca9c-438f-afcd-f821083f90fe",
+        "hmiDecision": "HmiDecisionebcaae2d-fc31-4dec-8f91-ca4035c37698",
+        "phsiDecision": "PhsiDecision9a397e63-a6ad-419c-b474-15604693926c",
+        "phsiClassification": "PhsiClassification3d4b00b1-219b-4d59-b435-6a461d3a3be3",
         "phsi": {
           "documentCheck": false,
           "identityCheck": true,
           "physicalCheck": false
         },
-        "uniqueId": "UniqueId8af61c8d-546e-4645-bcf3-113df1181654",
-        "eppoCode": "EppoCodee75f2da7-a2ad-4eff-8115-00fbe0b70bf4",
-        "variety": "Variety0c043e23-869f-4bdc-8b6d-689bf7deb4df",
+        "uniqueId": "UniqueIdaf656295-4a19-4c69-bade-d6f7deaa686e",
+        "eppoCode": "EppoCodea571380a-adfb-4cbb-a34e-43798cd734c6",
+        "variety": "Variety6ee3dac0-18e1-4d91-95f6-f3ce011d20c5",
         "isWoody": true,
-        "indoorOutdoor": "IndoorOutdoor33900464-c23f-4fbf-af43-549dc087969c",
-        "propagation": "Propagation756bc821-4773-4a32-b302-906c0d37f191",
-        "phsiRuleType": "PhsiRuleType2151ff48-1606-42e3-a02d-0db4175f3596"
+        "indoorOutdoor": "IndoorOutdoordd39dfc4-ee0b-413f-ad62-e076c219097d",
+        "propagation": "Propagationa8c86cf7-1f2c-4154-8337-860c698a25df",
+        "phsiRuleType": "PhsiRuleType020cf73b-e172-4bc5-a0d6-dd667aba6c56"
       },
-      "checks": [
-        {
-          "type": "PhsiDocument",
-          "status": "ToDo",
-          "reason": "Reason27904398-b0d1-4ad1-96f0-8854153e3e4c",
-          "otherReason": "OtherReason6adddcf6-616c-487a-a922-271338e86c54",
-          "isSelectedForChecks": false,
-          "hasChecksComplete": true
-        },
-        {
-          "type": "PhsiIdentity",
-          "status": "Compliant",
-          "reason": "Reason10e14d8c-adb1-415c-b32c-bd3a4efc8ef1",
-          "otherReason": "OtherReason6aba7fd3-8069-4d9b-807f-a338787a45e6",
-          "isSelectedForChecks": false,
-          "hasChecksComplete": true
-        },
-        {
-          "type": "PhsiPhysical",
-          "status": "AutoCleared",
-          "reason": "Reasonf96579ba-6917-49d5-bd69-e86068db0ab3",
-          "otherReason": "OtherReason39aae479-dad0-40d6-857c-48f03e50a3d2",
-          "isSelectedForChecks": false,
-          "hasChecksComplete": true
-        }
-      ]
-    },
-    {
-      "uniqueComplementId": "UniqueComplementIdf4bc91e6-8891-4de8-98d2-c55f4656f070",
-      "commodityDescription": "CommodityDescriptioncd2082b6-703d-485f-80e2-0b37e740f571",
-      "commodityId": "CommodityId0cffdb43-eca8-4572-b140-206dbdaa7c19",
-      "complementId": 241,
-      "complementName": "ComplementName50dcae3f-2ee1-44f3-8f87-32da3a1b00d9",
-      "eppoCode": "EppoCode3b5daad1-0faf-43af-ba2f-e207b4b6f83e",
-      "isWoodPackaging": false,
-      "speciesId": "SpeciesId71034bfa-793b-45d5-9c14-f749f5131781",
-      "speciesName": "SpeciesName099ccf82-cbb2-4db3-a03d-37ef85ae473b",
-      "speciesNomination": "SpeciesNomination696234ff-1de2-4ff6-90f1-cde21af12ef2",
-      "speciesTypeName": "SpeciesTypeName398d1f19-2f57-40b7-8689-e69f76dc5dc0",
-      "speciesType": "SpeciesTypee4edc7ba-1009-443d-ba7b-c731d1fc71c3",
-      "speciesClassName": "SpeciesClassName01eec883-31bd-4576-bf77-5cb558ff707c",
-      "speciesClass": "SpeciesClass11059403-31b9-4c3f-b557-963f4d99a878",
-      "speciesFamilyName": "SpeciesFamilyName04b5c204-3142-4af2-b52b-5a0da70c5419",
-      "speciesFamily": "SpeciesFamilyfaad2c43-1220-445d-bc8b-7c8e9c03865f",
-      "speciesCommonName": "SpeciesCommonName22afa31d-1a0b-4d45-b5ae-f3837a5de7a4",
-      "isCdsMatched": true,
-      "additionalData": [
-        {
-          "key": "keya8f8d934-d762-4ca7-8936-1c1f96659100",
-          "data": "data4fe11cf4-397b-4c99-a3cf-bf0fe85dec1"
-        },
-		{
-          "key": "keyde4f2a92-1827-4c82-bb8f-c37349d251d4",
-          "data": "data4fe11cf4-397b-4c99-a3cf-bf0fe85dec1"
-        },
-		{
-          "key": "key4fe11cf4-397b-4c99-a3cf-bf0fe85dec1c",
-          "data": "data4fe11cf4-397b-4c99-a3cf-bf0fe85dec1c"
-        }
-	  ],
-      "riskAssesment": {
-        "riskDecision": "Notrequired",
-        "exitRiskDecision": "Notrequired",
-        "hmiDecision": "Notrequired",
-        "phsiDecision": "Notrequired",
-        "phsiClassification": "Reduced",
+      {
+        "riskDecision": "RiskDecision4ceae9a8-7b05-4b93-bda4-7fb98cd98035",
+        "exitRiskDecision": "ExitRiskDecisiond3bdf50c-dd64-4035-a564-f0156a8a2dca",
+        "hmiDecision": "HmiDecisionc7c31be0-1e87-47b5-a29b-e7c40b42755d",
+        "phsiDecision": "PhsiDecision17b331fb-fb70-4b09-80ef-4ce0faa5d2d8",
+        "phsiClassification": "PhsiClassificationbe539c99-bb3b-498c-ae22-3eec33fedec2",
         "phsi": {
           "documentCheck": false,
           "identityCheck": true,
           "physicalCheck": false
         },
-        "uniqueId": "UniqueId51186a86-181d-4857-84dc-45c1591f07f7",
-        "eppoCode": "EppoCode18fc2d33-7388-468b-a968-e006bf5dcab8",
-        "variety": "Variety2b038315-83b8-499a-817c-02297b4a9029",
+        "uniqueId": "UniqueId8c23d319-9402-4d36-b519-5552562e9713",
+        "eppoCode": "EppoCode130f5401-7191-45fe-a228-24b978e6d602",
+        "variety": "Variety735c895a-afd7-482c-8163-d5c5f72828c0",
         "isWoody": true,
-        "indoorOutdoor": "IndoorOutdoor2bee440d-cebd-469e-acdb-6c1f6bce5398",
-        "propagation": "Propagationda354da5-168d-4ba3-b302-f6a188c45139",
-        "phsiRuleType": "PhsiRuleType5a503c75-915d-4dd9-bf21-734a1c616aca"
+        "indoorOutdoor": "IndoorOutdoor44abe53c-a619-4b8c-8405-460ea925e15d",
+        "propagation": "Propagation374751fa-39a2-4b68-b798-3f3d5be55dbd",
+        "phsiRuleType": "PhsiRuleType1fb917ed-8809-40ed-a9a6-8ae92abd9f6a"
       },
-      "checks": [
-        {
-          "type": "Hmi",
-          "status": "NonCompliant",
-          "reason": "Reason1a384fef-07c9-46d6-9e1f-c5d571d7d703",
-          "otherReason": "OtherReasond473404d-fec5-45f0-9b6f-854c07653b5e",
-          "isSelectedForChecks": false,
-          "hasChecksComplete": true
-        },
-        {
-          "type": "PhsiDocument",
-          "status": "NotInspected",
-          "reason": "Reason7e36b943-04dd-426b-b7c0-e34d7806915f",
-          "otherReason": "OtherReasonbcdfbdda-1333-46c3-b21e-000323e777f5",
-          "isSelectedForChecks": false,
-          "hasChecksComplete": true
-        },
-        {
-          "type": "PhsiIdentity",
-          "status": "ToBeInspected",
-          "reason": "Reasond6237d14-c794-4c5a-91a9-bb18c0654fdf",
-          "otherReason": "OtherReasone2b0ee95-ecd5-4880-9d13-d01d99ef9af7",
-          "isSelectedForChecks": false,
-          "hasChecksComplete": true
-        }
-      ]
-    },
-    {
-      "uniqueComplementId": "UniqueComplementId3fb47cf6-17f4-4780-b740-7dcbfd771d43",
-      "commodityDescription": "CommodityDescriptionbed3b77b-daf8-47f9-9f7a-72025f8bab17",
-      "commodityId": "CommodityId4a2a0c23-40f9-4800-bdd9-2422a459de10",
-      "complementId": 5,
-      "complementName": "ComplementName30f37396-e726-49c9-ac2e-4640ce567b96",
-      "eppoCode": "EppoCode84bf55ea-cd18-435e-a67c-55488420d648",
-      "isWoodPackaging": false,
-      "speciesId": "SpeciesId80aead77-1d9a-460e-8238-5093f990cbeb",
-      "speciesName": "SpeciesNamee5d4c9cd-7738-4293-9373-f82042350f09",
-      "speciesNomination": "SpeciesNomination113d1402-7945-4f56-9247-700adf2079a8",
-      "speciesTypeName": "SpeciesTypeName2e576119-bb56-45a5-aa9d-c2c746fc1a4d",
-      "speciesType": "SpeciesType9706161b-aaa4-4bcb-8d7e-4555760c8521",
-      "speciesClassName": "SpeciesClassName30141f77-ac43-453e-8606-df58ab1c3ea5",
-      "speciesClass": "SpeciesClassb08c4b2b-c3db-4eed-847f-ad0739ae060f",
-      "speciesFamilyName": "SpeciesFamilyName133d7bac-eab7-40d1-b907-af785926dca0",
-      "speciesFamily": "SpeciesFamily8d8670f8-5b0b-4886-bd03-609ef2675277",
-      "speciesCommonName": "SpeciesCommonNameb6184813-5c42-4ccc-a2a0-affdcbeaf6ec",
-      "isCdsMatched": true,
-      "additionalData": [
-        {
-          "key": "keya8f8d934-d762-4ca7-8936-1c1f96659100",
-          "data": "data4fe11cf4-397b-4c99-a3cf-bf0fe85dec1"
-        },
-		{
-          "key": "keyde4f2a92-1827-4c82-bb8f-c37349d251d4",
-          "data": "data4fe11cf4-397b-4c99-a3cf-bf0fe85dec1"
-        },
-		{
-          "key": "key4fe11cf4-397b-4c99-a3cf-bf0fe85dec1c",
-          "data": "data4fe11cf4-397b-4c99-a3cf-bf0fe85dec1c"
-        }
-	  ],
-      "riskAssesment": {
-        "riskDecision": "Inconclusive",
-        "exitRiskDecision": "Inconclusive",
-        "hmiDecision": "Required",
-        "phsiDecision": "Required",
-        "phsiClassification": "Controlled",
+      {
+        "riskDecision": "RiskDecisiond80aac9f-a7ad-4c9d-b75d-bee48fbdf9b4",
+        "exitRiskDecision": "ExitRiskDecisione608fc60-6f38-4c20-aee2-ab50b52020fe",
+        "hmiDecision": "HmiDecisiona3303df3-5559-48a1-bb2f-a9075fed87f0",
+        "phsiDecision": "PhsiDecision7a76fe5f-8f4b-47a3-8b9a-b8dbc6c3b7fe",
+        "phsiClassification": "PhsiClassificationc32805d1-2334-4d59-be42-35a33404b560",
         "phsi": {
           "documentCheck": false,
           "identityCheck": true,
           "physicalCheck": false
         },
-        "uniqueId": "UniqueId5a37a473-0032-4418-96e0-64eac8f6c034",
-        "eppoCode": "EppoCode87a31a60-f16a-4c38-a459-86792954779b",
-        "variety": "Variety24e756fd-0a7a-4230-9516-19cea1d71e29",
+        "uniqueId": "UniqueId21d06906-76c2-4085-b708-869f2d69c533",
+        "eppoCode": "EppoCode53a39186-777b-486f-831f-d2c5b0d6adff",
+        "variety": "Variety65cc2de9-421d-44e5-a3fc-041a95115032",
         "isWoody": true,
-        "indoorOutdoor": "IndoorOutdooredda0846-9023-477d-8746-c4a7f09f35f7",
-        "propagation": "Propagationa1c147a5-88a0-4b39-8b7e-c179ef768392",
-        "phsiRuleType": "PhsiRuleType2798f365-811a-4a01-9bd1-0099dcce5c42"
-      },
-      "checks": [
-        {
-          "type": "PhsiPhysical",
-          "status": "Hold",
-          "reason": "Reasona3424ed0-8967-4d2f-9f0c-ebbeeb6cd6a6",
-          "otherReason": "OtherReason2bd5114d-d41b-4056-b024-57c3c1c6f2ff",
-          "isSelectedForChecks": false,
-          "hasChecksComplete": true
-        },
-        {
-          "type": "Hmi",
-          "status": "ToDo",
-          "reason": "Reason057e3033-29fc-4b7f-94bf-62763b999348",
-          "otherReason": "OtherReason7e86a7ef-ffa6-4683-86ab-d86a806d61fe",
-          "isSelectedForChecks": false,
-          "hasChecksComplete": true
-        },
-        {
-          "type": "PhsiDocument",
-          "status": "Compliant",
-          "reason": "Reasonb26bf96c-3410-43f0-a687-1a0f7257d357",
-          "otherReason": "OtherReasonf9e911b7-65d2-4f3c-ad41-f684666e7386",
-          "isSelectedForChecks": false,
-          "hasChecksComplete": true
-        }
-      ]
-    }
-  ]
+        "indoorOutdoor": "IndoorOutdoor1abc01ba-7862-4a6d-9554-3404d44bc3c5",
+        "propagation": "Propagation3f062ec6-b85a-462c-a613-c071f47443a9",
+        "phsiRuleType": "PhsiRuleType525fb319-4e6f-4d91-8385-5acd9feb64dc"
+      }
+    ],
+    "assessedOn": "2023-11-11T13:15:47"
+  }
 }

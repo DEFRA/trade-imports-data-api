@@ -142,13 +142,4 @@ public class CommodityComplement
     [JsonPropertyName("isCdsMatched")]
     [System.ComponentModel.Description("Has commodity been matched with corresponding CDS declaration")]
     public bool? IsCdsMatched { get; set; }
-
-    [JsonPropertyName("additionalData")]
-    public KeyDataPair[]? AdditionalData { get; set; }
-
-    [JsonPropertyName("riskAssesment")]
-    public CommodityRiskResult? RiskAssesment { get; set; }
-
-    [JsonPropertyName("checks")]
-    public InspectionCheck[]? Checks { get; set; }
 }

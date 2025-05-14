@@ -117,6 +117,12 @@ public class ImportPreNotification
     public bool? ChildNotification { get; set; }
 
     /// <summary>
+    /// Result of risk assessment by the risk scorer
+    /// </summary>
+    [JsonPropertyName("riskAssessment")]
+    public RiskAssessmentResult? RiskAssessment { get; init; }
+
+    /// <summary>
     /// Details of the risk categorisation level for a notification
     /// </summary>
     [JsonPropertyName("journeyRiskCategorisation")]
@@ -243,10 +249,4 @@ public class ImportPreNotification
     [JsonPropertyName("isGMRMatched")]
     [System.ComponentModel.Description("Indicates whether a CHED has been matched with a GVMS GMR via DMP")]
     public bool? IsGMRMatched { get; set; }
-
-    [JsonPropertyName("commoditiesSummary")]
-    public Commodities CommoditiesSummary { get; set; } = default!;
-
-    [JsonPropertyName("commodities")]
-    public CommodityComplement[] Commodities { get; set; } = default!;
 }
