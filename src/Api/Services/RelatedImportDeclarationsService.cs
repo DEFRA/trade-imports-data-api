@@ -30,7 +30,11 @@ public class RelatedImportDeclarationsService(IDbContext dbContext) : IRelatedIm
 
         if (!string.IsNullOrEmpty(request.Mrn))
         {
-            return await StartFromCustomsDeclaration(x => x.Id.ToLowerInvariant() == request.Mrn.ToLowerInvariant(), maxDepth, cancellationToken);
+            return await StartFromCustomsDeclaration(
+                x => x.Id.ToLowerInvariant() == request.Mrn.ToLowerInvariant(),
+                maxDepth,
+                cancellationToken
+            );
         }
 
         if (!string.IsNullOrEmpty(request.ChedId))
