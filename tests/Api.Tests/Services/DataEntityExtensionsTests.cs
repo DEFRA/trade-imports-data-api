@@ -1,6 +1,8 @@
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
+using Defra.TradeImportsDataApi.Domain.Ipaffs;
+using Defra.TradeImportsDataApi.Domain.ProcessingErrors;
 using FluentAssertions;
 
 namespace Defra.TradeImportsDataApi.Api.Tests.Services;
@@ -19,6 +21,50 @@ public class DataEntityExtensionsTests
         result.Operation.Should().Be("operation");
         result.ETag.Should().Be("etag");
         result.Resource.Should().Be(subject);
+    }
+
+    [Fact]
+    public void WhenToResourceEvent_AndEntityShouldNotBeIncludedAsResource_ResourceShouldBeNull()
+    {
+        var subject = new FixtureEntity { Id = "id", ETag = "etag" };
+
+        var result = subject.ToResourceEvent("operation", includeEntityAsResource: false);
+
+        result.Resource.Should().BeNull();
+    }
+
+    [Fact]
+    public void WhenToResourceEvent_AndEntityIsImportPreNotification_ShouldMap()
+    {
+        var subject = new ImportPreNotificationEntity
+        {
+            Id = "id",
+            ImportPreNotification = new ImportPreNotification(),
+        };
+
+        var result = subject.ToResourceEvent("operation");
+
+        result.ResourceType.Should().Be("ImportPreNotification");
+    }
+
+    [Fact]
+    public void WhenToResourceEvent_AndEntityIsCustomsDeclaration_ShouldMap()
+    {
+        var subject = new CustomsDeclarationEntity { Id = "id" };
+
+        var result = subject.ToResourceEvent("operation");
+
+        result.ResourceType.Should().Be("CustomsDeclaration");
+    }
+
+    [Fact]
+    public void WhenToResourceEvent_AndEntityIsProcessingError_ShouldMap()
+    {
+        var subject = new ProcessingErrorEntity { Id = "id", ProcessingError = new ProcessingError() };
+
+        var result = subject.ToResourceEvent("operation");
+
+        result.ResourceType.Should().Be("ProcessingError");
     }
 
     [Fact]

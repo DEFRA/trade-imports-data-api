@@ -15,7 +15,11 @@ public static class DataEntityExtensions
         Converters = { new JsonStringEnumConverter() },
     };
 
-    public static ResourceEvent<TDataEntity> ToResourceEvent<TDataEntity>(this TDataEntity entity, string operation)
+    public static ResourceEvent<TDataEntity> ToResourceEvent<TDataEntity>(
+        this TDataEntity entity,
+        string operation,
+        bool includeEntityAsResource = true
+    )
         where TDataEntity : IDataEntity
     {
         return new ResourceEvent<TDataEntity>
@@ -24,7 +28,7 @@ public static class DataEntityExtensions
             ResourceType = ResourceTypeName<TDataEntity>(),
             Operation = operation,
             ETag = entity.ETag,
-            Resource = entity,
+            Resource = includeEntityAsResource ? entity : default,
         };
     }
 

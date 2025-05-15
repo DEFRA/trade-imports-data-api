@@ -31,7 +31,7 @@ public class ImportPreNotificationServiceTests
             .Received()
             .Publish(
                 Arg.Is<ResourceEvent<ImportPreNotificationEntity>>(x =>
-                    x.Operation == "Created" && x.ChangeSet.Count > 0
+                    x.Operation == "Created" && x.Resource == null && x.ChangeSet.Count == 0
                 ),
                 CancellationToken.None
             );
@@ -80,7 +80,7 @@ public class ImportPreNotificationServiceTests
             .Received()
             .Publish(
                 Arg.Is<ResourceEvent<ImportPreNotificationEntity>>(x =>
-                    x.Operation == "Updated" && x.ChangeSet.Count > 0
+                    x.Operation == "Updated" && x.Resource == null && x.ChangeSet.Count == 0
                 ),
                 CancellationToken.None
             );
