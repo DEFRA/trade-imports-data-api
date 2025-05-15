@@ -131,4 +131,17 @@ public class Commodities
     [PossibleValue("further")]
     [PossibleValue("other")]
     public string? CommodityIntendedFor { get; set; }
+
+    /// <summary>
+    /// Holder for additional parameters of a commodity
+    /// </summary>
+    [JsonPropertyName("commodityComplement")]
+    [System.ComponentModel.Description("Holder for additional parameters of a commodity")]
+    public CommodityComplement[]? CommodityComplements { get; set; }
+
+    /// <summary>
+    ///     Additional data for commodityComplement part containing such data as net weight
+    /// </summary>
+    [JsonPropertyName("complementParameterSet")]
+    public ComplementParameterSet[]? ComplementParameterSets { get; set; }
 }

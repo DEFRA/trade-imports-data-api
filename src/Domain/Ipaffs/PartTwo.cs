@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using Defra.TradeImportsDataApi.Domain.Attributes;
+using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 
 namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
 
@@ -121,6 +122,9 @@ public class PartTwo
     [JsonPropertyName("accompanyingDocuments")]
     [System.ComponentModel.Description("Accompanying documents")]
     public AccompanyingDocument[]? AccompanyingDocuments { get; set; }
+
+    [JsonPropertyName("commodityChecks")]
+    public CommodityCheck[]? CommodityChecks { get; set; }
 
     /// <summary>
     /// Have the PHSI regulated commodities been auto cleared?

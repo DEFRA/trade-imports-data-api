@@ -14,6 +14,7 @@
       Status: null,
       SplitConsignment: null,
       ChildNotification: null,
+      RiskAssessment: null,
       JourneyRiskCategorisation: null,
       IsHighRiskEuImport: null,
       PartOne: null,
@@ -31,9 +32,7 @@
       RequestId: null,
       IsCdsFullMatched: null,
       ChedTypeVersion: null,
-      IsGMRMatched: null,
-      CommoditiesSummary: null,
-      Commodities: null
+      IsGMRMatched: null
     },
     Created: 2025-04-07 11:00 Utc,
     Updated: 2025-04-07 11:15 Utc,

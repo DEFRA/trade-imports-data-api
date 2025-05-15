@@ -146,6 +146,9 @@ public class PartOne
     [System.ComponentModel.Description("Is GVMS route?")]
     public bool? IsGvmsRoute { get; set; }
 
+    [JsonPropertyName("commodities")]
+    public Commodities? Commodities { get; set; }
+
     /// <summary>
     /// Purpose of consignment details
     /// </summary>
