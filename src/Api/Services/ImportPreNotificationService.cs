@@ -2,7 +2,6 @@ using Defra.TradeImportsDataApi.Api.Exceptions;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.Events;
-using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using MongoDB.Driver.Linq;
 
 namespace Defra.TradeImportsDataApi.Api.Services;
@@ -41,9 +40,10 @@ public class ImportPreNotificationService(IDbContext dbContext, IResourceEventPu
         await dbContext.ImportPreNotifications.Insert(importPreNotificationEntity, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
         await resourceEventPublisher.Publish(
-            importPreNotificationEntity
-                .ToResourceEvent(ResourceEventOperations.Created)
-                .WithChangeSet(importPreNotificationEntity.ImportPreNotification, new ImportPreNotification()),
+            importPreNotificationEntity.ToResourceEvent(
+                ResourceEventOperations.Created,
+                includeEntityAsResource: false
+            ),
             cancellationToken
         );
 
@@ -67,9 +67,10 @@ public class ImportPreNotificationService(IDbContext dbContext, IResourceEventPu
         await dbContext.ImportPreNotifications.Update(importPreNotificationEntity, etag, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
         await resourceEventPublisher.Publish(
-            importPreNotificationEntity
-                .ToResourceEvent(ResourceEventOperations.Updated)
-                .WithChangeSet(importPreNotificationEntity.ImportPreNotification, existing.ImportPreNotification),
+            importPreNotificationEntity.ToResourceEvent(
+                ResourceEventOperations.Updated,
+                includeEntityAsResource: false
+            ),
             cancellationToken
         );
 
