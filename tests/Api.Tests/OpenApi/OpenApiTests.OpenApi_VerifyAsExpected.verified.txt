@@ -2373,17 +2373,17 @@
       "Defra.TradeImportsDataApi.Domain.Ipaffs.ComplementParameterSet": {
         "type": "object",
         "properties": {
-          "uniqueComplementID": {
+          "uniqueComplementId": {
             "type": "string",
             "description": "UUID used to match commodityComplement to its complementParameter set. CHEDPP only",
             "nullable": true
           },
-          "complementID": {
+          "complementId": {
             "type": "integer",
             "format": "int32",
             "nullable": true
           },
-          "speciesID": {
+          "speciesId": {
             "type": "string",
             "nullable": true
           },
