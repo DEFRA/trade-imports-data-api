@@ -939,10 +939,6 @@
             "type": "string",
             "nullable": true
           },
-          "departmentCode": {
-            "type": "string",
-            "nullable": true
-          },
           "decisionCode": {
             "type": "string",
             "nullable": true
