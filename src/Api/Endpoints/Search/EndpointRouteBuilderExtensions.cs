@@ -13,10 +13,10 @@ public static class EndpointRouteBuilderExtensions
         const string groupName = "RelatedImportDeclarations";
 
         app.MapGet("related-import-declarations", Search)
-            .WithName("related-import-declarations")
+            .WithName("GetRelatedImportDeclarations")
             .WithTags(groupName)
-            .WithSummary("related-import-declarations")
-            .WithDescription("related-import-declarations")
+            .WithSummary("Get RelatedImportDeclarations")
+            .WithDescription("Get all import declarations that are related to each other")
             .Produces<RelatedImportDeclarationsResponse>()
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .RequireAuthorization(PolicyNames.Read);

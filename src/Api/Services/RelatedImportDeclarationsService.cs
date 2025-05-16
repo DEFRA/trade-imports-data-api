@@ -22,7 +22,10 @@ public class RelatedImportDeclarationsService(IDbContext dbContext) : IRelatedIm
         if (!string.IsNullOrEmpty(request.Ducr))
         {
             return await StartFromCustomsDeclaration(
+#pragma warning disable CA1862
+                // MongoDB driver does not support string.Equals()
                 x => x.ClearanceRequest!.DeclarationUcr!.ToLowerInvariant() == request.Ducr.ToLowerInvariant(),
+#pragma warning restore CA1862
                 maxDepth,
                 cancellationToken
             );
@@ -31,7 +34,10 @@ public class RelatedImportDeclarationsService(IDbContext dbContext) : IRelatedIm
         if (!string.IsNullOrEmpty(request.Mrn))
         {
             return await StartFromCustomsDeclaration(
+#pragma warning disable CA1862
+                // MongoDB driver does not support string.Equals()
                 x => x.Id.ToLowerInvariant() == request.Mrn.ToLowerInvariant(),
+#pragma warning restore CA1862
                 maxDepth,
                 cancellationToken
             );
@@ -133,7 +139,7 @@ public class RelatedImportDeclarationsService(IDbContext dbContext) : IRelatedIm
             .Distinct()
             .ToList();
 
-        if (identifiers.Any())
+        if (identifiers.Count != 0)
         {
             importPreNotifications.AddRange(
                 await dbContext

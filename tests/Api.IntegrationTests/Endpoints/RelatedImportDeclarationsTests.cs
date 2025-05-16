@@ -75,7 +75,7 @@ public class RelatedImportDeclarationsTests : IntegrationTestBase
         response.ImportPreNotifications.Length.Should().Be(4);
     }
 
-    private async Task InsertTestData()
+    private static async Task InsertTestData()
     {
         await Task.WhenAll(
             CreateImportPreNotification("CHEDA.GB.2025.5555555"),
@@ -88,7 +88,7 @@ public class RelatedImportDeclarationsTests : IntegrationTestBase
         );
     }
 
-    private async Task CreateCustomsDeclaration(string mrn, string duckr, List<string> links)
+    private static async Task CreateCustomsDeclaration(string mrn, string duckr, List<string> links)
     {
         var client = CreateDataApiClient();
 
@@ -119,7 +119,7 @@ public class RelatedImportDeclarationsTests : IntegrationTestBase
         await client.PutCustomsDeclaration(mrn, cd, null, CancellationToken.None);
     }
 
-    private async Task CreateImportPreNotification(string chedId)
+    private static async Task CreateImportPreNotification(string chedId)
     {
         var client = CreateDataApiClient();
 

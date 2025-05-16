@@ -689,36 +689,44 @@
         "tags": [
           "RelatedImportDeclarations"
         ],
-        "summary": "related-import-declarations",
-        "description": "related-import-declarations",
-        "operationId": "related-import-declarations",
+        "summary": "Get RelatedImportDeclarations",
+        "description": "Get all import declarations that are related to each other",
+        "operationId": "GetRelatedImportDeclarations",
         "parameters": [
           {
             "name": "mrn",
             "in": "query",
+            "description": "Search by MRN",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "Search by MRN"
             }
           },
           {
             "name": "ducr",
             "in": "query",
+            "description": "Search by DUCR",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "Search by DUCR"
             }
           },
           {
             "name": "chedId",
             "in": "query",
+            "description": "Search by CHED ID",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "Search by CHED ID"
             }
           },
           {
             "name": "maxLinkDepth",
             "in": "query",
+            "description": "Max link depth to follow. Default is 3.",
             "schema": {
               "type": "integer",
+              "description": "Max link depth to follow. Default is 3.",
               "format": "int32"
             }
           }
