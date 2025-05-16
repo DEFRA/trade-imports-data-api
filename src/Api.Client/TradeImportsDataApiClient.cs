@@ -48,6 +48,19 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
         return result;
     }
 
+    public async Task<List<GmrResponse>?> GetGmrsByChedId(string chedId, CancellationToken cancellationToken)
+    {
+        var response = await Get(Endpoints.GmrsByChed(chedId), cancellationToken);
+        if (response.StatusCode == HttpStatusCode.NotFound)
+            return null;
+
+        response.EnsureSuccessStatusCode();
+
+        var result = await Deserialize<List<GmrResponse>?>(response, cancellationToken);
+
+        return result;
+    }
+
     public async Task PutImportPreNotification(
         string chedId,
         ImportPreNotification data,

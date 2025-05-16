@@ -9,6 +9,8 @@ internal static class Endpoints
     public static string CustomsDeclarationsByChed(string chedId) =>
         $"/import-pre-notifications/{chedId}/customs-declarations";
 
+    public static string GmrsByChed(string chedId) => $"/import-pre-notifications/{chedId}/gmrs";
+
     public static string Gmrs(string gmrId) => $"/gmrs/{gmrId}";
 
     public static string CustomsDeclarations(string mrn) => $"/customs-declarations/{mrn}";

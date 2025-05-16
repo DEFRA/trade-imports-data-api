@@ -212,6 +212,63 @@
         }
       }
     },
+    "/import-pre-notifications/{chedId}/gmrs": {
+      "get": {
+        "tags": [
+          "EndpointRouteBuilderExtensions"
+        ],
+        "summary": "Get Gmrs by CHED ID",
+        "description": "Get associated Gmrs by CHED ID",
+        "operationId": "ImportPreNotifications",
+        "parameters": [
+          {
+            "name": "chedId",
+            "in": "path",
+            "description": "CHED ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "CHEDA.GB.2024.1020304"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations.CustomsDeclarationResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/gmrs/{gmrId}": {
       "get": {
         "tags": [
