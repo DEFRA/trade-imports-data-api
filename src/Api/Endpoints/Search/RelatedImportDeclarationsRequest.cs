@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Defra.TradeImportsDataApi.Api.Endpoints.Search;
@@ -5,14 +6,18 @@ namespace Defra.TradeImportsDataApi.Api.Endpoints.Search;
 public class RelatedImportDeclarationsRequest
 {
     [FromQuery(Name = "mrn")]
-    public string? Mrn { get; set; }
+    [Description("Search by MRN")]
+    public string? Mrn { get; init; }
 
     [FromQuery(Name = "ducr")]
-    public string? Ducr { get; set; }
+    [Description("Search by DUCR")]
+    public string? Ducr { get; init; }
 
     [FromQuery(Name = "chedId")]
-    public string? ChedId { get; set; }
+    [Description("Search by CHED ID")]
+    public string? ChedId { get; init; }
 
     [FromQuery(Name = "maxLinkDepth")]
-    public int? MaxLinkDepth { get; set; } = 3;
+    [Description("Max link depth to follow. Default is 3.")]
+    public int? MaxLinkDepth { get; init; } = 3;
 }

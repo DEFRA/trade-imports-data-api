@@ -29,6 +29,6 @@ internal static class Endpoints
             select p.Name + "=" + HttpUtility.UrlEncode(p.GetValue(o, null)?.ToString())
         ).ToList();
 
-        return properties.Any() ? $"?{string.Join("&", properties.ToArray())}" : string.Empty;
+        return properties.Count != 0 ? $"?{string.Join("&", properties.ToArray())}" : string.Empty;
     }
 }

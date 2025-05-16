@@ -56,7 +56,7 @@ public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionNa
     {
         var builder = Builders<T>.Filter;
 
-        if (_entitiesToUpdate.Any())
+        if (_entitiesToUpdate.Count != 0)
         {
             foreach (var item in _entitiesToUpdate)
             {
@@ -88,7 +88,7 @@ public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionNa
 
     private async Task InsertDocuments(CancellationToken cancellationToken)
     {
-        if (_entitiesToInsert.Any())
+        if (_entitiesToInsert.Count != 0)
         {
             foreach (var item in _entitiesToInsert)
             {
