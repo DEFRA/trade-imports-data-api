@@ -15,17 +15,21 @@ public class GmrService(IDbContext dbContext) : IGmrService
         return dbContext.Gmrs.Find(gmrId, cancellationToken);
     }
 
-    public Task<List<GmrEntity>> GetGmrByChedId(string chedId, CancellationToken cancellationToken)
+    public async Task<List<GmrEntity>> GetGmrByChedId(string chedId, CancellationToken cancellationToken)
     {
-        var results =
-            from gmr in dbContext.Gmrs
-            where
-                gmr.Gmr.Declarations != null
-                && gmr.Gmr.Declarations.Customs != null
-                && gmr.Gmr.Declarations.Customs.Any(c => c.Id == chedId)
-            select gmr;
+        var mrnIdentifiers = await dbContext
+            .ImportPreNotifications.Where(x => x.Id == chedId)
+            .SelectMany(x => x.MrnIdentifiers)
+            .ToListAsync(cancellationToken);
 
-        return results.ToListAsync(cancellationToken);
+        if (mrnIdentifiers.Count == 0)
+            return [];
+
+        var gmrs = await dbContext
+            .Gmrs.Where(x => mrnIdentifiers.Intersect(x.MrnIdentifiers).Any())
+            .ToListAsync(cancellationToken);
+
+        return gmrs;
     }
 
     public async Task<GmrEntity> Insert(GmrEntity gmrEntity, CancellationToken cancellationToken)
