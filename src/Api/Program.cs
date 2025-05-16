@@ -141,7 +141,7 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
     builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
     builder.Services.AddAWSService<IAmazonSimpleNotificationService>();
 
-    builder.Services.AddDbContext(builder.Configuration);
+    builder.Services.AddDbContext(builder.Configuration, integrationTest);
 
     builder.Services.AddAuthenticationAuthorization();
 }
