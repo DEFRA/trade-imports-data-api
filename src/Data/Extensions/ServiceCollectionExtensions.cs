@@ -13,15 +13,21 @@ namespace Defra.TradeImportsDataApi.Data.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddDbContext(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddDbContext(
+        this IServiceCollection services,
+        IConfiguration configuration,
+        bool integrationTest
+    )
     {
         services
             .AddOptions<MongoDbOptions>()
             .Bind(configuration.GetSection(MongoDbOptions.SectionName))
             .ValidateDataAnnotations();
 
-        ////services.AddHostedService<MongoIndexService>();
+        if (integrationTest)
+            return services;
 
+        services.AddHostedService<MongoIndexService>();
         services.AddScoped<IDbContext, MongoDbContext>();
         services.AddSingleton(sp =>
         {
