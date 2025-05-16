@@ -177,7 +177,6 @@
         "checks": [
           {
             "checkCode": "CheckCode14e03aeb-2bb2-490a-a962-c447092051c8",
-            "departmentCode": "DepartmentCode49f0ac0d-c7d3-43ec-acdd-cb2241eaf925",
             "decisionCode": "DecisionCode8f0722c4-0964-4f8f-b661-5427eb90874e",
             "decisionsValidUntil": "2023-07-06T19:44:32.7295726",
             "decisionReasons": [
@@ -193,7 +192,6 @@
           },
           {
             "checkCode": "CheckCode7913123f-c2c2-4c4e-a601-d7d3c280573f",
-            "departmentCode": "DepartmentCode67d8f12a-e3d1-4beb-b458-1b2fe12459a9",
             "decisionCode": "DecisionCode58868db0-fb05-4ef5-ac98-20da42a96776",
             "decisionsValidUntil": "2025-09-02T13:18:59.6140076",
             "decisionReasons": [
@@ -209,7 +207,6 @@
           },
           {
             "checkCode": "CheckCodefd32a2c5-0c46-48fe-99fc-80b1f53558a2",
-            "departmentCode": "DepartmentCodebe076291-69b6-46ad-9b0b-f60f995ed6c0",
             "decisionCode": "DecisionCoded1f8a0df-7249-4388-a607-756dc4e254e0",
             "decisionsValidUntil": "2025-05-04T22:00:49.2034485",
             "decisionReasons": [
@@ -230,7 +227,6 @@
         "checks": [
           {
             "checkCode": "CheckCodec6d705be-b2e9-42e9-b5d1-26992d363a40",
-            "departmentCode": "DepartmentCodec4678ef6-d1a1-4f2e-a734-183dc1fbe344",
             "decisionCode": "DecisionCodec36c3e55-f950-42dd-859e-b0dea64cbaca",
             "decisionsValidUntil": "2023-12-25T19:46:48.7660994",
             "decisionReasons": [
@@ -246,7 +242,6 @@
           },
           {
             "checkCode": "CheckCodefb5bf492-d8c8-42c5-8343-a0789eb8ed5e",
-            "departmentCode": "DepartmentCodeef366ada-bfec-48e3-8feb-33a928c0f3a9",
             "decisionCode": "DecisionCode7c7c5712-1361-41c5-827e-e369f0d4c138",
             "decisionsValidUntil": "2024-01-05T20:53:30.5420778",
             "decisionReasons": [
@@ -262,7 +257,6 @@
           },
           {
             "checkCode": "CheckCode91d6d02b-fbb7-46d5-858f-e3c2e2741da4",
-            "departmentCode": "DepartmentCode405b3f07-23ed-4bce-b9b6-fe98b9a754f2",
             "decisionCode": "DecisionCode4c6303a2-ac09-41f1-b765-d6024236da75",
             "decisionsValidUntil": "2023-05-12T16:26:31.7814659",
             "decisionReasons": [
@@ -283,7 +277,6 @@
         "checks": [
           {
             "checkCode": "CheckCodeb1f4e0e2-3674-4e2c-b1cf-758dee4c600a",
-            "departmentCode": "DepartmentCodedb778116-2b43-45d5-9e52-e053eb040138",
             "decisionCode": "DecisionCodeaceb8bf4-3a04-446e-9ac3-d02f5fcf2d04",
             "decisionsValidUntil": "2027-01-20T23:11:33.9465323",
             "decisionReasons": [
@@ -299,7 +292,6 @@
           },
           {
             "checkCode": "CheckCode489a05f6-8966-4cef-af60-62d453fa8f8e",
-            "departmentCode": "DepartmentCode7d931579-b9e6-4857-a39c-aa0f9951d221",
             "decisionCode": "DecisionCode29f543e1-c7f3-4020-a3f5-ebadde55e4e3",
             "decisionsValidUntil": "2024-04-09T02:11:24.6713708",
             "decisionReasons": [
@@ -315,7 +307,6 @@
           },
           {
             "checkCode": "CheckCode65f3bf5a-eebe-4f89-97c6-dc885babe5ac",
-            "departmentCode": "DepartmentCode85818cef-0bf4-4acd-8ae1-68396418aaa5",
             "decisionCode": "DecisionCode94ac08d5-8ef6-4812-96d5-3678c6840f03",
             "decisionsValidUntil": "2026-07-13T10:21:54.2220684",
             "decisionReasons": [

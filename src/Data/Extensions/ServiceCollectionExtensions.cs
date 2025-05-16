@@ -20,7 +20,7 @@ public static class ServiceCollectionExtensions
             .Bind(configuration.GetSection(MongoDbOptions.SectionName))
             .ValidateDataAnnotations();
 
-        //// services.AddHostedService<MongoIndexService>();
+        ////services.AddHostedService<MongoIndexService>();
 
         services.AddScoped<IDbContext, MongoDbContext>();
         services.AddSingleton(sp =>

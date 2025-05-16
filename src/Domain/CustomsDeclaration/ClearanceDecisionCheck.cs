@@ -7,9 +7,6 @@ public class ClearanceDecisionCheck
     [JsonPropertyName("checkCode")]
     public required string CheckCode { get; set; }
 
-    [JsonPropertyName("departmentCode")]
-    public string? DepartmentCode { get; set; }
-
     [JsonPropertyName("decisionCode")]
     public required string DecisionCode { get; set; }
 
