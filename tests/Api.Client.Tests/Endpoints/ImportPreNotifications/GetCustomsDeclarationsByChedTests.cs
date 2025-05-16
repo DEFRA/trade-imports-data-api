@@ -10,13 +10,13 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Defra.TradeImportsDataApi.Api.Client.Tests.Endpoints.ImportPreNotifications;
 
-public class GetCustomsDeclarationsTests : WireMockTestBase<WireMockContext>
+public class GetCustomsDeclarationsByChedTests : WireMockTestBase<WireMockContext>
 {
     private TradeImportsDataApiClient Subject { get; }
 
     private readonly VerifySettings _settings;
 
-    public GetCustomsDeclarationsTests(WireMockContext context)
+    public GetCustomsDeclarationsByChedTests(WireMockContext context)
         : base(context)
     {
         Subject = new TradeImportsDataApiClient(context.HttpClient);
@@ -28,7 +28,7 @@ public class GetCustomsDeclarationsTests : WireMockTestBase<WireMockContext>
     }
 
     [Fact]
-    public async Task GetImportPreNotification_WhenNotFound_ShouldBeNull()
+    public async Task GetCustomDeclarationsByChed_WhenNotFound_ShouldBeNull()
     {
         var result = await Subject.GetCustomsDeclarationsByChedId("unknown", CancellationToken.None);
 

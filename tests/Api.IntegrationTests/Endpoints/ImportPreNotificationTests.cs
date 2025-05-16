@@ -1,4 +1,5 @@
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
+using Defra.TradeImportsDataApi.Domain.Gvms;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using Defra.TradeImportsDataApi.Testing;
 using FluentAssertions;
@@ -25,7 +26,7 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
     }
 
     [Fact]
-    public async Task WhenRelatedCustomsDeclarationsDoesNotExist_ShouldCreateAndRead()
+    public async Task WhenRelatedCustomsDeclarationsDoNotExist_ShouldReturnAnEmptyList()
     {
         var client = CreateDataApiClient();
         var chedRef = ImportPreNotificationIdGenerator.Generate();
@@ -43,6 +44,27 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
         var cdResult = await client.GetCustomsDeclarationsByChedId(chedRef, CancellationToken.None);
         cdResult.Should().NotBeNull();
         cdResult.Count.Should().Be(0);
+    }
+
+    [Fact]
+    public async Task WhenRelatedGmrsDoNotExist_ShouldReturnAnEmptyList()
+    {
+        var client = CreateDataApiClient();
+        var chedRef = ImportPreNotificationIdGenerator.Generate();
+
+        var result = await client.GetImportPreNotification(chedRef, CancellationToken.None);
+        result.Should().BeNull();
+
+        await client.PutImportPreNotification(
+            chedRef,
+            new ImportPreNotification { ReferenceNumber = chedRef, Version = 1 },
+            null,
+            CancellationToken.None
+        );
+
+        var gmrsResult = await client.GetGmrsByChedId(chedRef, CancellationToken.None);
+        gmrsResult.Should().NotBeNull();
+        gmrsResult.Count.Should().Be(0);
     }
 
     [Fact]
@@ -135,6 +157,65 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
         var actualResult = await client.GetCustomsDeclarationsByChedId(chedRef, CancellationToken.None);
         actualResult.Should().NotBeNull();
         actualResult.Count.Should().Be(1);
+    }
+
+    [Fact]
+    public async Task WhenRelatedGmrsExists_ShouldReturnThem()
+    {
+        var client = CreateDataApiClient();
+        const string chedRef = "CHEDA.GB.2025.1234567";
+        const string gmrId = "gmr123";
+
+        var result = await client.GetImportPreNotification(chedRef, CancellationToken.None);
+
+        if (result is null)
+        {
+            await client.PutImportPreNotification(
+                chedRef,
+                new ImportPreNotification { ReferenceNumber = chedRef, Version = 1 },
+                null,
+                CancellationToken.None
+            );
+        }
+
+        var cdResult = await client.GetGmr(gmrId, CancellationToken.None);
+
+        if (cdResult is null)
+        {
+            await client.PutGmr(
+                gmrId,
+                new Gmr
+                {
+                    Id = gmrId,
+                    HaulierEori = "GB1196193155298",
+                    State = "OPEN",
+                    InspectionRequired = null,
+                    ReportToLocations = null,
+                    UpdatedSource = new DateTime(2025, 4, 7, 11, 0, 0, DateTimeKind.Utc),
+                    Direction = "UK_INBOUND",
+                    HaulierType = "NATO_MOD",
+                    IsUnaccompanied = true,
+                    VehicleRegistrationNumber = "SAUSAGE",
+                    TrailerRegistrationNums = ["trn12345"],
+                    ContainerReferenceNums = null,
+                    PlannedCrossing = new PlannedCrossing
+                    {
+                        DepartsAt = new DateTime(2025, 4, 7, 11, 0, 0, DateTimeKind.Unspecified),
+                        RouteId = "19",
+                    },
+                    CheckedInCrossing = null,
+                    ActualCrossing = null,
+                    Declarations = new Declarations { Customs = [new Customs { Id = chedRef }] },
+                },
+                null,
+                CancellationToken.None
+            );
+        }
+
+        var actualResult = await client.GetGmrsByChedId(chedRef, CancellationToken.None);
+        actualResult.Should().NotBeNull();
+        actualResult.Count.Should().Be(1);
+        actualResult[0].Gmr.Id = gmrId;
     }
 
     [Fact]
