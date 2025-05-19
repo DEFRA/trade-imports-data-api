@@ -23,6 +23,7 @@ public static class EndpointRouteBuilderExtensions
             .WithDescription("Get a Customs Declaration by MRN")
             .Produces<CustomsDeclarationResponse>()
             .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesProblem(StatusCodes.Status404NotFound)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .RequireAuthorization(PolicyNames.Read);
 
