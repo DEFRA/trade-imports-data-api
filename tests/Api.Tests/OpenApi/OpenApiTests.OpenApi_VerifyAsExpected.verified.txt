@@ -802,8 +802,7 @@
         "type": "object",
         "properties": {
           "movementReferenceNumber": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "clearanceRequest": {
             "allOf": [
@@ -856,8 +855,7 @@
               {
                 "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Gvms.Gmr"
               }
-            ],
-            "nullable": true
+            ]
           },
           "created": {
             "type": "string",
@@ -878,8 +876,7 @@
               {
                 "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Ipaffs.ImportPreNotification"
               }
-            ],
-            "nullable": true
+            ]
           },
           "created": {
             "type": "string",
@@ -896,16 +893,14 @@
         "type": "object",
         "properties": {
           "movementReferenceNumber": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "processingError": {
             "allOf": [
               {
                 "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.ProcessingErrors.ProcessingError"
               }
-            ],
-            "nullable": true
+            ]
           },
           "created": {
             "type": "string",
@@ -925,15 +920,13 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations.CustomsDeclarationResponse"
-            },
-            "nullable": true
+            }
           },
           "importPreNotifications": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Api.Endpoints.ImportPreNotifications.ImportPreNotificationResponse"
-            },
-            "nullable": true
+            }
           }
         },
         "additionalProperties": false
@@ -970,8 +963,7 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ClearanceDecisionItem"
-            },
-            "nullable": true
+            }
           }
         },
         "additionalProperties": false
@@ -984,12 +976,10 @@
         "type": "object",
         "properties": {
           "checkCode": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "decisionCode": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "decisionsValidUntil": {
             "type": "string",
@@ -1027,8 +1017,7 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ClearanceDecisionCheck"
-            },
-            "nullable": true
+            }
           }
         },
         "additionalProperties": false
@@ -1257,8 +1246,7 @@
               "6"
             ],
             "type": "string",
-            "description": "Possible values taken from Finalisation schema version v1.",
-            "nullable": true
+            "description": "Possible values taken from Finalisation schema version v1."
           },
           "isManualRelease": {
             "type": "boolean"
@@ -1301,8 +1289,7 @@
         "type": "object",
         "properties": {
           "value": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -1324,12 +1311,10 @@
         "type": "object",
         "properties": {
           "code": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "message": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -1355,8 +1340,7 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.Errors.ErrorItem"
-            },
-            "nullable": true
+            }
           },
           "message": {
             "type": "string",

@@ -102,6 +102,7 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
         c.IncludeXmlComments(typeof(ImportPreNotification).Assembly);
         c.SchemaFilter<PossibleValueSchemaFilter>();
         c.CustomSchemaIds(x => x.FullName);
+        c.SupportNonNullableReferenceTypes();
         c.UseAllOfToExtendReferenceSchemas();
         c.SwaggerDoc(
             "v1",
