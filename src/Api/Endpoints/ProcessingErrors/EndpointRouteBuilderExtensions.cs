@@ -22,6 +22,7 @@ public static class EndpointRouteBuilderExtensions
             .WithDescription("Get a Processing Error by MRN")
             .Produces<ProcessingErrorResponse>()
             .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesProblem(StatusCodes.Status404NotFound)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .RequireAuthorization(PolicyNames.Read);
 

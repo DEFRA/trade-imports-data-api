@@ -24,6 +24,7 @@ public static class EndpointRouteBuilderExtensions
             .WithDescription("Get an import pre-notification by CHED ID")
             .Produces<ImportPreNotificationResponse>()
             .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesProblem(StatusCodes.Status404NotFound)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .RequireAuthorization(PolicyNames.Read);
 
