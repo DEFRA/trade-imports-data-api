@@ -1,5 +1,6 @@
 using Defra.TradeImportsDataApi.Api.Authentication;
 using Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations;
+using Defra.TradeImportsDataApi.Api.Endpoints.Gmrs;
 using Defra.TradeImportsDataApi.Api.Exceptions;
 using Defra.TradeImportsDataApi.Api.Extensions;
 using Defra.TradeImportsDataApi.Api.Services;
@@ -34,6 +35,16 @@ public static class EndpointRouteBuilderExtensions
             .WithSummary("Get CustomsDeclarations by CHED ID")
             .WithDescription("Get associated customs declarations by CHED ID")
             .Produces<List<CustomsDeclarationResponse>>()
+            .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesProblem(StatusCodes.Status500InternalServerError)
+            .RequireAuthorization(PolicyNames.Read);
+
+        app.MapGet("import-pre-notifications/{chedId}/gmrs", GetGmrs)
+            .WithName("GetGmrsByChedId")
+            .WithName(groupName)
+            .WithSummary("Get Gmrs by CHED ID")
+            .WithDescription("Get associated Gmrs by CHED ID")
+            .Produces<List<GmrResponse>>()
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .RequireAuthorization(PolicyNames.Read);
@@ -117,6 +128,28 @@ public static class EndpointRouteBuilderExtensions
                     customsDeclarationEntity.Updated
                 ))
                 .ToList()
+        );
+    }
+
+    /// <param name="chedId" example="CHEDA.GB.2024.1020304">CHED ID</param>
+    /// <param name="context"></param>
+    /// <param name="importPreNotificationService"></param>
+    /// <param name="gmrsService"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpGet]
+    private static async Task<IResult> GetGmrs(
+        [FromRoute] string chedId,
+        HttpContext context,
+        [FromServices] IImportPreNotificationService importPreNotificationService,
+        [FromServices] IGmrService gmrsService,
+        CancellationToken cancellationToken
+    )
+    {
+        var gmrs = await gmrsService.GetGmrByChedId(chedId, cancellationToken);
+
+        return Results.Ok(
+            gmrs.Select(gmrEntity => new GmrResponse(gmrEntity.Gmr, gmrEntity.Created, gmrEntity.Updated)).ToList()
         );
     }
 
