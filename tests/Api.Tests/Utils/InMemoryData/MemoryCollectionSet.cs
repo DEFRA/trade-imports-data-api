@@ -9,13 +9,13 @@ namespace Defra.TradeImportsDataApi.Api.Tests.Utils.InMemoryData;
 public class MemoryCollectionSet<T> : IMongoCollectionSet<T>
     where T : IDataEntity
 {
-    private readonly List<T> data = [];
+    private readonly List<T> _data = [];
 
-    private IQueryable<T> EntityQueryable => data.AsQueryable();
+    private IQueryable<T> EntityQueryable => _data.AsQueryable();
 
     public IEnumerator<T> GetEnumerator()
     {
-        return data.GetEnumerator();
+        return _data.GetEnumerator();
     }
 
     IEnumerator IEnumerable.GetEnumerator()
@@ -31,17 +31,22 @@ public class MemoryCollectionSet<T> : IMongoCollectionSet<T>
 
     internal void AddTestData(T item)
     {
-        data.Add(item);
+        _data.Add(item);
     }
 
     public Task<T?> Find(string id, CancellationToken cancellationToken = default)
     {
-        return Task.FromResult(data.Find(x => x.Id == id));
+        return Task.FromResult(_data.Find(x => x.Id == id));
     }
 
     public Task<T?> Find(Expression<Func<T, bool>> query, CancellationToken cancellationToken = default)
     {
-        return Task.FromResult(data.Find(i => query.Compile()(i)));
+        return Task.FromResult(_data.Find(i => query.Compile()(i)));
+    }
+
+    public Task<List<T>> FindMany(Expression<Func<T, bool>> query, CancellationToken cancellationToken = default)
+    {
+        return Task.FromResult(_data.FindAll(i => query.Compile()(i)));
     }
 
     public Task Insert(T item, CancellationToken cancellationToken = default)

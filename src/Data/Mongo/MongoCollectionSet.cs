@@ -45,6 +45,11 @@ public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionNa
         return await EntityQueryable.FirstOrDefaultAsync(query, cancellationToken: cancellationToken);
     }
 
+    public async Task<List<T>> FindMany(Expression<Func<T, bool>> query, CancellationToken cancellationToken = default)
+    {
+        return await EntityQueryable.Where(query).ToListAsync(cancellationToken);
+    }
+
     public async Task PersistAsync(CancellationToken cancellationToken)
     {
         await InsertDocuments(cancellationToken);
