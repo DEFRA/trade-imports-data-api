@@ -32,7 +32,7 @@ public static class EndpointRouteBuilderExtensions
             .WithTags(groupName)
             .WithSummary("Get ImportPreNotifications by MRN")
             .WithDescription("Get associated import pre-notifications by MRN")
-            .Produces<List<ImportPreNotificationResponse>>()
+            .Produces<ImportPreNotificationsResponse>()
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .RequireAuthorization(PolicyNames.Read);
@@ -106,9 +106,11 @@ public static class EndpointRouteBuilderExtensions
         );
 
         return Results.Ok(
-            importPreNotifications
-                .Select(x => new ImportPreNotificationResponse(x.ImportPreNotification, x.Created, x.Updated))
-                .ToList()
+            new ImportPreNotificationsResponse(
+                importPreNotifications
+                    .Select(x => new ImportPreNotificationResponse(x.ImportPreNotification, x.Created, x.Updated))
+                    .ToList()
+            )
         );
     }
 

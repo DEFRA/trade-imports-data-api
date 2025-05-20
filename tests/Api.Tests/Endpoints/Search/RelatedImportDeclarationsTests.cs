@@ -34,6 +34,7 @@ public class RelatedImportDeclarationsTests : EndpointTestBase, IClassFixture<Wi
         _settings.ScrubMember("traceId");
         _settings.DontScrubDateTimes();
         _settings.DontScrubGuids();
+        _settings.DontIgnoreEmptyCollections();
     }
 
     protected override void ConfigureTestServices(IServiceCollection services)

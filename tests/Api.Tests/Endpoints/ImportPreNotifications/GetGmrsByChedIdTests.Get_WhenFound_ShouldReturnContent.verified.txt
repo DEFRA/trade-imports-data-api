@@ -1,24 +1,26 @@
-﻿[
-  {
-    gmr: {
-      id: null,
-      haulierEori: null,
-      state: null,
-      inspectionRequired: null,
-      reportToLocations: null,
-      updatedSource: null,
-      direction: null,
-      haulierType: null,
-      isUnaccompanied: null,
-      vehicleRegistrationNumber: null,
-      trailerRegistrationNums: null,
-      containerReferenceNums: null,
-      plannedCrossing: null,
-      checkedInCrossing: null,
-      actualCrossing: null,
-      declarations: null
-    },
-    created: 2025-04-03T10:00:00Z,
-    updated: 2025-04-03T10:15:00Z
-  }
-]
+﻿{
+  gmrs: [
+    {
+      gmr: {
+        id: null,
+        haulierEori: null,
+        state: null,
+        inspectionRequired: null,
+        reportToLocations: null,
+        updatedSource: null,
+        direction: null,
+        haulierType: null,
+        isUnaccompanied: null,
+        vehicleRegistrationNumber: null,
+        trailerRegistrationNums: null,
+        containerReferenceNums: null,
+        plannedCrossing: null,
+        checkedInCrossing: null,
+        actualCrossing: null,
+        declarations: null
+      },
+      created: 2025-04-03T10:00:00Z,
+      updated: 2025-04-03T10:15:00Z
+    }
+  ]
+}

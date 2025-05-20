@@ -191,10 +191,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Api.Endpoints.ImportPreNotifications.ImportPreNotificationResponse"
-                  }
+                  "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Api.Endpoints.ImportPreNotifications.ImportPreNotificationsResponse"
                 }
               }
             }
@@ -248,10 +245,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Api.Endpoints.Gmrs.GmrResponse"
-                  }
+                  "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Api.Endpoints.Gmrs.GmrsResponse"
                 }
               }
             }
@@ -600,10 +594,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations.CustomsDeclarationResponse"
-                  }
+                  "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations.CustomsDeclarationsResponse"
                 }
               }
             }
@@ -904,6 +895,18 @@
         },
         "additionalProperties": false
       },
+      "Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations.CustomsDeclarationsResponse": {
+        "type": "object",
+        "properties": {
+          "customsDeclarations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations.CustomsDeclarationResponse"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
       "Defra.TradeImportsDataApi.Api.Endpoints.Gmrs.GmrResponse": {
         "type": "object",
         "properties": {
@@ -925,6 +928,18 @@
         },
         "additionalProperties": false
       },
+      "Defra.TradeImportsDataApi.Api.Endpoints.Gmrs.GmrsResponse": {
+        "type": "object",
+        "properties": {
+          "gmrs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Api.Endpoints.Gmrs.GmrResponse"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
       "Defra.TradeImportsDataApi.Api.Endpoints.ImportPreNotifications.ImportPreNotificationResponse": {
         "type": "object",
         "properties": {
@@ -942,6 +957,18 @@
           "updated": {
             "type": "string",
             "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Defra.TradeImportsDataApi.Api.Endpoints.ImportPreNotifications.ImportPreNotificationsResponse": {
+        "type": "object",
+        "properties": {
+          "importPreNotifications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Api.Endpoints.ImportPreNotifications.ImportPreNotificationResponse"
+            }
           }
         },
         "additionalProperties": false

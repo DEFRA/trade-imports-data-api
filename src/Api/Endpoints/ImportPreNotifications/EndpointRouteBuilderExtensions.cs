@@ -34,7 +34,7 @@ public static class EndpointRouteBuilderExtensions
             .WithTags(groupName)
             .WithSummary("Get CustomsDeclarations by CHED ID")
             .WithDescription("Get associated customs declarations by CHED ID")
-            .Produces<List<CustomsDeclarationResponse>>()
+            .Produces<CustomsDeclarationsResponse>()
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .RequireAuthorization(PolicyNames.Read);
@@ -44,7 +44,7 @@ public static class EndpointRouteBuilderExtensions
             .WithName(groupName)
             .WithSummary("Get Gmrs by CHED ID")
             .WithDescription("Get associated Gmrs by CHED ID")
-            .Produces<List<GmrResponse>>()
+            .Produces<GmrsResponse>()
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .RequireAuthorization(PolicyNames.Read);
@@ -117,17 +117,19 @@ public static class EndpointRouteBuilderExtensions
         );
 
         return Results.Ok(
-            customsDeclarations
-                .Select(customsDeclarationEntity => new CustomsDeclarationResponse(
-                    customsDeclarationEntity.Id,
-                    customsDeclarationEntity.ClearanceRequest,
-                    customsDeclarationEntity.ClearanceDecision,
-                    customsDeclarationEntity.Finalisation,
-                    customsDeclarationEntity.InboundError,
-                    customsDeclarationEntity.Created,
-                    customsDeclarationEntity.Updated
-                ))
-                .ToList()
+            new CustomsDeclarationsResponse(
+                customsDeclarations
+                    .Select(customsDeclarationEntity => new CustomsDeclarationResponse(
+                        customsDeclarationEntity.Id,
+                        customsDeclarationEntity.ClearanceRequest,
+                        customsDeclarationEntity.ClearanceDecision,
+                        customsDeclarationEntity.Finalisation,
+                        customsDeclarationEntity.InboundError,
+                        customsDeclarationEntity.Created,
+                        customsDeclarationEntity.Updated
+                    ))
+                    .ToList()
+            )
         );
     }
 
@@ -149,7 +151,9 @@ public static class EndpointRouteBuilderExtensions
         var gmrs = await gmrsService.GetGmrByChedId(chedId, cancellationToken);
 
         return Results.Ok(
-            gmrs.Select(gmrEntity => new GmrResponse(gmrEntity.Gmr, gmrEntity.Created, gmrEntity.Updated)).ToList()
+            new GmrsResponse(
+                gmrs.Select(gmrEntity => new GmrResponse(gmrEntity.Gmr, gmrEntity.Created, gmrEntity.Updated)).ToList()
+            )
         );
     }
 
