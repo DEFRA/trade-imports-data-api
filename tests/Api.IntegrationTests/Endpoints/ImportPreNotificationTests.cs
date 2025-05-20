@@ -163,9 +163,10 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
     public async Task WhenRelatedGmrsExists_ShouldReturnThem()
     {
         var client = CreateDataApiClient();
-        const string mrn = "mrn123";
-        const string gmrId = "gmr123";
-        const string chedRef = "CHEDA.GB.2025.9999999";
+        var mrn = Guid.NewGuid().ToString("N");
+        var gmrId = Guid.NewGuid().ToString("N");
+        var gmrIdTwo = Guid.NewGuid().ToString("N");
+        var (chedRef, chedId) = ImportPreNotificationIdGenerator.GenerateReturnId();
 
         var importPreNotification = ImportPreNotificationFixtures.CreateFromSample(
             GetType(),
@@ -186,7 +187,7 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
                         [
                             new ImportDocument
                             {
-                                DocumentReference = new ImportDocumentReference("GBCHD2025.9999999"),
+                                DocumentReference = new ImportDocumentReference($"GBCHD2025.{chedId}"),
                                 DocumentCode = "C640",
                             },
                         ],
@@ -195,64 +196,34 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
             },
         };
 
-        var result = await client.GetImportPreNotification(chedRef, CancellationToken.None);
-
-        if (result is null)
-        {
-            await client.PutImportPreNotification(
-                chedRef,
-                new ImportPreNotification { ReferenceNumber = chedRef, Version = 1 },
-                null,
-                CancellationToken.None
-            );
-        }
-
-        if (await client.GetImportPreNotification(chedRef, CancellationToken.None) is null)
-        {
-            await client.PutImportPreNotification(chedRef, importPreNotification, null, CancellationToken.None);
-        }
-
-        if (await client.GetCustomsDeclaration(mrn, CancellationToken.None) is null)
-        {
-            await client.PutCustomsDeclaration(mrn, customsDeclaration, null, CancellationToken.None);
-        }
-
-        if (await client.GetGmr(gmrId, CancellationToken.None) is null)
-        {
-            await client.PutGmr(
-                gmrId,
-                new Gmr
-                {
-                    Id = gmrId,
-                    HaulierEori = "GB1196193155298",
-                    State = "OPEN",
-                    InspectionRequired = null,
-                    ReportToLocations = null,
-                    UpdatedSource = new DateTime(2025, 4, 7, 11, 0, 0, DateTimeKind.Utc),
-                    Direction = "UK_INBOUND",
-                    HaulierType = "NATO_MOD",
-                    IsUnaccompanied = true,
-                    VehicleRegistrationNumber = "SAUSAGE",
-                    TrailerRegistrationNums = ["trn12345"],
-                    ContainerReferenceNums = null,
-                    PlannedCrossing = new PlannedCrossing
-                    {
-                        DepartsAt = new DateTime(2025, 4, 7, 11, 0, 0, DateTimeKind.Unspecified),
-                        RouteId = "19",
-                    },
-                    CheckedInCrossing = null,
-                    ActualCrossing = null,
-                    Declarations = new Declarations { Customs = [new Customs { Id = mrn }] },
-                },
-                null,
-                CancellationToken.None
-            );
-        }
+        await client.PutImportPreNotification(chedRef, importPreNotification, null, CancellationToken.None);
+        await client.PutCustomsDeclaration(mrn, customsDeclaration, null, CancellationToken.None);
+        await client.PutGmr(
+            gmrId,
+            new Gmr
+            {
+                Id = gmrId,
+                Declarations = new Declarations { Customs = [new Customs { Id = mrn }] },
+            },
+            null,
+            CancellationToken.None
+        );
+        await client.PutGmr(
+            gmrIdTwo,
+            new Gmr
+            {
+                Id = gmrIdTwo,
+                Declarations = new Declarations { Transits = [new Transits { Id = mrn }] },
+            },
+            null,
+            CancellationToken.None
+        );
 
         var actualResult = await client.GetGmrsByChedId(chedRef, CancellationToken.None);
         actualResult.Should().NotBeNull();
-        actualResult.Count.Should().Be(1);
-        actualResult[0].Gmr.Id = gmrId;
+        actualResult.Count.Should().Be(2);
+        actualResult.Should().Contain(g => g.Gmr.Id == gmrId);
+        actualResult.Should().Contain(g => g.Gmr.Id == gmrIdTwo);
     }
 
     [Fact]
