@@ -4,15 +4,25 @@ namespace Defra.TradeImportsDataApi.Testing;
 
 public static class ImportPreNotificationIdGenerator
 {
-    public static string Generate()
+    private static string GenerateId()
     {
-        Random rnd = new Random();
+        var rnd = new Random();
         var sb = new StringBuilder();
-        for (int i = 0; i < 7; i++)
+        for (var i = 0; i < 7; i++)
         {
             sb.Append(rnd.Next(9));
         }
+        return sb.ToString();
+    }
 
-        return $"CHEDA.GB.2025.{sb}";
+    public static string Generate()
+    {
+        return $"CHEDA.GB.2025.{GenerateId()}";
+    }
+
+    public static (string, string) GenerateReturnId()
+    {
+        var id = GenerateId();
+        return ($"CHEDA.GB.2025.{id}", id);
     }
 }
