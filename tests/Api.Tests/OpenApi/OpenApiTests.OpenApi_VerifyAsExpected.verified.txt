@@ -1346,11 +1346,7 @@
             "nullable": true
           },
           "documentReference": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Domain.CustomsDeclaration.ImportDocumentReference"
-              }
-            ],
+            "type": "string",
             "nullable": true
           },
           "documentStatus": {

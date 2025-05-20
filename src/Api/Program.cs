@@ -101,6 +101,7 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
         c.IncludeXmlComments(Assembly.GetExecutingAssembly());
         c.IncludeXmlComments(typeof(ImportPreNotification).Assembly);
         c.SchemaFilter<PossibleValueSchemaFilter>();
+        c.SchemaFilter<JsonConverterSchemaFilter>();
         c.CustomSchemaIds(x => x.FullName);
         c.SupportNonNullableReferenceTypes();
         c.UseAllOfToExtendReferenceSchemas();
