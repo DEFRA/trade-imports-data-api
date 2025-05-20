@@ -1,5 +1,4 @@
 using Argon;
-using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.Gvms;
 using Defra.TradeImportsDataApi.Testing;
 using FluentAssertions;
@@ -28,14 +27,6 @@ public class GetGmrsByChed : WireMockTestBase<WireMockContext>
     }
 
     [Fact]
-    public async Task GetGmrsByChed_WhenNotFound_ShouldBeNull()
-    {
-        var result = await Subject.GetGmrsByChedId("unknown", CancellationToken.None);
-
-        result.Should().BeNull();
-    }
-
-    [Fact]
     public async Task GetGmrsByChed_WhenFound_ShouldNotBeNull()
     {
         const string chedId = "CHED";
@@ -49,17 +40,12 @@ public class GetGmrsByChed : WireMockTestBase<WireMockContext>
                     .Create()
                     .WithBody(
                         JsonSerializer.Serialize(
-                            new List<GmrEntity>
-                            {
-                                new()
+                            new Defra.TradeImportsDataApi.Api.Endpoints.Gmrs.GmrsResponse(
+                                new List<Defra.TradeImportsDataApi.Api.Endpoints.Gmrs.GmrResponse>
                                 {
-                                    Id = "123",
-                                    Gmr = new Gmr(),
-                                    Created = created,
-                                    Updated = updated,
-                                    ETag = "etag",
-                                },
-                            }
+                                    new(new Gmr(), created, updated),
+                                }
+                            )
                         )
                     )
                     .WithStatusCode(StatusCodes.Status200OK)

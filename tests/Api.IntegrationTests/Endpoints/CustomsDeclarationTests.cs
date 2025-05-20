@@ -116,7 +116,7 @@ public class CustomsDeclarationTests(ITestOutputHelper testOutputHelper) : SqsTe
 
         var actualResult = await client.GetImportPreNotificationsByMrn(mrn, CancellationToken.None);
         actualResult.Should().NotBeNull();
-        actualResult.Count.Should().Be(1);
+        actualResult.ImportPreNotifications.Count.Should().Be(1);
     }
 
     [Fact]
