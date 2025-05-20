@@ -102,7 +102,29 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
         c.IncludeXmlComments(typeof(ImportPreNotification).Assembly);
         c.SchemaFilter<PossibleValueSchemaFilter>();
         c.SchemaFilter<JsonConverterSchemaFilter>();
-        c.CustomSchemaIds(x => x.FullName);
+
+        var typeMap = new Dictionary<string, string>
+        {
+            // ReSharper disable once RedundantNameQualifier
+            { typeof(Defra.TradeImportsDataApi.Domain.Ipaffs.CommodityCheck).FullName!, "NotificationCommodityCheck" },
+            {
+                typeof(Defra.TradeImportsDataApi.Domain.CustomsDeclaration.CommodityCheck).FullName!,
+                "CustomsCommodityCheck"
+            },
+        };
+        c.CustomSchemaIds(x =>
+        {
+            var schemaId = x.FullName!;
+
+            if (schemaId.StartsWith("Defra"))
+            {
+                var typeName = typeMap.TryGetValue(x.FullName!, out var mappedTypeName) ? mappedTypeName : x.Name;
+                schemaId = "Defra.TradeImportsDataApi." + typeName;
+            }
+
+            return schemaId;
+        });
+
         c.SupportNonNullableReferenceTypes();
         c.UseAllOfToExtendReferenceSchemas();
         c.SwaggerDoc(
