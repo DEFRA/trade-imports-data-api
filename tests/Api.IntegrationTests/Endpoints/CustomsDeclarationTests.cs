@@ -1,5 +1,6 @@
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
+using Defra.TradeImportsDataApi.Testing;
 using FluentAssertions;
 using Xunit.Abstractions;
 
@@ -67,52 +68,41 @@ public class CustomsDeclarationTests(ITestOutputHelper testOutputHelper) : SqsTe
     public async Task WhenRelatedImportPreNotificationsExists_ShouldRead()
     {
         var client = CreateDataApiClient();
-        var chedRef = "CHEDA.GB.2025.1234567";
-        var mrn = "testmrn123";
+        var (chedRef, chedId) = ImportPreNotificationIdGenerator.GenerateReturnId();
+        var mrn = Guid.NewGuid().ToString("N");
 
-        var result = await client.GetImportPreNotification(chedRef, CancellationToken.None);
-
-        if (result is null)
-        {
-            await client.PutImportPreNotification(
-                chedRef,
-                new ImportPreNotification { ReferenceNumber = chedRef, Version = 1 },
-                null,
-                CancellationToken.None
-            );
-        }
-
-        var cdResult = await client.GetCustomsDeclaration(mrn, CancellationToken.None);
-
-        if (cdResult is null)
-        {
-            await client.PutCustomsDeclaration(
-                mrn,
-                new CustomsDeclaration
+        await client.PutImportPreNotification(
+            chedRef,
+            new ImportPreNotification { ReferenceNumber = chedRef, Version = 1 },
+            null,
+            CancellationToken.None
+        );
+        await client.PutCustomsDeclaration(
+            mrn,
+            new CustomsDeclaration
+            {
+                ClearanceRequest = new ClearanceRequest
                 {
-                    ClearanceRequest = new ClearanceRequest
-                    {
-                        ExternalVersion = 1,
-                        Commodities =
-                        [
-                            new Commodity
-                            {
-                                Documents =
-                                [
-                                    new ImportDocument
-                                    {
-                                        DocumentReference = new ImportDocumentReference("GBCHD2025.1234567"),
-                                        DocumentCode = "C640",
-                                    },
-                                ],
-                            },
-                        ],
-                    },
+                    ExternalVersion = 1,
+                    Commodities =
+                    [
+                        new Commodity
+                        {
+                            Documents =
+                            [
+                                new ImportDocument
+                                {
+                                    DocumentReference = new ImportDocumentReference($"GBCHD2025.{chedId}"),
+                                    DocumentCode = "C640",
+                                },
+                            ],
+                        },
+                    ],
                 },
-                null,
-                CancellationToken.None
-            );
-        }
+            },
+            null,
+            CancellationToken.None
+        );
 
         var actualResult = await client.GetImportPreNotificationsByMrn(mrn, CancellationToken.None);
         actualResult.Should().NotBeNull();

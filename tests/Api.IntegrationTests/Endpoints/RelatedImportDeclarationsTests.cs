@@ -1,6 +1,7 @@
 using Defra.TradeImportsDataApi.Api.Client;
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
+using Defra.TradeImportsDataApi.Testing;
 using FluentAssertions;
 
 namespace Defra.TradeImportsDataApi.Api.IntegrationTests.Endpoints;
@@ -11,11 +12,10 @@ public class RelatedImportDeclarationsTests : IntegrationTestBase
     public async Task GivenSearchByChedId_WhenExists_AndHasIndirectNotification_AndHasMaxDepth_ThenIndirectNotificationShouldBeReturned()
     {
         var client = CreateDataApiClient();
-
-        await InsertTestData();
+        var (chedRef, _) = await InsertTestData(client);
 
         var response = await client.RelatedImportDeclarations(
-            new RelatedImportDeclarationsRequest { ChedId = "3333333", MaxLinkDepth = 1 },
+            new RelatedImportDeclarationsRequest { ChedId = chedRef, MaxLinkDepth = 1 },
             CancellationToken.None
         );
 
@@ -28,11 +28,10 @@ public class RelatedImportDeclarationsTests : IntegrationTestBase
     public async Task GivenSearchByChedId_WhenExists_AndHasIndirectNotification_AndNoMaxDepth_ThenIndirectNotificationShouldBeReturned()
     {
         var client = CreateDataApiClient();
-
-        await InsertTestData();
+        var (chedRef, _) = await InsertTestData(client);
 
         var response = await client.RelatedImportDeclarations(
-            new RelatedImportDeclarationsRequest { ChedId = "3333333" },
+            new RelatedImportDeclarationsRequest { ChedId = chedRef },
             CancellationToken.None
         );
 
@@ -45,11 +44,10 @@ public class RelatedImportDeclarationsTests : IntegrationTestBase
     public async Task GivenSearchByMrn_WhenExists_AndHasIndirectNotification_AndNoMaxDepth_ThenIndirectNotificationShouldBeReturned()
     {
         var client = CreateDataApiClient();
-
-        await InsertTestData();
+        var (_, random) = await InsertTestData(client);
 
         var response = await client.RelatedImportDeclarations(
-            new RelatedImportDeclarationsRequest { Mrn = "mRn1" },
+            new RelatedImportDeclarationsRequest { Mrn = $"{random}-mRn1" },
             CancellationToken.None
         );
 
@@ -62,11 +60,10 @@ public class RelatedImportDeclarationsTests : IntegrationTestBase
     public async Task GivenSearchByDucr_WhenExists_AndHasIndirectNotification_AndNoMaxDepth_ThenIndirectNotificationShouldBeReturned()
     {
         var client = CreateDataApiClient();
-
-        await InsertTestData();
+        var (_, random) = await InsertTestData(client);
 
         var response = await client.RelatedImportDeclarations(
-            new RelatedImportDeclarationsRequest { Ducr = "dUCr1" },
+            new RelatedImportDeclarationsRequest { Ducr = $"{random}-dUCr1" },
             CancellationToken.None
         );
 
@@ -75,30 +72,34 @@ public class RelatedImportDeclarationsTests : IntegrationTestBase
         response.ImportPreNotifications.Length.Should().Be(4);
     }
 
-    private static async Task InsertTestData()
+    private static async Task<(string ChedRef, string Random)> InsertTestData(TradeImportsDataApiClient client)
     {
+        var chedRef1 = ImportPreNotificationIdGenerator.Generate();
+        var chedRef2 = ImportPreNotificationIdGenerator.Generate();
+        var chedRef3 = ImportPreNotificationIdGenerator.Generate();
+        var chedRef4 = ImportPreNotificationIdGenerator.Generate();
+        var random = Guid.NewGuid().ToString("N");
+
         await Task.WhenAll(
-            CreateImportPreNotification("CHEDA.GB.2025.5555555"),
-            CreateImportPreNotification("CHEDA.GB.2025.4444444"),
-            CreateImportPreNotification("CHEDA.GB.2025.6666666"),
-            CreateImportPreNotification("CHEDA.GB.2025.3333333"),
-            CreateCustomsDeclaration("mrn1", "ducr1", ["GBCVD2025.6666666", "GBCVD2025.3333333"]),
-            CreateCustomsDeclaration("mrn2", "ducr2", ["GBCVD2025.4444444", "GBCVD2025.6666666"]),
-            CreateCustomsDeclaration("mrn3", "ducr3", ["GBCVD2025.5555555", "GBCVD2025.4444444"])
+            CreateImportPreNotification(client, chedRef1),
+            CreateImportPreNotification(client, chedRef2),
+            CreateImportPreNotification(client, chedRef3),
+            CreateImportPreNotification(client, chedRef4),
+            CreateCustomsDeclaration(client, $"{random}-mrn1", $"{random}-ducr1", [chedRef3, chedRef4]),
+            CreateCustomsDeclaration(client, $"{random}-mrn2", $"{random}-ducr2", [chedRef2, chedRef3]),
+            CreateCustomsDeclaration(client, $"{random}-mrn3", $"{random}-ducr3", [chedRef1, chedRef2])
         );
+
+        return (chedRef4, random);
     }
 
-    private static async Task CreateCustomsDeclaration(string mrn, string duckr, List<string> links)
+    private static async Task CreateCustomsDeclaration(
+        TradeImportsDataApiClient client,
+        string mrn,
+        string ducr,
+        List<string> links
+    )
     {
-        var client = CreateDataApiClient();
-
-        var existing = await client.GetCustomsDeclaration(mrn, CancellationToken.None);
-
-        if (existing is not null)
-        {
-            return;
-        }
-
         var documents = links
             .Select(x => new ImportDocument
             {
@@ -111,7 +112,7 @@ public class RelatedImportDeclarationsTests : IntegrationTestBase
         {
             ClearanceRequest = new ClearanceRequest
             {
-                DeclarationUcr = duckr,
+                DeclarationUcr = ducr,
                 Commodities = [new Commodity { Documents = documents }],
             },
         };
@@ -119,17 +120,8 @@ public class RelatedImportDeclarationsTests : IntegrationTestBase
         await client.PutCustomsDeclaration(mrn, cd, null, CancellationToken.None);
     }
 
-    private static async Task CreateImportPreNotification(string chedId)
+    private static async Task CreateImportPreNotification(TradeImportsDataApiClient client, string chedId)
     {
-        var client = CreateDataApiClient();
-
-        var notification = await client.GetImportPreNotification(chedId, CancellationToken.None);
-
-        if (notification is not null)
-        {
-            return;
-        }
-
         await client.PutImportPreNotification(
             chedId,
             new ImportPreNotification { ReferenceNumber = chedId, Version = 1 },
