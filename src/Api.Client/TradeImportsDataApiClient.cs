@@ -32,33 +32,25 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
         };
     }
 
-    public async Task<List<CustomsDeclarationResponse>?> GetCustomsDeclarationsByChedId(
+    public async Task<CustomsDeclarationsResponse> GetCustomsDeclarationsByChedId(
         string chedId,
         CancellationToken cancellationToken
     )
     {
         var response = await Get(Endpoints.CustomsDeclarationsByChed(chedId), cancellationToken);
-        if (response.StatusCode == HttpStatusCode.NotFound)
-            return null;
 
         response.EnsureSuccessStatusCode();
 
-        var result = await Deserialize<List<CustomsDeclarationResponse>?>(response, cancellationToken);
-
-        return result;
+        return await Deserialize<CustomsDeclarationsResponse>(response, cancellationToken);
     }
 
-    public async Task<List<GmrResponse>?> GetGmrsByChedId(string chedId, CancellationToken cancellationToken)
+    public async Task<GmrsResponse> GetGmrsByChedId(string chedId, CancellationToken cancellationToken)
     {
         var response = await Get(Endpoints.GmrsByChed(chedId), cancellationToken);
-        if (response.StatusCode == HttpStatusCode.NotFound)
-            return null;
 
         response.EnsureSuccessStatusCode();
 
-        var result = await Deserialize<List<GmrResponse>?>(response, cancellationToken);
-
-        return result;
+        return await Deserialize<GmrsResponse>(response, cancellationToken);
     }
 
     public async Task PutImportPreNotification(
@@ -117,20 +109,16 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
         };
     }
 
-    public async Task<List<ImportPreNotificationResponse>?> GetImportPreNotificationsByMrn(
+    public async Task<ImportPreNotificationsResponse> GetImportPreNotificationsByMrn(
         string mrn,
         CancellationToken cancellationToken
     )
     {
         var response = await Get(Endpoints.ImportPreNotificationsByMrn(mrn), cancellationToken);
-        if (response.StatusCode == HttpStatusCode.NotFound)
-            return null;
 
         response.EnsureSuccessStatusCode();
 
-        var result = await Deserialize<List<ImportPreNotificationResponse>?>(response, cancellationToken);
-
-        return result;
+        return await Deserialize<ImportPreNotificationsResponse>(response, cancellationToken);
     }
 
     public async Task PutCustomsDeclaration(

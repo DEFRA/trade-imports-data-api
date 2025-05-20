@@ -35,6 +35,7 @@ public class GetCustomsDeclarationsByChedIdTests : EndpointTestBase, IClassFixtu
         _settings.ScrubMember("traceId");
         _settings.DontScrubDateTimes();
         _settings.DontScrubGuids();
+        _settings.DontIgnoreEmptyCollections();
     }
 
     protected override void ConfigureTestServices(IServiceCollection services)
@@ -46,7 +47,7 @@ public class GetCustomsDeclarationsByChedIdTests : EndpointTestBase, IClassFixtu
     }
 
     [Fact]
-    public async Task Get_WhenNotFound_ShouldNotBeFound()
+    public async Task Get_WhenNotFound_ShouldReturnAnEmptyArray()
     {
         var client = CreateClient();
         MockCustomsDeclarationService

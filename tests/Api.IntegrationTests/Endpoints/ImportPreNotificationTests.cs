@@ -43,7 +43,7 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
 
         var cdResult = await client.GetCustomsDeclarationsByChedId(chedRef, CancellationToken.None);
         cdResult.Should().NotBeNull();
-        cdResult.Count.Should().Be(0);
+        cdResult.CustomsDeclarations.Count.Should().Be(0);
     }
 
     [Fact]
@@ -64,7 +64,7 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
 
         var gmrsResult = await client.GetGmrsByChedId(chedRef, CancellationToken.None);
         gmrsResult.Should().NotBeNull();
-        gmrsResult.Count.Should().Be(0);
+        gmrsResult.Gmrs.Count.Should().Be(0);
     }
 
     [Fact]
@@ -156,7 +156,7 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
 
         var actualResult = await client.GetCustomsDeclarationsByChedId(chedRef, CancellationToken.None);
         actualResult.Should().NotBeNull();
-        actualResult.Count.Should().Be(1);
+        actualResult.CustomsDeclarations.Count.Should().Be(1);
     }
 
     [Fact]
@@ -221,9 +221,9 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
 
         var actualResult = await client.GetGmrsByChedId(chedRef, CancellationToken.None);
         actualResult.Should().NotBeNull();
-        actualResult.Count.Should().Be(2);
-        actualResult.Should().Contain(g => g.Gmr.Id == gmrId);
-        actualResult.Should().Contain(g => g.Gmr.Id == gmrIdTwo);
+        actualResult.Gmrs.Count.Should().Be(2);
+        actualResult.Gmrs.Should().Contain(g => g.Gmr.Id == gmrId);
+        actualResult.Gmrs.Should().Contain(g => g.Gmr.Id == gmrIdTwo);
     }
 
     [Fact]

@@ -25,7 +25,8 @@
           Basic SW50ZWdyYXRpb25UZXN0LVJlYWRXcml0ZTppbnRlZ3JhdGlvbi10ZXN0LXJlYWR3cml0ZQ==
         ]
       }
-    ]
+    ],
+    Options: {}
   },
   IsSuccessStatusCode: true
 }

@@ -1,7 +1,7 @@
 using System.Net;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Data.Entities;
-using Defra.TradeImportsDataApi.Domain.Gvms;
+using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using Defra.TradeImportsDataApi.Testing;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,18 +9,19 @@ using NSubstitute;
 using WireMock.Server;
 using Xunit.Abstractions;
 
-namespace Defra.TradeImportsDataApi.Api.Tests.Endpoints.ImportPreNotifications;
+namespace Defra.TradeImportsDataApi.Api.Tests.Endpoints.CustomsDeclarations;
 
-public class GetGmrsByChedIdTests : EndpointTestBase, IClassFixture<WireMockContext>
+public class GetImportPreNotificationsByMrnTests : EndpointTestBase, IClassFixture<WireMockContext>
 {
     private IImportPreNotificationService MockImportPreNotificationService { get; } =
         Substitute.For<IImportPreNotificationService>();
-    private IGmrService MockGmrService { get; } = Substitute.For<IGmrService>();
+    private ICustomsDeclarationService MockCustomsDeclarationService { get; } =
+        Substitute.For<ICustomsDeclarationService>();
     private WireMockServer WireMock { get; }
-    private const string ChedId = "chedId";
+    private const string Mrn = "mrn";
     private readonly VerifySettings _settings;
 
-    public GetGmrsByChedIdTests(
+    public GetImportPreNotificationsByMrnTests(
         ApiWebApplicationFactory factory,
         ITestOutputHelper outputHelper,
         WireMockContext context
@@ -42,19 +43,19 @@ public class GetGmrsByChedIdTests : EndpointTestBase, IClassFixture<WireMockCont
         base.ConfigureTestServices(services);
 
         services.AddTransient<IImportPreNotificationService>(_ => MockImportPreNotificationService);
-        services.AddTransient<IGmrService>(_ => MockGmrService);
+        services.AddTransient<ICustomsDeclarationService>(_ => MockCustomsDeclarationService);
     }
 
     [Fact]
     public async Task Get_WhenNotFound_ShouldReturnAnEmptyArray()
     {
         var client = CreateClient();
-        MockGmrService
-            .GetGmrByChedId(ChedId, Arg.Any<CancellationToken>())
-            .Returns(Task.FromResult(new List<GmrEntity>()));
+        MockImportPreNotificationService
+            .GetImportPreNotificationsByMrn(Mrn, Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(new List<ImportPreNotificationEntity>()));
 
         var response = await client.GetAsync(
-            TradeImportsDataApi.Testing.Endpoints.ImportPreNotifications.GetGmrs(ChedId)
+            TradeImportsDataApi.Testing.Endpoints.CustomsDeclarations.GetImportPreNotifications(Mrn)
         );
 
         await VerifyJson(await response.Content.ReadAsStringAsync(), _settings);
@@ -64,23 +65,23 @@ public class GetGmrsByChedIdTests : EndpointTestBase, IClassFixture<WireMockCont
     public async Task Get_WhenFound_ShouldReturnContent()
     {
         var client = CreateClient();
-        MockGmrService
-            .GetGmrByChedId(ChedId, Arg.Any<CancellationToken>())
+        MockImportPreNotificationService
+            .GetImportPreNotificationsByMrn(Mrn, Arg.Any<CancellationToken>())
             .Returns(
                 [
-                    new GmrEntity
+                    new ImportPreNotificationEntity
                     {
                         Id = "123",
-                        ETag = "456",
+                        ImportPreNotification = new ImportPreNotification(),
                         Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
                         Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
-                        Gmr = new Gmr(),
+                        ETag = "etag",
                     },
                 ]
             );
 
         var response = await client.GetAsync(
-            TradeImportsDataApi.Testing.Endpoints.ImportPreNotifications.GetGmrs(ChedId)
+            TradeImportsDataApi.Testing.Endpoints.CustomsDeclarations.GetImportPreNotifications(Mrn)
         );
 
         await VerifyJson(await response.Content.ReadAsStringAsync(), _settings)
@@ -94,7 +95,7 @@ public class GetGmrsByChedIdTests : EndpointTestBase, IClassFixture<WireMockCont
         var client = CreateClient(addDefaultAuthorizationHeader: false);
 
         var response = await client.GetAsync(
-            TradeImportsDataApi.Testing.Endpoints.ImportPreNotifications.GetGmrs(ChedId)
+            TradeImportsDataApi.Testing.Endpoints.CustomsDeclarations.GetImportPreNotifications(Mrn)
         );
 
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
@@ -106,7 +107,7 @@ public class GetGmrsByChedIdTests : EndpointTestBase, IClassFixture<WireMockCont
         var client = CreateClient(testUser: TestUser.WriteOnly);
 
         var response = await client.GetAsync(
-            TradeImportsDataApi.Testing.Endpoints.ImportPreNotifications.GetGmrs(ChedId)
+            TradeImportsDataApi.Testing.Endpoints.CustomsDeclarations.GetImportPreNotifications(Mrn)
         );
 
         response.StatusCode.Should().Be(HttpStatusCode.Forbidden);

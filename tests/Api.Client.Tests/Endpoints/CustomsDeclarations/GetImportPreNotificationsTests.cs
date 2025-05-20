@@ -26,14 +26,6 @@ public class GetImportPreNotificationsTests : WireMockTestBase<WireMockContext>
     }
 
     [Fact]
-    public async Task GetCustomsDeclaration_WhenNotFound_ShouldBeNull()
-    {
-        var result = await Subject.GetImportPreNotificationsByMrn("unknown", CancellationToken.None);
-
-        result.Should().BeNull();
-    }
-
-    [Fact]
     public async Task GetCustomsDeclaration_WhenFound_ShouldNotBeNull()
     {
         const string mrn = "mrn";
@@ -46,14 +38,16 @@ public class GetImportPreNotificationsTests : WireMockTestBase<WireMockContext>
                     .Create()
                     .WithBody(
                         JsonSerializer.Serialize(
-                            new List<Api.Endpoints.ImportPreNotifications.ImportPreNotificationResponse>
-                            {
-                                new(
-                                    new Domain.Ipaffs.ImportPreNotification { ReferenceNumber = "ched" },
-                                    created,
-                                    updated
-                                ),
-                            }
+                            new Api.Endpoints.ImportPreNotifications.ImportPreNotificationsResponse(
+                                new List<Api.Endpoints.ImportPreNotifications.ImportPreNotificationResponse>
+                                {
+                                    new(
+                                        new Domain.Ipaffs.ImportPreNotification { ReferenceNumber = "ched" },
+                                        created,
+                                        updated
+                                    ),
+                                }
+                            )
                         )
                     )
                     .WithStatusCode(StatusCodes.Status200OK)

@@ -34,6 +34,7 @@ public class RelatedImportDeclarationsTests : EndpointTestBase, IClassFixture<Wi
         _settings.ScrubMember("traceId");
         _settings.DontScrubDateTimes();
         _settings.DontScrubGuids();
+        _settings.DontIgnoreEmptyCollections();
     }
 
     protected override void ConfigureTestServices(IServiceCollection services)
@@ -47,24 +48,21 @@ public class RelatedImportDeclarationsTests : EndpointTestBase, IClassFixture<Wi
     public async Task Search_WhenFound_ShouldReturnContent()
     {
         var client = CreateClient();
-        var mrn = "Mrn1";
         MockSearchService
             .Search(Arg.Any<RelatedImportDeclarationsRequest>(), Arg.Any<CancellationToken>())
             .Returns(
                 new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[]>(
-                    new[]
-                    {
+                    [
                         new CustomsDeclarationEntity
                         {
-                            Id = mrn,
+                            Id = "Mrn1",
                             ClearanceRequest = new ClearanceRequest(),
                             Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
                             Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
                             ETag = "etag",
                         },
-                    },
-                    new[]
-                    {
+                    ],
+                    [
                         new ImportPreNotificationEntity
                         {
                             Id = "ChedId",
@@ -74,12 +72,12 @@ public class RelatedImportDeclarationsTests : EndpointTestBase, IClassFixture<Wi
                             Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
                             ETag = "etag",
                         },
-                    }
+                    ]
                 )
             );
 
         var response = await client.GetAsync(
-            TradeImportsDataApi.Testing.Endpoints.RelatedImportDeclarations.SearchByMrn(mrn)
+            TradeImportsDataApi.Testing.Endpoints.RelatedImportDeclarations.SearchByMrn("Mrn1")
         );
 
         await VerifyJson(await response.Content.ReadAsStringAsync(), _settings)

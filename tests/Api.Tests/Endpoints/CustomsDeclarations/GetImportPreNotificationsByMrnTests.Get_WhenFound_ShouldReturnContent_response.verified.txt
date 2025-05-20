@@ -11,20 +11,14 @@
   },
   StatusCode: OK,
   ReasonPhrase: OK,
-  Headers: [
-    {
-      ETag: [
-        "etag"
-      ]
-    }
-  ],
+  Headers: [],
   TrailingHeaders: [],
   RequestMessage: {
     Version: 1.1,
     Method: {
       Method: GET
     },
-    RequestUri: http://localhost/gmrs/gmrId,
+    RequestUri: http://localhost/customs-declarations/mrn/import-pre-notifications,
     Headers: [
       {
         Authorization: [
