@@ -15,7 +15,7 @@ public class RelatedImportDeclarationsTests : IntegrationTestBase
         await InsertTestData();
 
         var response = await client.RelatedImportDeclarations(
-            new RelatedImportDeclarationsRequest() { ChedId = "3333333", MaxLinkDepth = 1 },
+            new RelatedImportDeclarationsRequest { ChedId = "3333333", MaxLinkDepth = 1 },
             CancellationToken.None
         );
 
@@ -32,7 +32,7 @@ public class RelatedImportDeclarationsTests : IntegrationTestBase
         await InsertTestData();
 
         var response = await client.RelatedImportDeclarations(
-            new RelatedImportDeclarationsRequest() { ChedId = "3333333" },
+            new RelatedImportDeclarationsRequest { ChedId = "3333333" },
             CancellationToken.None
         );
 
@@ -49,7 +49,7 @@ public class RelatedImportDeclarationsTests : IntegrationTestBase
         await InsertTestData();
 
         var response = await client.RelatedImportDeclarations(
-            new RelatedImportDeclarationsRequest() { Mrn = "mRn1" },
+            new RelatedImportDeclarationsRequest { Mrn = "mRn1" },
             CancellationToken.None
         );
 
@@ -66,7 +66,7 @@ public class RelatedImportDeclarationsTests : IntegrationTestBase
         await InsertTestData();
 
         var response = await client.RelatedImportDeclarations(
-            new RelatedImportDeclarationsRequest() { Ducr = "dUCr1" },
+            new RelatedImportDeclarationsRequest { Ducr = "dUCr1" },
             CancellationToken.None
         );
 
@@ -100,19 +100,19 @@ public class RelatedImportDeclarationsTests : IntegrationTestBase
         }
 
         var documents = links
-            .Select(x => new ImportDocument()
+            .Select(x => new ImportDocument
             {
                 DocumentReference = new ImportDocumentReference(x),
                 DocumentCode = "C640",
             })
             .ToArray();
 
-        var cd = new CustomsDeclaration()
+        var cd = new CustomsDeclaration
         {
-            ClearanceRequest = new ClearanceRequest()
+            ClearanceRequest = new ClearanceRequest
             {
                 DeclarationUcr = duckr,
-                Commodities = [new Commodity() { Documents = documents }],
+                Commodities = [new Commodity { Documents = documents }],
             },
         };
 

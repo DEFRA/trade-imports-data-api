@@ -4,5 +4,5 @@ namespace Defra.TradeImportsDataApi.Api.Endpoints.ImportPreNotifications;
 
 public record ImportPreNotificationsResponse(
     [property: JsonPropertyName("importPreNotifications")]
-    IReadOnlyList<ImportPreNotificationResponse> ImportPreNotifications
+        IReadOnlyList<ImportPreNotificationResponse> ImportPreNotifications
 );

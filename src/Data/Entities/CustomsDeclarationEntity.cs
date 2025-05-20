@@ -6,7 +6,7 @@ public class CustomsDeclarationEntity : IDataEntity
 {
     public required string Id { get; set; }
 
-    public List<string> ImportPreNotificationIdentifiers { get; set; } = new();
+    public List<string> ImportPreNotificationIdentifiers { get; set; } = [];
 
     public string ETag { get; set; } = null!;
 

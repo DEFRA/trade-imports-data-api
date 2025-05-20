@@ -29,7 +29,7 @@ public class RelatedImportDeclarationsServiceTests
         var memoryDbContext = new MemoryDbContext();
 
         memoryDbContext.CustomsDeclarations.AddTestData(
-            new()
+            new CustomsDeclarationEntity
             {
                 Id = mrn,
                 ImportPreNotificationIdentifiers = ["123"],
@@ -42,10 +42,7 @@ public class RelatedImportDeclarationsServiceTests
 
         var subject = new RelatedImportDeclarationsService(memoryDbContext);
 
-        var response = await subject.Search(
-            new RelatedImportDeclarationsRequest() { Mrn = mrn },
-            CancellationToken.None
-        );
+        var response = await subject.Search(new RelatedImportDeclarationsRequest { Mrn = mrn }, CancellationToken.None);
 
         response.Should().NotBeNull();
         response.CustomsDeclaration.Length.Should().Be(1);
@@ -59,25 +56,25 @@ public class RelatedImportDeclarationsServiceTests
         var memoryDbContext = new MemoryDbContext();
 
         memoryDbContext.CustomsDeclarations.AddTestData(
-            new()
+            new CustomsDeclarationEntity
             {
                 Id = mrn,
                 ImportPreNotificationIdentifiers = ["1234567"],
-                ClearanceRequest = new ClearanceRequest()
+                ClearanceRequest = new ClearanceRequest
                 {
                     DeclarationUcr = "ducr123",
                     Commodities =
                     [
-                        new Commodity()
+                        new Commodity
                         {
-                            Documents = new[]
-                            {
-                                new ImportDocument()
+                            Documents =
+                            [
+                                new ImportDocument
                                 {
                                     DocumentCode = "C640",
                                     DocumentReference = new ImportDocumentReference("CHEDA.GB.2025.1234567"),
                                 },
-                            },
+                            ],
                         },
                     ],
                 },
@@ -88,7 +85,7 @@ public class RelatedImportDeclarationsServiceTests
         );
 
         memoryDbContext.ImportPreNotifications.AddTestData(
-            new()
+            new ImportPreNotificationEntity
             {
                 Id = "CHEDA.GB.2025.1234567",
                 CustomsDeclarationIdentifier = "1234567",
@@ -101,10 +98,7 @@ public class RelatedImportDeclarationsServiceTests
 
         var subject = new RelatedImportDeclarationsService(memoryDbContext);
 
-        var response = await subject.Search(
-            new RelatedImportDeclarationsRequest() { Mrn = mrn },
-            CancellationToken.None
-        );
+        var response = await subject.Search(new RelatedImportDeclarationsRequest { Mrn = mrn }, CancellationToken.None);
 
         response.Should().NotBeNull();
         response.CustomsDeclaration.Length.Should().Be(1);
@@ -117,11 +111,11 @@ public class RelatedImportDeclarationsServiceTests
         var memoryDbContext = new MemoryDbContext();
 
         memoryDbContext.CustomsDeclarations.AddTestData(
-            new()
+            new CustomsDeclarationEntity
             {
                 Id = "mrn",
                 ImportPreNotificationIdentifiers = ["123"],
-                ClearanceRequest = new ClearanceRequest() { DeclarationUcr = "ducr123" },
+                ClearanceRequest = new ClearanceRequest { DeclarationUcr = "ducr123" },
                 Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
                 Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
                 ETag = "etag",
@@ -131,7 +125,7 @@ public class RelatedImportDeclarationsServiceTests
         var subject = new RelatedImportDeclarationsService(memoryDbContext);
 
         var response = await subject.Search(
-            new RelatedImportDeclarationsRequest() { Ducr = "ducr123" },
+            new RelatedImportDeclarationsRequest { Ducr = "ducr123" },
             CancellationToken.None
         );
 
@@ -146,25 +140,25 @@ public class RelatedImportDeclarationsServiceTests
         var memoryDbContext = new MemoryDbContext();
 
         memoryDbContext.CustomsDeclarations.AddTestData(
-            new()
+            new CustomsDeclarationEntity
             {
                 Id = "mrn",
                 ImportPreNotificationIdentifiers = ["1234567"],
-                ClearanceRequest = new ClearanceRequest()
+                ClearanceRequest = new ClearanceRequest
                 {
                     DeclarationUcr = "ducr123",
                     Commodities =
                     [
-                        new Commodity()
+                        new Commodity
                         {
-                            Documents = new[]
-                            {
-                                new ImportDocument()
+                            Documents =
+                            [
+                                new ImportDocument
                                 {
                                     DocumentCode = "C640",
                                     DocumentReference = new ImportDocumentReference("CHEDA.GB.2025.1234567"),
                                 },
-                            },
+                            ],
                         },
                     ],
                 },
@@ -175,7 +169,7 @@ public class RelatedImportDeclarationsServiceTests
         );
 
         memoryDbContext.ImportPreNotifications.AddTestData(
-            new()
+            new ImportPreNotificationEntity
             {
                 Id = "CHEDA.GB.2025.1234567",
                 CustomsDeclarationIdentifier = "1234567",
@@ -189,7 +183,7 @@ public class RelatedImportDeclarationsServiceTests
         var subject = new RelatedImportDeclarationsService(memoryDbContext);
 
         var response = await subject.Search(
-            new RelatedImportDeclarationsRequest() { Ducr = "ducr123" },
+            new RelatedImportDeclarationsRequest { Ducr = "ducr123" },
             CancellationToken.None
         );
 
@@ -208,7 +202,7 @@ public class RelatedImportDeclarationsServiceTests
         var memoryDbContext = new MemoryDbContext();
 
         memoryDbContext.ImportPreNotifications.AddTestData(
-            new()
+            new ImportPreNotificationEntity
             {
                 Id = "CHEDA.GB.2025.1234567",
                 CustomsDeclarationIdentifier = "1234567",
@@ -222,7 +216,7 @@ public class RelatedImportDeclarationsServiceTests
         var subject = new RelatedImportDeclarationsService(memoryDbContext);
 
         var response = await subject.Search(
-            new RelatedImportDeclarationsRequest() { ChedId = searchChedId },
+            new RelatedImportDeclarationsRequest { ChedId = searchChedId },
             CancellationToken.None
         );
 
@@ -239,7 +233,7 @@ public class RelatedImportDeclarationsServiceTests
         var subject = new RelatedImportDeclarationsService(memoryDbContext);
 
         var response = await subject.Search(
-            new RelatedImportDeclarationsRequest() { ChedId = "1234567" },
+            new RelatedImportDeclarationsRequest { ChedId = "1234567" },
             CancellationToken.None
         );
 
@@ -257,7 +251,7 @@ public class RelatedImportDeclarationsServiceTests
         var subject = new RelatedImportDeclarationsService(memoryDbContext);
 
         var response = await subject.Search(
-            new RelatedImportDeclarationsRequest() { ChedId = "1234510" },
+            new RelatedImportDeclarationsRequest { ChedId = "1234510" },
             CancellationToken.None
         );
 
@@ -275,7 +269,7 @@ public class RelatedImportDeclarationsServiceTests
         var subject = new RelatedImportDeclarationsService(memoryDbContext);
 
         var response = await subject.Search(
-            new RelatedImportDeclarationsRequest() { ChedId = "1234510", MaxLinkDepth = 1 },
+            new RelatedImportDeclarationsRequest { ChedId = "1234510", MaxLinkDepth = 1 },
             CancellationToken.None
         );
 
@@ -298,7 +292,7 @@ public class RelatedImportDeclarationsServiceTests
 
     private static ImportPreNotificationEntity CreateImportPreNotification(string chedId)
     {
-        return new ImportPreNotificationEntity()
+        return new ImportPreNotificationEntity
         {
             Id = chedId,
             CustomsDeclarationIdentifier = chedId.Split('.')[3],
@@ -312,17 +306,17 @@ public class RelatedImportDeclarationsServiceTests
     private static CustomsDeclarationEntity CreateCustomsDeclaration(string mrn, List<string> links)
     {
         var documents = links
-            .Select(x => new ImportDocument()
+            .Select(x => new ImportDocument
             {
                 DocumentReference = new ImportDocumentReference(x),
                 DocumentCode = "C640",
             })
             .ToArray();
-        return new CustomsDeclarationEntity()
+        return new CustomsDeclarationEntity
         {
             Id = mrn,
             ImportPreNotificationIdentifiers = links,
-            ClearanceRequest = new ClearanceRequest() { Commodities = [new Commodity() { Documents = documents }] },
+            ClearanceRequest = new ClearanceRequest { Commodities = [new Commodity { Documents = documents }] },
             Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
             Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
             ETag = "etag",
