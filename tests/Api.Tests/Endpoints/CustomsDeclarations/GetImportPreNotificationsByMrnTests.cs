@@ -47,7 +47,7 @@ public class GetImportPreNotificationsByMrnTests : EndpointTestBase, IClassFixtu
     }
 
     [Fact]
-    public async Task Get_WhenNotFound_ShouldNotBeFound()
+    public async Task Get_WhenNotFound_ShouldReturnAnEmptyArray()
     {
         var client = CreateClient();
         MockImportPreNotificationService
