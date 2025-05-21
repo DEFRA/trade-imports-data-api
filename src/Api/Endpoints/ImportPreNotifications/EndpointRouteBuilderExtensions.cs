@@ -61,6 +61,18 @@ public static class EndpointRouteBuilderExtensions
             .ProducesProblem(StatusCodes.Status409Conflict)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .RequireAuthorization(PolicyNames.Write);
+
+        app.MapGet("import-pre-notification-updates/", GetUpdates)
+            .WithName("GetImportPreNotificationUpdates")
+            .WithTags(groupName)
+            .WithSummary("Get ImportPreNotificationUpdates")
+            .WithDescription(
+                "Get an import pre-notification updated between a period of time, which will include update checks on linked resources"
+            )
+            .Produces<ImportPreNotificationUpdatesResponse>()
+            .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesProblem(StatusCodes.Status500InternalServerError)
+            .RequireAuthorization(PolicyNames.Read);
     }
 
     /// <param name="chedId" example="CHEDA.GB.2024.1020304">CHED ID</param>
@@ -203,5 +215,29 @@ public static class EndpointRouteBuilderExtensions
         {
             return Results.NotFound();
         }
+    }
+
+    /// <param name="request"></param>
+    /// <param name="importPreNotificationService"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpGet]
+    private static async Task<IResult> GetUpdates(
+        [AsParameters] ImportPreNotificationUpdatesRequest request,
+        [FromServices] IImportPreNotificationService importPreNotificationService,
+        CancellationToken cancellationToken
+    )
+    {
+        var result = await importPreNotificationService.GetImportPreNotificationUpdates(
+            request.From,
+            request.To,
+            cancellationToken
+        );
+
+        return Results.Ok(
+            new ImportPreNotificationUpdatesResponse(
+                result.Select(x => new ImportPreNotificationUpdateResponse(x.Id, x.Updated)).ToList()
+            )
+        );
     }
 }
