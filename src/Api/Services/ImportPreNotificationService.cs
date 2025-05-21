@@ -2,7 +2,6 @@ using Defra.TradeImportsDataApi.Api.Exceptions;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.Events;
-using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using MongoDB.Driver.Linq;
 
 namespace Defra.TradeImportsDataApi.Api.Services;
@@ -78,22 +77,17 @@ public class ImportPreNotificationService(IDbContext dbContext, IResourceEventPu
         return importPreNotificationEntity;
     }
 
-    public Task<List<ImportPreNotificationEntity>> GetImportPreNotificationUpdates(
+    public async Task<List<ImportPreNotificationUpdate>> GetImportPreNotificationUpdates(
         DateTime from,
         DateTime to,
         CancellationToken cancellationToken
     )
     {
-        return Task.FromResult(
-            new List<ImportPreNotificationEntity>
-            {
-                new()
-                {
-                    Id = "CHEDPP.GB.2024.5194492",
-                    ImportPreNotification = new ImportPreNotification { ReferenceNumber = "CHEDPP.GB.2024.5194492" },
-                    Updated = new DateTime(2025, 5, 21, 8, 51, 0, DateTimeKind.Utc),
-                },
-            }
-        );
+        var query =
+            from notification in dbContext.ImportPreNotifications
+            where notification.Updated >= @from && notification.Updated < to
+            select new ImportPreNotificationUpdate(notification.Id, notification.Updated);
+
+        return await query.ToListAsync(cancellationToken);
     }
 }
