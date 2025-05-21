@@ -29,6 +29,8 @@ public static class Endpoints
         public static string GetGmrs(string chedId) => $"{Root}/{chedId}/gmrs";
 
         public static string Put(string chedId) => $"{Root}/{chedId}";
+
+        public static string GetUpdates(EndpointQuery? query = null) => $"/import-pre-notification-updates{query}";
     }
 
     public static class CustomsDeclarations

@@ -622,6 +622,72 @@
         }
       }
     },
+    "/import-pre-notification-updates": {
+      "get": {
+        "tags": [
+          "ImportPreNotifications"
+        ],
+        "summary": "Get ImportPreNotificationUpdates",
+        "description": "Get an import pre-notification updated between a period of time, which will include update checks on linked resources",
+        "operationId": "GetImportPreNotificationUpdates",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "description": "Filter import pre notifications updated at this date and time or after this date and time.  Expected value is UTC using format ISO 8601-1:2019",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Filter import pre notifications updated at this date and time or after this date and time.  Expected value is UTC using format ISO 8601-1:2019",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "description": "Filter import pre notifications updated before this date and time. Expected value is UTC using format ISO 8601-1:2019",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Filter import pre notifications updated before this date and time. Expected value is UTC using format ISO 8601-1:2019",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Defra.TradeImportsDataApi.ImportPreNotificationUpdatesResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/processing-errors/{mrn}": {
       "get": {
         "tags": [
@@ -3486,6 +3552,31 @@
           "updated": {
             "type": "string",
             "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Defra.TradeImportsDataApi.ImportPreNotificationUpdateResponse": {
+        "type": "object",
+        "properties": {
+          "referenceNumber": {
+            "type": "string"
+          },
+          "updated": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Defra.TradeImportsDataApi.ImportPreNotificationUpdatesResponse": {
+        "type": "object",
+        "properties": {
+          "importPreNotificationUpdates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.ImportPreNotificationUpdateResponse"
+            }
           }
         },
         "additionalProperties": false

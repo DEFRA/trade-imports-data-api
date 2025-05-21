@@ -10,13 +10,21 @@ public interface IImportPreNotificationService
         string mrn,
         CancellationToken cancellationToken
     );
+
     Task<ImportPreNotificationEntity> Insert(
         ImportPreNotificationEntity importPreNotificationEntity,
         CancellationToken cancellationToken
     );
+
     Task<ImportPreNotificationEntity> Update(
         ImportPreNotificationEntity importPreNotificationEntity,
         string etag,
+        CancellationToken cancellationToken
+    );
+
+    Task<List<ImportPreNotificationEntity>> GetImportPreNotificationUpdates(
+        DateTime from,
+        DateTime to,
         CancellationToken cancellationToken
     );
 }

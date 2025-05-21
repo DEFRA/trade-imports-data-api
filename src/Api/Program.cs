@@ -64,6 +64,11 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
 
     // This adds default rate limiter, total request timeout, retries, circuit breaker and timeout per attempt
     builder.Services.ConfigureHttpClientDefaults(options => options.AddStandardResilienceHandler());
+    builder.Services.Configure<RouteHandlerOptions>(o =>
+    {
+        // Without this, bad request detail will only be thrown in DEVELOPMENT mode
+        o.ThrowOnBadRequest = true;
+    });
     builder.Services.AddProblemDetails();
     builder.Services.AddHealth();
     builder.Services.AddEndpointsApiExplorer();
