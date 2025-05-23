@@ -3,7 +3,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
-using MongoDB.Driver;
 
 namespace Defra.TradeImportsDataApi.Api.Tests.Utils.InMemoryData;
 
@@ -28,7 +27,6 @@ public class MemoryCollectionSet<T> : IMongoCollectionSet<T>
     public Expression Expression => EntityQueryable.Expression;
     public IQueryProvider Provider => EntityQueryable.Provider;
 
-    public IMongoCollection<T> Collection => throw new NotImplementedException();
     public int PendingChanges => 0;
 
     internal void AddTestData(T item)

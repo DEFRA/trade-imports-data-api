@@ -10,10 +10,14 @@ namespace Defra.TradeImportsDataApi.Data.Mongo;
 public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionName = null!) : IMongoCollectionSet<T>
     where T : class, IDataEntity
 {
+    private readonly IMongoCollection<T> _collection = string.IsNullOrEmpty(collectionName)
+        ? dbContext.Database.GetCollection<T>(typeof(T).Name)
+        : dbContext.Database.GetCollection<T>(collectionName);
+
     private readonly List<T> _entitiesToInsert = [];
     private readonly List<(T Item, string Etag)> _entitiesToUpdate = [];
 
-    private IQueryable<T> EntityQueryable => Collection.AsQueryable();
+    private IQueryable<T> EntityQueryable => _collection.AsQueryable();
 
     public IEnumerator<T> GetEnumerator()
     {
@@ -28,11 +32,6 @@ public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionNa
     public Type ElementType => EntityQueryable.ElementType;
     public Expression Expression => EntityQueryable.Expression;
     public IQueryProvider Provider => EntityQueryable.Provider;
-
-    public IMongoCollection<T> Collection { get; } =
-        string.IsNullOrEmpty(collectionName)
-            ? dbContext.Database.GetCollection<T>(typeof(T).Name)
-            : dbContext.Database.GetCollection<T>(collectionName);
 
     public int PendingChanges => _entitiesToInsert.Count + _entitiesToUpdate.Count;
 
@@ -74,8 +73,13 @@ public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionNa
 
                 var session = dbContext.ActiveTransaction?.Session;
                 var updateResult = session is not null
-                    ? await Collection.ReplaceOneAsync(session, filter, item.Item, cancellationToken: cancellationToken)
-                    : await Collection.ReplaceOneAsync(filter, item.Item, cancellationToken: cancellationToken);
+                    ? await _collection.ReplaceOneAsync(
+                        session,
+                        filter,
+                        item.Item,
+                        cancellationToken: cancellationToken
+                    )
+                    : await _collection.ReplaceOneAsync(filter, item.Item, cancellationToken: cancellationToken);
 
                 if (updateResult.ModifiedCount == 0)
                 {
@@ -100,11 +104,11 @@ public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionNa
                 var session = dbContext.ActiveTransaction?.Session;
                 if (session is not null)
                 {
-                    await Collection.InsertOneAsync(session, item, cancellationToken: cancellationToken);
+                    await _collection.InsertOneAsync(session, item, cancellationToken: cancellationToken);
                 }
                 else
                 {
-                    await Collection.InsertOneAsync(item, cancellationToken: cancellationToken);
+                    await _collection.InsertOneAsync(item, cancellationToken: cancellationToken);
                 }
             }
 

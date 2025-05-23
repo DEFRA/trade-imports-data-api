@@ -11,54 +11,21 @@ public class MongoIndexService(IMongoDatabase database, ILogger<MongoIndexServic
 {
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        await CreateImportPreNotificationIndexes(cancellationToken);
-        await CreateCustomsDeclarationIndexes(cancellationToken);
-        await CreateGmrIndexes(cancellationToken);
-    }
-
-    private async Task CreateGmrIndexes(CancellationToken cancellationToken)
-    {
-        await CreateIndex(
-            "MrnIdentifierIdx",
-            Builders<GmrEntity>.IndexKeys.Ascending(x => x.MrnIdentifiers),
-            cancellationToken: cancellationToken
-        );
-        await CreateIndex(
-            "UpdatedIdx",
-            Builders<GmrEntity>.IndexKeys.Ascending(x => x.Updated),
-            cancellationToken: cancellationToken
-        );
-    }
-
-    private async Task CreateCustomsDeclarationIndexes(CancellationToken cancellationToken)
-    {
-        await CreateIndex(
-            "ImportPreNotificationIdentifierIdx",
-            Builders<CustomsDeclarationEntity>.IndexKeys.Ascending(x => x.ImportPreNotificationIdentifiers),
-            cancellationToken: cancellationToken
-        );
-        await CreateIndex(
-            "DeclarationUcrIdx",
-            Builders<CustomsDeclarationEntity>.IndexKeys.Ascending(x => x.ClearanceRequest!.DeclarationUcr),
-            cancellationToken: cancellationToken
-        );
-        await CreateIndex(
-            "UpdatedIdx",
-            Builders<CustomsDeclarationEntity>.IndexKeys.Ascending(x => x.Updated),
-            cancellationToken: cancellationToken
-        );
-    }
-
-    private async Task CreateImportPreNotificationIndexes(CancellationToken cancellationToken)
-    {
         await CreateIndex(
             "CustomDeclarationIdentifierIdx",
-            Builders<ImportPreNotificationEntity>.IndexKeys.Ascending(x => x.CustomsDeclarationIdentifier),
+            Builders<ImportPreNotificationEntity>.IndexKeys.Ascending(n => n.CustomsDeclarationIdentifier),
             cancellationToken: cancellationToken
         );
+
         await CreateIndex(
-            "UpdatedIdx",
-            Builders<ImportPreNotificationEntity>.IndexKeys.Ascending(x => x.Updated),
+            "ImportPreNotificationIdentifierIdx",
+            Builders<CustomsDeclarationEntity>.IndexKeys.Ascending(n => n.ImportPreNotificationIdentifiers),
+            cancellationToken: cancellationToken
+        );
+
+        await CreateIndex(
+            "DeclarationUcrIdx",
+            Builders<CustomsDeclarationEntity>.IndexKeys.Ascending(n => n.ClearanceRequest!.DeclarationUcr),
             cancellationToken: cancellationToken
         );
     }

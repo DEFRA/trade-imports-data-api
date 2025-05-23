@@ -27,7 +27,16 @@ public class GmrService(IDbContext dbContext) : IGmrService
             return [];
 
         return await dbContext.Gmrs.FindMany(
-            x => x.MrnIdentifiers.Any(mrn => customsDeclarationIds.Any(cId => cId == mrn)),
+            x =>
+                x.Gmr.Declarations != null
+                && (
+                    (
+                        x.Gmr.Declarations.Customs != null
+                        && x.Gmr.Declarations.Customs.Any(c => customsDeclarationIds.Any(cId => cId == c.Id))
+                    )
+                    || x.Gmr.Declarations.Transits != null
+                        && x.Gmr.Declarations.Transits.Any(t => customsDeclarationIds.Any(cId => cId == t.Id))
+                ),
             cancellationToken
         );
     }
