@@ -22,7 +22,7 @@ public interface IImportPreNotificationService
         CancellationToken cancellationToken
     );
 
-    Task<List<ImportPreNotificationUpdate>> GetImportPreNotificationUpdates(
+    Task<List<ImportPreNotificationEntity>> GetImportPreNotificationUpdates(
         DateTime from,
         DateTime to,
         CancellationToken cancellationToken

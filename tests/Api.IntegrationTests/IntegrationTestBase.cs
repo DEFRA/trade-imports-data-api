@@ -1,9 +1,5 @@
 using System.Net.Http.Headers;
 using Defra.TradeImportsDataApi.Api.Client;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Conventions;
-using MongoDB.Driver;
-using MongoDB.Driver.Core.Extensions.DiagnosticSources;
 
 namespace Defra.TradeImportsDataApi.Api.IntegrationTests;
 
@@ -11,9 +7,7 @@ namespace Defra.TradeImportsDataApi.Api.IntegrationTests;
 [Collection("Integration Tests")]
 public abstract class IntegrationTestBase
 {
-    protected static TradeImportsDataApiClient CreateDataApiClient() => new(CreateHttpClient());
-
-    protected static HttpClient CreateHttpClient()
+    protected static TradeImportsDataApiClient CreateDataApiClient()
     {
         var httpClient = new HttpClient { BaseAddress = new Uri("http://localhost:8080") };
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
@@ -22,36 +16,6 @@ public abstract class IntegrationTestBase
             Convert.ToBase64String("IntegrationTests:integration-tests-pwd"u8.ToArray())
         );
 
-        return httpClient;
-    }
-
-    protected static IMongoDatabase GetMongoDatabase()
-    {
-        var settings = MongoClientSettings.FromConnectionString("mongodb://127.0.0.1:27017/?directConnection=true");
-
-        settings.ClusterConfigurator = cb =>
-            cb.Subscribe(
-                new DiagnosticsActivityEventSubscriber(new InstrumentationOptions { CaptureCommandText = true })
-            );
-
-        return new MongoClient(settings).GetDatabase("trade-imports-data-api");
-    }
-
-    protected static IMongoCollection<T> GetMongoCollection<T>()
-    {
-        var db = GetMongoDatabase();
-
-        return db.GetCollection<T>(typeof(T).Name);
-    }
-
-    protected IntegrationTestBase()
-    {
-        var conventionPack = new ConventionPack
-        {
-            new CamelCaseElementNameConvention(),
-            new EnumRepresentationConvention(BsonType.String),
-        };
-
-        ConventionRegistry.Register(nameof(conventionPack), conventionPack, _ => true);
+        return new TradeImportsDataApiClient(httpClient);
     }
 }

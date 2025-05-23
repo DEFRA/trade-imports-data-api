@@ -6,8 +6,6 @@ public class GmrEntity : IDataEntity
 {
     public required string Id { get; set; }
 
-    public List<string> MrnIdentifiers { get; set; } = [];
-
     public string ETag { get; set; } = null!;
 
     public DateTime Created { get; set; }
@@ -16,13 +14,5 @@ public class GmrEntity : IDataEntity
 
     public required Gmr Gmr { get; set; }
 
-    public void OnSave()
-    {
-        MrnIdentifiers.Clear();
-
-        var customs = Gmr.Declarations?.Customs?.Select(x => x.Id) ?? [];
-        var transits = Gmr.Declarations?.Transits?.Select(x => x.Id) ?? [];
-
-        MrnIdentifiers.AddRange(customs.Concat(transits).Where(x => !string.IsNullOrWhiteSpace(x))!);
-    }
+    public void OnSave() { }
 }
