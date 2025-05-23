@@ -1,7 +1,5 @@
 using System.Net;
 using Defra.TradeImportsDataApi.Api.Services;
-using Defra.TradeImportsDataApi.Api.Tests.Utils.InMemoryData;
-using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Testing;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +11,8 @@ namespace Defra.TradeImportsDataApi.Api.Tests.Endpoints.ImportPreNotifications;
 
 public class GetUpdatesTests : EndpointTestBase, IClassFixture<WireMockContext>
 {
+    private IImportPreNotificationService MockImportPreNotificationService { get; } =
+        Substitute.For<IImportPreNotificationService>();
     private WireMockServer WireMock { get; }
     private readonly VerifySettings _settings;
 
@@ -33,8 +33,7 @@ public class GetUpdatesTests : EndpointTestBase, IClassFixture<WireMockContext>
     {
         base.ConfigureTestServices(services);
 
-        services.AddTransient<IDbContext>(_ => new MemoryDbContext());
-        services.AddTransient<IResourceEventPublisher>(_ => Substitute.For<IResourceEventPublisher>());
+        services.AddTransient<IImportPreNotificationService>(_ => MockImportPreNotificationService);
     }
 
     [Fact]
@@ -51,12 +50,22 @@ public class GetUpdatesTests : EndpointTestBase, IClassFixture<WireMockContext>
     public async Task Get_WhenValidRequest_ShouldReturnSingle()
     {
         var client = CreateClient();
+        var from = new DateTime(2025, 5, 21, 8, 0, 0, DateTimeKind.Utc);
+        var to = new DateTime(2025, 5, 21, 9, 0, 0, DateTimeKind.Utc);
+        MockImportPreNotificationService
+            .GetImportPreNotificationUpdates(from, to, Arg.Any<CancellationToken>())
+            .Returns(
+                [
+                    new ImportPreNotificationUpdate(
+                        "CHEDPP.GB.2024.5194492",
+                        new DateTime(2025, 5, 21, 8, 51, 0, DateTimeKind.Utc)
+                    ),
+                ]
+            );
 
         var response = await client.GetAsync(
             TradeImportsDataApi.Testing.Endpoints.ImportPreNotifications.GetUpdates(
-                EndpointQuery
-                    .New.Where(EndpointFilter.From(new DateTime(2025, 5, 21, 10, 30, 0, DateTimeKind.Utc)))
-                    .Where(EndpointFilter.To(new DateTime(2025, 5, 21, 10, 40, 0, DateTimeKind.Utc)))
+                EndpointQuery.New.Where(EndpointFilter.From(from)).Where(EndpointFilter.To(to))
             )
         );
 

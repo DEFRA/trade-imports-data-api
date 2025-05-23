@@ -12,6 +12,18 @@ namespace Defra.TradeImportsDataApi.Api.Tests.Services;
 public class ImportPreNotificationServiceTests
 {
     [Fact]
+    public async Task GetImportPreNotification_WhenNotFound_ShouldBeNull()
+    {
+        var mockDbContext = Substitute.For<IDbContext>();
+        var mockResourceEventPublisher = Substitute.For<IResourceEventPublisher>();
+        var subject = new ImportPreNotificationService(mockDbContext, mockResourceEventPublisher);
+
+        var result = await subject.GetImportPreNotification("chedId", CancellationToken.None);
+
+        result.Should().BeNull();
+    }
+
+    [Fact]
     public async Task Insert_ShouldInsertAndPublish()
     {
         var mockDbContext = Substitute.For<IDbContext>();

@@ -107,8 +107,8 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
     public async Task WhenRelatedCustomsDeclarationsExists_ShouldRead()
     {
         var client = CreateDataApiClient();
-        var chedRef = "CHEDA.GB.2025.1234567";
-        var mrn = "testmrn123";
+        var (chedRef, chedId) = ImportPreNotificationIdGenerator.GenerateReturnId();
+        var mrn = Guid.NewGuid().ToString("N");
 
         var result = await client.GetImportPreNotification(chedRef, CancellationToken.None);
 
@@ -141,7 +141,7 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
                                 [
                                     new ImportDocument
                                     {
-                                        DocumentReference = new ImportDocumentReference("GBCHD2025.1234567"),
+                                        DocumentReference = new ImportDocumentReference($"GBCHD2025.{chedId}"),
                                         DocumentCode = "C640",
                                     },
                                 ],
