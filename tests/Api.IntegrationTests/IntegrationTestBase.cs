@@ -25,7 +25,7 @@ public abstract class IntegrationTestBase
         return httpClient;
     }
 
-    protected static IMongoCollection<T> GetMongoCollection<T>()
+    protected static IMongoDatabase GetMongoDatabase()
     {
         var settings = MongoClientSettings.FromConnectionString("mongodb://127.0.0.1:27017/?directConnection=true");
 
@@ -34,7 +34,12 @@ public abstract class IntegrationTestBase
                 new DiagnosticsActivityEventSubscriber(new InstrumentationOptions { CaptureCommandText = true })
             );
 
-        var db = new MongoClient(settings).GetDatabase("trade-imports-data-api");
+        return new MongoClient(settings).GetDatabase("trade-imports-data-api");
+    }
+
+    protected static IMongoCollection<T> GetMongoCollection<T>()
+    {
+        var db = GetMongoDatabase();
 
         return db.GetCollection<T>(typeof(T).Name);
     }
