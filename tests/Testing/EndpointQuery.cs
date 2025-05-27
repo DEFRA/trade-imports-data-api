@@ -12,6 +12,8 @@ public class EndpointQuery
 
     public EndpointQuery Where(EndpointFilter filter) => new([.. _filters, filter]);
 
+    public EndpointQuery Where(EndpointFilter[] filters) => new([.. _filters, .. filters]);
+
     public override string ToString() =>
         _filters.Length == 0 ? string.Empty : "?" + string.Join("&", _filters.Select(f => f.Filter));
 }

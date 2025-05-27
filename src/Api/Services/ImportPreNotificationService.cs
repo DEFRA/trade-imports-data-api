@@ -3,13 +3,18 @@ using Defra.TradeImportsDataApi.Api.Exceptions;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.Events;
+using MongoDB.Bson;
+using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 
 namespace Defra.TradeImportsDataApi.Api.Services;
 
 [ExcludeFromCodeCoverage] // see integration tests
-public class ImportPreNotificationService(IDbContext dbContext, IResourceEventPublisher resourceEventPublisher)
-    : IImportPreNotificationService
+public class ImportPreNotificationService(
+    IDbContext dbContext,
+    IResourceEventPublisher resourceEventPublisher,
+    ILogger<ImportPreNotificationService> logger
+) : IImportPreNotificationService
 {
     public async Task<ImportPreNotificationEntity?> GetImportPreNotification(
         string chedId,
@@ -82,13 +87,61 @@ public class ImportPreNotificationService(IDbContext dbContext, IResourceEventPu
     public async Task<List<ImportPreNotificationUpdate>> GetImportPreNotificationUpdates(
         DateTime from,
         DateTime to,
-        CancellationToken cancellationToken
+        string[]? pointOfEntry = null,
+        string[]? type = null,
+        string[]? status = null,
+        CancellationToken cancellationToken = default
     )
     {
-        var query = dbContext
-            .ImportPreNotifications.Where(x => x.Updated >= from && x.Updated < to)
-            .Select(x => new ImportPreNotificationUpdate(x.Id, x.Updated));
+        // See UpdatesIdx index and field order - query order matches the index field order
+        // _id included in index as final projection produces an update object, which means
+        // only the index is needed to provide the result from this query.
 
-        return await query.ToListAsync(cancellationToken: cancellationToken);
+        var where = new BsonDocument
+        {
+            {
+                "updated",
+                new BsonDocument { { "$gte", from }, { "$lt", to } }
+            },
+        };
+
+        if (pointOfEntry is { Length: > 0 })
+            where.Add(
+                "importPreNotification.partOne.pointOfEntry",
+                new BsonDocument { { "$in", new BsonArray(pointOfEntry) } }
+            );
+
+        if (type is { Length: > 0 })
+            where.Add(
+                "importPreNotification.importNotificationType",
+                new BsonDocument { { "$in", new BsonArray(type) } }
+            );
+
+        if (status is { Length: > 0 })
+            where.Add("importPreNotification.status", new BsonDocument { { "$in", new BsonArray(status) } });
+
+        var pipeline = new[]
+        {
+            new BsonDocument("$match", where),
+            new BsonDocument(
+                "$project",
+                new BsonDocument
+                {
+                    { "referenceNumber", "$_id" },
+                    { "updated", "$updated" },
+                    { "_id", 0 },
+                }
+            ),
+        };
+
+        var rawQuery = string.Join(",\n", pipeline.Select(x => x.ToString()));
+        logger.LogInformation("Updates query: {RawQuery}", rawQuery);
+
+        var aggregate = await dbContext.ImportPreNotifications.Collection.AggregateAsync<ImportPreNotificationUpdate>(
+            pipeline,
+            cancellationToken: cancellationToken
+        );
+
+        return await aggregate.ToListAsync(cancellationToken);
     }
 }

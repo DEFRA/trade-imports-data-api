@@ -652,6 +652,42 @@
               "description": "Filter import pre notifications updated before this date and time. Expected value is UTC using format ISO 8601-1:2019",
               "format": "date-time"
             }
+          },
+          {
+            "name": "pointOfEntry",
+            "in": "query",
+            "description": "Filter import pre notifications by point of entry. Multiple should be specified as pointOfEntry=A&pointOfEntry=B etc.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Filter import pre notifications by point of entry. Multiple should be specified as pointOfEntry=A&pointOfEntry=B etc."
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Filter import pre notifications by type. Multiple should be specified as type=A&type=B etc.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Filter import pre notifications by type. Multiple should be specified as type=A&type=B etc."
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Filter import pre notifications by status. Multiple should be specified as status=A&status=B etc.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Filter import pre notifications by status. Multiple should be specified as status=A&status=B etc."
+            }
           }
         ],
         "responses": {

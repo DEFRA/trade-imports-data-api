@@ -5,6 +5,7 @@ using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.Events;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using FluentAssertions;
+using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 
 namespace Defra.TradeImportsDataApi.Api.Tests.Services;
@@ -16,7 +17,11 @@ public class ImportPreNotificationServiceTests
     {
         var mockDbContext = Substitute.For<IDbContext>();
         var mockResourceEventPublisher = Substitute.For<IResourceEventPublisher>();
-        var subject = new ImportPreNotificationService(mockDbContext, mockResourceEventPublisher);
+        var subject = new ImportPreNotificationService(
+            mockDbContext,
+            mockResourceEventPublisher,
+            NullLogger<ImportPreNotificationService>.Instance
+        );
         var entity = new ImportPreNotificationEntity
         {
             Id = "id",
@@ -42,7 +47,11 @@ public class ImportPreNotificationServiceTests
     {
         var mockDbContext = Substitute.For<IDbContext>();
         var mockResourceEventPublisher = Substitute.For<IResourceEventPublisher>();
-        var subject = new ImportPreNotificationService(mockDbContext, mockResourceEventPublisher);
+        var subject = new ImportPreNotificationService(
+            mockDbContext,
+            mockResourceEventPublisher,
+            NullLogger<ImportPreNotificationService>.Instance
+        );
         var entity = new ImportPreNotificationEntity { Id = "id", ImportPreNotification = new ImportPreNotification() };
 
         var act = async () => await subject.Update(entity, "etag", CancellationToken.None);
@@ -65,7 +74,11 @@ public class ImportPreNotificationServiceTests
                 }
             );
         var mockResourceEventPublisher = Substitute.For<IResourceEventPublisher>();
-        var subject = new ImportPreNotificationService(mockDbContext, mockResourceEventPublisher);
+        var subject = new ImportPreNotificationService(
+            mockDbContext,
+            mockResourceEventPublisher,
+            NullLogger<ImportPreNotificationService>.Instance
+        );
         var entity = new ImportPreNotificationEntity
         {
             Id = id,

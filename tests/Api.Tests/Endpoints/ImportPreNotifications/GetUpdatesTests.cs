@@ -37,11 +37,25 @@ public class GetUpdatesTests : EndpointTestBase, IClassFixture<WireMockContext>
     }
 
     [Fact]
-    public async Task Get_WhenInvalidRequest_ShouldBeBadRequest()
+    public async Task Get_WhenInvalidRequest_NoFromDate_ShouldBeBadRequest()
     {
         var client = CreateClient();
 
         var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.ImportPreNotifications.GetUpdates());
+
+        await VerifyJson(await response.Content.ReadAsStringAsync(), _settings);
+    }
+
+    [Fact]
+    public async Task Get_WhenInvalidRequest_NoToDate_ShouldBeBadRequest()
+    {
+        var client = CreateClient();
+
+        var response = await client.GetAsync(
+            TradeImportsDataApi.Testing.Endpoints.ImportPreNotifications.GetUpdates(
+                EndpointQuery.New.Where(EndpointFilter.From(DateTime.UtcNow))
+            )
+        );
 
         await VerifyJson(await response.Content.ReadAsStringAsync(), _settings);
     }
@@ -52,8 +66,18 @@ public class GetUpdatesTests : EndpointTestBase, IClassFixture<WireMockContext>
         var client = CreateClient();
         var from = new DateTime(2025, 5, 21, 8, 0, 0, DateTimeKind.Utc);
         var to = new DateTime(2025, 5, 21, 9, 0, 0, DateTimeKind.Utc);
+        string[] pointOfEntry = ["BCP1", "BCP2"];
+        string[] type = ["CVEDA", "CVEDP"];
+        string[] status = ["DRAFT", "SUBMITTED"];
         MockImportPreNotificationService
-            .GetImportPreNotificationUpdates(from, to, Arg.Any<CancellationToken>())
+            .GetImportPreNotificationUpdates(
+                from,
+                to,
+                Arg.Is<string[]?>(x => x != null && x.SequenceEqual(pointOfEntry)),
+                Arg.Is<string[]?>(x => x != null && x.SequenceEqual(type)),
+                Arg.Is<string[]?>(x => x != null && x.SequenceEqual(status)),
+                Arg.Any<CancellationToken>()
+            )
             .Returns(
                 [
                     new ImportPreNotificationUpdate(
@@ -65,7 +89,12 @@ public class GetUpdatesTests : EndpointTestBase, IClassFixture<WireMockContext>
 
         var response = await client.GetAsync(
             TradeImportsDataApi.Testing.Endpoints.ImportPreNotifications.GetUpdates(
-                EndpointQuery.New.Where(EndpointFilter.From(from)).Where(EndpointFilter.To(to))
+                EndpointQuery
+                    .New.Where(EndpointFilter.From(from))
+                    .Where(EndpointFilter.To(to))
+                    .Where(EndpointFilter.PointOfEntry(pointOfEntry))
+                    .Where(EndpointFilter.Type(type))
+                    .Where(EndpointFilter.Status(status))
             )
         );
 
