@@ -236,7 +236,7 @@ public static class EndpointRouteBuilderExtensions
 
         return Results.Ok(
             new ImportPreNotificationUpdatesResponse(
-                result.Select(x => new ImportPreNotificationUpdateResponse(x.Id, x.Updated)).ToList()
+                result.Select(x => new ImportPreNotificationUpdateResponse(x.ReferenceNumber, x.Updated)).ToList()
             )
         );
     }

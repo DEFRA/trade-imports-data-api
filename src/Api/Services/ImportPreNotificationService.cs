@@ -78,21 +78,16 @@ public class ImportPreNotificationService(IDbContext dbContext, IResourceEventPu
         return importPreNotificationEntity;
     }
 
-    public Task<List<ImportPreNotificationEntity>> GetImportPreNotificationUpdates(
+    public Task<List<ImportPreNotificationUpdate>> GetImportPreNotificationUpdates(
         DateTime from,
         DateTime to,
         CancellationToken cancellationToken
     )
     {
         return Task.FromResult(
-            new List<ImportPreNotificationEntity>
+            new List<ImportPreNotificationUpdate>
             {
-                new()
-                {
-                    Id = "CHEDPP.GB.2024.5194492",
-                    ImportPreNotification = new ImportPreNotification { ReferenceNumber = "CHEDPP.GB.2024.5194492" },
-                    Updated = new DateTime(2025, 5, 21, 8, 51, 0, DateTimeKind.Utc),
-                },
+                new("CHEDPP.GB.2024.5194492", new DateTime(2025, 5, 21, 8, 51, 0, DateTimeKind.Utc)),
             }
         );
     }
