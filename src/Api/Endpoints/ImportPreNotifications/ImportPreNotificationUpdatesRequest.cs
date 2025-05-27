@@ -20,7 +20,7 @@ public class ImportPreNotificationUpdatesRequest
     public DateTime To { get; init; }
 
     [Description(
-        "Filter import pre notifications by point of entry. Multiple should be specified as pointOfEntry=A&pointOfEntry=B etc."
+        "Filter import pre notifications by point of entry. Multiple should be specified as pointOfEntry=A&pointOfEntry=B etc. Either a Border-Inspection-Post or Designated-Point-Of-Entry, e.g. GBFXT1"
     )]
     [FromQuery(Name = "pointOfEntry")]
     public string[]? PointOfEntry { get; init; }
