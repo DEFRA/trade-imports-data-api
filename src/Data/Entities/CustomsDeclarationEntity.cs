@@ -25,23 +25,17 @@ public class CustomsDeclarationEntity : IDataEntity
     public void OnSave()
     {
         ImportPreNotificationIdentifiers.Clear();
-        var items = ClearanceRequest?.Commodities;
-        if (items == null)
+
+        if (ClearanceRequest?.Commodities == null)
             return;
 
-        foreach (var documents in items.Select(item => item.Documents))
-        {
-            if (documents == null)
-                continue;
-            foreach (var documentReference in documents)
-            {
-                if (documentReference == null)
-                    continue;
-                if (documentReference.HasValidDocumentReference())
-                {
-                    ImportPreNotificationIdentifiers.Add(documentReference.GetDocumentReferenceIdentifier());
-                }
-            }
-        }
+        var documents = ClearanceRequest.Commodities.SelectMany(x => x.Documents ?? []);
+        var references = documents
+            .Where(x => x.HasValidDocumentReference())
+            .Select(x => x.GetDocumentReferenceIdentifier())
+            .Where(x => !string.IsNullOrEmpty(x))
+            .Distinct();
+
+        ImportPreNotificationIdentifiers.AddRange(references);
     }
 }
