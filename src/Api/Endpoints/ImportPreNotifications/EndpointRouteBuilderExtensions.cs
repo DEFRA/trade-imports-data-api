@@ -72,7 +72,8 @@ public static class EndpointRouteBuilderExtensions
             .Produces<ImportPreNotificationUpdatesResponse>()
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
-            .RequireAuthorization(PolicyNames.Read);
+            .RequireAuthorization(PolicyNames.Read)
+            .AddEndpointFilter<ImportPreNotificationUpdatesRequest.ImportPreNotificationUpdatesRequestValidator>();
     }
 
     /// <param name="chedId" example="CHEDA.GB.2024.1020304">CHED ID</param>

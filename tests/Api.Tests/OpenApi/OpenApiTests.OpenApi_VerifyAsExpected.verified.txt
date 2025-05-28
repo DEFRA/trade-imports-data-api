@@ -645,11 +645,11 @@
           {
             "name": "to",
             "in": "query",
-            "description": "Filter import pre notifications updated before this date and time. Expected value is UTC using format ISO 8601-1:2019",
+            "description": "Filter import pre notifications updated before this date and time. Expected value is UTC using format ISO 8601-1:2019. Cannot be more than 1 hour of From",
             "required": true,
             "schema": {
               "type": "string",
-              "description": "Filter import pre notifications updated before this date and time. Expected value is UTC using format ISO 8601-1:2019",
+              "description": "Filter import pre notifications updated before this date and time. Expected value is UTC using format ISO 8601-1:2019. Cannot be more than 1 hour of From",
               "format": "date-time"
             }
           },
