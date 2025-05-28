@@ -2,6 +2,7 @@ using System.Reflection;
 using Amazon.SimpleNotificationService;
 using Defra.TradeImportsDataApi.Api.Authentication;
 using Defra.TradeImportsDataApi.Api.Configuration;
+using Defra.TradeImportsDataApi.Api.Data;
 using Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations;
 using Defra.TradeImportsDataApi.Api.Endpoints.Gmrs;
 using Defra.TradeImportsDataApi.Api.Endpoints.ImportPreNotifications;
@@ -172,6 +173,10 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
     builder.Services.AddAWSService<IAmazonSimpleNotificationService>();
 
     builder.Services.AddDbContext(builder.Configuration, integrationTest);
+    builder.Services.AddTransient<IImportPreNotificationRepository, ImportPreNotificationRepository>();
+    builder.Services.AddTransient<ICustomsDeclarationRepository, CustomsDeclarationRepository>();
+    builder.Services.AddTransient<IGmrRepository, GmrRepository>();
+    builder.Services.AddTransient<IProcessingErrorRepository, ProcessingErrorRepository>();
 
     builder.Services.AddAuthenticationAuthorization();
 }

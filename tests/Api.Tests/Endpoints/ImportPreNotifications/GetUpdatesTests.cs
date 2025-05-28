@@ -1,4 +1,5 @@
 using System.Net;
+using Defra.TradeImportsDataApi.Api.Data;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Testing;
 using FluentAssertions;

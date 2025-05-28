@@ -1,3 +1,4 @@
+using Defra.TradeImportsDataApi.Api.Data;
 using Defra.TradeImportsDataApi.Api.Endpoints.Search;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Api.Tests.Utils.InMemoryData;
@@ -5,6 +6,7 @@ using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using FluentAssertions;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Defra.TradeImportsDataApi.Api.Tests.Services;
 
@@ -14,7 +16,7 @@ public class RelatedImportDeclarationsServiceTests
     public async Task GivenSearchNothing_ThenShouldReturnEmpty()
     {
         var memoryDbContext = new MemoryDbContext();
-        var subject = new RelatedImportDeclarationsService(memoryDbContext);
+        var subject = CreateSubject(memoryDbContext);
 
         var response = await subject.Search(new RelatedImportDeclarationsRequest(), CancellationToken.None);
 
@@ -40,7 +42,7 @@ public class RelatedImportDeclarationsServiceTests
             }
         );
 
-        var subject = new RelatedImportDeclarationsService(memoryDbContext);
+        var subject = CreateSubject(memoryDbContext);
 
         var response = await subject.Search(new RelatedImportDeclarationsRequest { Mrn = mrn }, CancellationToken.None);
 
@@ -96,7 +98,7 @@ public class RelatedImportDeclarationsServiceTests
             }
         );
 
-        var subject = new RelatedImportDeclarationsService(memoryDbContext);
+        var subject = CreateSubject(memoryDbContext);
 
         var response = await subject.Search(new RelatedImportDeclarationsRequest { Mrn = mrn }, CancellationToken.None);
 
@@ -122,7 +124,7 @@ public class RelatedImportDeclarationsServiceTests
             }
         );
 
-        var subject = new RelatedImportDeclarationsService(memoryDbContext);
+        var subject = CreateSubject(memoryDbContext);
 
         var response = await subject.Search(
             new RelatedImportDeclarationsRequest { Ducr = "ducr123" },
@@ -180,7 +182,7 @@ public class RelatedImportDeclarationsServiceTests
             }
         );
 
-        var subject = new RelatedImportDeclarationsService(memoryDbContext);
+        var subject = CreateSubject(memoryDbContext);
 
         var response = await subject.Search(
             new RelatedImportDeclarationsRequest { Ducr = "ducr123" },
@@ -213,7 +215,7 @@ public class RelatedImportDeclarationsServiceTests
             }
         );
 
-        var subject = new RelatedImportDeclarationsService(memoryDbContext);
+        var subject = CreateSubject(memoryDbContext);
 
         var response = await subject.Search(
             new RelatedImportDeclarationsRequest { ChedId = searchChedId },
@@ -230,7 +232,7 @@ public class RelatedImportDeclarationsServiceTests
     {
         var memoryDbContext = new MemoryDbContext();
 
-        var subject = new RelatedImportDeclarationsService(memoryDbContext);
+        var subject = CreateSubject(memoryDbContext);
 
         var response = await subject.Search(
             new RelatedImportDeclarationsRequest { ChedId = "1234567" },
@@ -248,7 +250,7 @@ public class RelatedImportDeclarationsServiceTests
         var memoryDbContext = new MemoryDbContext();
         InsertTestData(memoryDbContext);
 
-        var subject = new RelatedImportDeclarationsService(memoryDbContext);
+        var subject = CreateSubject(memoryDbContext);
 
         var response = await subject.Search(
             new RelatedImportDeclarationsRequest { ChedId = "1234510" },
@@ -266,7 +268,7 @@ public class RelatedImportDeclarationsServiceTests
         var memoryDbContext = new MemoryDbContext();
         InsertTestData(memoryDbContext);
 
-        var subject = new RelatedImportDeclarationsService(memoryDbContext);
+        var subject = CreateSubject(memoryDbContext);
 
         var response = await subject.Search(
             new RelatedImportDeclarationsRequest { ChedId = "1234510", MaxLinkDepth = 1 },
@@ -312,6 +314,7 @@ public class RelatedImportDeclarationsServiceTests
                 DocumentCode = "C640",
             })
             .ToArray();
+
         return new CustomsDeclarationEntity
         {
             Id = mrn,
@@ -321,5 +324,13 @@ public class RelatedImportDeclarationsServiceTests
             Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
             ETag = "etag",
         };
+    }
+
+    private static RelatedImportDeclarationsService CreateSubject(MemoryDbContext memoryDbContext)
+    {
+        return new RelatedImportDeclarationsService(
+            new CustomsDeclarationRepository(memoryDbContext),
+            new ImportPreNotificationRepository(memoryDbContext, NullLogger<ImportPreNotificationRepository>.Instance)
+        );
     }
 }

@@ -1,9 +1,10 @@
-using Defra.TradeImportsDataApi.Api.Exceptions;
+using Defra.TradeImportsDataApi.Api.Data;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 using Defra.TradeImportsDataApi.Domain.Events;
+using Defra.TradeImportsDataApi.Testing;
 using FluentAssertions;
 using NSubstitute;
 
@@ -11,19 +12,31 @@ namespace Defra.TradeImportsDataApi.Api.Tests.Services;
 
 public class CustomsDeclarationServiceTests
 {
+    private IDbContext DbContext { get; }
+    private IResourceEventPublisher ResourceEventPublisher { get; }
+    private ICustomsDeclarationRepository CustomsDeclarationRepository { get; }
+    private CustomsDeclarationService Subject { get; }
+
+    public CustomsDeclarationServiceTests()
+    {
+        DbContext = Substitute.For<IDbContext>();
+        ResourceEventPublisher = Substitute.For<IResourceEventPublisher>();
+        CustomsDeclarationRepository = Substitute.For<ICustomsDeclarationRepository>();
+
+        Subject = new CustomsDeclarationService(DbContext, ResourceEventPublisher, CustomsDeclarationRepository);
+    }
+
     [Fact]
     public async Task Insert_ShouldInsertAndPublish()
     {
-        var mockDbContext = Substitute.For<IDbContext>();
-        var mockResourceEventPublisher = Substitute.For<IResourceEventPublisher>();
-        var subject = new CustomsDeclarationService(mockDbContext, mockResourceEventPublisher);
         var entity = new CustomsDeclarationEntity { Id = "id", ClearanceRequest = new ClearanceRequest() };
+        CustomsDeclarationRepository.Insert(entity, CancellationToken.None).Returns(entity);
 
-        await subject.Insert(entity, CancellationToken.None);
+        await Subject.Insert(entity, CancellationToken.None);
 
-        await mockDbContext.CustomsDeclarations.Received().Insert(entity, CancellationToken.None);
-        await mockDbContext.Received().SaveChangesAsync(CancellationToken.None);
-        await mockResourceEventPublisher
+        await CustomsDeclarationRepository.Received().Insert(entity, CancellationToken.None);
+        await DbContext.Received().SaveChangesAsync(CancellationToken.None);
+        await ResourceEventPublisher
             .Received()
             .Publish(
                 Arg.Is<ResourceEvent<CustomsDeclarationEntity>>(x =>
@@ -34,45 +47,27 @@ public class CustomsDeclarationServiceTests
     }
 
     [Fact]
-    public async Task Update_WhenNotExists_ShouldThrow()
-    {
-        var mockDbContext = Substitute.For<IDbContext>();
-        var mockResourceEventPublisher = Substitute.For<IResourceEventPublisher>();
-        var subject = new CustomsDeclarationService(mockDbContext, mockResourceEventPublisher);
-        var entity = new CustomsDeclarationEntity { Id = "id", ClearanceRequest = new ClearanceRequest() };
-
-        var act = async () => await subject.Update(entity, "etag", CancellationToken.None);
-
-        await act.Should().ThrowAsync<EntityNotFoundException>();
-    }
-
-    [Fact]
     public async Task Update_ShouldUpdateAndPublish()
     {
-        var mockDbContext = Substitute.For<IDbContext>();
         const string id = "id";
-        mockDbContext
-            .CustomsDeclarations.Find(id)
-            .Returns(
-                new CustomsDeclarationEntity
-                {
-                    Id = id,
-                    ClearanceRequest = new ClearanceRequest { ExternalVersion = 1 },
-                }
-            );
-        var mockResourceEventPublisher = Substitute.For<IResourceEventPublisher>();
-        var subject = new CustomsDeclarationService(mockDbContext, mockResourceEventPublisher);
+        var existing = new CustomsDeclarationEntity
+        {
+            Id = id,
+            ClearanceRequest = new ClearanceRequest { ExternalVersion = 1 },
+        };
+        CustomsDeclarationRepository.Get(id, CancellationToken.None).Returns(existing);
         var entity = new CustomsDeclarationEntity
         {
             Id = id,
             ClearanceRequest = new ClearanceRequest { ExternalVersion = 2 },
         };
+        CustomsDeclarationRepository.Update(entity, "etag", CancellationToken.None).Returns((existing, entity));
 
-        await subject.Update(entity, "etag", CancellationToken.None);
+        await Subject.Update(entity, "etag", CancellationToken.None);
 
-        await mockDbContext.CustomsDeclarations.Received().Update(entity, "etag", CancellationToken.None);
-        await mockDbContext.Received().SaveChangesAsync(CancellationToken.None);
-        await mockResourceEventPublisher
+        await CustomsDeclarationRepository.Received().Update(entity, "etag", CancellationToken.None);
+        await DbContext.Received().SaveChangesAsync(CancellationToken.None);
+        await ResourceEventPublisher
             .Received()
             .Publish(
                 Arg.Is<ResourceEvent<CustomsDeclarationEntity>>(x =>
@@ -80,5 +75,30 @@ public class CustomsDeclarationServiceTests
                 ),
                 CancellationToken.None
             );
+    }
+
+    [Fact]
+    public async Task GetCustomsDeclaration_ShouldReturn()
+    {
+        const string id = "id";
+        CustomsDeclarationRepository.Get(id, CancellationToken.None).Returns(new CustomsDeclarationEntity { Id = id });
+
+        var result = await Subject.GetCustomsDeclaration(id, CancellationToken.None);
+
+        result.Should().NotBeNull();
+    }
+
+    [Fact]
+    public async Task GetCustomsDeclarationsByChedId_ShouldReturn()
+    {
+        const string id = "id";
+        var (chedRef, chedId) = ImportPreNotificationIdGenerator.GenerateReturnId();
+        CustomsDeclarationRepository
+            .GetAll(chedId, CancellationToken.None)
+            .Returns([new CustomsDeclarationEntity { Id = id }]);
+
+        var result = await Subject.GetCustomsDeclarationsByChedId(chedRef, CancellationToken.None);
+
+        result.Should().NotBeEmpty();
     }
 }

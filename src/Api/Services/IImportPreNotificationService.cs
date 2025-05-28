@@ -1,3 +1,4 @@
+using Defra.TradeImportsDataApi.Api.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
 
 namespace Defra.TradeImportsDataApi.Api.Services;

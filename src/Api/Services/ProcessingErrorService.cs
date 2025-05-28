@@ -1,3 +1,4 @@
+using Defra.TradeImportsDataApi.Api.Data;
 using Defra.TradeImportsDataApi.Api.Exceptions;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
@@ -6,29 +7,32 @@ using Defra.TradeImportsDataApi.Domain.ProcessingErrors;
 
 namespace Defra.TradeImportsDataApi.Api.Services;
 
-public class ProcessingErrorService(IDbContext dbContext, IResourceEventPublisher resourceEventPublisher)
-    : IProcessingErrorService
+public class ProcessingErrorService(
+    IDbContext dbContext,
+    IResourceEventPublisher resourceEventPublisher,
+    IProcessingErrorRepository processingErrorRepository
+) : IProcessingErrorService
 {
-    public async Task<ProcessingErrorEntity?> GetProcessingError(string mrn, CancellationToken cancellationToken)
-    {
-        return await dbContext.ProcessingErrors.Find(mrn, cancellationToken);
-    }
+    public async Task<ProcessingErrorEntity?> GetProcessingError(string mrn, CancellationToken cancellationToken) =>
+        await processingErrorRepository.Get(mrn, cancellationToken);
 
     public async Task<ProcessingErrorEntity> Insert(
         ProcessingErrorEntity processingErrorEntity,
         CancellationToken cancellationToken
     )
     {
-        await dbContext.ProcessingErrors.Insert(processingErrorEntity, cancellationToken);
+        var inserted = await processingErrorRepository.Insert(processingErrorEntity, cancellationToken);
+
         await dbContext.SaveChangesAsync(cancellationToken);
+
         await resourceEventPublisher.Publish(
-            processingErrorEntity
+            inserted
                 .ToResourceEvent(ResourceEventOperations.Created)
-                .WithChangeSet(processingErrorEntity.ProcessingError, new ProcessingError()),
+                .WithChangeSet(inserted.ProcessingError, new ProcessingError()),
             cancellationToken
         );
 
-        return processingErrorEntity;
+        return inserted;
     }
 
     public async Task<ProcessingErrorEntity> Update(
@@ -37,23 +41,21 @@ public class ProcessingErrorService(IDbContext dbContext, IResourceEventPublishe
         CancellationToken cancellationToken
     )
     {
-        var existing = await dbContext.ProcessingErrors.Find(processingErrorEntity.Id, cancellationToken);
-        if (existing == null)
-        {
-            throw new EntityNotFoundException(nameof(ProcessingErrorEntity), processingErrorEntity.Id);
-        }
-
-        processingErrorEntity.Created = existing.Created;
-
-        await dbContext.ProcessingErrors.Update(processingErrorEntity, etag, cancellationToken);
-        await dbContext.SaveChangesAsync(cancellationToken);
-        await resourceEventPublisher.Publish(
-            processingErrorEntity
-                .ToResourceEvent(ResourceEventOperations.Updated)
-                .WithChangeSet(processingErrorEntity.ProcessingError, existing.ProcessingError),
+        var (existing, updated) = await processingErrorRepository.Update(
+            processingErrorEntity,
+            etag,
             cancellationToken
         );
 
-        return processingErrorEntity;
+        await dbContext.SaveChangesAsync(cancellationToken);
+
+        await resourceEventPublisher.Publish(
+            updated
+                .ToResourceEvent(ResourceEventOperations.Updated)
+                .WithChangeSet(updated.ProcessingError, existing.ProcessingError),
+            cancellationToken
+        );
+
+        return updated;
     }
 }

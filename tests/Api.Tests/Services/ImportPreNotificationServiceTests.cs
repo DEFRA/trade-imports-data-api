@@ -1,38 +1,52 @@
-using Defra.TradeImportsDataApi.Api.Exceptions;
+using Defra.TradeImportsDataApi.Api.Data;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.Events;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using FluentAssertions;
-using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 
 namespace Defra.TradeImportsDataApi.Api.Tests.Services;
 
 public class ImportPreNotificationServiceTests
 {
+    private IDbContext DbContext { get; }
+    private IResourceEventPublisher ResourceEventPublisher { get; }
+    private IImportPreNotificationRepository ImportPreNotificationRepository { get; }
+    private ICustomsDeclarationRepository CustomsDeclarationRepository { get; }
+    private ImportPreNotificationService Subject { get; }
+
+    public ImportPreNotificationServiceTests()
+    {
+        DbContext = Substitute.For<IDbContext>();
+        ResourceEventPublisher = Substitute.For<IResourceEventPublisher>();
+        ImportPreNotificationRepository = Substitute.For<IImportPreNotificationRepository>();
+        CustomsDeclarationRepository = Substitute.For<ICustomsDeclarationRepository>();
+
+        Subject = new ImportPreNotificationService(
+            DbContext,
+            ResourceEventPublisher,
+            ImportPreNotificationRepository,
+            CustomsDeclarationRepository
+        );
+    }
+
     [Fact]
     public async Task Insert_ShouldInsertAndPublish()
     {
-        var mockDbContext = Substitute.For<IDbContext>();
-        var mockResourceEventPublisher = Substitute.For<IResourceEventPublisher>();
-        var subject = new ImportPreNotificationService(
-            mockDbContext,
-            mockResourceEventPublisher,
-            NullLogger<ImportPreNotificationService>.Instance
-        );
         var entity = new ImportPreNotificationEntity
         {
             Id = "id",
             ImportPreNotification = new ImportPreNotification { Version = 1 },
         };
+        ImportPreNotificationRepository.Insert(entity, CancellationToken.None).Returns(entity);
 
-        await subject.Insert(entity, CancellationToken.None);
+        await Subject.Insert(entity, CancellationToken.None);
 
-        await mockDbContext.ImportPreNotifications.Received().Insert(entity, CancellationToken.None);
-        await mockDbContext.Received().SaveChangesAsync(CancellationToken.None);
-        await mockResourceEventPublisher
+        await ImportPreNotificationRepository.Received().Insert(entity, CancellationToken.None);
+        await DbContext.Received().SaveChangesAsync(CancellationToken.None);
+        await ResourceEventPublisher
             .Received()
             .Publish(
                 Arg.Is<ResourceEvent<ImportPreNotificationEntity>>(x =>
@@ -43,53 +57,27 @@ public class ImportPreNotificationServiceTests
     }
 
     [Fact]
-    public async Task Update_WhenNotExists_ShouldThrow()
-    {
-        var mockDbContext = Substitute.For<IDbContext>();
-        var mockResourceEventPublisher = Substitute.For<IResourceEventPublisher>();
-        var subject = new ImportPreNotificationService(
-            mockDbContext,
-            mockResourceEventPublisher,
-            NullLogger<ImportPreNotificationService>.Instance
-        );
-        var entity = new ImportPreNotificationEntity { Id = "id", ImportPreNotification = new ImportPreNotification() };
-
-        var act = async () => await subject.Update(entity, "etag", CancellationToken.None);
-
-        await act.Should().ThrowAsync<EntityNotFoundException>();
-    }
-
-    [Fact]
     public async Task Update_ShouldUpdateAndPublish()
     {
-        var mockDbContext = Substitute.For<IDbContext>();
         const string id = "id";
-        mockDbContext
-            .ImportPreNotifications.Find(id)
-            .Returns(
-                new ImportPreNotificationEntity
-                {
-                    Id = id,
-                    ImportPreNotification = new ImportPreNotification { Version = 1 },
-                }
-            );
-        var mockResourceEventPublisher = Substitute.For<IResourceEventPublisher>();
-        var subject = new ImportPreNotificationService(
-            mockDbContext,
-            mockResourceEventPublisher,
-            NullLogger<ImportPreNotificationService>.Instance
-        );
+        var existing = new ImportPreNotificationEntity
+        {
+            Id = id,
+            ImportPreNotification = new ImportPreNotification { Version = 1 },
+        };
+        ImportPreNotificationRepository.Get(id, CancellationToken.None).Returns(existing);
         var entity = new ImportPreNotificationEntity
         {
             Id = id,
             ImportPreNotification = new ImportPreNotification { Version = 2 },
         };
+        ImportPreNotificationRepository.Update(entity, "etag", CancellationToken.None).Returns((existing, entity));
 
-        await subject.Update(entity, "etag", CancellationToken.None);
+        await Subject.Update(entity, "etag", CancellationToken.None);
 
-        await mockDbContext.ImportPreNotifications.Received().Update(entity, "etag", CancellationToken.None);
-        await mockDbContext.Received().SaveChangesAsync(CancellationToken.None);
-        await mockResourceEventPublisher
+        await ImportPreNotificationRepository.Received().Update(entity, "etag", CancellationToken.None);
+        await DbContext.Received().SaveChangesAsync(CancellationToken.None);
+        await ResourceEventPublisher
             .Received()
             .Publish(
                 Arg.Is<ResourceEvent<ImportPreNotificationEntity>>(x =>
@@ -97,5 +85,53 @@ public class ImportPreNotificationServiceTests
                 ),
                 CancellationToken.None
             );
+    }
+
+    [Fact]
+    public async Task GetImportPreNotification_ShouldReturn()
+    {
+        const string id = "id";
+        ImportPreNotificationRepository
+            .Get(id, CancellationToken.None)
+            .Returns(new ImportPreNotificationEntity { Id = id, ImportPreNotification = new ImportPreNotification() });
+
+        var result = await Subject.GetImportPreNotification(id, CancellationToken.None);
+
+        result.Should().NotBeNull();
+    }
+
+    [Fact]
+    public async Task GetImportPreNotificationsByMrn_ShouldReturn()
+    {
+        const string id = "id";
+        const string mrn = "mrn";
+        var identifiers = new List<string> { "identifier" };
+        CustomsDeclarationRepository
+            .GetAllImportPreNotificationIdentifiers(mrn, CancellationToken.None)
+            .Returns(identifiers);
+        ImportPreNotificationRepository
+            .GetAll(Arg.Is<string[]>(x => x.SequenceEqual(identifiers)), CancellationToken.None)
+            .Returns(
+                [new ImportPreNotificationEntity { Id = id, ImportPreNotification = new ImportPreNotification() }]
+            );
+
+        var result = await Subject.GetImportPreNotificationsByMrn(mrn, CancellationToken.None);
+
+        result.Should().NotBeEmpty();
+    }
+
+    [Fact]
+    public async Task GetImportPreNotificationUpdates_ShouldReturn()
+    {
+        const string id = "id";
+        var from = DateTime.UtcNow;
+        var to = DateTime.UtcNow.AddDays(1);
+        ImportPreNotificationRepository
+            .GetUpdates(from, to, null, null, null, CancellationToken.None)
+            .Returns([new ImportPreNotificationUpdate(id, DateTime.UtcNow)]);
+
+        var result = await Subject.GetImportPreNotificationUpdates(from, to, null, null, null, CancellationToken.None);
+
+        result.Should().NotBeEmpty();
     }
 }
