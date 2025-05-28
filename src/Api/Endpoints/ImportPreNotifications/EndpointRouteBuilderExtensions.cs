@@ -231,6 +231,9 @@ public static class EndpointRouteBuilderExtensions
         var result = await importPreNotificationService.GetImportPreNotificationUpdates(
             request.From,
             request.To,
+            request.PointOfEntry,
+            request.Type,
+            request.Status,
             cancellationToken
         );
 

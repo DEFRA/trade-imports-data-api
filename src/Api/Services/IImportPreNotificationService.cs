@@ -25,6 +25,9 @@ public interface IImportPreNotificationService
     Task<List<ImportPreNotificationUpdate>> GetImportPreNotificationUpdates(
         DateTime from,
         DateTime to,
-        CancellationToken cancellationToken
+        string[]? pointOfEntry = null,
+        string[]? type = null,
+        string[]? status = null,
+        CancellationToken cancellationToken = default
     );
 }

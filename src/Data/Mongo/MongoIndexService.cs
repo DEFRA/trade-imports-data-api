@@ -61,6 +61,19 @@ public class MongoIndexService(IMongoDatabase database, ILogger<MongoIndexServic
             Builders<ImportPreNotificationEntity>.IndexKeys.Ascending(x => x.Updated),
             cancellationToken: cancellationToken
         );
+        await CreateIndex(
+            "UpdatesIdx",
+            Builders<ImportPreNotificationEntity>
+                // Order of fields important - don't change without reason
+                .IndexKeys.Ascending(x => x.Updated)
+                .Ascending(
+                    new StringFieldDefinition<ImportPreNotificationEntity>("importPreNotification.partOne.pointOfEntry")
+                )
+                .Ascending(x => x.ImportPreNotification.ImportNotificationType)
+                .Ascending(x => x.ImportPreNotification.Status)
+                .Ascending(x => x.Id),
+            cancellationToken: cancellationToken
+        );
     }
 
     public Task StopAsync(CancellationToken cancellationToken)

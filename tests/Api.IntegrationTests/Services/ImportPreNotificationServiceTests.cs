@@ -5,6 +5,7 @@ using Defra.TradeImportsDataApi.Data.Mongo;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using Defra.TradeImportsDataApi.Testing;
 using FluentAssertions;
+using Microsoft.Extensions.Logging.Abstractions;
 using MongoDB.Driver;
 using NSubstitute;
 
@@ -33,7 +34,11 @@ public class ImportPreNotificationServiceTests : IntegrationTestBase, IAsyncLife
 
         Client = CreateDataApiClient();
         MongoDbContext = new MongoDbContext(GetMongoDatabase());
-        Subject = new ImportPreNotificationService(MongoDbContext, Substitute.For<IResourceEventPublisher>());
+        Subject = new ImportPreNotificationService(
+            MongoDbContext,
+            Substitute.For<IResourceEventPublisher>(),
+            NullLogger<ImportPreNotificationService>.Instance
+        );
     }
 
     public Task DisposeAsync() => Task.CompletedTask;
@@ -57,10 +62,113 @@ public class ImportPreNotificationServiceTests : IntegrationTestBase, IAsyncLife
         var result = await Subject.GetImportPreNotificationUpdates(
             Updated.AddSeconds(fromSeconds),
             Updated.AddSeconds(toSeconds),
+            pointOfEntry: null,
+            type: null,
+            status: null,
             CancellationToken.None
         );
 
         AssertResult(expectResult, result, chedRef);
+    }
+
+    [Fact]
+    public async Task WhenImportPreNotificationPointOfEntryMatch_ThenNotificationIdAndUpdateAsExpected()
+    {
+        var (chedRef, _) = ImportPreNotificationIdGenerator.GenerateReturnId();
+        var (chedRefNoMatch, _) = ImportPreNotificationIdGenerator.GenerateReturnId();
+
+        await CreateNotification(chedRef, pointOfEntry: "BCP1");
+        await OverrideUpdated(Notifications, chedRef, Updated);
+
+        await CreateNotification(chedRefNoMatch, pointOfEntry: "NoMatch");
+        await OverrideUpdated(Notifications, chedRefNoMatch, Updated);
+
+        var result = await Subject.GetImportPreNotificationUpdates(
+            Updated.AddSeconds(-1),
+            Updated.AddSeconds(1),
+            pointOfEntry: ["BCP1"],
+            type: null,
+            status: null,
+            cancellationToken: CancellationToken.None
+        );
+
+        AssertResult(expectResult: true, result, chedRef);
+    }
+
+    [Fact]
+    public async Task WhenImportPreNotificationTypeMatch_ThenNotificationIdAndUpdateAsExpected()
+    {
+        var (chedRef, _) = ImportPreNotificationIdGenerator.GenerateReturnId();
+        var (chedRefNoMatch, _) = ImportPreNotificationIdGenerator.GenerateReturnId();
+
+        await CreateNotification(chedRef, type: "CHEDA");
+        await OverrideUpdated(Notifications, chedRef, Updated);
+
+        await CreateNotification(chedRefNoMatch, type: "CHEDP");
+        await OverrideUpdated(Notifications, chedRefNoMatch, Updated);
+
+        var result = await Subject.GetImportPreNotificationUpdates(
+            Updated.AddSeconds(-1),
+            Updated.AddSeconds(1),
+            pointOfEntry: null,
+            type: ["CHEDA"],
+            status: null,
+            cancellationToken: CancellationToken.None
+        );
+
+        AssertResult(expectResult: true, result, chedRef);
+    }
+
+    [Fact]
+    public async Task WhenImportPreNotificationStatusMatch_ThenNotificationIdAndUpdateAsExpected()
+    {
+        var (chedRef, _) = ImportPreNotificationIdGenerator.GenerateReturnId();
+        var (chedRefNoMatch, _) = ImportPreNotificationIdGenerator.GenerateReturnId();
+
+        await CreateNotification(chedRef, status: "SUBMITTED");
+        await OverrideUpdated(Notifications, chedRef, Updated);
+
+        await CreateNotification(chedRefNoMatch, status: "DRAFT");
+        await OverrideUpdated(Notifications, chedRefNoMatch, Updated);
+
+        var result = await Subject.GetImportPreNotificationUpdates(
+            Updated.AddSeconds(-1),
+            Updated.AddSeconds(1),
+            pointOfEntry: null,
+            type: null,
+            status: ["SUBMITTED"],
+            cancellationToken: CancellationToken.None
+        );
+
+        AssertResult(expectResult: true, result, chedRef);
+    }
+
+    [Fact]
+    public async Task WhenImportPreNotificationAllFilters_ThenNotificationIdAndUpdateAsExpected()
+    {
+        var (chedRef, _) = ImportPreNotificationIdGenerator.GenerateReturnId();
+
+        await CreateNotification(chedRef, pointOfEntry: "BCP1", type: "CHEDA", status: "SUBMITTED");
+        await OverrideUpdated(Notifications, chedRef, Updated);
+
+        for (var i = 0; i < 10; i++)
+        {
+            var (chedRefNoMatch, _) = ImportPreNotificationIdGenerator.GenerateReturnId();
+
+            await CreateNotification(chedRefNoMatch, status: "DRAFT");
+            await OverrideUpdated(Notifications, chedRefNoMatch, Updated.AddSeconds(1));
+        }
+
+        var result = await Subject.GetImportPreNotificationUpdates(
+            Updated.AddSeconds(-1),
+            Updated.AddSeconds(1),
+            pointOfEntry: ["BCP1", "BCP2"],
+            type: ["CHEDA", "CHEDP"],
+            status: ["SUBMITTED", "VALIDATED"],
+            cancellationToken: CancellationToken.None
+        );
+
+        AssertResult(expectResult: true, result, chedRef);
     }
 
     private static void AssertResult(bool expectResult, List<ImportPreNotificationUpdate> result, string chedRef)
@@ -77,14 +185,25 @@ public class ImportPreNotificationServiceTests : IntegrationTestBase, IAsyncLife
         }
     }
 
-    private async Task CreateNotification(string chedRef)
+    private async Task CreateNotification(
+        string chedRef,
+        string? pointOfEntry = null,
+        string? type = null,
+        string? status = null
+    )
     {
-        await Client.PutImportPreNotification(
-            chedRef,
-            new ImportPreNotification { ReferenceNumber = chedRef, Version = 1 },
-            null,
-            CancellationToken.None
-        );
+        var notification = new ImportPreNotification { ReferenceNumber = chedRef, Version = 1 };
+
+        if (pointOfEntry != null)
+            notification.PartOne = new PartOne { PointOfEntry = pointOfEntry };
+
+        if (type != null)
+            notification.ImportNotificationType = type;
+
+        if (status != null)
+            notification.Status = status;
+
+        await Client.PutImportPreNotification(chedRef, notification, null, CancellationToken.None);
     }
 
     private static async Task OverrideUpdated<T>(IMongoCollection<T> collection, string id, DateTime updated)

@@ -652,6 +652,42 @@
               "description": "Filter import pre notifications updated before this date and time. Expected value is UTC using format ISO 8601-1:2019",
               "format": "date-time"
             }
+          },
+          {
+            "name": "pointOfEntry",
+            "in": "query",
+            "description": "Filter import pre notifications by point of entry. Multiple should be specified as pointOfEntry=A&pointOfEntry=B etc. Either a Border-Inspection-Post or Designated-Point-Of-Entry, e.g. GBFXT1",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Filter import pre notifications by point of entry. Multiple should be specified as pointOfEntry=A&pointOfEntry=B etc. Either a Border-Inspection-Post or Designated-Point-Of-Entry, e.g. GBFXT1"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Filter import pre notifications by type. Multiple should be specified as type=A&type=B etc. Possible values: CVEDA, CVEDP, CHEDPP, CED, IMP",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Filter import pre notifications by type. Multiple should be specified as type=A&type=B etc."
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Filter import pre notifications by status. Multiple should be specified as status=A&status=B etc. Possible values: DRAFT, SUBMITTED, VALIDATED, REJECTED, IN_PROGRESS, AMEND, MODIFY, REPLACED, CANCELLED, DELETED, PARTIALLY_REJECTED, SPLIT_CONSIGNMENT, SUBMITTED,IN_PROGRESS,MODIFY",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Filter import pre notifications by status. Multiple should be specified as status=A&status=B etc."
+            }
           }
         ],
         "responses": {

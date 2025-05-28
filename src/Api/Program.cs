@@ -107,6 +107,7 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
         c.IncludeXmlComments(typeof(ImportPreNotification).Assembly);
         c.SchemaFilter<PossibleValueSchemaFilter>();
         c.SchemaFilter<JsonConverterSchemaFilter>();
+        c.OperationFilter<PossibleValueOperationFilter>();
 
         var typeMap = new Dictionary<string, string>
         {
