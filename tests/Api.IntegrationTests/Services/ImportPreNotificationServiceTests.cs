@@ -2,6 +2,8 @@ using Defra.TradeImportsDataApi.Api.Client;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Data.Mongo;
+using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
+using Defra.TradeImportsDataApi.Domain.Gvms;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using Defra.TradeImportsDataApi.Testing;
 using FluentAssertions;
@@ -171,6 +173,40 @@ public class ImportPreNotificationServiceTests : IntegrationTestBase, IAsyncLife
         AssertResult(expectResult: true, result, chedRef);
     }
 
+    [Fact]
+    public async Task WhenImportPreNotification_AndLinkedData_ThenNotificationIdAndUpdateAsExpected()
+    {
+        var (chedRef, chedId) = ImportPreNotificationIdGenerator.GenerateReturnId();
+        var mrn = Guid.NewGuid().ToString("N");
+        var gmrId = Guid.NewGuid().ToString("N");
+
+        await CreateNotification(chedRef, pointOfEntry: "BCP1", type: "CHEDA", status: "SUBMITTED");
+        await OverrideUpdated(Notifications, chedRef, Updated);
+        await CreateCustomsDeclaration(mrn, chedId);
+        await OverrideUpdated(CustomsDeclarations, mrn, Updated);
+        await CreateGmr(gmrId, transitsMrn: mrn);
+        await OverrideUpdated(Gmrs, gmrId, Updated);
+
+        for (var i = 0; i < 10; i++)
+        {
+            var (chedRefNoMatch, _) = ImportPreNotificationIdGenerator.GenerateReturnId();
+
+            await CreateNotification(chedRefNoMatch, status: "DRAFT");
+            await OverrideUpdated(Notifications, chedRefNoMatch, Updated.AddSeconds(1));
+        }
+
+        var result = await Subject.GetImportPreNotificationUpdates(
+            Updated.AddSeconds(-1),
+            Updated.AddSeconds(1),
+            pointOfEntry: ["BCP1", "BCP2"],
+            type: ["CHEDA", "CHEDP"],
+            status: ["SUBMITTED", "VALIDATED"],
+            cancellationToken: CancellationToken.None
+        );
+
+        AssertResult(expectResult: true, result, chedRef);
+    }
+
     private static void AssertResult(bool expectResult, List<ImportPreNotificationUpdate> result, string chedRef)
     {
         if (expectResult)
@@ -213,5 +249,54 @@ public class ImportPreNotificationServiceTests : IntegrationTestBase, IAsyncLife
         var update = Builders<T>.Update.Set(x => x.Updated, updated);
 
         await collection.UpdateOneAsync(filter, update);
+    }
+
+    private async Task CreateCustomsDeclaration(string mrn, string? chedId = null)
+    {
+        var customsDeclaration = new CustomsDeclaration { ClearanceRequest = new ClearanceRequest() };
+
+        if (chedId != null)
+            customsDeclaration = new CustomsDeclaration
+            {
+                ClearanceRequest = new ClearanceRequest
+                {
+                    ExternalVersion = 1,
+                    Commodities =
+                    [
+                        new Commodity
+                        {
+                            Documents =
+                            [
+                                new ImportDocument
+                                {
+                                    DocumentReference = new ImportDocumentReference($"GBCHD2025.{chedId}"),
+                                    DocumentCode = "C640",
+                                },
+                            ],
+                        },
+                    ],
+                },
+            };
+
+        await Client.PutCustomsDeclaration(mrn, customsDeclaration, null, CancellationToken.None);
+    }
+
+    private async Task CreateGmr(string gmrId, string? transitsMrn = null, string? customsMrn = null)
+    {
+        var gmr = new Gmr();
+
+        if (transitsMrn != null)
+        {
+            gmr.Declarations ??= new Declarations();
+            gmr.Declarations.Transits = [new Transits { Id = transitsMrn }];
+        }
+
+        if (customsMrn != null)
+        {
+            gmr.Declarations ??= new Declarations();
+            gmr.Declarations.Customs = [new Customs { Id = customsMrn }];
+        }
+
+        await Client.PutGmr(gmrId, gmr, null, CancellationToken.None);
     }
 }

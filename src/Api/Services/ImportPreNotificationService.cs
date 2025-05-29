@@ -127,21 +127,31 @@ public class ImportPreNotificationService(
                 "$project",
                 new BsonDocument
                 {
-                    { "referenceNumber", "$_id" },
+                    // _id is always returned
                     { "updated", "$updated" },
-                    { "_id", 0 },
                 }
             ),
         };
 
-        var rawQuery = string.Join(",\n", pipeline.Select(x => x.ToString()));
-        logger.LogInformation("Updates query: {RawQuery}", rawQuery);
+        var start = TimeProvider.System.GetTimestamp();
+        var query = string.Join(",\n", pipeline.Select(x => x.ToString()));
 
-        var aggregate = await dbContext.ImportPreNotifications.Collection.AggregateAsync<ImportPreNotificationUpdate>(
+        var aggregate = await dbContext.ImportPreNotifications.Collection.AggregateAsync<NotificationUpdate>(
             pipeline,
             cancellationToken: cancellationToken
         );
 
-        return await aggregate.ToListAsync(cancellationToken);
+        var updates = (await aggregate.ToListAsync(cancellationToken)).ToDictionary(x => x.Id, x => x);
+
+        var elapsed = TimeProvider.System.GetElapsedTime(start);
+        logger.LogInformation("Updates (notifications): {Elapsed} {Query}", elapsed.TotalMilliseconds, query);
+
+        // Add GMRs
+        // Add customs declarations
+
+        return updates.Values.Select(x => new ImportPreNotificationUpdate(x.Id, x.Updated)).ToList();
     }
+
+    // ReSharper disable once ClassNeverInstantiated.Local
+    private sealed record NotificationUpdate(string Id, DateTime Updated);
 }
