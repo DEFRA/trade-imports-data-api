@@ -1,45 +1,49 @@
-using Defra.TradeImportsDataApi.Api.Exceptions;
+using Defra.TradeImportsDataApi.Api.Data;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 using Defra.TradeImportsDataApi.Domain.Events;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
-using MongoDB.Driver.Linq;
 
 namespace Defra.TradeImportsDataApi.Api.Services;
 
-public class CustomsDeclarationService(IDbContext dbContext, IResourceEventPublisher resourceEventPublisher)
-    : ICustomsDeclarationService
+public class CustomsDeclarationService(
+    IDbContext dbContext,
+    IResourceEventPublisher resourceEventPublisher,
+    ICustomsDeclarationRepository customsDeclarationRepository
+) : ICustomsDeclarationService
 {
-    public async Task<CustomsDeclarationEntity?> GetCustomsDeclaration(string mrn, CancellationToken cancellationToken)
-    {
-        return await dbContext.CustomsDeclarations.Find(mrn, cancellationToken);
-    }
+    public async Task<CustomsDeclarationEntity?> GetCustomsDeclaration(
+        string id,
+        CancellationToken cancellationToken
+    ) => await customsDeclarationRepository.Get(id, cancellationToken);
 
     public async Task<CustomsDeclarationEntity> Insert(
         CustomsDeclarationEntity customsDeclarationEntity,
         CancellationToken cancellationToken
     )
     {
-        await dbContext.CustomsDeclarations.Insert(customsDeclarationEntity, cancellationToken);
+        var inserted = await customsDeclarationRepository.Insert(customsDeclarationEntity, cancellationToken);
+
         await dbContext.SaveChangesAsync(cancellationToken);
+
         await resourceEventPublisher.Publish(
-            customsDeclarationEntity
+            inserted
                 .ToResourceEvent(ResourceEventOperations.Created)
                 .WithChangeSet(
                     new CustomsDeclaration
                     {
-                        ClearanceRequest = customsDeclarationEntity.ClearanceRequest,
-                        ClearanceDecision = customsDeclarationEntity.ClearanceDecision,
-                        Finalisation = customsDeclarationEntity.Finalisation,
-                        InboundError = customsDeclarationEntity.InboundError,
+                        ClearanceRequest = inserted.ClearanceRequest,
+                        ClearanceDecision = inserted.ClearanceDecision,
+                        Finalisation = inserted.Finalisation,
+                        InboundError = inserted.InboundError,
                     },
                     new CustomsDeclaration()
                 ),
             cancellationToken
         );
 
-        return customsDeclarationEntity;
+        return inserted;
     }
 
     public async Task<List<CustomsDeclarationEntity>> GetCustomsDeclarationsByChedId(
@@ -49,9 +53,7 @@ public class CustomsDeclarationService(IDbContext dbContext, IResourceEventPubli
     {
         var identifier = new ChedIdReference(chedId).GetIdentifier();
 
-        return await dbContext
-            .CustomsDeclarations.Where(x => x.ImportPreNotificationIdentifiers.Contains(identifier))
-            .ToListAsync(cancellationToken: cancellationToken);
+        return await customsDeclarationRepository.GetAll(identifier, cancellationToken);
     }
 
     public async Task<CustomsDeclarationEntity> Update(
@@ -60,26 +62,24 @@ public class CustomsDeclarationService(IDbContext dbContext, IResourceEventPubli
         CancellationToken cancellationToken
     )
     {
-        var existing = await dbContext.CustomsDeclarations.Find(customsDeclarationEntity.Id, cancellationToken);
-        if (existing == null)
-        {
-            throw new EntityNotFoundException(nameof(CustomsDeclarationEntity), customsDeclarationEntity.Id);
-        }
+        var (existing, updated) = await customsDeclarationRepository.Update(
+            customsDeclarationEntity,
+            etag,
+            cancellationToken
+        );
 
-        customsDeclarationEntity.Created = existing.Created;
-
-        await dbContext.CustomsDeclarations.Update(customsDeclarationEntity, etag, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
+
         await resourceEventPublisher.Publish(
-            customsDeclarationEntity
+            updated
                 .ToResourceEvent(ResourceEventOperations.Updated)
                 .WithChangeSet(
                     new CustomsDeclaration
                     {
-                        ClearanceRequest = customsDeclarationEntity.ClearanceRequest,
-                        ClearanceDecision = customsDeclarationEntity.ClearanceDecision,
-                        Finalisation = customsDeclarationEntity.Finalisation,
-                        InboundError = customsDeclarationEntity.InboundError,
+                        ClearanceRequest = updated.ClearanceRequest,
+                        ClearanceDecision = updated.ClearanceDecision,
+                        Finalisation = updated.Finalisation,
+                        InboundError = updated.InboundError,
                     },
                     new CustomsDeclaration
                     {
@@ -92,6 +92,6 @@ public class CustomsDeclarationService(IDbContext dbContext, IResourceEventPubli
             cancellationToken
         );
 
-        return customsDeclarationEntity;
+        return updated;
     }
 }

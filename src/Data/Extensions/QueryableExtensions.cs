@@ -4,7 +4,7 @@ namespace Defra.TradeImportsDataApi.Data.Extensions;
 
 public static class QueryableExtensions
 {
-    public static async Task<List<TSource>> ToListAsync<TSource>(
+    public static async Task<List<TSource>> ToListWithFallbackAsync<TSource>(
         this IQueryable<TSource> source,
         CancellationToken cancellationToken = default
     )

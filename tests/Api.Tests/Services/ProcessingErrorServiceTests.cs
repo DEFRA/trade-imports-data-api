@@ -1,3 +1,4 @@
+using Defra.TradeImportsDataApi.Api.Data;
 using Defra.TradeImportsDataApi.Api.Exceptions;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Data;
@@ -12,23 +13,35 @@ namespace Defra.TradeImportsDataApi.Api.Tests.Services;
 
 public class ProcessingErrorServiceTests
 {
+    private IDbContext DbContext { get; }
+    private IResourceEventPublisher ResourceEventPublisher { get; }
+    private IProcessingErrorRepository ProcessingErrorRepository { get; }
+    private ProcessingErrorService Subject { get; }
+
+    public ProcessingErrorServiceTests()
+    {
+        DbContext = Substitute.For<IDbContext>();
+        ResourceEventPublisher = Substitute.For<IResourceEventPublisher>();
+        ProcessingErrorRepository = Substitute.For<IProcessingErrorRepository>();
+
+        Subject = new ProcessingErrorService(DbContext, ResourceEventPublisher, ProcessingErrorRepository);
+    }
+
     [Fact]
     public async Task Insert_ShouldInsertAndPublish()
     {
-        var mockDbContext = Substitute.For<IDbContext>();
-        var mockResourceEventPublisher = Substitute.For<IResourceEventPublisher>();
-        var subject = new ProcessingErrorService(mockDbContext, mockResourceEventPublisher);
         var entity = new ProcessingErrorEntity
         {
             Id = "id",
             ProcessingError = new ProcessingError { Notifications = [new ErrorNotification { ExternalVersion = 1 }] },
         };
+        ProcessingErrorRepository.Insert(entity, CancellationToken.None).Returns(entity);
 
-        await subject.Insert(entity, CancellationToken.None);
+        await Subject.Insert(entity, CancellationToken.None);
 
-        await mockDbContext.ProcessingErrors.Received().Insert(entity, CancellationToken.None);
-        await mockDbContext.Received().SaveChangesAsync(CancellationToken.None);
-        await mockResourceEventPublisher
+        await ProcessingErrorRepository.Received().Insert(entity, CancellationToken.None);
+        await DbContext.Received().SaveChangesAsync(CancellationToken.None);
+        await ResourceEventPublisher
             .Received()
             .Publish(
                 Arg.Is<ResourceEvent<ProcessingErrorEntity>>(x => x.Operation == "Created" && x.ChangeSet.Count > 0),
@@ -37,37 +50,15 @@ public class ProcessingErrorServiceTests
     }
 
     [Fact]
-    public async Task Update_WhenNotExists_ShouldThrow()
-    {
-        var mockDbContext = Substitute.For<IDbContext>();
-        var mockResourceEventPublisher = Substitute.For<IResourceEventPublisher>();
-        var subject = new ProcessingErrorService(mockDbContext, mockResourceEventPublisher);
-        var entity = new ProcessingErrorEntity { Id = "id", ProcessingError = new ProcessingError() };
-
-        var act = async () => await subject.Update(entity, "etag", CancellationToken.None);
-
-        await act.Should().ThrowAsync<EntityNotFoundException>();
-    }
-
-    [Fact]
     public async Task Update_ShouldUpdateAndPublish()
     {
-        var mockDbContext = Substitute.For<IDbContext>();
         const string id = "id";
-        mockDbContext
-            .ProcessingErrors.Find(id)
-            .Returns(
-                new ProcessingErrorEntity
-                {
-                    Id = "id",
-                    ProcessingError = new ProcessingError
-                    {
-                        Notifications = [new ErrorNotification { ExternalVersion = 1 }],
-                    },
-                }
-            );
-        var mockResourceEventPublisher = Substitute.For<IResourceEventPublisher>();
-        var subject = new ProcessingErrorService(mockDbContext, mockResourceEventPublisher);
+        var existing = new ProcessingErrorEntity
+        {
+            Id = "id",
+            ProcessingError = new ProcessingError { Notifications = [new ErrorNotification { ExternalVersion = 1 }] },
+        };
+        ProcessingErrorRepository.Get(id, CancellationToken.None).Returns(existing);
         var entity = new ProcessingErrorEntity
         {
             Id = "id",
@@ -80,16 +71,30 @@ public class ProcessingErrorServiceTests
                 ],
             },
         };
+        ProcessingErrorRepository.Update(entity, "etag", CancellationToken.None).Returns((existing, entity));
 
-        await subject.Update(entity, "etag", CancellationToken.None);
+        await Subject.Update(entity, "etag", CancellationToken.None);
 
-        await mockDbContext.ProcessingErrors.Received().Update(entity, "etag", CancellationToken.None);
-        await mockDbContext.Received().SaveChangesAsync(CancellationToken.None);
-        await mockResourceEventPublisher
+        await ProcessingErrorRepository.Received().Update(entity, "etag", CancellationToken.None);
+        await DbContext.Received().SaveChangesAsync(CancellationToken.None);
+        await ResourceEventPublisher
             .Received()
             .Publish(
                 Arg.Is<ResourceEvent<ProcessingErrorEntity>>(x => x.Operation == "Updated" && x.ChangeSet.Count > 0),
                 CancellationToken.None
             );
+    }
+
+    [Fact]
+    public async Task GetCustomsDeclaration_ShouldReturn()
+    {
+        const string id = "id";
+        ProcessingErrorRepository
+            .Get(id, CancellationToken.None)
+            .Returns(new ProcessingErrorEntity { Id = id, ProcessingError = new ProcessingError() });
+
+        var result = await Subject.GetProcessingError(id, CancellationToken.None);
+
+        result.Should().NotBeNull();
     }
 }

@@ -1,58 +1,53 @@
-using Defra.TradeImportsDataApi.Api.Exceptions;
+using Defra.TradeImportsDataApi.Api.Data;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
 
 namespace Defra.TradeImportsDataApi.Api.Services;
 
-public class GmrService(IDbContext dbContext) : IGmrService
+public class GmrService(
+    IDbContext dbContext,
+    IGmrRepository gmrRepository,
+    IImportPreNotificationRepository importPreNotificationRepository,
+    ICustomsDeclarationRepository customsDeclarationRepository
+) : IGmrService
 {
-    public Task<GmrEntity?> GetGmr(string gmrId, CancellationToken cancellationToken)
-    {
-        return dbContext.Gmrs.Find(gmrId, cancellationToken);
-    }
+    public Task<GmrEntity?> GetGmr(string id, CancellationToken cancellationToken) =>
+        gmrRepository.Get(id, cancellationToken);
 
     public async Task<List<GmrEntity>> GetGmrByChedId(string chedId, CancellationToken cancellationToken)
     {
-        var importNotification = await dbContext.ImportPreNotifications.Find(x => x.Id == chedId, cancellationToken);
-        if (importNotification == null)
-            return [];
-
-        var customsDeclaration = await dbContext.CustomsDeclarations.FindMany(
-            x => x.ImportPreNotificationIdentifiers.Contains(importNotification.CustomsDeclarationIdentifier),
+        var customsDeclarationIdentifier = await importPreNotificationRepository.GetCustomsDeclarationIdentifier(
+            chedId,
             cancellationToken
         );
+        if (customsDeclarationIdentifier == null)
+            return [];
 
-        var customsDeclarationIds = customsDeclaration.Select(c => c.Id).ToList();
+        var customsDeclarationIds = await customsDeclarationRepository.GetAllIds(
+            customsDeclarationIdentifier,
+            cancellationToken
+        );
         if (customsDeclarationIds.Count == 0)
             return [];
 
-        return await dbContext.Gmrs.FindMany(
-            x => x.CustomsDeclarationIdentifiers.Any(id => customsDeclarationIds.Any(cId => cId == id)),
-            cancellationToken
-        );
+        return await gmrRepository.GetAll(customsDeclarationIds.ToArray(), cancellationToken);
     }
 
     public async Task<GmrEntity> Insert(GmrEntity gmrEntity, CancellationToken cancellationToken)
     {
-        await dbContext.Gmrs.Insert(gmrEntity, cancellationToken);
+        var inserted = await gmrRepository.Insert(gmrEntity, cancellationToken);
+
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        return gmrEntity;
+        return inserted;
     }
 
     public async Task<GmrEntity> Update(GmrEntity gmrEntity, string etag, CancellationToken cancellationToken)
     {
-        var existing = await dbContext.Gmrs.Find(gmrEntity.Id, cancellationToken);
-        if (existing == null)
-        {
-            throw new EntityNotFoundException(nameof(GmrEntity), gmrEntity.Id);
-        }
+        var (_, updated) = await gmrRepository.Update(gmrEntity, etag, cancellationToken);
 
-        gmrEntity.Created = existing.Created;
-
-        await dbContext.Gmrs.Update(gmrEntity, etag, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        return gmrEntity;
+        return updated;
     }
 }

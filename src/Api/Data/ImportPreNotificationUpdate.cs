@@ -1,3 +1,3 @@
-namespace Defra.TradeImportsDataApi.Api.Services;
+namespace Defra.TradeImportsDataApi.Api.Data;
 
 public record ImportPreNotificationUpdate(string ReferenceNumber, DateTime Updated);

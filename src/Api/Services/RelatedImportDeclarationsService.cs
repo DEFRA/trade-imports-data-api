@@ -1,12 +1,14 @@
 using System.Linq.Expressions;
+using Defra.TradeImportsDataApi.Api.Data;
 using Defra.TradeImportsDataApi.Api.Endpoints.Search;
-using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
-using Defra.TradeImportsDataApi.Data.Extensions;
 
 namespace Defra.TradeImportsDataApi.Api.Services;
 
-public class RelatedImportDeclarationsService(IDbContext dbContext) : IRelatedImportDeclarationsService
+public class RelatedImportDeclarationsService(
+    ICustomsDeclarationRepository customsDeclarationRepository,
+    IImportPreNotificationRepository importPreNotificationRepository
+) : IRelatedImportDeclarationsService
 {
     public async Task<(
         CustomsDeclarationEntity[] CustomsDeclaration,
@@ -60,13 +62,9 @@ public class RelatedImportDeclarationsService(IDbContext dbContext) : IRelatedIm
         CancellationToken cancellationToken
     )
     {
-        var customsDeclarations = await dbContext
-            .CustomsDeclarations.Where(predicate)
-            .ToListAsync(cancellationToken: cancellationToken);
+        var customsDeclarations = await customsDeclarationRepository.GetAll(predicate, cancellationToken);
         var identifiers = customsDeclarations.SelectMany(x => x.ImportPreNotificationIdentifiers);
-        var notifications = await dbContext
-            .ImportPreNotifications.Where(x => identifiers.Contains(x.CustomsDeclarationIdentifier))
-            .ToListAsync(cancellationToken: cancellationToken);
+        var notifications = await importPreNotificationRepository.GetAll(identifiers.ToArray(), cancellationToken);
 
         return await IncludeIndirectLinks(
             new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[]>(
@@ -85,22 +83,20 @@ public class RelatedImportDeclarationsService(IDbContext dbContext) : IRelatedIm
     )> StartFromImportPreNotification(string chedId, int maxDepth, CancellationToken cancellationToken)
     {
         var identifier = chedId.Substring(chedId.Length - 7);
-        var notification = (
-            await dbContext
-                .ImportPreNotifications.Where(x => x.CustomsDeclarationIdentifier == identifier)
-                .ToListAsync(cancellationToken)
-        ).SingleOrDefault();
 
+        var notification = await importPreNotificationRepository.GetByCustomsDeclarationIdentifier(
+            identifier,
+            cancellationToken
+        );
         if (notification == null)
         {
             return new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[]>([], []);
         }
 
-        var customsDeclarations = await dbContext
-            .CustomsDeclarations.Where(x =>
-                x.ImportPreNotificationIdentifiers.Contains(notification.CustomsDeclarationIdentifier)
-            )
-            .ToListAsync(cancellationToken: cancellationToken);
+        var customsDeclarations = await customsDeclarationRepository.GetAll(
+            notification.CustomsDeclarationIdentifier,
+            cancellationToken
+        );
 
         return await IncludeIndirectLinks(
             new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[]>(
@@ -142,20 +138,21 @@ public class RelatedImportDeclarationsService(IDbContext dbContext) : IRelatedIm
         if (identifiers.Count != 0)
         {
             importPreNotifications.AddRange(
-                await dbContext
-                    .ImportPreNotifications.Where(x =>
-                        identifiers.Contains(x.CustomsDeclarationIdentifier) && !importPreNotificationIds.Contains(x.Id)
-                    )
-                    .ToListAsync(cancellationToken: cancellationToken)
+                await importPreNotificationRepository.GetAll(
+                    x =>
+                        identifiers.Contains(x.CustomsDeclarationIdentifier)
+                        && !importPreNotificationIds.Contains(x.Id),
+                    cancellationToken
+                )
             );
 
             customsDeclarations.AddRange(
-                await dbContext
-                    .CustomsDeclarations.Where(x =>
+                await customsDeclarationRepository.GetAll(
+                    x =>
                         x.ImportPreNotificationIdentifiers.Any(y => identifiers.Contains(y))
-                        && !customsDeclarationIds.Contains(x.Id)
-                    )
-                    .ToListAsync(cancellationToken: cancellationToken)
+                        && !customsDeclarationIds.Contains(x.Id),
+                    cancellationToken
+                )
             );
         }
 

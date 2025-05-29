@@ -1,4 +1,5 @@
 using Defra.TradeImportsDataApi.Api.Client;
+using Defra.TradeImportsDataApi.Api.Data;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Data.Mongo;
@@ -39,7 +40,8 @@ public class ImportPreNotificationServiceTests : IntegrationTestBase, IAsyncLife
         Subject = new ImportPreNotificationService(
             MongoDbContext,
             Substitute.For<IResourceEventPublisher>(),
-            NullLogger<ImportPreNotificationService>.Instance
+            new ImportPreNotificationRepository(MongoDbContext, NullLogger<ImportPreNotificationRepository>.Instance),
+            new CustomsDeclarationRepository(MongoDbContext)
         );
     }
 
