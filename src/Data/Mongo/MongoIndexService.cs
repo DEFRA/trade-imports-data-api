@@ -63,14 +63,12 @@ public class MongoIndexService(IMongoDatabase database, ILogger<MongoIndexServic
         );
         await CreateIndex(
             "UpdatesIdx",
-            Builders<ImportPreNotificationEntity>
+            Builders<ImportPreNotificationUpdateEntity>
                 // Order of fields important - don't change without reason
                 .IndexKeys.Ascending(x => x.Updated)
-                .Ascending(
-                    new StringFieldDefinition<ImportPreNotificationEntity>("importPreNotification.partOne.pointOfEntry")
-                )
-                .Ascending(x => x.ImportPreNotification.ImportNotificationType)
-                .Ascending(x => x.ImportPreNotification.Status)
+                .Ascending(x => x.PointOfEntry)
+                .Ascending(x => x.ImportNotificationType)
+                .Ascending(x => x.Status)
                 .Ascending(x => x.Id),
             cancellationToken: cancellationToken
         );

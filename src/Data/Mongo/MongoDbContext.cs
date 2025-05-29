@@ -11,6 +11,7 @@ public class MongoDbContext : IDbContext
     {
         Database = database;
         ImportPreNotifications = new MongoCollectionSet<ImportPreNotificationEntity>(this);
+        ImportPreNotificationUpdates = new MongoCollectionSet<ImportPreNotificationUpdateEntity>(this);
         CustomsDeclarations = new MongoCollectionSet<CustomsDeclarationEntity>(this);
         Gmrs = new MongoCollectionSet<GmrEntity>(this);
         ProcessingErrors = new MongoCollectionSet<ProcessingErrorEntity>(this);
@@ -20,6 +21,7 @@ public class MongoDbContext : IDbContext
     internal MongoDbTransaction? ActiveTransaction { get; private set; }
 
     public IMongoCollectionSet<ImportPreNotificationEntity> ImportPreNotifications { get; }
+    public IMongoCollectionSet<ImportPreNotificationUpdateEntity> ImportPreNotificationUpdates { get; }
     public IMongoCollectionSet<CustomsDeclarationEntity> CustomsDeclarations { get; }
     public IMongoCollectionSet<GmrEntity> Gmrs { get; }
     public IMongoCollectionSet<ProcessingErrorEntity> ProcessingErrors { get; }
@@ -62,6 +64,7 @@ public class MongoDbContext : IDbContext
     {
         // This logic needs to be reviewed as it's easy to forget to include any new collection sets
         return ImportPreNotifications.PendingChanges
+            + ImportPreNotificationUpdates.PendingChanges
             + CustomsDeclarations.PendingChanges
             + Gmrs.PendingChanges
             + ProcessingErrors.PendingChanges;
@@ -74,5 +77,8 @@ public class MongoDbContext : IDbContext
         await CustomsDeclarations.PersistAsync(cancellation);
         await Gmrs.PersistAsync(cancellation);
         await ProcessingErrors.PersistAsync(cancellation);
+
+        // Keep this last as upserts above will impact those below
+        await ImportPreNotificationUpdates.PersistAsync(cancellation);
     }
 }

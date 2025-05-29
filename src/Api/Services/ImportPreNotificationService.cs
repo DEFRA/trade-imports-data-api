@@ -31,33 +31,33 @@ public class ImportPreNotificationService(
     }
 
     public async Task<ImportPreNotificationEntity> Insert(
-        ImportPreNotificationEntity importPreNotificationEntity,
+        ImportPreNotificationEntity entity,
         CancellationToken cancellationToken
     )
     {
-        var updated = await importPreNotificationRepository.Insert(importPreNotificationEntity, cancellationToken);
+        var inserted = await importPreNotificationRepository.Insert(entity, cancellationToken);
+
+        await importPreNotificationRepository.TrackImportPreNotificationUpdate(inserted, cancellationToken);
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
         await resourceEventPublisher.Publish(
-            updated.ToResourceEvent(ResourceEventOperations.Created, includeEntityAsResource: false),
+            inserted.ToResourceEvent(ResourceEventOperations.Created, includeEntityAsResource: false),
             cancellationToken
         );
 
-        return updated;
+        return inserted;
     }
 
     public async Task<ImportPreNotificationEntity> Update(
-        ImportPreNotificationEntity importPreNotificationEntity,
+        ImportPreNotificationEntity entity,
         string etag,
         CancellationToken cancellationToken
     )
     {
-        var (_, updated) = await importPreNotificationRepository.Update(
-            importPreNotificationEntity,
-            etag,
-            cancellationToken
-        );
+        var (_, updated) = await importPreNotificationRepository.Update(entity, etag, cancellationToken);
+
+        await importPreNotificationRepository.TrackImportPreNotificationUpdate(updated, cancellationToken);
 
         await dbContext.SaveChangesAsync(cancellationToken);
 

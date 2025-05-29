@@ -11,13 +11,10 @@ public interface ICustomsDeclarationService
         CancellationToken cancellationToken
     );
 
-    Task<CustomsDeclarationEntity> Insert(
-        CustomsDeclarationEntity customsDeclarationEntity,
-        CancellationToken cancellationToken
-    );
+    Task<CustomsDeclarationEntity> Insert(CustomsDeclarationEntity entity, CancellationToken cancellationToken);
 
     Task<CustomsDeclarationEntity> Update(
-        CustomsDeclarationEntity customsDeclarationEntity,
+        CustomsDeclarationEntity entity,
         string etag,
         CancellationToken cancellationToken
     );
