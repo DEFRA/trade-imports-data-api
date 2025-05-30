@@ -137,7 +137,7 @@ public static class EndpointRouteBuilderExtensions
                         customsDeclarationEntity.ClearanceRequest,
                         customsDeclarationEntity.ClearanceDecision,
                         customsDeclarationEntity.Finalisation,
-                        customsDeclarationEntity.InboundError,
+                        customsDeclarationEntity.ExternalErrors,
                         customsDeclarationEntity.Created,
                         customsDeclarationEntity.Updated
                     ))

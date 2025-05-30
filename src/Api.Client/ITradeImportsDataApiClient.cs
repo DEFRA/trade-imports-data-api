@@ -40,7 +40,7 @@ public interface ITradeImportsDataApiClient
 
     Task PutProcessingError(
         string mrn,
-        Domain.ProcessingErrors.ProcessingError data,
+        Domain.Errors.ProcessingError[] data,
         string? etag,
         CancellationToken cancellationToken
     );

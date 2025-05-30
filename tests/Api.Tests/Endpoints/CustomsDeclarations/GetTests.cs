@@ -131,7 +131,7 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
                     ClearanceRequest = customsDeclaration.ClearanceRequest,
                     ClearanceDecision = customsDeclaration.ClearanceDecision,
                     Finalisation = customsDeclaration.Finalisation,
-                    InboundError = customsDeclaration.InboundError,
+                    ExternalErrors = customsDeclaration.ExternalErrors,
                     Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
                     Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
                     ETag = "etag",

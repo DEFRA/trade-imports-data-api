@@ -64,7 +64,7 @@ public static class EndpointRouteBuilderExtensions
         return Results.Ok(
             new ProcessingErrorResponse(
                 processingErrorEntity.Id,
-                processingErrorEntity.ProcessingError,
+                processingErrorEntity.ProcessingErrors,
                 processingErrorEntity.Created,
                 processingErrorEntity.Updated
             )
@@ -75,13 +75,13 @@ public static class EndpointRouteBuilderExtensions
     private static async Task<IResult> Put(
         [FromRoute] string mrn,
         HttpContext context,
-        [FromBody] Domain.ProcessingErrors.ProcessingError data,
+        [FromBody] Domain.Errors.ProcessingError[] data,
         [FromHeader(Name = "If-Match")] string? ifMatch,
         [FromServices] IProcessingErrorService processingErrorService,
         CancellationToken cancellationToken
     )
     {
-        var processingErrorEntity = new ProcessingErrorEntity { Id = mrn, ProcessingError = data };
+        var processingErrorEntity = new ProcessingErrorEntity { Id = mrn, ProcessingErrors = data };
 
         var etag = ETags.ValidateAndParseFirst(ifMatch);
 

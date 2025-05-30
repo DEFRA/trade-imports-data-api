@@ -8,7 +8,7 @@ public record CustomsDeclarationResponse(
     [property: JsonPropertyName("clearanceRequest")] ClearanceRequest? ClearanceRequest,
     [property: JsonPropertyName("clearanceDecision")] ClearanceDecision? ClearanceDecision,
     [property: JsonPropertyName("finalisation")] Finalisation? Finalisation,
-    [property: JsonPropertyName("inboundError")] InboundError? InboundError,
+    [property: JsonPropertyName("externalErrors")] ExternalError[]? ExternalErrors,
     [property: JsonPropertyName("created")] DateTime Created,
     [property: JsonPropertyName("updated")] DateTime Updated
 );

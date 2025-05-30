@@ -1,4 +1,4 @@
-using Defra.TradeImportsDataApi.Domain.ProcessingErrors;
+using Defra.TradeImportsDataApi.Domain.Errors;
 
 namespace Defra.TradeImportsDataApi.Data.Entities;
 
@@ -12,7 +12,7 @@ public class ProcessingErrorEntity : IDataEntity
 
     public DateTime Updated { get; set; }
 
-    public required ProcessingError ProcessingError { get; set; }
+    public required ProcessingError[] ProcessingErrors { get; set; }
 
     public void OnSave() { }
 }

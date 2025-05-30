@@ -167,7 +167,7 @@
   },
   "clearanceDecision": {
     "externalCorrelationId": "ExternalCorrelationIde459a47f-bd3d-4663-b49f-24dc1338840f",
-    "timestamp": "2024-01-09T04:51:43.0248311",
+    "created": "2024-01-09T04:51:43.0248311",
     "externalVersionNumber": 200,
     "decisionNumber": 116,
     "sourceVersion": "123",
@@ -332,7 +332,7 @@
     "finalState": "0",
     "isManualRelease": true
   },
-  "inboundError": {
+  "externalError": {
     "notifications": [
       {
         "externalCorrelationId": "ExternalCorrelationId5a0fb6fd-70ef-4159-a8ca-51455cab6016",

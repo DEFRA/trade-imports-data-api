@@ -11,5 +11,5 @@ public static class ResourceEventSubResourceTypes
 
     public const string Finalisation = nameof(Finalisation);
 
-    public const string InboundError = nameof(InboundError);
+    public const string ExternalError = nameof(ExternalError);
 }

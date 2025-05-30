@@ -331,7 +331,7 @@ public class ImportPreNotificationUpdateTests : IntegrationTestBase, IAsyncLifet
                 ClearanceRequest = response.ClearanceRequest,
                 ClearanceDecision = response.ClearanceDecision,
                 Finalisation = response.Finalisation,
-                InboundError = response.InboundError,
+                ExternalErrors = response.ExternalErrors,
             },
             response.ETag,
             CancellationToken.None
