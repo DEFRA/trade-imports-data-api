@@ -1,3 +1,6 @@
+using System.IO.Compression;
+using System.Text;
+using System.Text.Json;
 using Amazon.SimpleNotificationService;
 using Amazon.SimpleNotificationService.Model;
 using Defra.TradeImportsDataApi.Api.Configuration;
@@ -5,6 +8,7 @@ using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Api.Utils.Logging;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.Events;
+using FluentAssertions;
 using Microsoft.AspNetCore.HeaderPropagation;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -52,6 +56,68 @@ public class ResourceEventPublisherTests
                 ),
                 CancellationToken.None
             );
+    }
+
+    [Fact]
+    public async Task Publish_WhenEventIsLargerThanCompressionThreshold_ShouldCompressMessage()
+    {
+        var mockSimpleNotificationService = Substitute.For<IAmazonSimpleNotificationService>();
+        var subject = new ResourceEventPublisher(
+            mockSimpleNotificationService,
+            new OptionsWrapper<TraceHeader>(new TraceHeader { Name = "trace-id" }),
+            new HeaderPropagationValues(),
+            new OptionsWrapper<ResourceEventOptions>(
+                new ResourceEventOptions { ArnPrefix = "arn", TopicName = "topic-name" }
+            ),
+            NullLogger<ResourceEventPublisher>.Instance
+        );
+
+        var largerThanCompressionThreshold = 256 * 1000 + 1;
+        var sb = new StringBuilder(largerThanCompressionThreshold);
+        const char pattern = 'A';
+        for (var i = 0; i < largerThanCompressionThreshold; i++)
+        {
+            sb.Append(pattern);
+        }
+        var largeMessage = sb.ToString();
+        largeMessage.Length.Should().Be(largerThanCompressionThreshold);
+
+        var resource = new FixtureEntity { Id = largeMessage };
+
+        var @event = new ResourceEvent<FixtureEntity>
+        {
+            ResourceId = "resourceId",
+            ResourceType = "resourceType",
+            Operation = "operation",
+            Resource = resource,
+        };
+
+        await subject.Publish(@event, CancellationToken.None);
+
+        await mockSimpleNotificationService
+            .Received()
+            .PublishAsync(
+                Arg.Is<PublishRequest>(x =>
+                    x.MessageAttributes["Content-Encoding"].StringValue == "gzip, base64"
+                    && DecodeAndDecompressTo<ResourceEvent<FixtureEntity>>(x.Message).Resource != resource
+                ),
+                CancellationToken.None
+            );
+    }
+
+    private static T DecodeAndDecompressTo<T>(string compressedMessage)
+    {
+        compressedMessage.Length.Should().BeLessThan(256 * 1000);
+        var compressedBytes = Convert.FromBase64String(compressedMessage);
+
+        using var compressedStream = new MemoryStream(compressedBytes);
+        using var gzipStream = new GZipStream(compressedStream, CompressionMode.Decompress);
+        using var reader = new StreamReader(gzipStream, Encoding.UTF8);
+        var result = reader.ReadToEnd();
+
+        var deserialised = JsonSerializer.Deserialize<T>(result);
+        deserialised.Should().NotBeNull();
+        return deserialised;
     }
 
     [Fact]

@@ -1,3 +1,5 @@
+using System.IO.Compression;
+using System.Text;
 using System.Text.Json;
 using Amazon.SimpleNotificationService;
 using Amazon.SimpleNotificationService.Model;
@@ -17,13 +19,19 @@ public class ResourceEventPublisher(
     ILogger<ResourceEventPublisher> logger
 ) : IResourceEventPublisher
 {
+    private const string CompressedHeader = "Content-Encoding";
+    private const int CompressionThreshold = 256 * 1000;
+    private const string DataTypeString = "String";
+
     public async Task Publish<T>(ResourceEvent<T> @event, CancellationToken cancellationToken)
     {
+        var (message, compressed) = SerializeEvent(@event);
+
         var messageAttributes = new Dictionary<string, MessageAttributeValue>
         {
             {
                 nameof(@event.ResourceType),
-                new MessageAttributeValue { StringValue = @event.ResourceType, DataType = "String" }
+                new MessageAttributeValue { StringValue = @event.ResourceType, DataType = DataTypeString }
             },
         };
 
@@ -31,7 +39,15 @@ public class ResourceEventPublisher(
         {
             messageAttributes.Add(
                 nameof(@event.SubResourceType),
-                new MessageAttributeValue { StringValue = @event.SubResourceType, DataType = "String" }
+                new MessageAttributeValue { StringValue = @event.SubResourceType, DataType = DataTypeString }
+            );
+        }
+
+        if (compressed)
+        {
+            messageAttributes.Add(
+                CompressedHeader,
+                new MessageAttributeValue { StringValue = "gzip, base64", DataType = DataTypeString }
             );
         }
 
@@ -41,7 +57,7 @@ public class ResourceEventPublisher(
         {
             TopicArn = resourceEventOptions.Value.TopicArn,
             MessageAttributes = messageAttributes,
-            Message = JsonSerializer.Serialize(@event),
+            Message = message,
         };
 
         await simpleNotificationService.PublishAsync(request, cancellationToken);
@@ -54,6 +70,21 @@ public class ResourceEventPublisher(
         );
     }
 
+    private static (string message, bool compressed) SerializeEvent<T>(ResourceEvent<T> @event)
+    {
+        var message = JsonSerializer.Serialize(@event);
+        if (message.Length <= CompressionThreshold)
+            return (message, false);
+
+        var buffer = Encoding.UTF8.GetBytes(message);
+        var memoryStream = new MemoryStream();
+        using var gzipStream = new GZipStream(memoryStream, CompressionLevel.Optimal);
+        gzipStream.Write(buffer, 0, buffer.Length);
+        gzipStream.Flush();
+
+        return (Convert.ToBase64String(memoryStream.ToArray()), true);
+    }
+
     private void AddTraceIdIfPresent(Dictionary<string, MessageAttributeValue> messageAttributes)
     {
         if (
@@ -63,7 +94,7 @@ public class ResourceEventPublisher(
         {
             messageAttributes.Add(
                 traceHeaderOptions.Value.Name,
-                new MessageAttributeValue { StringValue = traceId, DataType = "String" }
+                new MessageAttributeValue { StringValue = traceId, DataType = DataTypeString }
             );
         }
     }
