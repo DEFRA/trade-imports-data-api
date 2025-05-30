@@ -4,7 +4,7 @@ using Defra.TradeImportsDataApi.Api.Exceptions;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
-using Defra.TradeImportsDataApi.Domain.ProcessingErrors;
+using Defra.TradeImportsDataApi.Domain.Errors;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;

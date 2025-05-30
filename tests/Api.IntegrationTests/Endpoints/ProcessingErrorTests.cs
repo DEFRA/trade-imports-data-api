@@ -1,5 +1,4 @@
 using Defra.TradeImportsDataApi.Domain.Errors;
-using Defra.TradeImportsDataApi.Domain.ProcessingErrors;
 using FluentAssertions;
 using Xunit.Abstractions;
 
@@ -37,18 +36,18 @@ public class ProcessingErrorTests(ITestOutputHelper testOutputHelper) : SqsTestB
         result.Should().NotBeNull();
         result.Created.Should().BeAfter(DateTime.MinValue);
         result.Updated.Should().BeAfter(DateTime.MinValue);
-        result.ProcessingError?.Notifications.Should().BeNull();
+        result.ProcessingErrors?.Should().BeNull();
 
         await client.PutProcessingError(
             mrn,
-            new ProcessingError { Notifications = [new ErrorNotification()] },
+            [],
             result.ETag,
             CancellationToken.None
         );
 
         var result2 = await client.GetProcessingError(mrn, CancellationToken.None);
         result2.Should().NotBeNull();
-        result2.ProcessingError?.Notifications.Should().NotBeEmpty();
+        result2.ProcessingErrors?.Should().NotBeEmpty();
         result2.Created.Should().Be(result.Created);
         result2.Updated.Should().BeAfter(result.Updated);
     }

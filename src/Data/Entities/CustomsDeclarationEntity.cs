@@ -20,7 +20,7 @@ public class CustomsDeclarationEntity : IDataEntity
 
     public Finalisation? Finalisation { get; set; }
 
-    public InboundError? InboundError { get; set; }
+    public ExternalError[]? ExternalErrors { get; set; }
 
     public void OnSave()
     {

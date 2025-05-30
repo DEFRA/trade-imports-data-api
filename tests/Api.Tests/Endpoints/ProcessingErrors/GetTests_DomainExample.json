@@ -1,5 +1,4 @@
-{
-  "notifications": [
+[
     {
       "externalCorrelationId": "ExternalCorrelationId815625eb-3e33-460b-af4f-a5e5f23da033",
       "externalVersion": 36,
@@ -60,5 +59,4 @@
       ],
       "message": "Message15ed54b7-4573-40bb-8236-902dcf1a82c2"
     }
-  ]
-}
+]

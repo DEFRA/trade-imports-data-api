@@ -340,7 +340,7 @@
     "finalState": "0",
     "isManualRelease": true
   },
-  "InboundError": {
+  "externalError": {
     "notifications": [
       {
         "externalCorrelationId": "ExternalCorrelationId5a0fb6fd-70ef-4159-a8ca-51455cab6016",

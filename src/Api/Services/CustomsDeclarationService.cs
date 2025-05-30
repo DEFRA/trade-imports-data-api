@@ -39,7 +39,7 @@ public class CustomsDeclarationService(
                         ClearanceRequest = inserted.ClearanceRequest,
                         ClearanceDecision = inserted.ClearanceDecision,
                         Finalisation = inserted.Finalisation,
-                        InboundError = inserted.InboundError,
+                        ExternalErrors = inserted.ExternalErrors,
                     },
                     new CustomsDeclaration()
                 ),
@@ -80,14 +80,14 @@ public class CustomsDeclarationService(
                         ClearanceRequest = updated.ClearanceRequest,
                         ClearanceDecision = updated.ClearanceDecision,
                         Finalisation = updated.Finalisation,
-                        InboundError = updated.InboundError,
+                        ExternalErrors = updated.ExternalErrors,
                     },
                     new CustomsDeclaration
                     {
                         ClearanceRequest = existing.ClearanceRequest,
                         ClearanceDecision = existing.ClearanceDecision,
                         Finalisation = existing.Finalisation,
-                        InboundError = existing.InboundError,
+                        ExternalErrors = existing.ExternalErrors,
                     }
                 ),
             cancellationToken

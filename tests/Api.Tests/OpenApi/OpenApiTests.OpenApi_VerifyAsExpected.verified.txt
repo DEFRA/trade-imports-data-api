@@ -1461,7 +1461,7 @@
             "type": "string",
             "nullable": true
           },
-          "timestamp": {
+          "created": {
             "type": "string",
             "format": "date-time"
           },
@@ -2392,10 +2392,10 @@
             ],
             "nullable": true
           },
-          "inboundError": {
+          "externalError": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.InboundError"
+                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.ExternalError"
               }
             ],
             "nullable": true
@@ -2433,10 +2433,10 @@
             ],
             "nullable": true
           },
-          "inboundError": {
+          "externalError": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.InboundError"
+                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.ExternalError"
               }
             ],
             "nullable": true
@@ -3641,7 +3641,7 @@
         },
         "additionalProperties": false
       },
-      "Defra.TradeImportsDataApi.InboundError": {
+      "Defra.TradeImportsDataApi.ExternalError": {
         "type": "object",
         "properties": {
           "notifications": {

@@ -5,7 +5,7 @@ using System.Text.Json;
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 using Defra.TradeImportsDataApi.Domain.Gvms;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
-using Defra.TradeImportsDataApi.Domain.ProcessingErrors;
+using Defra.TradeImportsDataApi.Domain.Errors;
 
 namespace Defra.TradeImportsDataApi.Api.Client;
 
@@ -152,7 +152,7 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
 
     public async Task PutProcessingError(
         string mrn,
-        ProcessingError data,
+        ProcessingError[] data,
         string? etag,
         CancellationToken cancellationToken
     )
