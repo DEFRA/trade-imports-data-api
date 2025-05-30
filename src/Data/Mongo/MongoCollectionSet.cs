@@ -69,8 +69,6 @@ public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionNa
                 var filter = builder.Eq(x => x.Id, item.Item.Id) & builder.Eq(x => x.ETag, item.Etag);
 
                 item.Item.ETag = BsonObjectIdGenerator.Instance.GenerateId(null, null).ToString()!;
-                item.Item.Updated = DateTime.UtcNow;
-                item.Item.OnSave();
 
                 var session = dbContext.ActiveTransaction?.Session;
                 var updateResult = session is not null
@@ -94,8 +92,6 @@ public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionNa
             foreach (var item in _entitiesToInsert)
             {
                 item.ETag = BsonObjectIdGenerator.Instance.GenerateId(null, null).ToString()!;
-                item.Created = item.Updated = DateTime.UtcNow;
-                item.OnSave();
 
                 var session = dbContext.ActiveTransaction?.Session;
                 if (session is not null)
@@ -114,7 +110,11 @@ public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionNa
 
     public Task Insert(T item, CancellationToken cancellationToken = default)
     {
+        item.Created = item.Updated = DateTime.UtcNow;
+        item.OnSave();
+
         _entitiesToInsert.Add(item);
+
         return Task.CompletedTask;
     }
 
@@ -139,8 +139,14 @@ public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionNa
         }
 
         ArgumentNullException.ThrowIfNull(etag);
+
         _entitiesToUpdate.RemoveAll(x => x.Item.Id == item.Id);
+
+        item.Updated = DateTime.UtcNow;
+        item.OnSave();
+
         _entitiesToUpdate.Add(new ValueTuple<T, string>(item, etag));
+
         return Task.CompletedTask;
     }
 }

@@ -16,12 +16,9 @@ public class ProcessingErrorService(
     public async Task<ProcessingErrorEntity?> GetProcessingError(string mrn, CancellationToken cancellationToken) =>
         await processingErrorRepository.Get(mrn, cancellationToken);
 
-    public async Task<ProcessingErrorEntity> Insert(
-        ProcessingErrorEntity processingErrorEntity,
-        CancellationToken cancellationToken
-    )
+    public async Task<ProcessingErrorEntity> Insert(ProcessingErrorEntity entity, CancellationToken cancellationToken)
     {
-        var inserted = await processingErrorRepository.Insert(processingErrorEntity, cancellationToken);
+        var inserted = await processingErrorRepository.Insert(entity, cancellationToken);
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
@@ -36,16 +33,12 @@ public class ProcessingErrorService(
     }
 
     public async Task<ProcessingErrorEntity> Update(
-        ProcessingErrorEntity processingErrorEntity,
+        ProcessingErrorEntity entity,
         string etag,
         CancellationToken cancellationToken
     )
     {
-        var (existing, updated) = await processingErrorRepository.Update(
-            processingErrorEntity,
-            etag,
-            cancellationToken
-        );
+        var (existing, updated) = await processingErrorRepository.Update(entity, etag, cancellationToken);
 
         await dbContext.SaveChangesAsync(cancellationToken);
 

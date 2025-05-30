@@ -106,11 +106,37 @@ public class GmrServiceTests
     [Fact]
     public async Task Insert_ShouldInsert()
     {
-        var entity = new GmrEntity { Id = "id", Gmr = new Gmr() };
+        const string mrn = "mrn";
+        var importPreNotificationIdentifiers = new List<string> { "123" };
+        var entity = new GmrEntity
+        {
+            Id = "id",
+            Gmr = new Gmr { Declarations = new Declarations { Customs = [new Customs { Id = mrn }] } },
+        };
+        GmrRepository
+            .Insert(entity, CancellationToken.None)
+            .Returns(x =>
+            {
+                entity.OnSave();
+                return entity;
+            });
+        CustomsDeclarationRepository
+            .GetAllImportPreNotificationIdentifiers(
+                Arg.Is<string[]>(x => x.SequenceEqual(new[] { mrn })),
+                CancellationToken.None
+            )
+            .Returns(importPreNotificationIdentifiers);
 
         await Subject.Insert(entity, CancellationToken.None);
 
         await GmrRepository.Received().Insert(entity, CancellationToken.None);
+        await ImportPreNotificationRepository
+            .Received()
+            .TrackImportPreNotificationUpdate(
+                entity,
+                Arg.Is<string[]>(x => x.SequenceEqual(importPreNotificationIdentifiers)),
+                CancellationToken.None
+            );
         await DbContext.Received().SaveChangesAsync(CancellationToken.None);
     }
 
@@ -118,20 +144,18 @@ public class GmrServiceTests
     public async Task Update_ShouldUpdate()
     {
         const string id = "id";
-        GmrRepository
-            .Get(id, CancellationToken.None)
-            .Returns(
-                new GmrEntity
-                {
-                    Id = id,
-                    Gmr = new Gmr { State = "OPEN" },
-                }
-            );
+        var existing = new GmrEntity
+        {
+            Id = id,
+            Gmr = new Gmr { State = "OPEN" },
+        };
+        GmrRepository.Get(id, CancellationToken.None).Returns(existing);
         var entity = new GmrEntity
         {
             Id = id,
             Gmr = new Gmr { State = "COMPLETED" },
         };
+        GmrRepository.Update(entity, "etag", CancellationToken.None).Returns((existing, entity));
 
         await Subject.Update(entity, "etag", CancellationToken.None);
 

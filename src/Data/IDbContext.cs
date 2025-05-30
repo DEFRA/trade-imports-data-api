@@ -6,6 +6,8 @@ public interface IDbContext
 {
     IMongoCollectionSet<ImportPreNotificationEntity> ImportPreNotifications { get; }
 
+    IMongoCollectionSet<ImportPreNotificationUpdateEntity> ImportPreNotificationUpdates { get; }
+
     IMongoCollectionSet<CustomsDeclarationEntity> CustomsDeclarations { get; }
 
     IMongoCollectionSet<GmrEntity> Gmrs { get; }
