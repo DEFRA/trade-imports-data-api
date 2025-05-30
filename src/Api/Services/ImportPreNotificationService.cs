@@ -42,7 +42,7 @@ public class ImportPreNotificationService(
         await dbContext.SaveChangesAsync(cancellationToken);
 
         await resourceEventPublisher.Publish(
-            inserted.ToResourceEvent(ResourceEventOperations.Created, includeEntityAsResource: false),
+            inserted.ToResourceEvent(ResourceEventOperations.Created),
             cancellationToken
         );
 
@@ -62,7 +62,7 @@ public class ImportPreNotificationService(
         await dbContext.SaveChangesAsync(cancellationToken);
 
         await resourceEventPublisher.Publish(
-            updated.ToResourceEvent(ResourceEventOperations.Updated, includeEntityAsResource: false),
+            updated.ToResourceEvent(ResourceEventOperations.Updated),
             cancellationToken
         );
 
