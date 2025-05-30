@@ -8,6 +8,7 @@ using Defra.TradeImportsDataApi.Domain.Gvms;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using Defra.TradeImportsDataApi.Testing;
 using FluentAssertions;
+using Microsoft.Extensions.Logging.Abstractions;
 using MongoDB.Driver;
 using ImportPreNotificationResponse = Defra.TradeImportsDataApi.Api.Client.ImportPreNotificationResponse;
 
@@ -39,7 +40,7 @@ public class ImportPreNotificationUpdateTests : IntegrationTestBase, IAsyncLifet
 
         DataApiClient = CreateDataApiClient();
         HttpClient = CreateHttpClient();
-        MongoDbContext = new MongoDbContext(GetMongoDatabase());
+        MongoDbContext = new MongoDbContext(GetMongoDatabase(), NullLogger<MongoDbContext>.Instance);
     }
 
     public Task DisposeAsync() => Task.CompletedTask;

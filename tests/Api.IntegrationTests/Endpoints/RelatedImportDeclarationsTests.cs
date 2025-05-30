@@ -80,15 +80,13 @@ public class RelatedImportDeclarationsTests : IntegrationTestBase
         var chedRef4 = ImportPreNotificationIdGenerator.Generate();
         var random = Guid.NewGuid().ToString("N");
 
-        await Task.WhenAll(
-            CreateImportPreNotification(client, chedRef1),
-            CreateImportPreNotification(client, chedRef2),
-            CreateImportPreNotification(client, chedRef3),
-            CreateImportPreNotification(client, chedRef4),
-            CreateCustomsDeclaration(client, $"{random}-mrn1", $"{random}-ducr1", [chedRef3, chedRef4]),
-            CreateCustomsDeclaration(client, $"{random}-mrn2", $"{random}-ducr2", [chedRef2, chedRef3]),
-            CreateCustomsDeclaration(client, $"{random}-mrn3", $"{random}-ducr3", [chedRef1, chedRef2])
-        );
+        await CreateImportPreNotification(client, chedRef1);
+        await CreateImportPreNotification(client, chedRef2);
+        await CreateImportPreNotification(client, chedRef3);
+        await CreateImportPreNotification(client, chedRef4);
+        await CreateCustomsDeclaration(client, $"{random}-mrn1", $"{random}-ducr1", [chedRef3, chedRef4]);
+        await CreateCustomsDeclaration(client, $"{random}-mrn2", $"{random}-ducr2", [chedRef2, chedRef3]);
+        await CreateCustomsDeclaration(client, $"{random}-mrn3", $"{random}-ducr3", [chedRef1, chedRef2]);
 
         return (chedRef4, random);
     }
