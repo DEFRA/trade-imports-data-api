@@ -1461,7 +1461,7 @@
             "type": "string",
             "nullable": true
           },
-          "timestamp": {
+          "created": {
             "type": "string",
             "format": "date-time"
           },
@@ -2392,10 +2392,10 @@
             ],
             "nullable": true
           },
-          "inboundError": {
+          "externalError": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.InboundError"
+                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.ExternalError"
               }
             ],
             "nullable": true
@@ -2433,10 +2433,10 @@
             ],
             "nullable": true
           },
-          "inboundError": {
+          "externalError": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.InboundError"
+                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.ExternalError"
               }
             ],
             "nullable": true
@@ -2945,6 +2945,19 @@
           },
           "message": {
             "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Defra.TradeImportsDataApi.ExternalError": {
+        "type": "object",
+        "properties": {
+          "notifications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.ErrorNotification"
+            },
             "nullable": true
           }
         },
@@ -3637,19 +3650,6 @@
             "items": {
               "$ref": "#/components/schemas/Defra.TradeImportsDataApi.ImportPreNotificationResponse"
             }
-          }
-        },
-        "additionalProperties": false
-      },
-      "Defra.TradeImportsDataApi.InboundError": {
-        "type": "object",
-        "properties": {
-          "notifications": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.ErrorNotification"
-            },
-            "nullable": true
           }
         },
         "additionalProperties": false

@@ -3,7 +3,7 @@ using Defra.TradeImportsDataApi.Domain.Errors;
 
 namespace Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 
-public class InboundError
+public class ExternalError
 {
     [JsonPropertyName("notifications")]
     public ErrorNotification[]? Notifications { get; set; }

@@ -8,7 +8,7 @@
     <Nullable>enable</Nullable>
     <IsPackable>true</IsPackable>
     <PackageId>Defra.TradeImportsDataApi.Api.Client</PackageId>
-    <VersionPrefix>0.25.0</VersionPrefix>
+    <VersionPrefix>0.26.0</VersionPrefix>
     <PackageDescription>Defra Trade Imports Data Api Client</PackageDescription>
     <Company>DEFRA</Company>
     <RepositoryUrl>https://github.com/DEFRA/trade-imports-data-api</RepositoryUrl>

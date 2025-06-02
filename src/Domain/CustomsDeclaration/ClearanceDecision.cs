@@ -7,8 +7,8 @@ public class ClearanceDecision
     [JsonPropertyName("externalCorrelationId")]
     public string? ExternalCorrelationId { get; set; }
 
-    [JsonPropertyName("timestamp")]
-    public DateTime Timestamp { get; set; }
+    [JsonPropertyName("created")]
+    public DateTime Created { get; set; }
 
     [JsonPropertyName("externalVersionNumber")]
     public int? ExternalVersionNumber { get; set; }

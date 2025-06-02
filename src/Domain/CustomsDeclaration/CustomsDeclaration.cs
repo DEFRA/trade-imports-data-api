@@ -9,5 +9,5 @@ public class CustomsDeclaration
 
     public Finalisation? Finalisation { get; set; }
 
-    public InboundError? InboundError { get; set; }
+    public ExternalError? ExternalError { get; set; }
 }

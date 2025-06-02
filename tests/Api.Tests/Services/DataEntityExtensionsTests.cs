@@ -202,15 +202,15 @@ public class DataEntityExtensionsTests
     }
 
     [Fact]
-    public void WhenWithChangeSet_AndSubResourceTypeIsInboundError_ShouldSetSubResourceType()
+    public void WhenWithChangeSet_AndSubResourceTypeIsExternalError_ShouldSetSubResourceType()
     {
         var subject = new FixtureEntity { Id = "id", ETag = "etag" };
         var previous = new CustomsDeclaration();
-        var current = new CustomsDeclaration { InboundError = new InboundError() };
+        var current = new CustomsDeclaration { ExternalError = new ExternalError() };
 
         var result = subject.ToResourceEvent("operation").WithChangeSet(current, previous);
 
-        result.SubResourceType.Should().Be("InboundError");
+        result.SubResourceType.Should().Be("ExternalError");
     }
 
     [Fact]
@@ -228,7 +228,7 @@ public class DataEntityExtensionsTests
                 FinalState = "0",
                 IsManualRelease = false,
             },
-            InboundError = new InboundError(),
+            ExternalError = new ExternalError(),
         };
 
         var act = () => subject.ToResourceEvent("operation").WithChangeSet(current, previous);
