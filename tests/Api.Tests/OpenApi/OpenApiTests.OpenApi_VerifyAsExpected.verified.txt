@@ -2928,14 +2928,14 @@
             "type": "string",
             "nullable": true
           },
-          "messageSentAt": {
-            "type": "string",
-            "format": "date-time"
-          },
           "externalVersion": {
             "type": "integer",
             "format": "int32",
             "nullable": true
+          },
+          "messageSentAt": {
+            "type": "string",
+            "format": "date-time"
           },
           "errors": {
             "type": "array",
