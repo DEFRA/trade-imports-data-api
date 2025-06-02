@@ -21,6 +21,8 @@ public interface ICustomsDeclarationRepository
 
     Task<List<string>> GetAllImportPreNotificationIdentifiers(string id, CancellationToken cancellationToken);
 
+    Task<List<string>> GetAllImportPreNotificationIdentifiers(string[] ids, CancellationToken cancellationToken);
+
     Task<CustomsDeclarationEntity> Insert(CustomsDeclarationEntity entity, CancellationToken cancellationToken);
 
     Task<(CustomsDeclarationEntity Existing, CustomsDeclarationEntity Updated)> Update(

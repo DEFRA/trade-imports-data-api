@@ -48,6 +48,15 @@ public class CustomsDeclarationRepository(IDbContext dbContext) : ICustomsDeclar
             .SelectMany(x => x.ImportPreNotificationIdentifiers)
             .ToListAsync(cancellationToken);
 
+    public async Task<List<string>> GetAllImportPreNotificationIdentifiers(
+        string[] ids,
+        CancellationToken cancellationToken
+    ) =>
+        await dbContext
+            .CustomsDeclarations.Where(x => ids.Contains(x.Id))
+            .SelectMany(x => x.ImportPreNotificationIdentifiers)
+            .ToListAsync(cancellationToken);
+
     public async Task<CustomsDeclarationEntity> Insert(
         CustomsDeclarationEntity entity,
         CancellationToken cancellationToken

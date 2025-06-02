@@ -33,21 +33,42 @@ public class GmrService(
         return await gmrRepository.GetAll(customsDeclarationIds.ToArray(), cancellationToken);
     }
 
-    public async Task<GmrEntity> Insert(GmrEntity gmrEntity, CancellationToken cancellationToken)
+    public async Task<GmrEntity> Insert(GmrEntity entity, CancellationToken cancellationToken)
     {
-        var inserted = await gmrRepository.Insert(gmrEntity, cancellationToken);
+        var inserted = await gmrRepository.Insert(entity, cancellationToken);
+
+        await TrackImportPreNotificationUpdate(inserted, cancellationToken);
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return inserted;
     }
 
-    public async Task<GmrEntity> Update(GmrEntity gmrEntity, string etag, CancellationToken cancellationToken)
+    public async Task<GmrEntity> Update(GmrEntity entity, string etag, CancellationToken cancellationToken)
     {
-        var (_, updated) = await gmrRepository.Update(gmrEntity, etag, cancellationToken);
+        var (_, updated) = await gmrRepository.Update(entity, etag, cancellationToken);
+
+        await TrackImportPreNotificationUpdate(updated, cancellationToken);
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return updated;
+    }
+
+    private async Task TrackImportPreNotificationUpdate(GmrEntity entity, CancellationToken cancellationToken)
+    {
+        if (entity.CustomsDeclarationIdentifiers.Count <= 0)
+            return;
+
+        var identifiers = await customsDeclarationRepository.GetAllImportPreNotificationIdentifiers(
+            entity.CustomsDeclarationIdentifiers.ToArray(),
+            cancellationToken
+        );
+
+        await importPreNotificationRepository.TrackImportPreNotificationUpdate(
+            entity,
+            identifiers.ToArray(),
+            cancellationToken
+        );
     }
 }

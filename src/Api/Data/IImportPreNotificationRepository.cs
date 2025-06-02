@@ -40,4 +40,12 @@ public interface IImportPreNotificationRepository
         string etag,
         CancellationToken cancellationToken
     );
+
+    Task TrackImportPreNotificationUpdate(
+        IDataEntity source,
+        string[] customsDeclarationIdentifiers,
+        CancellationToken cancellationToken
+    );
+
+    Task TrackImportPreNotificationUpdate(ImportPreNotificationEntity entity, CancellationToken cancellationToken);
 }

@@ -12,13 +12,10 @@ public interface IImportPreNotificationService
         CancellationToken cancellationToken
     );
 
-    Task<ImportPreNotificationEntity> Insert(
-        ImportPreNotificationEntity importPreNotificationEntity,
-        CancellationToken cancellationToken
-    );
+    Task<ImportPreNotificationEntity> Insert(ImportPreNotificationEntity entity, CancellationToken cancellationToken);
 
     Task<ImportPreNotificationEntity> Update(
-        ImportPreNotificationEntity importPreNotificationEntity,
+        ImportPreNotificationEntity entity,
         string etag,
         CancellationToken cancellationToken
     );

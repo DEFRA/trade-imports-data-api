@@ -10,7 +10,8 @@ namespace Defra.TradeImportsDataApi.Api.Services;
 public class CustomsDeclarationService(
     IDbContext dbContext,
     IResourceEventPublisher resourceEventPublisher,
-    ICustomsDeclarationRepository customsDeclarationRepository
+    ICustomsDeclarationRepository customsDeclarationRepository,
+    IImportPreNotificationRepository importPreNotificationRepository
 ) : ICustomsDeclarationService
 {
     public async Task<CustomsDeclarationEntity?> GetCustomsDeclaration(
@@ -19,11 +20,13 @@ public class CustomsDeclarationService(
     ) => await customsDeclarationRepository.Get(id, cancellationToken);
 
     public async Task<CustomsDeclarationEntity> Insert(
-        CustomsDeclarationEntity customsDeclarationEntity,
+        CustomsDeclarationEntity entity,
         CancellationToken cancellationToken
     )
     {
-        var inserted = await customsDeclarationRepository.Insert(customsDeclarationEntity, cancellationToken);
+        var inserted = await customsDeclarationRepository.Insert(entity, cancellationToken);
+
+        await TrackImportPreNotificationUpdate(inserted, cancellationToken);
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
@@ -57,16 +60,14 @@ public class CustomsDeclarationService(
     }
 
     public async Task<CustomsDeclarationEntity> Update(
-        CustomsDeclarationEntity customsDeclarationEntity,
+        CustomsDeclarationEntity entity,
         string etag,
         CancellationToken cancellationToken
     )
     {
-        var (existing, updated) = await customsDeclarationRepository.Update(
-            customsDeclarationEntity,
-            etag,
-            cancellationToken
-        );
+        var (existing, updated) = await customsDeclarationRepository.Update(entity, etag, cancellationToken);
+
+        await TrackImportPreNotificationUpdate(updated, cancellationToken);
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
@@ -93,5 +94,20 @@ public class CustomsDeclarationService(
         );
 
         return updated;
+    }
+
+    private async Task TrackImportPreNotificationUpdate(
+        CustomsDeclarationEntity entity,
+        CancellationToken cancellationToken
+    )
+    {
+        if (entity.ImportPreNotificationIdentifiers.Count <= 0)
+            return;
+
+        await importPreNotificationRepository.TrackImportPreNotificationUpdate(
+            entity,
+            entity.ImportPreNotificationIdentifiers.ToArray(),
+            cancellationToken
+        );
     }
 }

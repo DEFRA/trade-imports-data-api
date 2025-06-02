@@ -38,6 +38,11 @@ public class ImportPreNotificationRepository(IDbContext dbContext, ILogger<Impor
         CancellationToken cancellationToken
     ) => await dbContext.ImportPreNotifications.Where(predicate).ToListWithFallbackAsync(cancellationToken);
 
+    public async Task<List<ImportPreNotificationUpdateEntity>> GetAllUpdates(
+        string[] ids,
+        CancellationToken cancellationToken
+    ) => await dbContext.ImportPreNotificationUpdates.Where(x => ids.Contains(x.Id)).ToListAsync(cancellationToken);
+
     public async Task<string?> GetCustomsDeclarationIdentifier(string id, CancellationToken cancellationToken) =>
         await dbContext
             .ImportPreNotifications.Where(x => x.Id == id)
@@ -66,19 +71,13 @@ public class ImportPreNotificationRepository(IDbContext dbContext, ILogger<Impor
         };
 
         if (pointOfEntry is { Length: > 0 })
-            where.Add(
-                "importPreNotification.partOne.pointOfEntry",
-                new BsonDocument { { "$in", new BsonArray(pointOfEntry) } }
-            );
+            where.Add("pointOfEntry", new BsonDocument { { "$in", new BsonArray(pointOfEntry) } });
 
         if (type is { Length: > 0 })
-            where.Add(
-                "importPreNotification.importNotificationType",
-                new BsonDocument { { "$in", new BsonArray(type) } }
-            );
+            where.Add("importNotificationType", new BsonDocument { { "$in", new BsonArray(type) } });
 
         if (status is { Length: > 0 })
-            where.Add("importPreNotification.status", new BsonDocument { { "$in", new BsonArray(status) } });
+            where.Add("status", new BsonDocument { { "$in", new BsonArray(status) } });
 
         var pipeline = new[]
         {
@@ -88,7 +87,7 @@ public class ImportPreNotificationRepository(IDbContext dbContext, ILogger<Impor
                 new BsonDocument
                 {
                     // _id is always returned
-                    { "updated", "$updated" },
+                    { "updated", "$source.updated" },
                 }
             ),
         };
@@ -96,7 +95,7 @@ public class ImportPreNotificationRepository(IDbContext dbContext, ILogger<Impor
         var start = TimeProvider.System.GetTimestamp();
         var query = string.Join(",\n", pipeline.Select(x => x.ToString()));
 
-        var aggregate = await dbContext.ImportPreNotifications.Collection.AggregateAsync<NotificationUpdate>(
+        var aggregate = await dbContext.ImportPreNotificationUpdates.Collection.AggregateAsync<NotificationUpdate>(
             pipeline,
             cancellationToken: cancellationToken
         );
@@ -104,7 +103,7 @@ public class ImportPreNotificationRepository(IDbContext dbContext, ILogger<Impor
         var updates = (await aggregate.ToListAsync(cancellationToken)).ToDictionary(x => x.Id, x => x);
 
         var elapsed = TimeProvider.System.GetElapsedTime(start);
-        logger.LogInformation("Updates (notifications): {Elapsed} {Query}", elapsed.TotalMilliseconds, query);
+        logger.LogInformation("Updates query {Elapsed} {Query}", elapsed.TotalMilliseconds, query);
 
         return updates.Values.Select(x => new ImportPreNotificationUpdate(x.Id, x.Updated)).ToList();
     }
@@ -139,5 +138,51 @@ public class ImportPreNotificationRepository(IDbContext dbContext, ILogger<Impor
         await dbContext.ImportPreNotifications.Update(entity, etag, cancellationToken);
 
         return (existing, entity);
+    }
+
+    public async Task TrackImportPreNotificationUpdate(
+        IDataEntity source,
+        string[] customsDeclarationIdentifiers,
+        CancellationToken cancellationToken
+    )
+    {
+        var notifications = await GetAll(customsDeclarationIdentifiers, cancellationToken);
+
+        await TrackImportPreNotificationUpdate(source, notifications, cancellationToken);
+    }
+
+    public async Task TrackImportPreNotificationUpdate(
+        ImportPreNotificationEntity entity,
+        CancellationToken cancellationToken
+    ) => await TrackImportPreNotificationUpdate(entity, [entity], cancellationToken);
+
+    private async Task TrackImportPreNotificationUpdate(
+        IDataEntity source,
+        List<ImportPreNotificationEntity> notifications,
+        CancellationToken cancellationToken
+    )
+    {
+        if (notifications.Count == 0)
+            return;
+
+        var updates = await GetAllUpdates(notifications.Select(x => x.Id).ToArray(), cancellationToken);
+
+        foreach (var importPreNotification in notifications)
+        {
+            var update = updates.FirstOrDefault(x => x.Id == importPreNotification.Id);
+            var existed = update != null;
+
+            update ??= new ImportPreNotificationUpdateEntity { Id = importPreNotification.Id };
+
+            update.PointOfEntry = importPreNotification.ImportPreNotification.PartOne?.PointOfEntry;
+            update.ImportNotificationType = importPreNotification.ImportPreNotification.ImportNotificationType;
+            update.Status = importPreNotification.ImportPreNotification.Status;
+            update.SetSource(source);
+
+            if (existed)
+                await dbContext.ImportPreNotificationUpdates.Update(update, cancellationToken);
+            else
+                await dbContext.ImportPreNotificationUpdates.Insert(update, cancellationToken);
+        }
     }
 }
