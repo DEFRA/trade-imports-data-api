@@ -136,6 +136,36 @@ public class ImportPreNotificationUpdateTests : IntegrationTestBase, IAsyncLifet
     }
 
     [Fact]
+    public async Task WhenImportPreNotificationExcludeStatusMatch_ThenNotificationIdAndUpdateAsExpected()
+    {
+        var (chedRef, _) = ImportPreNotificationIdGenerator.GenerateReturnId();
+        var (chedRefNoMatch, _) = ImportPreNotificationIdGenerator.GenerateReturnId();
+
+        await CreateNotification(chedRef, status: "SUBMITTED");
+        await CreateNotification(chedRefNoMatch, status: "DRAFT");
+
+        var chedRefResponse = await DataApiClient.GetImportPreNotification(chedRef, CancellationToken.None);
+        var chedRefNoMatchResponse = await DataApiClient.GetImportPreNotification(
+            chedRefNoMatch,
+            CancellationToken.None
+        );
+
+        var result = await GetUpdates(excludeStatus: ["DRAFT"]);
+
+        AssertResult(expectResult: true, result, chedRef, chedRefResponse?.Updated);
+
+        // Updates
+        await UpdateNotification(chedRefResponse!);
+        await UpdateNotification(chedRefNoMatchResponse!);
+
+        chedRefResponse = await DataApiClient.GetImportPreNotification(chedRef, CancellationToken.None);
+
+        result = await GetUpdates(excludeStatus: ["DRAFT"]);
+
+        AssertResult(expectResult: true, result, chedRef, chedRefResponse?.Updated);
+    }
+
+    [Fact]
     public async Task WhenImportPreNotificationAllFilters_ThenNotificationIdAndUpdateAsExpected()
     {
         var (chedRef, _) = ImportPreNotificationIdGenerator.GenerateReturnId();
@@ -366,7 +396,8 @@ public class ImportPreNotificationUpdateTests : IntegrationTestBase, IAsyncLifet
     private async Task<ImportPreNotificationUpdatesResponse> GetUpdates(
         string[]? pointOfEntry = null,
         string[]? type = null,
-        string[]? status = null
+        string[]? status = null,
+        string[]? excludeStatus = null
     )
     {
         var now = DateTime.UtcNow;
@@ -379,6 +410,7 @@ public class ImportPreNotificationUpdateTests : IntegrationTestBase, IAsyncLifet
                         .Where(EndpointFilter.PointOfEntry(pointOfEntry))
                         .Where(EndpointFilter.Type(type))
                         .Where(EndpointFilter.Status(status))
+                        .Where(EndpointFilter.ExcludeStatus(excludeStatus))
                 )
             ) ?? throw new InvalidOperationException("Could not deserialize");
 

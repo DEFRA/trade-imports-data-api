@@ -12,6 +12,7 @@ public class ImportPreNotificationUpdatesRequest
     private readonly string[]? _pointOfEntry;
     private readonly string[]? _type;
     private readonly string[]? _status;
+    private readonly string[]? _excludeStatus;
 
     [Description(
         "Filter import pre notifications updated at this date and time or after this date and time. "
@@ -51,6 +52,16 @@ public class ImportPreNotificationUpdatesRequest
     {
         get => _status?.All(string.IsNullOrWhiteSpace) == true ? null : _status;
         init => _status = value;
+    }
+
+    [Description(
+        "Filter import pre notifications by NOT IN status. Multiple should be specified as excludeStatus=A&excludeStatus=B etc."
+    )]
+    [FromQuery(Name = "excludeStatus")]
+    public string[]? ExcludeStatus
+    {
+        get => _excludeStatus?.All(string.IsNullOrWhiteSpace) == true ? null : _excludeStatus;
+        init => _excludeStatus = value;
     }
 
     public class ImportPreNotificationUpdatesRequestValidator
