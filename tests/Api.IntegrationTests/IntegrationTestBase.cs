@@ -41,7 +41,7 @@ public abstract class IntegrationTestBase
     {
         var db = GetMongoDatabase();
 
-        return db.GetCollection<T>(typeof(T).Name);
+        return db.GetCollection<T>(typeof(T).Name.Replace("Entity", ""));
     }
 
     protected IntegrationTestBase()

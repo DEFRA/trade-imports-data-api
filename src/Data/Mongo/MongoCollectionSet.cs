@@ -31,7 +31,7 @@ public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionNa
 
     public IMongoCollection<T> Collection { get; } =
         string.IsNullOrEmpty(collectionName)
-            ? dbContext.Database.GetCollection<T>(typeof(T).Name)
+            ? dbContext.Database.GetCollection<T>(typeof(T).Name.Replace("Entity", ""))
             : dbContext.Database.GetCollection<T>(collectionName);
 
     public int PendingChanges => _entitiesToInsert.Count + _entitiesToUpdate.Count;
