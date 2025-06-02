@@ -7,16 +7,16 @@ public class ExternalError
 {
     [JsonPropertyName("externalCorrelationId")]
     public string? ExternalCorrelationId { get; set; }
-    
-    [JsonPropertyName("externalSourceCorrelationId")]
-    public string? ExternalSourceCorrelationId { get; set; }
+
+    [JsonPropertyName("sourceCorrelationId")]
+    public string? SourceCorrelationId { get; set; }
+
+    [JsonPropertyName("externalVersion")]
+    public int? ExternalVersion { get; set; }
 
     [JsonPropertyName("messageSentAt")]
     public DateTime MessageSentAt { get; set; }
 
-    [JsonPropertyName("externalVersion")]
-    public int? ExternalVersion { get; set; }
-    
     [JsonPropertyName("errors")]
     public ErrorItem[]? Errors { get; set; }
 }

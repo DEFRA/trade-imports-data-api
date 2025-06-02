@@ -7,9 +7,9 @@ public class ProcessingError
     [JsonPropertyName("correlationId")]
     public string? CorrelationId { get; set; }
 
-    [JsonPropertyName("externalSourceCorrelationId")]
-    public string? ExternalSourceCorrelationId { get; set; }
-    
+    [JsonPropertyName("sourceExternalCorrelationId")]
+    public string? SourceExternalCorrelationId { get; set; }
+
     [JsonPropertyName("externalVersion")]
     public int? ExternalVersion { get; set; }
 

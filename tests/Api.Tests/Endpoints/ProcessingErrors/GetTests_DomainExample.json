@@ -1,6 +1,7 @@
 [
     {
-      "externalCorrelationId": "ExternalCorrelationId815625eb-3e33-460b-af4f-a5e5f23da033",
+      "correlationId": "90000000",
+      "sourceExternalCorrelationId": "ExternalCorrelationId815625eb-3e33-460b-af4f-a5e5f23da033",
       "externalVersion": 36,
       "created": "2026-03-19T09:36:58.823352",
       "errors": [
@@ -20,7 +21,8 @@
       "message": "Message15ed54b7-4573-40bb-8236-902dcf1a82c3"
     },
     {
-      "externalCorrelationId": "ExternalCorrelationIdbcb39365-a337-42ac-bdee-94613207ad4f",
+      "correlationId": "90000001",
+      "sourceExternalCorrelationId": "ExternalCorrelationIdbcb39365-a337-42ac-bdee-94613207ad4f",
       "externalVersion": 206,
       "created": "2026-03-19T09:36:58.823352",
       "errors": [
@@ -40,7 +42,8 @@
       "message": "Message15ed54b7-4573-40bb-8236-902dcf1a82c1"
     },
     {
-      "externalCorrelationId": "ExternalCorrelationIdca508e72-10f6-4b67-8c36-312d6b0678ca",
+      "correlationId": "90000002",
+      "sourceExternalCorrelationId": "ExternalCorrelationIdca508e72-10f6-4b67-8c36-312d6b0678ca",
       "externalVersion": 32,
       "created": "2026-03-19T09:36:58.823352",
       "errors": [

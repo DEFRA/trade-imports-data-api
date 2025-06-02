@@ -165,8 +165,8 @@
     ]
   },
   "ClearanceDecision": {
-    "externalCorrelationId": "ExternalCorrelationIde459a47f-bd3d-4663-b49f-24dc1338840f",
-    "timestamp": "2024-01-09T04:51:43.0248311",
+    "correlationId": "ExternalCorrelationIde459a47f-bd3d-4663-b49f-24dc1338840f",
+    "created": "2024-01-09T04:51:43.0248311",
     "externalVersionNumber": 200,
     "decisionNumber": 116,
 	"sourceVersion": "123",
@@ -340,12 +340,11 @@
     "finalState": "0",
     "isManualRelease": true
   },
-  "externalError": {
-    "notifications": [
+  "ExternalErrors": [
       {
         "externalCorrelationId": "ExternalCorrelationId5a0fb6fd-70ef-4159-a8ca-51455cab6016",
         "externalVersion": 194,
-        "created": "2026-03-19T09:36:58.823352",
+        "messageSentAt": "2026-03-19T09:36:58.823352",
         "errors": [
           {
             "code": "Code05d73f4c-48da-4c60-b677-2dc8160bd332",
@@ -365,7 +364,7 @@
       {
         "externalCorrelationId": "ExternalCorrelationIdb19e0c33-34b2-446f-aae2-934a50c5472e",
         "externalVersion": 170,
-        "created": "2026-03-19T09:36:58.823352",
+        "messageSentAt": "2026-03-19T09:36:58.823352",
         "errors": [
           {
             "code": "Codee681e46c-e169-4667-99f0-e7cad24ae9fa",
@@ -385,7 +384,7 @@
       {
         "externalCorrelationId": "ExternalCorrelationId4475cf43-6aba-4c98-a0ca-13357a85abb1",
         "externalVersion": 108,
-        "created": "2026-03-19T09:36:58.823352",
+        "messageSentAt": "2026-03-19T09:36:58.823352",
         "errors": [
           {
             "code": "Code9e3906b5-f906-4b50-9087-0c7e8ec7ea83",
@@ -403,5 +402,4 @@
         "message": "Message15ed54b7-4573-40bb-8236-902dcf1a82d9"
       }
     ]
-  }
 }

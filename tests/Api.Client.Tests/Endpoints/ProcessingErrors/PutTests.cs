@@ -17,6 +17,7 @@ public class PutTests(WireMockContext context) : WireMockTestBase<WireMockContex
     public async Task PutProcessingError_WhenNoEtag_ShouldNotBeNull()
     {
         const string mrn = "mrn";
+        var data = Array.Empty<ProcessingError>();
         WireMock
             .Given(
                 Request
@@ -37,7 +38,7 @@ public class PutTests(WireMockContext context) : WireMockTestBase<WireMockContex
     public async Task PutProcessingError_WhenHasEtag_ShouldNotBeNull()
     {
         const string mrn = "mrn";
-        var data = new ProcessingError();
+        var data = Array.Empty<ProcessingError>();
         WireMock
             .Given(
                 Request
@@ -58,7 +59,7 @@ public class PutTests(WireMockContext context) : WireMockTestBase<WireMockContex
     public async Task PutProcessingError_WhenBadRequest_ShouldThrow()
     {
         const string mrn = "mrn";
-        var data = new ProcessingError();
+        var data = Array.Empty<ProcessingError>();
         WireMock
             .Given(
                 Request

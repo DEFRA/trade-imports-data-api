@@ -60,10 +60,11 @@ public class ProcessingErrorServiceTests
         var entity = new ProcessingErrorEntity
         {
             Id = "id",
-            ProcessingErrors = [
-                    new ProcessingError { ExternalVersion = 1 },
-                    new ProcessingError { ExternalVersion = 2 },
-                ]
+            ProcessingErrors =
+            [
+                new ProcessingError { ExternalVersion = 1 },
+                new ProcessingError { ExternalVersion = 2 },
+            ],
         };
         ProcessingErrorRepository.Update(entity, "etag", CancellationToken.None).Returns((existing, entity));
 

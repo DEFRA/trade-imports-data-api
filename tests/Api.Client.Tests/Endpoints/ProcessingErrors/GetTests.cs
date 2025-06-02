@@ -52,19 +52,13 @@ public class GetTests : WireMockTestBase<WireMockContext>
                                 [
                                     new ProcessingError
                                     {
-                                        ExternalCorrelationId = "80000000",
-                                        ExternalSourceCorrelationId = "1800000",
+                                        CorrelationId = "80000000",
+                                        SourceExternalCorrelationId = "1800000",
                                         ExternalVersion = 1,
                                         Created = created,
-                                        Errors = [
-                                            new ErrorItem
-                                            {
-                                                Code = "error-code",
-                                                Message = "error-message"
-                                            }
-                                        ],
-                                        Message = "error-message"
-                                    }
+                                        Errors = [new ErrorItem { Code = "error-code", Message = "error-message" }],
+                                        Message = "error-message",
+                                    },
                                 ],
                                 created,
                                 updated

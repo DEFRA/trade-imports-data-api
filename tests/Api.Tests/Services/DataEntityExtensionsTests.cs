@@ -205,11 +205,11 @@ public class DataEntityExtensionsTests
     {
         var subject = new FixtureEntity { Id = "id", ETag = "etag" };
         var previous = new CustomsDeclaration();
-        var current = new CustomsDeclaration { ExternalErrors = [] };
+        var current = new CustomsDeclaration { ExternalErrors = [new ExternalError()] };
 
         var result = subject.ToResourceEvent("operation").WithChangeSet(current, previous);
 
-        result.SubResourceType.Should().Be("externalError");
+        result.SubResourceType.Should().Be("ExternalError");
     }
 
     [Fact]

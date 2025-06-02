@@ -15,7 +15,7 @@ public class ProcessingErrorTests(ITestOutputHelper testOutputHelper) : SqsTestB
         var result = await client.GetProcessingError(mrn, CancellationToken.None);
         result.Should().BeNull();
 
-        await client.PutProcessingError(mrn, new ProcessingError(), null, CancellationToken.None);
+        await client.PutProcessingError(mrn, [new ProcessingError()], null, CancellationToken.None);
 
         result = await client.GetProcessingError(mrn, CancellationToken.None);
         result.Should().NotBeNull();
@@ -30,7 +30,7 @@ public class ProcessingErrorTests(ITestOutputHelper testOutputHelper) : SqsTestB
         var result = await client.GetProcessingError(mrn, CancellationToken.None);
         result.Should().BeNull();
 
-        await client.PutProcessingError(mrn, new ProcessingError(), null, CancellationToken.None);
+        await client.PutProcessingError(mrn, [new ProcessingError()], null, CancellationToken.None);
 
         result = await client.GetProcessingError(mrn, CancellationToken.None);
         result.Should().NotBeNull();
@@ -38,12 +38,7 @@ public class ProcessingErrorTests(ITestOutputHelper testOutputHelper) : SqsTestB
         result.Updated.Should().BeAfter(DateTime.MinValue);
         result.ProcessingErrors?.Should().BeNull();
 
-        await client.PutProcessingError(
-            mrn,
-            [],
-            result.ETag,
-            CancellationToken.None
-        );
+        await client.PutProcessingError(mrn, [], result.ETag, CancellationToken.None);
 
         var result2 = await client.GetProcessingError(mrn, CancellationToken.None);
         result2.Should().NotBeNull();
@@ -59,7 +54,7 @@ public class ProcessingErrorTests(ITestOutputHelper testOutputHelper) : SqsTestB
         var mrn = Guid.NewGuid().ToString("N");
         await DrainAllMessages();
 
-        await client.PutProcessingError(mrn, new ProcessingError(), null, CancellationToken.None);
+        await client.PutProcessingError(mrn, [new ProcessingError()], null, CancellationToken.None);
 
         Assert.True(
             await AsyncWaiter.WaitForAsync(async () => (await GetQueueAttributes()).ApproximateNumberOfMessages == 1)

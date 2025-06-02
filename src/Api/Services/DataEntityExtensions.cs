@@ -64,7 +64,7 @@ public static class DataEntityExtensions
                     ResourceEventSubResourceTypes.ClearanceRequest => ResourceEventSubResourceTypes.ClearanceRequest,
                     ResourceEventSubResourceTypes.ClearanceDecision => ResourceEventSubResourceTypes.ClearanceDecision,
                     ResourceEventSubResourceTypes.Finalisation => ResourceEventSubResourceTypes.Finalisation,
-                    ResourceEventSubResourceTypes.ExternalError => ResourceEventSubResourceTypes.ExternalError,
+                    "ExternalErrors" => ResourceEventSubResourceTypes.ExternalError,
                     _ => null,
                 }
             )

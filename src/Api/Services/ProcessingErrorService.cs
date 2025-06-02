@@ -1,8 +1,8 @@
 using Defra.TradeImportsDataApi.Api.Data;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
-using Defra.TradeImportsDataApi.Domain.Events;
 using Defra.TradeImportsDataApi.Domain.Errors;
+using Defra.TradeImportsDataApi.Domain.Events;
 
 namespace Defra.TradeImportsDataApi.Api.Services;
 
@@ -22,9 +22,7 @@ public class ProcessingErrorService(
         await dbContext.SaveChangesAsync(cancellationToken);
 
         await resourceEventPublisher.Publish(
-            inserted
-                .ToResourceEvent(ResourceEventOperations.Created)
-                .WithChangeSet(inserted.ProcessingErrors, []),
+            inserted.ToResourceEvent(ResourceEventOperations.Created).WithChangeSet(inserted.ProcessingErrors, []),
             cancellationToken
         );
 
