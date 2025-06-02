@@ -75,6 +75,16 @@ public class ImportPreNotificationService(
         string[]? pointOfEntry = null,
         string[]? type = null,
         string[]? status = null,
+        string[]? excludeStatus = null,
         CancellationToken cancellationToken = default
-    ) => await importPreNotificationRepository.GetUpdates(from, to, pointOfEntry, type, status, cancellationToken);
+    ) =>
+        await importPreNotificationRepository.GetUpdates(
+            from,
+            to,
+            pointOfEntry,
+            type,
+            status,
+            excludeStatus,
+            cancellationToken
+        );
 }

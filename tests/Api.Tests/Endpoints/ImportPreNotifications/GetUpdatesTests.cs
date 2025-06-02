@@ -88,6 +88,7 @@ public class GetUpdatesTests : EndpointTestBase, IClassFixture<WireMockContext>
                 Arg.Is<string[]?>(x => x == null),
                 Arg.Is<string[]?>(x => x == null),
                 Arg.Is<string[]?>(x => x == null),
+                Arg.Is<string[]?>(x => x == null),
                 Arg.Any<CancellationToken>()
             )
             .Returns(
@@ -107,6 +108,7 @@ public class GetUpdatesTests : EndpointTestBase, IClassFixture<WireMockContext>
                     .Where(EndpointFilter.PointOfEntry(""))
                     .Where(EndpointFilter.Type(""))
                     .Where(EndpointFilter.Status(""))
+                    .Where(EndpointFilter.ExcludeStatus(""))
             )
         );
 
@@ -115,6 +117,7 @@ public class GetUpdatesTests : EndpointTestBase, IClassFixture<WireMockContext>
             .GetImportPreNotificationUpdates(
                 Arg.Any<DateTime>(),
                 Arg.Any<DateTime>(),
+                Arg.Is<string[]?>(x => x == null),
                 Arg.Is<string[]?>(x => x == null),
                 Arg.Is<string[]?>(x => x == null),
                 Arg.Is<string[]?>(x => x == null),
@@ -131,6 +134,7 @@ public class GetUpdatesTests : EndpointTestBase, IClassFixture<WireMockContext>
         string[] pointOfEntry = ["BCP1", "BCP2"];
         string[] type = ["CVEDA", "CVEDP"];
         string[] status = ["DRAFT", "SUBMITTED"];
+        string[] excludeStatus = ["AMEND"];
         MockImportPreNotificationService
             .GetImportPreNotificationUpdates(
                 from,
@@ -138,6 +142,7 @@ public class GetUpdatesTests : EndpointTestBase, IClassFixture<WireMockContext>
                 Arg.Is<string[]?>(x => x != null && x.SequenceEqual(pointOfEntry)),
                 Arg.Is<string[]?>(x => x != null && x.SequenceEqual(type)),
                 Arg.Is<string[]?>(x => x != null && x.SequenceEqual(status)),
+                Arg.Is<string[]?>(x => x != null && x.SequenceEqual(excludeStatus)),
                 Arg.Any<CancellationToken>()
             )
             .Returns(
@@ -157,6 +162,7 @@ public class GetUpdatesTests : EndpointTestBase, IClassFixture<WireMockContext>
                     .Where(EndpointFilter.PointOfEntry(pointOfEntry))
                     .Where(EndpointFilter.Type(type))
                     .Where(EndpointFilter.Status(status))
+                    .Where(EndpointFilter.ExcludeStatus(excludeStatus))
             )
         );
 

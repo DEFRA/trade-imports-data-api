@@ -22,4 +22,9 @@ public class EndpointFilter
     public static EndpointFilter[] Status(string[]? statuses) => (statuses ?? []).Select(Status).ToArray();
 
     public static EndpointFilter Status(string status) => new($"status={status}");
+
+    public static EndpointFilter[] ExcludeStatus(string[]? statuses) =>
+        (statuses ?? []).Select(ExcludeStatus).ToArray();
+
+    public static EndpointFilter ExcludeStatus(string status) => new($"excludeStatus={status}");
 }
