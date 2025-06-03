@@ -19,7 +19,7 @@ public class MemoryDbContext : IDbContext
     public IMongoCollectionSet<ProcessingErrorEntity> ProcessingErrors { get; } =
         new MemoryCollectionSet<ProcessingErrorEntity>();
 
-    public Task SaveChangesAsync(CancellationToken cancellation = default)
+    public Task SaveChangesAsync(CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

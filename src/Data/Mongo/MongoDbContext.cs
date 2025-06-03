@@ -30,38 +30,40 @@ public class MongoDbContext : IDbContext
     public IMongoCollectionSet<GmrEntity> Gmrs { get; }
     public IMongoCollectionSet<ProcessingErrorEntity> ProcessingErrors { get; }
 
-    private async Task<IMongoDbTransaction> StartTransaction(CancellationToken cancellationToken = default)
+    private async Task<IDbTransaction> StartTransaction(CancellationToken cancellationToken)
     {
         var session = await Database.Client.StartSessionAsync(cancellationToken: cancellationToken);
         session.StartTransaction();
+
         ActiveTransaction = new MongoDbTransaction(session);
+
         return ActiveTransaction;
     }
 
-    public async Task SaveChangesAsync(CancellationToken cancellation = default)
+    public async Task SaveChangesAsync(CancellationToken cancellationToken)
     {
-        if (GetChangedRecordsCount() == 0)
+        switch (GetChangedRecordsCount())
         {
-            return;
+            case 0:
+                return;
+            case 1:
+                await SaveChanges(cancellationToken);
+                break;
+            default:
+                await SaveChangesWithinTransaction(cancellationToken);
+                break;
         }
+    }
 
-        if (GetChangedRecordsCount() == 1)
-        {
-            await InternalSaveChangesAsync(cancellation);
-            return;
-        }
+    private async Task SaveChangesWithinTransaction(CancellationToken cancellationToken)
+    {
+        using var transaction = await StartTransaction(cancellationToken);
 
-        using var transaction = await StartTransaction(cancellation);
-        try
-        {
-            await InternalSaveChangesAsync(cancellation);
-            await transaction.CommitTransaction(cancellation);
-        }
-        catch (Exception)
-        {
-            await transaction.RollbackTransaction(cancellation);
-            throw;
-        }
+        await SaveChanges(cancellationToken);
+
+        // If the transaction is not committed within the using scope,
+        // then it will be rolled back automatically by the transaction
+        await transaction.Commit(cancellationToken);
     }
 
     private int GetChangedRecordsCount()
@@ -74,18 +76,18 @@ public class MongoDbContext : IDbContext
             + ProcessingErrors.PendingChanges;
     }
 
-    private async Task InternalSaveChangesAsync(CancellationToken cancellation = default)
+    private async Task SaveChanges(CancellationToken cancellationToken)
     {
         try
         {
             // This logic needs to be reviewed as it's easy to forget to include any new collection sets
-            await ImportPreNotifications.PersistAsync(cancellation);
-            await CustomsDeclarations.PersistAsync(cancellation);
-            await Gmrs.PersistAsync(cancellation);
-            await ProcessingErrors.PersistAsync(cancellation);
+            await ImportPreNotifications.PersistAsync(cancellationToken);
+            await CustomsDeclarations.PersistAsync(cancellationToken);
+            await Gmrs.PersistAsync(cancellationToken);
+            await ProcessingErrors.PersistAsync(cancellationToken);
 
             // Keep this last as upserts above will impact those below
-            await ImportPreNotificationUpdates.PersistAsync(cancellation);
+            await ImportPreNotificationUpdates.PersistAsync(cancellationToken);
         }
         catch (MongoCommandException mongoCommandException) when (mongoCommandException.Code == 112)
         {
