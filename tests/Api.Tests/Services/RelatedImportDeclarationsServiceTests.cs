@@ -52,6 +52,48 @@ public class RelatedImportDeclarationsServiceTests
     }
 
     [Fact]
+    public async Task GivenSearchByMrn_WhenMrnExists_AndIdentifiersMatchesAnotherMrn_ThenShouldReturn()
+    {
+        const string mrn1 = "mrn1";
+        const string mrn2 = "mrn2";
+        var memoryDbContext = new MemoryDbContext();
+
+        memoryDbContext.CustomsDeclarations.AddTestData(
+            new CustomsDeclarationEntity
+            {
+                Id = mrn1,
+                ImportPreNotificationIdentifiers = [""],
+                ClearanceRequest = new ClearanceRequest(),
+                Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+                ETag = "etag",
+            }
+        );
+        memoryDbContext.CustomsDeclarations.AddTestData(
+            new CustomsDeclarationEntity
+            {
+                Id = mrn2,
+                ImportPreNotificationIdentifiers = [""],
+                ClearanceRequest = new ClearanceRequest(),
+                Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+                ETag = "etag",
+            }
+        );
+
+        var subject = CreateSubject(memoryDbContext);
+
+        var response = await subject.Search(
+            new RelatedImportDeclarationsRequest { Mrn = mrn1 },
+            CancellationToken.None
+        );
+
+        response.Should().NotBeNull();
+        response.CustomsDeclarations.Length.Should().Be(1);
+        response.ImportPreNotifications.Length.Should().Be(0);
+    }
+
+    [Fact]
     public async Task GivenSearchByMrn_WhenMrnExists_AndNotificationsExist_ThenShouldReturn()
     {
         const string mrn = "mrn";

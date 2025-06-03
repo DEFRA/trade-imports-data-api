@@ -132,6 +132,7 @@ public class RelatedImportDeclarationsService(
         var identifiers = data
             .CustomsDeclarations.SelectMany(x => x.ImportPreNotificationIdentifiers)
             .Union(data.ImportPreNotifications.Select(x => x.CustomsDeclarationIdentifier))
+            .Where(x => !string.IsNullOrEmpty(x))
             .Distinct()
             .ToList();
 
