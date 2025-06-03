@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 using Defra.TradeImportsDataApi.Api.Data;
-using Defra.TradeImportsDataApi.Api.Endpoints.Search;
+using Defra.TradeImportsDataApi.Api.Endpoints.RelatedImportDeclarations;
 using Defra.TradeImportsDataApi.Data.Entities;
 
 namespace Defra.TradeImportsDataApi.Api.Services;

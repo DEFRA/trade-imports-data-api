@@ -1,5 +1,5 @@
 using Defra.TradeImportsDataApi.Api.Data;
-using Defra.TradeImportsDataApi.Api.Endpoints.Search;
+using Defra.TradeImportsDataApi.Api.Endpoints.RelatedImportDeclarations;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Api.Tests.Utils.InMemoryData;
 using Defra.TradeImportsDataApi.Data.Entities;

@@ -1,4 +1,4 @@
-using Defra.TradeImportsDataApi.Api.Endpoints.Search;
+using Defra.TradeImportsDataApi.Api.Endpoints.RelatedImportDeclarations;
 using Defra.TradeImportsDataApi.Data.Entities;
 
 namespace Defra.TradeImportsDataApi.Api.Services;

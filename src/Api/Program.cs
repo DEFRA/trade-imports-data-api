@@ -7,7 +7,7 @@ using Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations;
 using Defra.TradeImportsDataApi.Api.Endpoints.Gmrs;
 using Defra.TradeImportsDataApi.Api.Endpoints.ImportPreNotifications;
 using Defra.TradeImportsDataApi.Api.Endpoints.ProcessingErrors;
-using Defra.TradeImportsDataApi.Api.Endpoints.Search;
+using Defra.TradeImportsDataApi.Api.Endpoints.RelatedImportDeclarations;
 using Defra.TradeImportsDataApi.Api.Health;
 using Defra.TradeImportsDataApi.Api.OpenApi;
 using Defra.TradeImportsDataApi.Api.Services;

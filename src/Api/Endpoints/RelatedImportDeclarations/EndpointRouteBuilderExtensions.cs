@@ -2,10 +2,9 @@ using Defra.TradeImportsDataApi.Api.Authentication;
 using Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations;
 using Defra.TradeImportsDataApi.Api.Endpoints.ImportPreNotifications;
 using Defra.TradeImportsDataApi.Api.Services;
-using Defra.TradeImportsDataApi.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Defra.TradeImportsDataApi.Api.Endpoints.Search;
+namespace Defra.TradeImportsDataApi.Api.Endpoints.RelatedImportDeclarations;
 
 public static class EndpointRouteBuilderExtensions
 {
