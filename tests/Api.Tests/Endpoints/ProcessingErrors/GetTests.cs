@@ -56,7 +56,6 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
     {
         var client = CreateClient();
 
-        var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.ProcessingErrors.Get(Mrn));
         MockProcessingErrorService
             .GetProcessingError(Mrn, Arg.Any<CancellationToken>())
             .Returns(
@@ -69,6 +68,8 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
                     ETag = "etag",
                 }
             );
+
+        var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.ProcessingErrors.Get(Mrn));
 
         await VerifyJson(await response.Content.ReadAsStringAsync(), _settings)
             .UseMethodName(nameof(Get_WhenFound_ShouldReturnContent));

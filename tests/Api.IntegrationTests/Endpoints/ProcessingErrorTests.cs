@@ -30,19 +30,19 @@ public class ProcessingErrorTests(ITestOutputHelper testOutputHelper) : SqsTestB
         var result = await client.GetProcessingError(mrn, CancellationToken.None);
         result.Should().BeNull();
 
-        await client.PutProcessingError(mrn, [new ProcessingError()], null, CancellationToken.None);
+        await client.PutProcessingError(mrn, [], null, CancellationToken.None);
 
         result = await client.GetProcessingError(mrn, CancellationToken.None);
         result.Should().NotBeNull();
         result.Created.Should().BeAfter(DateTime.MinValue);
         result.Updated.Should().BeAfter(DateTime.MinValue);
-        result.ProcessingErrors?.Should().BeNull();
+        result.ProcessingErrors.Should().BeEmpty();
 
-        await client.PutProcessingError(mrn, [], result.ETag, CancellationToken.None);
+        await client.PutProcessingError(mrn, [new ProcessingError()], result.ETag, CancellationToken.None);
 
         var result2 = await client.GetProcessingError(mrn, CancellationToken.None);
         result2.Should().NotBeNull();
-        result2.ProcessingErrors?.Should().NotBeEmpty();
+        result2.ProcessingErrors.Should().NotBeEmpty();
         result2.Created.Should().Be(result.Created);
         result2.Updated.Should().BeAfter(result.Updated);
     }
