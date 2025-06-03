@@ -98,12 +98,17 @@ public class MongoIndexService(IMongoDatabase database, ILogger<MongoIndexServic
                 }
             );
             await database
-                .GetCollection<T>(typeof(T).Name)
+                .GetCollection<T>(typeof(T).Name.Replace("Entity", ""))
                 .Indexes.CreateOneAsync(indexModel, cancellationToken: cancellationToken);
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Failed to Create index {Name} on {Collection}", name, typeof(T).Name);
+            logger.LogError(
+                e,
+                "Failed to Create index {Name} on {Collection}",
+                name,
+                typeof(T).Name.Replace("Entity", "")
+            );
         }
     }
 }
