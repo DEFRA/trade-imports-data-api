@@ -2,21 +2,16 @@ using MongoDB.Driver;
 
 namespace Defra.TradeImportsDataApi.Data.Mongo;
 
-public class MongoDbTransaction(IClientSessionHandle session) : IMongoDbTransaction
+public class MongoDbTransaction(IClientSessionHandle session) : IDbTransaction
 {
     public IClientSessionHandle? Session { get; private set; } = session;
 
-    public async Task CommitTransaction(CancellationToken cancellationToken = default)
+    public async Task Commit(CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(Session);
-        await Session.CommitTransactionAsync(cancellationToken: cancellationToken);
-        Session = null!;
-    }
 
-    public async Task RollbackTransaction(CancellationToken cancellationToken = default)
-    {
-        ArgumentNullException.ThrowIfNull(Session);
-        await Session.AbortTransactionAsync(cancellationToken);
+        await Session.CommitTransactionAsync(cancellationToken: cancellationToken);
+
         Session = null!;
     }
 
