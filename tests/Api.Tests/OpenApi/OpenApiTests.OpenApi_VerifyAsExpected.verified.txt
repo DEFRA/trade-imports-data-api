@@ -688,6 +688,18 @@
               },
               "description": "Filter import pre notifications by status. Multiple should be specified as status=A&status=B etc."
             }
+          },
+          {
+            "name": "excludeStatus",
+            "in": "query",
+            "description": "Filter import pre notifications by NOT IN status. Multiple should be specified as excludeStatus=A&excludeStatus=B etc.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Filter import pre notifications by NOT IN status. Multiple should be specified as excludeStatus=A&excludeStatus=B etc."
+            }
           }
         ],
         "responses": {

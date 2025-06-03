@@ -30,6 +30,14 @@ public class ImportPreNotificationUpdatesRequestTests
     }
 
     [Fact]
+    public void WhenEmptyExcludeStatus_ShouldBeNull()
+    {
+        var subject = new ImportPreNotificationUpdatesRequest { ExcludeStatus = [""] };
+
+        subject.ExcludeStatus.Should().BeNull();
+    }
+
+    [Fact]
     public async Task WhenFromAndToAreMoreThanOneHourApart_ShouldBeInvalid()
     {
         var subject = new ImportPreNotificationUpdatesRequest

@@ -235,6 +235,7 @@ public static class EndpointRouteBuilderExtensions
             request.PointOfEntry,
             request.Type,
             request.Status,
+            request.ExcludeStatus,
             cancellationToken
         );
 

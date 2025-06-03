@@ -55,6 +55,7 @@ public class ImportPreNotificationRepository(IDbContext dbContext, ILogger<Impor
         string[]? pointOfEntry = null,
         string[]? type = null,
         string[]? status = null,
+        string[]? excludeStatus = null,
         CancellationToken cancellationToken = default
     )
     {
@@ -78,6 +79,9 @@ public class ImportPreNotificationRepository(IDbContext dbContext, ILogger<Impor
 
         if (status is { Length: > 0 })
             where.Add("status", new BsonDocument { { "$in", new BsonArray(status) } });
+
+        if (excludeStatus is { Length: > 0 })
+            where.Add("status", new BsonDocument { { "$nin", new BsonArray(excludeStatus) } });
 
         var pipeline = new[]
         {
