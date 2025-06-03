@@ -21,7 +21,7 @@ public class RelatedImportDeclarationsServiceTests
         var response = await subject.Search(new RelatedImportDeclarationsRequest(), CancellationToken.None);
 
         response.ImportPreNotifications.Length.Should().Be(0);
-        response.CustomsDeclaration.Length.Should().Be(0);
+        response.CustomsDeclarations.Length.Should().Be(0);
     }
 
     [Fact]
@@ -47,7 +47,7 @@ public class RelatedImportDeclarationsServiceTests
         var response = await subject.Search(new RelatedImportDeclarationsRequest { Mrn = mrn }, CancellationToken.None);
 
         response.Should().NotBeNull();
-        response.CustomsDeclaration.Length.Should().Be(1);
+        response.CustomsDeclarations.Length.Should().Be(1);
         response.ImportPreNotifications.Length.Should().Be(0);
     }
 
@@ -103,7 +103,7 @@ public class RelatedImportDeclarationsServiceTests
         var response = await subject.Search(new RelatedImportDeclarationsRequest { Mrn = mrn }, CancellationToken.None);
 
         response.Should().NotBeNull();
-        response.CustomsDeclaration.Length.Should().Be(1);
+        response.CustomsDeclarations.Length.Should().Be(1);
         response.ImportPreNotifications.Length.Should().Be(1);
     }
 
@@ -132,7 +132,7 @@ public class RelatedImportDeclarationsServiceTests
         );
 
         response.Should().NotBeNull();
-        response.CustomsDeclaration.Length.Should().Be(1);
+        response.CustomsDeclarations.Length.Should().Be(1);
         response.ImportPreNotifications.Length.Should().Be(0);
     }
 
@@ -190,7 +190,7 @@ public class RelatedImportDeclarationsServiceTests
         );
 
         response.Should().NotBeNull();
-        response.CustomsDeclaration.Length.Should().Be(1);
+        response.CustomsDeclarations.Length.Should().Be(1);
         response.ImportPreNotifications.Length.Should().Be(1);
     }
 
@@ -223,7 +223,7 @@ public class RelatedImportDeclarationsServiceTests
         );
 
         response.Should().NotBeNull();
-        response.CustomsDeclaration.Length.Should().Be(0);
+        response.CustomsDeclarations.Length.Should().Be(0);
         response.ImportPreNotifications.Length.Should().Be(1);
     }
 
@@ -240,7 +240,7 @@ public class RelatedImportDeclarationsServiceTests
         );
 
         response.Should().NotBeNull();
-        response.CustomsDeclaration.Length.Should().Be(0);
+        response.CustomsDeclarations.Length.Should().Be(0);
         response.ImportPreNotifications.Length.Should().Be(0);
     }
 
@@ -258,7 +258,7 @@ public class RelatedImportDeclarationsServiceTests
         );
 
         response.Should().NotBeNull();
-        response.CustomsDeclaration.Length.Should().Be(3);
+        response.CustomsDeclarations.Length.Should().Be(3);
         response.ImportPreNotifications.Length.Should().Be(4);
     }
 
@@ -276,7 +276,7 @@ public class RelatedImportDeclarationsServiceTests
         );
 
         response.Should().NotBeNull();
-        response.CustomsDeclaration.Length.Should().Be(2);
+        response.CustomsDeclarations.Length.Should().Be(2);
         response.ImportPreNotifications.Length.Should().Be(2);
     }
 

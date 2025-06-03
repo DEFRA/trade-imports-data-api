@@ -5,7 +5,7 @@ namespace Defra.TradeImportsDataApi.Api.Services;
 
 public interface IRelatedImportDeclarationsService
 {
-    Task<(CustomsDeclarationEntity[] CustomsDeclaration, ImportPreNotificationEntity[] ImportPreNotifications)> Search(
+    Task<(CustomsDeclarationEntity[] CustomsDeclarations, ImportPreNotificationEntity[] ImportPreNotifications)> Search(
         RelatedImportDeclarationsRequest request,
         CancellationToken cancellationToken
     );

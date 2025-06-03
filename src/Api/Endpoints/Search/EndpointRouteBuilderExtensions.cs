@@ -2,6 +2,7 @@ using Defra.TradeImportsDataApi.Api.Authentication;
 using Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations;
 using Defra.TradeImportsDataApi.Api.Endpoints.ImportPreNotifications;
 using Defra.TradeImportsDataApi.Api.Services;
+using Defra.TradeImportsDataApi.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Defra.TradeImportsDataApi.Api.Endpoints.Search;
@@ -37,7 +38,7 @@ public static class EndpointRouteBuilderExtensions
 
         var response = new RelatedImportDeclarationsResponse(
             searchResults
-                .CustomsDeclaration.Select(x => new CustomsDeclarationResponse(
+                .CustomsDeclarations.Select(x => new CustomsDeclarationResponse(
                     x.Id,
                     x.ClearanceRequest,
                     x.ClearanceDecision,
