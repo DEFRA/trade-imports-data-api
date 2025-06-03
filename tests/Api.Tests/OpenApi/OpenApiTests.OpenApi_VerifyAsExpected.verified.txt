@@ -2927,12 +2927,16 @@
             "type": "string",
             "nullable": true
           },
+          "sourceCorrelationId": {
+            "type": "string",
+            "nullable": true
+          },
           "externalVersion": {
             "type": "integer",
             "format": "int32",
             "nullable": true
           },
-          "created": {
+          "messageSentAt": {
             "type": "string",
             "format": "date-time",
             "nullable": true
