@@ -55,7 +55,7 @@ services:
       start_period: 5s
 
   localstack:
-    image: localstack/localstack
+    image: localstack/localstack:4
     ports:
       - '4566:4566' # LocalStack Gateway
       - '4510-4559:4510-4559' # external services port range
