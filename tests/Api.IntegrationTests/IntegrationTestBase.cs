@@ -3,7 +3,6 @@ using Defra.TradeImportsDataApi.Api.Client;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
-using MongoDB.Driver.Core.Extensions.DiagnosticSources;
 
 namespace Defra.TradeImportsDataApi.Api.IntegrationTests;
 
@@ -28,11 +27,6 @@ public abstract class IntegrationTestBase
     protected static IMongoDatabase GetMongoDatabase()
     {
         var settings = MongoClientSettings.FromConnectionString("mongodb://127.0.0.1:27017/?directConnection=true");
-
-        settings.ClusterConfigurator = cb =>
-            cb.Subscribe(
-                new DiagnosticsActivityEventSubscriber(new InstrumentationOptions { CaptureCommandText = true })
-            );
 
         return new MongoClient(settings).GetDatabase("trade-imports-data-api");
     }
