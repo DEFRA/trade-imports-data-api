@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Defra.TradeImportsDataApi.Api.Endpoints.Search;
+namespace Defra.TradeImportsDataApi.Api.Endpoints.RelatedImportDeclarations;
 
 public class RelatedImportDeclarationsRequest
 {

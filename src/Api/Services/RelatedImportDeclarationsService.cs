@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 using Defra.TradeImportsDataApi.Api.Data;
-using Defra.TradeImportsDataApi.Api.Endpoints.Search;
+using Defra.TradeImportsDataApi.Api.Endpoints.RelatedImportDeclarations;
 using Defra.TradeImportsDataApi.Data.Entities;
 
 namespace Defra.TradeImportsDataApi.Api.Services;
@@ -11,7 +11,7 @@ public class RelatedImportDeclarationsService(
 ) : IRelatedImportDeclarationsService
 {
     public async Task<(
-        CustomsDeclarationEntity[] CustomsDeclaration,
+        CustomsDeclarationEntity[] CustomsDeclarations,
         ImportPreNotificationEntity[] ImportPreNotifications
     )> Search(RelatedImportDeclarationsRequest request, CancellationToken cancellationToken)
     {
@@ -54,7 +54,7 @@ public class RelatedImportDeclarationsService(
     }
 
     private async Task<(
-        CustomsDeclarationEntity[] CustomsDeclaration,
+        CustomsDeclarationEntity[] CustomsDeclarations,
         ImportPreNotificationEntity[] ImportPreNotifications
     )> StartFromCustomsDeclaration(
         Expression<Func<CustomsDeclarationEntity, bool>> predicate,
@@ -78,7 +78,7 @@ public class RelatedImportDeclarationsService(
     }
 
     private async Task<(
-        CustomsDeclarationEntity[] CustomsDeclaration,
+        CustomsDeclarationEntity[] CustomsDeclarations,
         ImportPreNotificationEntity[] ImportPreNotifications
     )> StartFromImportPreNotification(string chedId, int maxDepth, CancellationToken cancellationToken)
     {
@@ -110,10 +110,10 @@ public class RelatedImportDeclarationsService(
     }
 
     private async Task<(
-        CustomsDeclarationEntity[] CustomsDeclaration,
+        CustomsDeclarationEntity[] CustomsDeclarations,
         ImportPreNotificationEntity[] ImportPreNotifications
     )> IncludeIndirectLinks(
-        (CustomsDeclarationEntity[] CustomsDeclaration, ImportPreNotificationEntity[] ImportPreNotifications) data,
+        (CustomsDeclarationEntity[] CustomsDeclarations, ImportPreNotificationEntity[] ImportPreNotifications) data,
         int currentDepth,
         int maxDepth,
         CancellationToken cancellationToken
@@ -124,14 +124,15 @@ public class RelatedImportDeclarationsService(
             return data;
         }
 
-        var customsDeclarations = data.CustomsDeclaration.ToList();
+        var customsDeclarations = data.CustomsDeclarations.ToList();
         var customsDeclarationIds = customsDeclarations.Select(x => x.Id);
         var importPreNotifications = data.ImportPreNotifications.ToList();
         var importPreNotificationIds = importPreNotifications.Select(x => x.Id);
 
         var identifiers = data
-            .CustomsDeclaration.SelectMany(x => x.ImportPreNotificationIdentifiers)
+            .CustomsDeclarations.SelectMany(x => x.ImportPreNotificationIdentifiers)
             .Union(data.ImportPreNotifications.Select(x => x.CustomsDeclarationIdentifier))
+            .Where(x => !string.IsNullOrEmpty(x))
             .Distinct()
             .ToList();
 
@@ -163,7 +164,7 @@ public class RelatedImportDeclarationsService(
 
         // bail out of the recursive loop if there are no records loaded
         if (
-            response.Item1.Length == data.CustomsDeclaration.Length
+            response.Item1.Length == data.CustomsDeclarations.Length
             && response.Item2.Length == data.ImportPreNotifications.Length
         )
         {

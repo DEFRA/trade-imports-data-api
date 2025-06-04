@@ -1,5 +1,5 @@
 using Defra.TradeImportsDataApi.Api.Data;
-using Defra.TradeImportsDataApi.Api.Endpoints.Search;
+using Defra.TradeImportsDataApi.Api.Endpoints.RelatedImportDeclarations;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Api.Tests.Utils.InMemoryData;
 using Defra.TradeImportsDataApi.Data.Entities;
@@ -21,7 +21,7 @@ public class RelatedImportDeclarationsServiceTests
         var response = await subject.Search(new RelatedImportDeclarationsRequest(), CancellationToken.None);
 
         response.ImportPreNotifications.Length.Should().Be(0);
-        response.CustomsDeclaration.Length.Should().Be(0);
+        response.CustomsDeclarations.Length.Should().Be(0);
     }
 
     [Fact]
@@ -47,7 +47,49 @@ public class RelatedImportDeclarationsServiceTests
         var response = await subject.Search(new RelatedImportDeclarationsRequest { Mrn = mrn }, CancellationToken.None);
 
         response.Should().NotBeNull();
-        response.CustomsDeclaration.Length.Should().Be(1);
+        response.CustomsDeclarations.Length.Should().Be(1);
+        response.ImportPreNotifications.Length.Should().Be(0);
+    }
+
+    [Fact]
+    public async Task GivenSearchByMrn_WhenMrnExists_AndIdentifiersMatchesAnotherMrn_ThenShouldReturn()
+    {
+        const string mrn1 = "mrn1";
+        const string mrn2 = "mrn2";
+        var memoryDbContext = new MemoryDbContext();
+
+        memoryDbContext.CustomsDeclarations.AddTestData(
+            new CustomsDeclarationEntity
+            {
+                Id = mrn1,
+                ImportPreNotificationIdentifiers = [""],
+                ClearanceRequest = new ClearanceRequest(),
+                Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+                ETag = "etag",
+            }
+        );
+        memoryDbContext.CustomsDeclarations.AddTestData(
+            new CustomsDeclarationEntity
+            {
+                Id = mrn2,
+                ImportPreNotificationIdentifiers = [""],
+                ClearanceRequest = new ClearanceRequest(),
+                Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+                ETag = "etag",
+            }
+        );
+
+        var subject = CreateSubject(memoryDbContext);
+
+        var response = await subject.Search(
+            new RelatedImportDeclarationsRequest { Mrn = mrn1 },
+            CancellationToken.None
+        );
+
+        response.Should().NotBeNull();
+        response.CustomsDeclarations.Length.Should().Be(1);
         response.ImportPreNotifications.Length.Should().Be(0);
     }
 
@@ -103,7 +145,7 @@ public class RelatedImportDeclarationsServiceTests
         var response = await subject.Search(new RelatedImportDeclarationsRequest { Mrn = mrn }, CancellationToken.None);
 
         response.Should().NotBeNull();
-        response.CustomsDeclaration.Length.Should().Be(1);
+        response.CustomsDeclarations.Length.Should().Be(1);
         response.ImportPreNotifications.Length.Should().Be(1);
     }
 
@@ -132,7 +174,7 @@ public class RelatedImportDeclarationsServiceTests
         );
 
         response.Should().NotBeNull();
-        response.CustomsDeclaration.Length.Should().Be(1);
+        response.CustomsDeclarations.Length.Should().Be(1);
         response.ImportPreNotifications.Length.Should().Be(0);
     }
 
@@ -190,7 +232,7 @@ public class RelatedImportDeclarationsServiceTests
         );
 
         response.Should().NotBeNull();
-        response.CustomsDeclaration.Length.Should().Be(1);
+        response.CustomsDeclarations.Length.Should().Be(1);
         response.ImportPreNotifications.Length.Should().Be(1);
     }
 
@@ -223,7 +265,7 @@ public class RelatedImportDeclarationsServiceTests
         );
 
         response.Should().NotBeNull();
-        response.CustomsDeclaration.Length.Should().Be(0);
+        response.CustomsDeclarations.Length.Should().Be(0);
         response.ImportPreNotifications.Length.Should().Be(1);
     }
 
@@ -240,7 +282,7 @@ public class RelatedImportDeclarationsServiceTests
         );
 
         response.Should().NotBeNull();
-        response.CustomsDeclaration.Length.Should().Be(0);
+        response.CustomsDeclarations.Length.Should().Be(0);
         response.ImportPreNotifications.Length.Should().Be(0);
     }
 
@@ -258,7 +300,7 @@ public class RelatedImportDeclarationsServiceTests
         );
 
         response.Should().NotBeNull();
-        response.CustomsDeclaration.Length.Should().Be(3);
+        response.CustomsDeclarations.Length.Should().Be(3);
         response.ImportPreNotifications.Length.Should().Be(4);
     }
 
@@ -276,7 +318,7 @@ public class RelatedImportDeclarationsServiceTests
         );
 
         response.Should().NotBeNull();
-        response.CustomsDeclaration.Length.Should().Be(2);
+        response.CustomsDeclarations.Length.Should().Be(2);
         response.ImportPreNotifications.Length.Should().Be(2);
     }
 

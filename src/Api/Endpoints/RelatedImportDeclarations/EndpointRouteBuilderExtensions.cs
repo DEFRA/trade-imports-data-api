@@ -4,7 +4,7 @@ using Defra.TradeImportsDataApi.Api.Endpoints.ImportPreNotifications;
 using Defra.TradeImportsDataApi.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Defra.TradeImportsDataApi.Api.Endpoints.Search;
+namespace Defra.TradeImportsDataApi.Api.Endpoints.RelatedImportDeclarations;
 
 public static class EndpointRouteBuilderExtensions
 {
@@ -37,7 +37,7 @@ public static class EndpointRouteBuilderExtensions
 
         var response = new RelatedImportDeclarationsResponse(
             searchResults
-                .CustomsDeclaration.Select(x => new CustomsDeclarationResponse(
+                .CustomsDeclarations.Select(x => new CustomsDeclarationResponse(
                     x.Id,
                     x.ClearanceRequest,
                     x.ClearanceDecision,
