@@ -135,13 +135,13 @@ public class Commodities
     /// <summary>
     /// Holder for additional parameters of a commodity
     /// </summary>
-    [JsonPropertyName("commodityComplement")]
+    [JsonPropertyName("commodityComplements")]
     [System.ComponentModel.Description("Holder for additional parameters of a commodity")]
-    public CommodityComplement[]? CommodityComplements { get; set; }
+    public CommodityComplements[]? CommodityComplements { get; set; }
 
     /// <summary>
     ///     Additional data for commodityComplement part containing such data as net weight
     /// </summary>
-    [JsonPropertyName("complementParameterSet")]
-    public ComplementParameterSet[]? ComplementParameterSets { get; set; }
+    [JsonPropertyName("complementParameterSets")]
+    public ComplementParameterSets[]? ComplementParameterSets { get; set; }
 }

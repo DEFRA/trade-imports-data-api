@@ -5,7 +5,7 @@ namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
 /// <summary>
 /// Holder for additional parameters of a commodity
 /// </summary>
-public class CommodityComplement
+public class CommodityComplements
 {
     /// <summary>
     /// UUID used to match commodityComplement to its complementParameter set. CHEDPP only
