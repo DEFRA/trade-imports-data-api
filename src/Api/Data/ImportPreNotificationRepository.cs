@@ -38,7 +38,7 @@ public class ImportPreNotificationRepository(IDbContext dbContext, ILogger<Impor
         CancellationToken cancellationToken
     ) => await dbContext.ImportPreNotifications.Where(predicate).ToListWithFallbackAsync(cancellationToken);
 
-    public async Task<List<ImportPreNotificationUpdateEntity>> GetAllUpdates(
+    private async Task<List<ImportPreNotificationUpdateEntity>> GetAllUpdates(
         string[] ids,
         CancellationToken cancellationToken
     ) => await dbContext.ImportPreNotificationUpdates.Where(x => ids.Contains(x.Id)).ToListAsync(cancellationToken);
