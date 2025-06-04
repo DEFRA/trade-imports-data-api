@@ -3,7 +3,7 @@ using System.Text.Json;
 using AutoFixture;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Data.Entities;
-using Defra.TradeImportsDataApi.Domain.ProcessingErrors;
+using Defra.TradeImportsDataApi.Domain.Errors;
 using Defra.TradeImportsDataApi.Testing;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
@@ -55,13 +55,14 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
     public async Task Get_WhenFound_ShouldReturnContent()
     {
         var client = CreateClient();
+
         MockProcessingErrorService
             .GetProcessingError(Mrn, Arg.Any<CancellationToken>())
             .Returns(
                 new ProcessingErrorEntity
                 {
                     Id = Mrn,
-                    ProcessingError = new ProcessingError(),
+                    ProcessingErrors = [],
                     Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
                     Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
                     ETag = "etag",
@@ -117,8 +118,8 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
     {
         // See test above for generation of new content
         var body = EmbeddedResource.GetBody(GetType(), "GetTests_DomainExample.json");
-        var processingError =
-            JsonSerializer.Deserialize<ProcessingError>(body, s_jsonOptions) ?? throw new InvalidOperationException();
+        var processingErrors =
+            JsonSerializer.Deserialize<ProcessingError[]>(body, s_jsonOptions) ?? throw new InvalidOperationException();
         var client = CreateClient();
         MockProcessingErrorService
             .GetProcessingError(Mrn, Arg.Any<CancellationToken>())
@@ -126,7 +127,7 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
                 new ProcessingErrorEntity
                 {
                     Id = Mrn,
-                    ProcessingError = processingError,
+                    ProcessingErrors = processingErrors,
                     Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
                     Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
                     ETag = "etag",

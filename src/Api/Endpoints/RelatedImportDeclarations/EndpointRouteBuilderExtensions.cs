@@ -42,7 +42,7 @@ public static class EndpointRouteBuilderExtensions
                     x.ClearanceRequest,
                     x.ClearanceDecision,
                     x.Finalisation,
-                    x.InboundError,
+                    x.ExternalErrors,
                     x.Created,
                     x.Updated
                 ))

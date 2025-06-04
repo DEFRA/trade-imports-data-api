@@ -1,5 +1,5 @@
 using Argon;
-using Defra.TradeImportsDataApi.Domain.ProcessingErrors;
+using Defra.TradeImportsDataApi.Domain.Errors;
 using Defra.TradeImportsDataApi.Testing;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
@@ -49,7 +49,17 @@ public class GetTests : WireMockTestBase<WireMockContext>
                         JsonSerializer.Serialize(
                             new Defra.TradeImportsDataApi.Api.Endpoints.ProcessingErrors.ProcessingErrorResponse(
                                 mrn,
-                                new ProcessingError(),
+                                [
+                                    new ProcessingError
+                                    {
+                                        CorrelationId = "80000000",
+                                        SourceExternalCorrelationId = "1800000",
+                                        ExternalVersion = 1,
+                                        Created = created,
+                                        Errors = [new ErrorItem { Code = "error-code", Message = "error-message" }],
+                                        Message = "error-message",
+                                    },
+                                ],
                                 created,
                                 updated
                             )

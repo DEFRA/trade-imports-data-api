@@ -2,7 +2,6 @@ using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
-using Defra.TradeImportsDataApi.Domain.ProcessingErrors;
 using FluentAssertions;
 
 namespace Defra.TradeImportsDataApi.Api.Tests.Services;
@@ -60,7 +59,7 @@ public class DataEntityExtensionsTests
     [Fact]
     public void WhenToResourceEvent_AndEntityIsProcessingError_ShouldMap()
     {
-        var subject = new ProcessingErrorEntity { Id = "id", ProcessingError = new ProcessingError() };
+        var subject = new ProcessingErrorEntity { Id = "id", ProcessingErrors = [] };
 
         var result = subject.ToResourceEvent("operation");
 
@@ -202,15 +201,15 @@ public class DataEntityExtensionsTests
     }
 
     [Fact]
-    public void WhenWithChangeSet_AndSubResourceTypeIsInboundError_ShouldSetSubResourceType()
+    public void WhenWithChangeSet_AndSubResourceTypeIsExternalError_ShouldSetSubResourceType()
     {
         var subject = new FixtureEntity { Id = "id", ETag = "etag" };
         var previous = new CustomsDeclaration();
-        var current = new CustomsDeclaration { InboundError = new InboundError() };
+        var current = new CustomsDeclaration { ExternalErrors = [new ExternalError()] };
 
         var result = subject.ToResourceEvent("operation").WithChangeSet(current, previous);
 
-        result.SubResourceType.Should().Be("InboundError");
+        result.SubResourceType.Should().Be("ExternalError");
     }
 
     [Fact]
@@ -228,7 +227,7 @@ public class DataEntityExtensionsTests
                 FinalState = "0",
                 IsManualRelease = false,
             },
-            InboundError = new InboundError(),
+            ExternalErrors = [],
         };
 
         var act = () => subject.ToResourceEvent("operation").WithChangeSet(current, previous);

@@ -2,10 +2,13 @@ using System.Text.Json.Serialization;
 
 namespace Defra.TradeImportsDataApi.Domain.Errors;
 
-public class ErrorNotification
+public class ProcessingError
 {
-    [JsonPropertyName("externalCorrelationId")]
-    public string? ExternalCorrelationId { get; set; }
+    [JsonPropertyName("correlationId")]
+    public string? CorrelationId { get; set; }
+
+    [JsonPropertyName("sourceExternalCorrelationId")]
+    public string? SourceExternalCorrelationId { get; set; }
 
     [JsonPropertyName("externalVersion")]
     public int? ExternalVersion { get; set; }

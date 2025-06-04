@@ -4,7 +4,7 @@ using Defra.TradeImportsDataApi.Api.Exceptions;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
-using Defra.TradeImportsDataApi.Domain.ProcessingErrors;
+using Defra.TradeImportsDataApi.Domain.Errors;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
@@ -31,7 +31,10 @@ public class PutTests(ApiWebApplicationFactory factory, ITestOutputHelper output
     {
         var client = CreateClient(addDefaultAuthorizationHeader: false);
 
-        var response = await client.PutAsJsonAsync(Testing.Endpoints.ProcessingErrors.Put(Mrn), new ProcessingError());
+        var response = await client.PutAsJsonAsync(
+            Testing.Endpoints.ProcessingErrors.Put(Mrn),
+            Array.Empty<ProcessingError>()
+        );
 
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
@@ -41,7 +44,10 @@ public class PutTests(ApiWebApplicationFactory factory, ITestOutputHelper output
     {
         var client = CreateClient(testUser: TestUser.ReadOnly);
 
-        var response = await client.PutAsJsonAsync(Testing.Endpoints.ProcessingErrors.Put(Mrn), new ProcessingError());
+        var response = await client.PutAsJsonAsync(
+            Testing.Endpoints.ProcessingErrors.Put(Mrn),
+            Array.Empty<ProcessingError>()
+        );
 
         response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
     }
@@ -54,7 +60,10 @@ public class PutTests(ApiWebApplicationFactory factory, ITestOutputHelper output
             .Insert(Arg.Any<ProcessingErrorEntity>(), Arg.Any<CancellationToken>())
             .Throws(new EntityNotFoundException("entityType", "entityId"));
 
-        var response = await client.PutAsJsonAsync(Testing.Endpoints.ProcessingErrors.Put(Mrn), new ProcessingError());
+        var response = await client.PutAsJsonAsync(
+            Testing.Endpoints.ProcessingErrors.Put(Mrn),
+            Array.Empty<ProcessingError>()
+        );
 
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
@@ -67,7 +76,10 @@ public class PutTests(ApiWebApplicationFactory factory, ITestOutputHelper output
             .Insert(Arg.Any<ProcessingErrorEntity>(), Arg.Any<CancellationToken>())
             .Throws(new ConcurrencyException("entityId", "etag"));
 
-        var response = await client.PutAsJsonAsync(Testing.Endpoints.ProcessingErrors.Put(Mrn), new ProcessingError());
+        var response = await client.PutAsJsonAsync(
+            Testing.Endpoints.ProcessingErrors.Put(Mrn),
+            Array.Empty<ProcessingError>()
+        );
 
         response.StatusCode.Should().Be(HttpStatusCode.Conflict);
     }

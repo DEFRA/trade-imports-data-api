@@ -1,8 +1,20 @@
 ﻿{
   MovementReferenceNumber: mrn,
-  ProcessingError: {
-    Notifications: null
-  },
+  ProcessingErrors: [
+    {
+      CorrelationId: 80000000,
+      SourceExternalCorrelationId: 1800000,
+      ExternalVersion: 1,
+      Created: 2025-04-07 11:00 Utc,
+      Errors: [
+        {
+          Code: error-code,
+          Message: error-message
+        }
+      ],
+      Message: error-message
+    }
+  ],
   Created: 2025-04-07 11:00 Utc,
   Updated: 2025-04-07 11:15 Utc,
   ETag: "etag"

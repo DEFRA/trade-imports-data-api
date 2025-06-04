@@ -826,11 +826,10 @@
           "content": {
             "application/json": {
               "schema": {
-                "allOf": [
-                  {
-                    "$ref": "#/components/schemas/Defra.TradeImportsDataApi.ProcessingError"
-                  }
-                ]
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Defra.TradeImportsDataApi.ProcessingError"
+                }
               }
             }
           },
@@ -1457,11 +1456,11 @@
         ],
         "type": "object",
         "properties": {
-          "externalCorrelationId": {
+          "correlationId": {
             "type": "string",
             "nullable": true
           },
-          "timestamp": {
+          "created": {
             "type": "string",
             "format": "date-time"
           },
@@ -2392,12 +2391,11 @@
             ],
             "nullable": true
           },
-          "inboundError": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.InboundError"
-              }
-            ],
+          "externalErrors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.ExternalError"
+            },
             "nullable": true
           }
         },
@@ -2433,12 +2431,11 @@
             ],
             "nullable": true
           },
-          "inboundError": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.InboundError"
-              }
-            ],
+          "externalErrors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.ExternalError"
+            },
             "nullable": true
           },
           "created": {
@@ -2920,10 +2917,14 @@
         },
         "additionalProperties": false
       },
-      "Defra.TradeImportsDataApi.ErrorNotification": {
+      "Defra.TradeImportsDataApi.ExternalError": {
         "type": "object",
         "properties": {
           "externalCorrelationId": {
+            "type": "string",
+            "nullable": true
+          },
+          "sourceCorrelationId": {
             "type": "string",
             "nullable": true
           },
@@ -2932,19 +2933,15 @@
             "format": "int32",
             "nullable": true
           },
-          "created": {
+          "messageSentAt": {
             "type": "string",
-            "format": "date-time",
-            "nullable": true
+            "format": "date-time"
           },
           "errors": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Defra.TradeImportsDataApi.ErrorItem"
-            }
-          },
-          "message": {
-            "type": "string",
+            },
             "nullable": true
           }
         },
@@ -3637,19 +3634,6 @@
             "items": {
               "$ref": "#/components/schemas/Defra.TradeImportsDataApi.ImportPreNotificationResponse"
             }
-          }
-        },
-        "additionalProperties": false
-      },
-      "Defra.TradeImportsDataApi.InboundError": {
-        "type": "object",
-        "properties": {
-          "notifications": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.ErrorNotification"
-            },
-            "nullable": true
           }
         },
         "additionalProperties": false
@@ -4812,11 +4796,32 @@
       "Defra.TradeImportsDataApi.ProcessingError": {
         "type": "object",
         "properties": {
-          "notifications": {
+          "correlationId": {
+            "type": "string",
+            "nullable": true
+          },
+          "sourceExternalCorrelationId": {
+            "type": "string",
+            "nullable": true
+          },
+          "externalVersion": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "errors": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.ErrorNotification"
-            },
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.ErrorItem"
+            }
+          },
+          "message": {
+            "type": "string",
             "nullable": true
           }
         },
@@ -4828,12 +4833,11 @@
           "movementReferenceNumber": {
             "type": "string"
           },
-          "processingError": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.ProcessingError"
-              }
-            ]
+          "processingErrors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.ProcessingError"
+            }
           },
           "created": {
             "type": "string",

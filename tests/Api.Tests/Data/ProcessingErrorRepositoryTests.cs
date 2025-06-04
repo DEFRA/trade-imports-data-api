@@ -2,7 +2,6 @@ using Defra.TradeImportsDataApi.Api.Data;
 using Defra.TradeImportsDataApi.Api.Exceptions;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
-using Defra.TradeImportsDataApi.Domain.ProcessingErrors;
 using FluentAssertions;
 using NSubstitute;
 
@@ -23,7 +22,7 @@ public class ProcessingErrorRepositoryTests
     [Fact]
     public async Task Update_WhenNotExists_ShouldThrow()
     {
-        var entity = new ProcessingErrorEntity { Id = "id", ProcessingError = new ProcessingError() };
+        var entity = new ProcessingErrorEntity { Id = "id", ProcessingErrors = [] };
 
         var act = async () => await Subject.Update(entity, "etag", CancellationToken.None);
 

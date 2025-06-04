@@ -1,11 +1,9 @@
 using Defra.TradeImportsDataApi.Api.Data;
-using Defra.TradeImportsDataApi.Api.Exceptions;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.Errors;
 using Defra.TradeImportsDataApi.Domain.Events;
-using Defra.TradeImportsDataApi.Domain.ProcessingErrors;
 using FluentAssertions;
 using NSubstitute;
 
@@ -33,7 +31,7 @@ public class ProcessingErrorServiceTests
         var entity = new ProcessingErrorEntity
         {
             Id = "id",
-            ProcessingError = new ProcessingError { Notifications = [new ErrorNotification { ExternalVersion = 1 }] },
+            ProcessingErrors = [new ProcessingError { ExternalVersion = 1 }],
         };
         ProcessingErrorRepository.Insert(entity, CancellationToken.None).Returns(entity);
 
@@ -56,20 +54,17 @@ public class ProcessingErrorServiceTests
         var existing = new ProcessingErrorEntity
         {
             Id = "id",
-            ProcessingError = new ProcessingError { Notifications = [new ErrorNotification { ExternalVersion = 1 }] },
+            ProcessingErrors = [new ProcessingError { ExternalVersion = 1 }],
         };
         ProcessingErrorRepository.Get(id, CancellationToken.None).Returns(existing);
         var entity = new ProcessingErrorEntity
         {
             Id = "id",
-            ProcessingError = new ProcessingError
-            {
-                Notifications =
-                [
-                    new ErrorNotification { ExternalVersion = 1 },
-                    new ErrorNotification { ExternalVersion = 2 },
-                ],
-            },
+            ProcessingErrors =
+            [
+                new ProcessingError { ExternalVersion = 1 },
+                new ProcessingError { ExternalVersion = 2 },
+            ],
         };
         ProcessingErrorRepository.Update(entity, "etag", CancellationToken.None).Returns((existing, entity));
 
@@ -91,7 +86,7 @@ public class ProcessingErrorServiceTests
         const string id = "id";
         ProcessingErrorRepository
             .Get(id, CancellationToken.None)
-            .Returns(new ProcessingErrorEntity { Id = id, ProcessingError = new ProcessingError() });
+            .Returns(new ProcessingErrorEntity { Id = id, ProcessingErrors = [] });
 
         var result = await Subject.GetProcessingError(id, CancellationToken.None);
 

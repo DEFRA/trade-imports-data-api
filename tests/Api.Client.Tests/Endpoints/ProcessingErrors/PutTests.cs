@@ -1,5 +1,5 @@
 using System.Text.Json;
-using Defra.TradeImportsDataApi.Domain.ProcessingErrors;
+using Defra.TradeImportsDataApi.Domain.Errors;
 using Defra.TradeImportsDataApi.Testing;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
@@ -17,7 +17,7 @@ public class PutTests(WireMockContext context) : WireMockTestBase<WireMockContex
     public async Task PutProcessingError_WhenNoEtag_ShouldNotBeNull()
     {
         const string mrn = "mrn";
-        var data = new ProcessingError();
+        var data = Array.Empty<ProcessingError>();
         WireMock
             .Given(
                 Request
@@ -29,7 +29,7 @@ public class PutTests(WireMockContext context) : WireMockTestBase<WireMockContex
             )
             .RespondWith(Response.Create().WithStatusCode(StatusCodes.Status201Created));
 
-        var act = async () => await Subject.PutProcessingError(mrn, data, etag: null, CancellationToken.None);
+        var act = async () => await Subject.PutProcessingError(mrn, [], etag: null, CancellationToken.None);
 
         await act.Should().NotThrowAsync();
     }
@@ -38,7 +38,7 @@ public class PutTests(WireMockContext context) : WireMockTestBase<WireMockContex
     public async Task PutProcessingError_WhenHasEtag_ShouldNotBeNull()
     {
         const string mrn = "mrn";
-        var data = new ProcessingError();
+        var data = Array.Empty<ProcessingError>();
         WireMock
             .Given(
                 Request
@@ -59,7 +59,7 @@ public class PutTests(WireMockContext context) : WireMockTestBase<WireMockContex
     public async Task PutProcessingError_WhenBadRequest_ShouldThrow()
     {
         const string mrn = "mrn";
-        var data = new ProcessingError();
+        var data = Array.Empty<ProcessingError>();
         WireMock
             .Given(
                 Request
