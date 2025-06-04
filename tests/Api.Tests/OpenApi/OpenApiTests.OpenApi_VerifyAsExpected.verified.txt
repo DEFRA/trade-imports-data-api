@@ -1712,18 +1712,18 @@
             "description": "What the commodity is intended for. Possible values taken from IPAFFS schema version 17.5.",
             "nullable": true
           },
-          "commodityComplement": {
+          "commodityComplements": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.CommodityComplement"
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.CommodityComplements"
             },
             "description": "Holder for additional parameters of a commodity",
             "nullable": true
           },
-          "complementParameterSet": {
+          "complementParameterSets": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.ComplementParameterSet"
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.ComplementParameterSets"
             },
             "description": "Additional data for commodityComplement part containing such data as net weight",
             "nullable": true
@@ -1795,7 +1795,7 @@
         },
         "additionalProperties": false
       },
-      "Defra.TradeImportsDataApi.CommodityComplement": {
+      "Defra.TradeImportsDataApi.CommodityComplements": {
         "type": "object",
         "properties": {
           "uniqueComplementId": {
@@ -2004,20 +2004,20 @@
         },
         "additionalProperties": false
       },
-      "Defra.TradeImportsDataApi.ComplementParameterSet": {
+      "Defra.TradeImportsDataApi.ComplementParameterSets": {
         "type": "object",
         "properties": {
-          "uniqueComplementID": {
+          "uniqueComplementId": {
             "type": "string",
             "description": "UUID used to match commodityComplement to its complementParameter set. CHEDPP only",
             "nullable": true
           },
-          "complementID": {
+          "complementId": {
             "type": "integer",
             "format": "int32",
             "nullable": true
           },
-          "speciesID": {
+          "speciesId": {
             "type": "string",
             "nullable": true
           },

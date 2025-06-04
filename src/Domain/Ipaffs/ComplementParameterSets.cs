@@ -2,18 +2,18 @@ using System.Text.Json.Serialization;
 
 namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
 
-public class ComplementParameterSet
+public class ComplementParameterSets
 {
     /// <summary>
     ///     UUID used to match commodityComplement to its complementParameter set. CHEDPP only
     /// </summary>
-    [JsonPropertyName("uniqueComplementID")]
+    [JsonPropertyName("uniqueComplementId")]
     public string? UniqueComplementId { get; set; }
 
-    [JsonPropertyName("complementID")]
+    [JsonPropertyName("complementId")]
     public int? ComplementId { get; set; }
 
-    [JsonPropertyName("speciesID")]
+    [JsonPropertyName("speciesId")]
     public string? SpeciesId { get; set; }
 
     [JsonPropertyName("keyDataPair")]
