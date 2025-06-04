@@ -6,7 +6,6 @@ using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using FluentAssertions;
-using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Defra.TradeImportsDataApi.Api.Tests.Services;
 
@@ -372,7 +371,7 @@ public class RelatedImportDeclarationsServiceTests
     {
         return new RelatedImportDeclarationsService(
             new CustomsDeclarationRepository(memoryDbContext),
-            new ImportPreNotificationRepository(memoryDbContext, NullLogger<ImportPreNotificationRepository>.Instance)
+            new ImportPreNotificationRepository(memoryDbContext)
         );
     }
 }

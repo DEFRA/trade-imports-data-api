@@ -9,8 +9,7 @@ using MongoDB.Driver.Linq;
 
 namespace Defra.TradeImportsDataApi.Api.Data;
 
-public class ImportPreNotificationRepository(IDbContext dbContext, ILogger<ImportPreNotificationRepository> logger)
-    : IImportPreNotificationRepository
+public class ImportPreNotificationRepository(IDbContext dbContext) : IImportPreNotificationRepository
 {
     public async Task<ImportPreNotificationEntity?> Get(string id, CancellationToken cancellationToken) =>
         await dbContext.ImportPreNotifications.Find(id, cancellationToken);
@@ -96,18 +95,12 @@ public class ImportPreNotificationRepository(IDbContext dbContext, ILogger<Impor
             ),
         };
 
-        var start = TimeProvider.System.GetTimestamp();
-        var query = string.Join(",\n", pipeline.Select(x => x.ToString()));
-
         var aggregate = await dbContext.ImportPreNotificationUpdates.Collection.AggregateAsync<NotificationUpdate>(
             pipeline,
             cancellationToken: cancellationToken
         );
 
         var updates = (await aggregate.ToListAsync(cancellationToken)).ToDictionary(x => x.Id, x => x);
-
-        var elapsed = TimeProvider.System.GetElapsedTime(start);
-        logger.LogInformation("Updates query {Elapsed} {Query}", elapsed.TotalMilliseconds, query);
 
         return updates.Values.Select(x => new ImportPreNotificationUpdate(x.Id, x.Updated)).ToList();
     }
