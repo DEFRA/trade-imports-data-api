@@ -4,7 +4,6 @@ using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using FluentAssertions;
-using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 
 namespace Defra.TradeImportsDataApi.Api.Tests.Data;
@@ -18,7 +17,7 @@ public class ImportPreNotificationRepositoryTests
     {
         DbContext = Substitute.For<IDbContext>();
 
-        Subject = new ImportPreNotificationRepository(DbContext, NullLogger<ImportPreNotificationRepository>.Instance);
+        Subject = new ImportPreNotificationRepository(DbContext);
     }
 
     [Fact]
