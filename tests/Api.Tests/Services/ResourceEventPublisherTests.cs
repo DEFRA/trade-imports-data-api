@@ -51,6 +51,8 @@ public class ResourceEventPublisherTests
                     x.TopicArn == "arn:topic-name"
                     && x.MessageAttributes.ContainsKey("ResourceType")
                     && x.MessageAttributes["ResourceType"].StringValue == "resourceType"
+                    && x.MessageAttributes.ContainsKey("ResourceId")
+                    && x.MessageAttributes["ResourceId"].StringValue == "resourceId"
                     && x.Message
                         == "{\"resourceId\":\"resourceId\",\"resourceType\":\"resourceType\",\"subResourceType\":null,\"operation\":\"operation\",\"resource\":null,\"etag\":null,\"timestamp\":\"2025-04-16T07:00:00Z\",\"changeSet\":[]}"
                 ),

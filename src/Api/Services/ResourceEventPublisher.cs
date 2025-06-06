@@ -33,6 +33,10 @@ public class ResourceEventPublisher(
                 nameof(@event.ResourceType),
                 new MessageAttributeValue { StringValue = @event.ResourceType, DataType = DataTypeString }
             },
+            {
+                nameof(@event.ResourceId),
+                new MessageAttributeValue { StringValue = @event.ResourceId, DataType = DataTypeString }
+            },
         };
 
         if (@event.SubResourceType is not null)
