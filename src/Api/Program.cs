@@ -61,7 +61,7 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
     );
     builder.Configuration.AddEnvironmentVariables();
 
-    // Load certificates into Trust Store - Note must happen before Mongo and Http client connections
+    // This must happen before Mongo and Http client connections
     builder.Services.AddCustomTrustStore();
 
     builder.ConfigureLoggingAndTracing(integrationTest);
