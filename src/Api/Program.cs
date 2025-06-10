@@ -14,12 +14,13 @@ using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Api.Utils;
 using Defra.TradeImportsDataApi.Api.Utils.Logging;
 using Defra.TradeImportsDataApi.Data.Extensions;
-using Defra.TradeImportsDataApi.Domain.Ipaffs;
+using Elastic.CommonSchema.Serilog;
 using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.OpenApi.Models;
+using Microsoft.Extensions.Http.Resilience;
+using Polly;
 using Serilog;
 
-Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateBootstrapLogger();
+Log.Logger = new LoggerConfiguration().WriteTo.Console(new EcsTextFormatter()).CreateBootstrapLogger();
 
 try
 {
@@ -58,13 +59,34 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
     );
     builder.Configuration.AddEnvironmentVariables();
 
-    // Load certificates into Trust Store - Note must happen before Mongo and Http client connections
+    // This must happen before Mongo and Http client connections
     builder.Services.AddCustomTrustStore();
 
     builder.ConfigureLoggingAndTracing(integrationTest);
 
-    // This adds default rate limiter, total request timeout, retries, circuit breaker and timeout per attempt
-    builder.Services.ConfigureHttpClientDefaults(options => options.AddStandardResilienceHandler());
+    builder.Services.ConfigureHttpClientDefaults(options =>
+    {
+        var resilienceOptions = new HttpStandardResilienceOptions { Retry = { UseJitter = true } };
+        resilienceOptions.Retry.DisableForUnsafeHttpMethods();
+
+        options.ConfigureHttpClient(c =>
+        {
+            // Disable the HttpClient timeout to allow the resilient pipeline below
+            // to handle all timeouts
+            c.Timeout = Timeout.InfiniteTimeSpan;
+        });
+
+        options.AddResilienceHandler(
+            "All",
+            builder =>
+            {
+                builder
+                    .AddTimeout(resilienceOptions.TotalRequestTimeout)
+                    .AddRetry(resilienceOptions.Retry)
+                    .AddTimeout(resilienceOptions.AttemptTimeout);
+            }
+        );
+    });
     builder.Services.Configure<RouteHandlerOptions>(o =>
     {
         // Without this, bad request detail will only be thrown in DEVELOPMENT mode
@@ -73,94 +95,8 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
     builder.Services.AddProblemDetails();
     builder.Services.AddHealth();
     builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen(c =>
-    {
-        c.AddServer(
-            new OpenApiServer
-            {
-                Url = "https://" + (builder.Configuration.GetValue<string>("OpenApi:Host") ?? "localhost"),
-            }
-        );
-        c.AddSecurityDefinition(
-            "Basic",
-            new OpenApiSecurityScheme
-            {
-                Description = "RFC8725 Compliant JWT",
-                In = ParameterLocation.Header,
-                Name = "Authorization",
-                Scheme = "Basic",
-                Type = SecuritySchemeType.Http,
-            }
-        );
-        c.AddSecurityRequirement(
-            new OpenApiSecurityRequirement
-            {
-                {
-                    new OpenApiSecurityScheme
-                    {
-                        Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Basic" },
-                    },
-                    []
-                },
-            }
-        );
-        c.IncludeXmlComments(Assembly.GetExecutingAssembly());
-        c.IncludeXmlComments(typeof(ImportPreNotification).Assembly);
-        c.SchemaFilter<PossibleValueSchemaFilter>();
-        c.SchemaFilter<JsonConverterSchemaFilter>();
-        c.OperationFilter<PossibleValueOperationFilter>();
-
-        var typeMap = new Dictionary<string, string>
-        {
-            // ReSharper disable once RedundantNameQualifier
-            { typeof(Defra.TradeImportsDataApi.Domain.Ipaffs.CommodityCheck).FullName!, "NotificationCommodityCheck" },
-            {
-                typeof(Defra.TradeImportsDataApi.Domain.CustomsDeclaration.CommodityCheck).FullName!,
-                "CustomsCommodityCheck"
-            },
-        };
-        c.CustomSchemaIds(x =>
-        {
-            var schemaId = x.FullName!;
-
-            if (schemaId.StartsWith("Defra"))
-            {
-                var typeName = typeMap.TryGetValue(x.FullName!, out var mappedTypeName) ? mappedTypeName : x.Name;
-                schemaId = "Defra.TradeImportsDataApi." + typeName;
-            }
-
-            return schemaId;
-        });
-
-        c.SupportNonNullableReferenceTypes();
-        c.UseAllOfToExtendReferenceSchemas();
-        c.SwaggerDoc(
-            "v1",
-            new OpenApiInfo
-            {
-                Description = "TBC",
-                Contact = new OpenApiContact
-                {
-                    Email = "tbc@defra.gov.uk",
-                    Name = "DEFRA",
-                    Url = new Uri(
-#pragma warning disable S1075
-                        "https://www.gov.uk/government/organisations/department-for-environment-food-rural-affairs"
-#pragma warning restore S1075
-                    ),
-                },
-                Title = "Trade Imports Data API",
-                Version = "v1",
-            }
-        );
-    });
+    builder.Services.AddOpenApi(builder.Configuration);
     builder.Services.AddHttpClient();
-    builder.Services.AddHeaderPropagation(options =>
-    {
-        var traceHeader = builder.Configuration.GetValue<string>("TraceHeader");
-        if (!string.IsNullOrWhiteSpace(traceHeader))
-            options.Headers.Add(traceHeader);
-    });
 
     builder.Services.AddTransient<IRelatedImportDeclarationsService, RelatedImportDeclarationsService>();
     builder.Services.AddTransient<IGmrService, GmrService>();
@@ -194,17 +130,7 @@ static WebApplication BuildWebApplication(WebApplicationBuilder builder)
     app.MapCustomsDeclarationEndpoints();
     app.MapProcessingErrorEndpoints();
     app.MapSearchEndpoints();
-    app.UseSwagger(options =>
-    {
-        options.RouteTemplate = "/.well-known/openapi/{documentName}/openapi.json";
-    });
-    app.UseReDoc(options =>
-    {
-        options.ConfigObject.ExpandResponses = "200";
-        options.DocumentTitle = "Trade Import Data API";
-        options.RoutePrefix = "redoc";
-        options.SpecUrl = "/.well-known/openapi/v1/openapi.json";
-    });
+    app.UseOpenApi();
     app.UseStatusCodePages();
     app.UseExceptionHandler(
         new ExceptionHandlerOptions
