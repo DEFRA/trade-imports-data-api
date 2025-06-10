@@ -99,12 +99,6 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddOpenApi(builder.Configuration);
     builder.Services.AddHttpClient();
-    builder.Services.AddHeaderPropagation(options =>
-    {
-        var traceHeader = builder.Configuration.GetValue<string>("TraceHeader");
-        if (!string.IsNullOrWhiteSpace(traceHeader))
-            options.Headers.Add(traceHeader);
-    });
 
     builder.Services.AddTransient<IRelatedImportDeclarationsService, RelatedImportDeclarationsService>();
     builder.Services.AddTransient<IGmrService, GmrService>();
