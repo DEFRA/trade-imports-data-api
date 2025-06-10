@@ -14,11 +14,9 @@ using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Api.Utils;
 using Defra.TradeImportsDataApi.Api.Utils.Logging;
 using Defra.TradeImportsDataApi.Data.Extensions;
-using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using Elastic.CommonSchema.Serilog;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.Extensions.Http.Resilience;
-using Microsoft.OpenApi.Models;
 using Polly;
 using Serilog;
 
