@@ -16,7 +16,9 @@ using Defra.TradeImportsDataApi.Api.Utils.Logging;
 using Defra.TradeImportsDataApi.Data.Extensions;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.Extensions.Http.Resilience;
 using Microsoft.OpenApi.Models;
+using Polly;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateBootstrapLogger();
@@ -63,8 +65,29 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
 
     builder.ConfigureLoggingAndTracing(integrationTest);
 
-    // This adds default rate limiter, total request timeout, retries, circuit breaker and timeout per attempt
-    builder.Services.ConfigureHttpClientDefaults(options => options.AddStandardResilienceHandler());
+    builder.Services.ConfigureHttpClientDefaults(options =>
+    {
+        var resilienceOptions = new HttpStandardResilienceOptions { Retry = { UseJitter = true } };
+        resilienceOptions.Retry.DisableForUnsafeHttpMethods();
+
+        options.ConfigureHttpClient(c =>
+        {
+            // Disable the HttpClient timeout to allow the resilient pipeline below
+            // to handle all timeouts
+            c.Timeout = Timeout.InfiniteTimeSpan;
+        });
+
+        options.AddResilienceHandler(
+            "All",
+            builder =>
+            {
+                builder
+                    .AddTimeout(resilienceOptions.TotalRequestTimeout)
+                    .AddRetry(resilienceOptions.Retry)
+                    .AddTimeout(resilienceOptions.AttemptTimeout);
+            }
+        );
+    });
     builder.Services.Configure<RouteHandlerOptions>(o =>
     {
         // Without this, bad request detail will only be thrown in DEVELOPMENT mode
