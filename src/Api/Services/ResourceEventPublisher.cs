@@ -67,10 +67,11 @@ public class ResourceEventPublisher(
         await simpleNotificationService.PublishAsync(request, cancellationToken);
 
         logger.LogInformation(
-            "Published resource event {ResourceType} {Operation} {SubResourceType}",
+            "Published resource event {ResourceType} {Operation} {SubResourceType} (compressed {Compressed})",
             @event.ResourceType,
             @event.Operation,
-            @event.SubResourceType
+            @event.SubResourceType,
+            compressed
         );
     }
 
