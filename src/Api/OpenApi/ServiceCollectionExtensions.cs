@@ -1,9 +1,11 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using Microsoft.OpenApi.Models;
 
 namespace Defra.TradeImportsDataApi.Api.OpenApi;
 
+[ExcludeFromCodeCoverage]
 public static class ServiceCollectionExtensions
 {
     public static void AddOpenApi(this IServiceCollection services, IConfiguration configuration)

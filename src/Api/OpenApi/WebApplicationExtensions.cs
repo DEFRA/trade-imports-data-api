@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Defra.TradeImportsDataApi.Api.OpenApi;
 
+[ExcludeFromCodeCoverage]
 public static class WebApplicationExtensions
 {
     public static void UseOpenApi(this WebApplication app)
