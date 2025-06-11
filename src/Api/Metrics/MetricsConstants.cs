@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Defra.TradeImportsDataApi.Api.Metrics;
 
+[ExcludeFromCodeCoverage]
 public static class MetricsConstants
 {
     public static class MetricNames
