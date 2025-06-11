@@ -34,6 +34,14 @@ public class RequestMetricsTests
         var receivedMeasurements = messagesReceivedCollector.GetMeasurementSnapshot();
         receivedMeasurements.Count.Should().Be(1);
         receivedMeasurements[0].Value.Should().Be(1);
+        receivedMeasurements[0].ContainsTags(MetricsConstants.RequestTags.RequestPath).Should().BeTrue();
+        receivedMeasurements[0].Tags[MetricsConstants.RequestTags.RequestPath].Should().Be("TestMessage1");
+        receivedMeasurements[0].ContainsTags(MetricsConstants.RequestTags.HttpMethod).Should().BeTrue();
+        receivedMeasurements[0].Tags[MetricsConstants.RequestTags.HttpMethod].Should().Be("/test-request-path-1");
+        receivedMeasurements[0].ContainsTags(MetricsConstants.RequestTags.StatusCode).Should().BeTrue();
+        receivedMeasurements[0].Tags[MetricsConstants.RequestTags.StatusCode].Should().Be(200);
+        receivedMeasurements[0].ContainsTags(MetricsConstants.RequestTags.Service).Should().BeTrue();
+        receivedMeasurements[0].Tags[MetricsConstants.RequestTags.Service].Should().Be("dotnet");
     }
 
     [Fact]
@@ -49,10 +57,12 @@ public class RequestMetricsTests
         );
         var metrics = new RequestMetrics(mf);
 
-        metrics.RequestFaulted("TestMessage1", "/test-request-path-1", 200, new Exception());
+        metrics.RequestFaulted("TestMessage1", "/test-request-path-1", 200, new Exception("Test Message"));
 
         var receivedMeasurements = messagesReceivedCollector.GetMeasurementSnapshot();
         receivedMeasurements.Count.Should().Be(1);
         receivedMeasurements[0].Value.Should().Be(1);
+        receivedMeasurements[0].ContainsTags(MetricsConstants.RequestTags.ExceptionType).Should().BeTrue();
+        receivedMeasurements[0].Tags[MetricsConstants.RequestTags.ExceptionType].Should().Be("Exception");
     }
 }
