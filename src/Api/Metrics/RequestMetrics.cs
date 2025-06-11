@@ -6,8 +6,6 @@ namespace Defra.TradeImportsDataApi.Api.Metrics;
 
 public class RequestMetrics
 {
-    public const string MeterName = "Defra.TradeImportsDataApi";
-
     private readonly Counter<long> requestsReceived;
     private readonly Counter<long> requestsFaulted;
     private readonly Histogram<double> requestDuration;

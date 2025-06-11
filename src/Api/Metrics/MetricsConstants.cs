@@ -7,7 +7,7 @@ public static class MetricsConstants
 {
     public static class MetricNames
     {
-        public const string MeterName = " Defra.TradeImportsDataApi.Api";
+        public const string MeterName = "Defra.TradeImportsDataApi.Api";
     }
 
     public static class RequestTags

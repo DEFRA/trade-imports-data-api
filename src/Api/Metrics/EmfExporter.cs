@@ -40,7 +40,7 @@ public static class EmfExporter
         _awsNamespace = awsNamespace;
         MeterListener.InstrumentPublished = (instrument, listener) =>
         {
-            if (instrument.Meter.Name is RequestMetrics.MeterName)
+            if (instrument.Meter.Name is MetricsConstants.MetricNames.MeterName)
             {
                 listener.EnableMeasurementEvents(instrument);
             }
