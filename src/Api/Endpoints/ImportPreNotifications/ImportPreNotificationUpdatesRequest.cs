@@ -13,6 +13,8 @@ public class ImportPreNotificationUpdatesRequest
     private readonly string[]? _type;
     private readonly string[]? _status;
     private readonly string[]? _excludeStatus;
+    private readonly int? _page;
+    private readonly int? _pageSize;
 
     [Description(
         "Filter import pre notifications updated at this date and time or after this date and time. "
@@ -64,6 +66,22 @@ public class ImportPreNotificationUpdatesRequest
         init => _excludeStatus = value;
     }
 
+    [Description("Page number (1-based). Defaults to 1 if not specified.")]
+    [FromQuery(Name = "page")]
+    public int? Page
+    {
+        get => _page ?? 1;
+        init => _page = value;
+    }
+
+    [Description("Number of items per page. Defaults to 100 if not specified")]
+    [FromQuery(Name = "pageSize")]
+    public int? PageSize
+    {
+        get => _pageSize ?? 100;
+        init => _pageSize = value;
+    }
+
     public class ImportPreNotificationUpdatesRequestValidator
         : ValidationEndpointFilter<ImportPreNotificationUpdatesRequest>
     {
@@ -77,6 +95,8 @@ public class ImportPreNotificationUpdatesRequest
                 .WithMessage(
                     $"Must not be more than {TimeSpan.FromHours(1).Duration().TotalHours} hour(s) of {nameof(From)}"
                 );
+            RuleFor(x => x.Page).GreaterThanOrEqualTo(1);
+            RuleFor(x => x.PageSize).GreaterThanOrEqualTo(1);
         }
     }
 }

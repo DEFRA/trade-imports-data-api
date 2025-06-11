@@ -700,6 +700,26 @@
               },
               "description": "Filter import pre notifications by NOT IN status. Multiple should be specified as excludeStatus=A&excludeStatus=B etc."
             }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number (1-based). Defaults to 1 if not specified.",
+            "schema": {
+              "type": "integer",
+              "description": "Page number (1-based). Defaults to 1 if not specified.",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Number of items per page. Defaults to 100 if not specified",
+            "schema": {
+              "type": "integer",
+              "description": "Number of items per page. Defaults to 100 if not specified",
+              "format": "int32"
+            }
           }
         ],
         "responses": {
@@ -3622,6 +3642,10 @@
             "items": {
               "$ref": "#/components/schemas/Defra.TradeImportsDataApi.ImportPreNotificationUpdateResponse"
             }
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false

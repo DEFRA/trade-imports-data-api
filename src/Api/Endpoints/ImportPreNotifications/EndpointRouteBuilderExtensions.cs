@@ -236,12 +236,17 @@ public static class EndpointRouteBuilderExtensions
             request.Type,
             request.Status,
             request.ExcludeStatus,
+            request.Page.GetValueOrDefault(),
+            request.PageSize.GetValueOrDefault(),
             cancellationToken
         );
 
         return Results.Ok(
             new ImportPreNotificationUpdatesResponse(
-                result.Select(x => new ImportPreNotificationUpdateResponse(x.ReferenceNumber, x.Updated)).ToList()
+                result
+                    .Updates.Select(x => new ImportPreNotificationUpdateResponse(x.ReferenceNumber, x.Updated))
+                    .ToList(),
+                result.Total
             )
         );
     }

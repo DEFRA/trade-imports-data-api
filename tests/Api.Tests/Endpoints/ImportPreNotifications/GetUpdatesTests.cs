@@ -78,6 +78,41 @@ public class GetUpdatesTests : EndpointTestBase, IClassFixture<WireMockContext>
     }
 
     [Fact]
+    public async Task Get_WhenInvalidRequest_PageLessThan1_ShouldBeBadRequest()
+    {
+        var client = CreateClient();
+
+        var response = await client.GetAsync(
+            TradeImportsDataApi.Testing.Endpoints.ImportPreNotifications.GetUpdates(
+                EndpointQuery
+                    .New.Where(EndpointFilter.From(new DateTime(2025, 5, 28, 13, 55, 0, DateTimeKind.Utc)))
+                    .Where(EndpointFilter.To(new DateTime(2025, 5, 28, 14, 15, 0, DateTimeKind.Utc)))
+                    .Where(EndpointFilter.Page(0))
+            )
+        );
+
+        await VerifyJson(await response.Content.ReadAsStringAsync(), _settings);
+    }
+
+    [Fact]
+    public async Task Get_WhenInvalidRequest_PageSizeLessThan1_ShouldBeBadRequest()
+    {
+        var client = CreateClient();
+
+        var response = await client.GetAsync(
+            TradeImportsDataApi.Testing.Endpoints.ImportPreNotifications.GetUpdates(
+                EndpointQuery
+                    .New.Where(EndpointFilter.From(new DateTime(2025, 5, 28, 13, 55, 0, DateTimeKind.Utc)))
+                    .Where(EndpointFilter.To(new DateTime(2025, 5, 28, 14, 15, 0, DateTimeKind.Utc)))
+                    .Where(EndpointFilter.Page(1))
+                    .Where(EndpointFilter.PageSize(0))
+            )
+        );
+
+        await VerifyJson(await response.Content.ReadAsStringAsync(), _settings);
+    }
+
+    [Fact]
     public async Task Get_WhenInvalidRequest_EmptyStringInArrays_ShouldCallWithNone()
     {
         var client = CreateClient();
@@ -89,15 +124,20 @@ public class GetUpdatesTests : EndpointTestBase, IClassFixture<WireMockContext>
                 Arg.Is<string[]?>(x => x == null),
                 Arg.Is<string[]?>(x => x == null),
                 Arg.Is<string[]?>(x => x == null),
+                Arg.Any<int>(),
+                Arg.Any<int>(),
                 Arg.Any<CancellationToken>()
             )
             .Returns(
-                [
-                    new ImportPreNotificationUpdate(
-                        "CHEDPP.GB.2024.5194492",
-                        new DateTime(2025, 5, 21, 8, 51, 0, DateTimeKind.Utc)
-                    ),
-                ]
+                new ImportPreNotificationUpdates(
+                    [
+                        new ImportPreNotificationUpdate(
+                            "CHEDPP.GB.2024.5194492",
+                            new DateTime(2025, 5, 21, 8, 51, 0, DateTimeKind.Utc)
+                        ),
+                    ],
+                    Total: 1
+                )
             );
 
         await client.GetAsync(
@@ -121,6 +161,8 @@ public class GetUpdatesTests : EndpointTestBase, IClassFixture<WireMockContext>
                 Arg.Is<string[]?>(x => x == null),
                 Arg.Is<string[]?>(x => x == null),
                 Arg.Is<string[]?>(x => x == null),
+                Arg.Any<int>(),
+                Arg.Any<int>(),
                 Arg.Any<CancellationToken>()
             );
     }
@@ -143,15 +185,20 @@ public class GetUpdatesTests : EndpointTestBase, IClassFixture<WireMockContext>
                 Arg.Is<string[]?>(x => x != null && x.SequenceEqual(type)),
                 Arg.Is<string[]?>(x => x != null && x.SequenceEqual(status)),
                 Arg.Is<string[]?>(x => x != null && x.SequenceEqual(excludeStatus)),
+                Arg.Is<int>(x => x == 2),
+                Arg.Is<int>(x => x == 200),
                 Arg.Any<CancellationToken>()
             )
             .Returns(
-                [
-                    new ImportPreNotificationUpdate(
-                        "CHEDPP.GB.2024.5194492",
-                        new DateTime(2025, 5, 21, 8, 51, 0, DateTimeKind.Utc)
-                    ),
-                ]
+                new ImportPreNotificationUpdates(
+                    [
+                        new ImportPreNotificationUpdate(
+                            "CHEDPP.GB.2024.5194492",
+                            new DateTime(2025, 5, 21, 8, 51, 0, DateTimeKind.Utc)
+                        ),
+                    ],
+                    Total: 1
+                )
             );
 
         var response = await client.GetAsync(
@@ -163,6 +210,8 @@ public class GetUpdatesTests : EndpointTestBase, IClassFixture<WireMockContext>
                     .Where(EndpointFilter.Type(type))
                     .Where(EndpointFilter.Status(status))
                     .Where(EndpointFilter.ExcludeStatus(excludeStatus))
+                    .Where(EndpointFilter.Page(2))
+                    .Where(EndpointFilter.PageSize(200))
             )
         );
 

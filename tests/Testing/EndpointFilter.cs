@@ -27,4 +27,8 @@ public class EndpointFilter
         (statuses ?? []).Select(ExcludeStatus).ToArray();
 
     public static EndpointFilter ExcludeStatus(string status) => new($"excludeStatus={status}");
+
+    public static EndpointFilter Page(int page) => new($"page={page}");
+
+    public static EndpointFilter PageSize(int pageSize) => new($"pageSize={pageSize}");
 }

@@ -4,5 +4,6 @@
       referenceNumber: CHEDPP.GB.2024.5194492,
       updated: 2025-05-21T08:51:00Z
     }
-  ]
+  ],
+  total: 1
 }

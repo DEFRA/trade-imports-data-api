@@ -273,6 +273,52 @@ public class ImportPreNotificationUpdateTests : IntegrationTestBase, IAsyncLifet
         AssertResult(expectResult: true, result, chedRef, customsDeclarationResponse?.Updated);
     }
 
+    [Fact]
+    public async Task WhenPaging_ThenPagesReturnedAsExpected()
+    {
+        const int pageSize = 5;
+
+        // Create 12 records
+        for (var i = 1; i <= 12; i++)
+        {
+            var ched = $"CHED.2025.{i.ToString().PadLeft(7, '0')}";
+
+            await CreateNotification(ched, status: "DRAFT");
+            await Task.Delay(1);
+        }
+
+        // Loop expected pages
+        for (var i = 1; i <= 3; i++)
+        {
+            var pageOffset = (i - 1) * pageSize;
+
+            var result = await GetUpdates(page: i, pageSize: pageSize);
+
+            // We wrote 12 records
+            result.Total.Should().Be(12);
+
+            var lastPage = i == 3;
+
+            // As we wrote 12 records, we expect 3 pages where the
+            // first two pages contain 5 records each and the
+            // third page contains 2 records
+            result.ImportPreNotificationUpdates.Should().HaveCount(lastPage ? 2 : pageSize);
+
+            // Loop expected records per page
+            for (var j = 1; j <= 5; j++)
+            {
+                result
+                    .ImportPreNotificationUpdates[j - 1]
+                    .ReferenceNumber.Should()
+                    .Be($"CHED.2025.{(j + pageOffset).ToString().PadLeft(7, '0')}");
+
+                // Only 2 records on the last page so break
+                if (lastPage && j == 2)
+                    break;
+            }
+        }
+    }
+
     private static void AssertResult(
         bool expectResult,
         ImportPreNotificationUpdatesResponse result,
@@ -397,21 +443,29 @@ public class ImportPreNotificationUpdateTests : IntegrationTestBase, IAsyncLifet
         string[]? pointOfEntry = null,
         string[]? type = null,
         string[]? status = null,
-        string[]? excludeStatus = null
+        string[]? excludeStatus = null,
+        int? page = null,
+        int? pageSize = null
     )
     {
         var now = DateTime.UtcNow;
+        var query = EndpointQuery
+            .New.Where(EndpointFilter.From(now.AddMinutes(-30)))
+            .Where(EndpointFilter.To(now.AddMinutes(30)))
+            .Where(EndpointFilter.PointOfEntry(pointOfEntry))
+            .Where(EndpointFilter.Type(type))
+            .Where(EndpointFilter.Status(status))
+            .Where(EndpointFilter.ExcludeStatus(excludeStatus));
+
+        if (page != null)
+            query = query.Where(EndpointFilter.Page(page.GetValueOrDefault()));
+
+        if (pageSize != null)
+            query = query.Where(EndpointFilter.PageSize(pageSize.GetValueOrDefault()));
+
         var result =
             await HttpClient.GetFromJsonAsync<ImportPreNotificationUpdatesResponse>(
-                Testing.Endpoints.ImportPreNotifications.GetUpdates(
-                    EndpointQuery
-                        .New.Where(EndpointFilter.From(now.AddMinutes(-30)))
-                        .Where(EndpointFilter.To(now.AddMinutes(30)))
-                        .Where(EndpointFilter.PointOfEntry(pointOfEntry))
-                        .Where(EndpointFilter.Type(type))
-                        .Where(EndpointFilter.Status(status))
-                        .Where(EndpointFilter.ExcludeStatus(excludeStatus))
-                )
+                Testing.Endpoints.ImportPreNotifications.GetUpdates(query)
             ) ?? throw new InvalidOperationException("Could not deserialize");
 
         return result;

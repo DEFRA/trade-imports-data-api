@@ -136,7 +136,9 @@ public class ImportPreNotificationServiceTests
                 excludeStatus: null,
                 cancellationToken: CancellationToken.None
             )
-            .Returns([new ImportPreNotificationUpdate(id, DateTime.UtcNow)]);
+            .Returns(
+                new ImportPreNotificationUpdates([new ImportPreNotificationUpdate(id, DateTime.UtcNow)], Total: 1)
+            );
 
         var result = await Subject.GetImportPreNotificationUpdates(
             from: from,
@@ -148,6 +150,8 @@ public class ImportPreNotificationServiceTests
             cancellationToken: CancellationToken.None
         );
 
-        result.Should().NotBeEmpty();
+        result.Should().NotBeNull();
+        result.Updates.Should().NotBeEmpty();
+        result.Total.Should().Be(1);
     }
 }
