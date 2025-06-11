@@ -229,6 +229,8 @@ public static class EndpointRouteBuilderExtensions
         CancellationToken cancellationToken
     )
     {
+        var page = request.Page.GetValueOrDefault();
+        var pageSize = request.PageSize.GetValueOrDefault();
         var result = await importPreNotificationService.GetImportPreNotificationUpdates(
             request.From,
             request.To,
@@ -236,8 +238,8 @@ public static class EndpointRouteBuilderExtensions
             request.Type,
             request.Status,
             request.ExcludeStatus,
-            request.Page.GetValueOrDefault(),
-            request.PageSize.GetValueOrDefault(),
+            page,
+            pageSize,
             cancellationToken
         );
 
@@ -246,7 +248,9 @@ public static class EndpointRouteBuilderExtensions
                 result
                     .Updates.Select(x => new ImportPreNotificationUpdateResponse(x.ReferenceNumber, x.Updated))
                     .ToList(),
-                result.Total
+                result.Total,
+                page,
+                pageSize
             )
         );
     }

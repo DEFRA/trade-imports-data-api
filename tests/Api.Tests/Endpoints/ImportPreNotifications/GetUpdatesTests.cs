@@ -177,6 +177,8 @@ public class GetUpdatesTests : EndpointTestBase, IClassFixture<WireMockContext>
         string[] type = ["CVEDA", "CVEDP"];
         string[] status = ["DRAFT", "SUBMITTED"];
         string[] excludeStatus = ["AMEND"];
+        const int page = 1;
+        const int pageSize = 10;
         MockImportPreNotificationService
             .GetImportPreNotificationUpdates(
                 from,
@@ -185,8 +187,8 @@ public class GetUpdatesTests : EndpointTestBase, IClassFixture<WireMockContext>
                 Arg.Is<string[]?>(x => x != null && x.SequenceEqual(type)),
                 Arg.Is<string[]?>(x => x != null && x.SequenceEqual(status)),
                 Arg.Is<string[]?>(x => x != null && x.SequenceEqual(excludeStatus)),
-                Arg.Is<int>(x => x == 2),
-                Arg.Is<int>(x => x == 200),
+                Arg.Is<int>(x => x == page),
+                Arg.Is<int>(x => x == pageSize),
                 Arg.Any<CancellationToken>()
             )
             .Returns(
@@ -210,8 +212,8 @@ public class GetUpdatesTests : EndpointTestBase, IClassFixture<WireMockContext>
                     .Where(EndpointFilter.Type(type))
                     .Where(EndpointFilter.Status(status))
                     .Where(EndpointFilter.ExcludeStatus(excludeStatus))
-                    .Where(EndpointFilter.Page(2))
-                    .Where(EndpointFilter.PageSize(200))
+                    .Where(EndpointFilter.Page(page))
+                    .Where(EndpointFilter.PageSize(pageSize))
             )
         );
 
