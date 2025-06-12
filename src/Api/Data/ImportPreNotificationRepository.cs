@@ -96,18 +96,12 @@ public class ImportPreNotificationRepository(IDbContext dbContext) : IImportPreN
             new BsonDocument("$limit", query.PageSize),
         };
 
-        var mongoQuery = string.Join(",", aggregatePipeline.Select(x => x.ToString()));
-        Console.WriteLine(mongoQuery);
-
         var countPipeline = new[]
         {
             new BsonDocument("$match", where),
             new BsonDocument("$group", new BsonDocument { { "_id", "$importPreNotificationId" } }),
             new BsonDocument("$count", "total"),
         };
-
-        mongoQuery = string.Join(",", countPipeline.Select(x => x.ToString()));
-        Console.WriteLine(mongoQuery);
 
         var aggregateTask = dbContext.ImportPreNotificationUpdates.Collection.AggregateAsync<NotificationUpdate>(
             aggregatePipeline,
