@@ -37,11 +37,6 @@ public class ImportPreNotificationRepository(IDbContext dbContext) : IImportPreN
         CancellationToken cancellationToken
     ) => await dbContext.ImportPreNotifications.Where(predicate).ToListWithFallbackAsync(cancellationToken);
 
-    private async Task<List<ImportPreNotificationUpdateEntity>> GetAllUpdates(
-        string[] ids,
-        CancellationToken cancellationToken
-    ) => await dbContext.ImportPreNotificationUpdates.Where(x => ids.Contains(x.Id)).ToListAsync(cancellationToken);
-
     public async Task<string?> GetCustomsDeclarationIdentifier(string id, CancellationToken cancellationToken) =>
         await dbContext
             .ImportPreNotifications.Where(x => x.Id == id)
@@ -59,9 +54,9 @@ public class ImportPreNotificationRepository(IDbContext dbContext) : IImportPreN
         if (query.PageSize < 1)
             throw new ArgumentOutOfRangeException(nameof(query), "Page size must be greater than 0");
 
-        // See UpdatesIdx index and field order - query order matches the index field order
-        // _id included in index as final projection produces an update object, which means
-        // only the index is needed to provide the result from this query.
+        // See UpdatesIdx index and field order - any changes should check the query plan used
+        // We can expect multiple update entities for the same CHED, which is why we group
+        // and then take the last updated value from the source reference
 
         var where = new BsonDocument
         {
@@ -86,20 +81,33 @@ public class ImportPreNotificationRepository(IDbContext dbContext) : IImportPreN
         var aggregatePipeline = new[]
         {
             new BsonDocument("$match", where),
-            new BsonDocument("$sort", new BsonDocument("updated", 1)),
-            new BsonDocument("$skip", (query.Page - 1) * query.PageSize),
-            new BsonDocument("$limit", query.PageSize),
+            // Group by importPreNotificationId, then take the last updated value
             new BsonDocument(
-                "$project",
+                "$group",
                 new BsonDocument
                 {
-                    // _id is always returned
-                    { "updated", "$source.updated" },
+                    { "_id", "$importPreNotificationId" },
+                    { "updated", new BsonDocument("$last", "$source.updated") },
                 }
             ),
+            // Sort to ensure same order on each query execution
+            new BsonDocument("$sort", new BsonDocument { { "updated", 1 }, { "_id", 1 } }),
+            new BsonDocument("$skip", (query.Page - 1) * query.PageSize),
+            new BsonDocument("$limit", query.PageSize),
         };
 
-        var countPipeline = new[] { new BsonDocument("$match", where), new BsonDocument("$count", "total") };
+        var mongoQuery = string.Join(",", aggregatePipeline.Select(x => x.ToString()));
+        Console.WriteLine(mongoQuery);
+
+        var countPipeline = new[]
+        {
+            new BsonDocument("$match", where),
+            new BsonDocument("$group", new BsonDocument { { "_id", "$importPreNotificationId" } }),
+            new BsonDocument("$count", "total"),
+        };
+
+        mongoQuery = string.Join(",", countPipeline.Select(x => x.ToString()));
+        Console.WriteLine(mongoQuery);
 
         var aggregateTask = dbContext.ImportPreNotificationUpdates.Collection.AggregateAsync<NotificationUpdate>(
             aggregatePipeline,
@@ -181,24 +189,20 @@ public class ImportPreNotificationRepository(IDbContext dbContext) : IImportPreN
         if (notifications.Count == 0)
             return;
 
-        var updates = await GetAllUpdates(notifications.Select(x => x.Id).ToArray(), cancellationToken);
-
-        foreach (var importPreNotification in notifications)
+        foreach (
+            var update in notifications.Select(importPreNotification => new ImportPreNotificationUpdateEntity
+            {
+                Id = ObjectId.GenerateNewId().ToString(),
+                ImportPreNotificationId = importPreNotification.Id,
+                PointOfEntry = importPreNotification.ImportPreNotification.PartOne?.PointOfEntry,
+                ImportNotificationType = importPreNotification.ImportPreNotification.ImportNotificationType,
+                Status = importPreNotification.ImportPreNotification.Status,
+            })
+        )
         {
-            var update = updates.FirstOrDefault(x => x.Id == importPreNotification.Id);
-            var existed = update != null;
-
-            update ??= new ImportPreNotificationUpdateEntity { Id = importPreNotification.Id };
-
-            update.PointOfEntry = importPreNotification.ImportPreNotification.PartOne?.PointOfEntry;
-            update.ImportNotificationType = importPreNotification.ImportPreNotification.ImportNotificationType;
-            update.Status = importPreNotification.ImportPreNotification.Status;
             update.SetSource(source);
 
-            if (existed)
-                await dbContext.ImportPreNotificationUpdates.Update(update, cancellationToken);
-            else
-                await dbContext.ImportPreNotificationUpdates.Insert(update, cancellationToken);
+            await dbContext.ImportPreNotificationUpdates.Insert(update, cancellationToken);
         }
     }
 }

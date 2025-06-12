@@ -285,6 +285,13 @@ public class ImportPreNotificationUpdateTests : IntegrationTestBase, IAsyncLifet
 
             await CreateNotification(ched, status: "DRAFT");
             await Task.Delay(1);
+
+            if (i % 2 != 0)
+                continue;
+
+            // Add random update for every other CHED
+            var notification = await DataApiClient.GetImportPreNotification(ched, CancellationToken.None);
+            await UpdateNotification(notification!);
         }
 
         // Loop expected pages
@@ -317,6 +324,34 @@ public class ImportPreNotificationUpdateTests : IntegrationTestBase, IAsyncLifet
                     break;
             }
         }
+    }
+
+    [Fact]
+    public async Task WhenMultipleUpdatesWithTimePeriod_ShouldReturnSingleUpdate()
+    {
+        var (chedRef, chedId) = ImportPreNotificationIdGenerator.GenerateReturnId();
+        var mrn = Guid.NewGuid().ToString("N");
+
+        await CreateNotification(chedRef, pointOfEntry: "BCP1", type: "CHEDA", status: "SUBMITTED");
+        await CreateCustomsDeclaration(mrn, chedId);
+
+        var importPreNotification = await DataApiClient.GetImportPreNotification(chedRef, CancellationToken.None);
+        var customsDeclarationResponse = await DataApiClient.GetCustomsDeclaration(mrn, CancellationToken.None);
+
+        // Updates
+
+        await Task.Delay(1);
+        await UpdateNotification(importPreNotification!);
+        await UpdateCustomsDeclaration(customsDeclarationResponse!);
+
+        importPreNotification = await DataApiClient.GetImportPreNotification(chedRef, CancellationToken.None);
+
+        await Task.Delay(1);
+        await UpdateNotification(importPreNotification!);
+
+        var result = await GetUpdates(pointOfEntry: ["BCP1"]);
+
+        result.ImportPreNotificationUpdates.Should().HaveCount(1);
     }
 
     private static void AssertResult(

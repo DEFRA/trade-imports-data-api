@@ -12,6 +12,8 @@ public class ImportPreNotificationUpdateEntity : IDataEntity
 
     public DateTime Updated { get; set; }
 
+    public required string ImportPreNotificationId { get; set; }
+
     public string? PointOfEntry { get; set; }
 
     public string? ImportNotificationType { get; set; }
