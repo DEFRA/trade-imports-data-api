@@ -278,7 +278,7 @@ public class ImportPreNotificationUpdateTests : IntegrationTestBase, IAsyncLifet
     {
         const int pageSize = 5;
 
-        // Create 12 records
+        // Create 12 CHEDs
         for (var i = 1; i <= 12; i++)
         {
             var ched = $"CHED.2025.{i.ToString().PadLeft(7, '0')}";
@@ -289,7 +289,7 @@ public class ImportPreNotificationUpdateTests : IntegrationTestBase, IAsyncLifet
             if (i % 2 != 0)
                 continue;
 
-            // Add random update for every other CHED
+            // Add random update for every other CHED (18 total updates)
             var notification = await DataApiClient.GetImportPreNotification(ched, CancellationToken.None);
             await UpdateNotification(notification!);
         }
@@ -301,12 +301,12 @@ public class ImportPreNotificationUpdateTests : IntegrationTestBase, IAsyncLifet
 
             var result = await GetUpdates(page: i, pageSize: pageSize);
 
-            // We wrote 12 records
+            // We wrote 12 unique CHEDs
             result.Total.Should().Be(12);
 
             var lastPage = i == 3;
 
-            // As we wrote 12 records, we expect 3 pages where the
+            // As we wrote 12, we expect 3 pages where the
             // first two pages contain 5 records each and the
             // third page contains 2 records
             result.ImportPreNotificationUpdates.Should().HaveCount(lastPage ? 2 : pageSize);
@@ -324,6 +324,34 @@ public class ImportPreNotificationUpdateTests : IntegrationTestBase, IAsyncLifet
                     break;
             }
         }
+    }
+
+    [Fact]
+    public async Task WhenPaging_AndFirstChedUpdateAtEndOfUpdates_ThenItIsAlwaysLast()
+    {
+        string ched = nameof(ched);
+        const int total = 12;
+
+        for (var i = 1; i <= total; i++)
+        {
+            ched = $"CHED.2025.{i.ToString().PadLeft(7, '0')}";
+
+            await CreateNotification(ched, status: "DRAFT");
+        }
+
+        var notificationResponse = await DataApiClient.GetImportPreNotification(ched, CancellationToken.None);
+
+        await Task.Delay(1);
+        await UpdateNotification(notificationResponse!);
+
+        var result = await GetUpdates(pageSize: 25);
+
+        result.ImportPreNotificationUpdates.Should().HaveCount(total);
+        result.Total.Should().Be(total);
+        result.Page.Should().Be(1);
+        result.PageSize.Should().Be(25);
+
+        result.ImportPreNotificationUpdates[^1].ReferenceNumber.Should().Be(ched);
     }
 
     [Fact]
