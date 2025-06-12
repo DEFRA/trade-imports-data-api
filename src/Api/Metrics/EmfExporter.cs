@@ -18,7 +18,10 @@ public static class EmfExportExtensions
         if (enabled)
         {
             var ns = config.GetValue<string>("AWS_EMF_NAMESPACE");
-            EmfExporter.Init(builder.ApplicationServices.GetRequiredService<ILoggerFactory>(), ns!);
+            if (string.IsNullOrWhiteSpace(ns))
+                throw new InvalidOperationException("AWS_EMF_NAMESPACE is not set but metrics are enabled");
+
+            EmfExporter.Init(builder.ApplicationServices.GetRequiredService<ILoggerFactory>(), ns);
         }
 
         return builder;
@@ -28,28 +31,28 @@ public static class EmfExportExtensions
 [ExcludeFromCodeCoverage]
 public static class EmfExporter
 {
-    private static readonly MeterListener MeterListener = new();
-    private static ILogger _logger = null!;
-    private static ILoggerFactory _loggerFactory = NullLoggerFactory.Instance;
-    private static string? _awsNamespace;
+    private static readonly MeterListener s_meterListener = new();
+    private static ILogger s_logger = null!;
+    private static ILoggerFactory s_loggerFactory = NullLoggerFactory.Instance;
+    private static string? s_awsNamespace;
 
     public static void Init(ILoggerFactory loggerFactory, string? awsNamespace)
     {
-        _logger = loggerFactory.CreateLogger(nameof(EmfExporter));
-        _loggerFactory = loggerFactory;
-        _awsNamespace = awsNamespace;
-        MeterListener.InstrumentPublished = (instrument, listener) =>
+        s_logger = loggerFactory.CreateLogger(nameof(EmfExporter));
+        s_loggerFactory = loggerFactory;
+        s_awsNamespace = awsNamespace;
+
+        s_meterListener.InstrumentPublished = (instrument, listener) =>
         {
             if (instrument.Meter.Name is MetricsConstants.MetricNames.MeterName)
             {
                 listener.EnableMeasurementEvents(instrument);
             }
         };
-
-        MeterListener.SetMeasurementEventCallback<int>(OnMeasurementRecorded);
-        MeterListener.SetMeasurementEventCallback<long>(OnMeasurementRecorded);
-        MeterListener.SetMeasurementEventCallback<double>(OnMeasurementRecorded);
-        MeterListener.Start();
+        s_meterListener.SetMeasurementEventCallback<int>(OnMeasurementRecorded);
+        s_meterListener.SetMeasurementEventCallback<long>(OnMeasurementRecorded);
+        s_meterListener.SetMeasurementEventCallback<double>(OnMeasurementRecorded);
+        s_meterListener.Start();
     }
 
     private static void OnMeasurementRecorded<T>(
@@ -61,14 +64,16 @@ public static class EmfExporter
     {
         try
         {
-            using var metricsLogger = new MetricsLogger(_loggerFactory);
+            using var metricsLogger = new MetricsLogger(s_loggerFactory);
 
-            metricsLogger.SetNamespace(_awsNamespace);
+            metricsLogger.SetNamespace(s_awsNamespace);
             var dimensionSet = new DimensionSet();
+
             foreach (var tag in tags)
             {
                 if (string.IsNullOrWhiteSpace(tag.Value?.ToString()))
                     continue;
+
                 dimensionSet.AddDimension(tag.Key, tag.Value?.ToString());
             }
 
@@ -80,7 +85,7 @@ public static class EmfExporter
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to push EMF metric");
+            s_logger.LogError(ex, "Failed to push EMF metric");
         }
     }
 }
