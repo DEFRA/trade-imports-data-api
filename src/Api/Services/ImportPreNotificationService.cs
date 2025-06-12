@@ -69,22 +69,8 @@ public class ImportPreNotificationService(
         return updated;
     }
 
-    public async Task<List<ImportPreNotificationUpdate>> GetImportPreNotificationUpdates(
-        DateTime from,
-        DateTime to,
-        string[]? pointOfEntry = null,
-        string[]? type = null,
-        string[]? status = null,
-        string[]? excludeStatus = null,
-        CancellationToken cancellationToken = default
-    ) =>
-        await importPreNotificationRepository.GetUpdates(
-            from,
-            to,
-            pointOfEntry,
-            type,
-            status,
-            excludeStatus,
-            cancellationToken
-        );
+    public async Task<ImportPreNotificationUpdates> GetImportPreNotificationUpdates(
+        ImportPreNotificationUpdateQuery query,
+        CancellationToken cancellationToken
+    ) => await importPreNotificationRepository.GetUpdates(query, cancellationToken);
 }

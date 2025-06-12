@@ -48,16 +48,17 @@ public class ImportPreNotificationRepository(IDbContext dbContext) : IImportPreN
             .Select(x => x.CustomsDeclarationIdentifier)
             .FirstOrDefaultAsync(cancellationToken);
 
-    public async Task<List<ImportPreNotificationUpdate>> GetUpdates(
-        DateTime from,
-        DateTime to,
-        string[]? pointOfEntry = null,
-        string[]? type = null,
-        string[]? status = null,
-        string[]? excludeStatus = null,
+    public async Task<ImportPreNotificationUpdates> GetUpdates(
+        ImportPreNotificationUpdateQuery query,
         CancellationToken cancellationToken = default
     )
     {
+        if (query.Page < 1)
+            throw new ArgumentOutOfRangeException(nameof(query), "Page must be greater than 0");
+
+        if (query.PageSize < 1)
+            throw new ArgumentOutOfRangeException(nameof(query), "Page size must be greater than 0");
+
         // See UpdatesIdx index and field order - query order matches the index field order
         // _id included in index as final projection produces an update object, which means
         // only the index is needed to provide the result from this query.
@@ -66,25 +67,28 @@ public class ImportPreNotificationRepository(IDbContext dbContext) : IImportPreN
         {
             {
                 "updated",
-                new BsonDocument { { "$gte", from }, { "$lt", to } }
+                new BsonDocument { { "$gte", query.From }, { "$lt", query.To } }
             },
         };
 
-        if (pointOfEntry is { Length: > 0 })
-            where.Add("pointOfEntry", new BsonDocument { { "$in", new BsonArray(pointOfEntry) } });
+        if (query.PointOfEntry is { Length: > 0 })
+            where.Add("pointOfEntry", new BsonDocument { { "$in", new BsonArray(query.PointOfEntry) } });
 
-        if (type is { Length: > 0 })
-            where.Add("importNotificationType", new BsonDocument { { "$in", new BsonArray(type) } });
+        if (query.Type is { Length: > 0 })
+            where.Add("importNotificationType", new BsonDocument { { "$in", new BsonArray(query.Type) } });
 
-        if (status is { Length: > 0 })
-            where.Add("status", new BsonDocument { { "$in", new BsonArray(status) } });
+        if (query.Status is { Length: > 0 })
+            where.Add("status", new BsonDocument { { "$in", new BsonArray(query.Status) } });
 
-        if (excludeStatus is { Length: > 0 })
-            where.Add("status", new BsonDocument { { "$nin", new BsonArray(excludeStatus) } });
+        if (query.ExcludeStatus is { Length: > 0 })
+            where.Add("status", new BsonDocument { { "$nin", new BsonArray(query.ExcludeStatus) } });
 
-        var pipeline = new[]
+        var aggregatePipeline = new[]
         {
             new BsonDocument("$match", where),
+            new BsonDocument("$sort", new BsonDocument("updated", 1)),
+            new BsonDocument("$skip", (query.Page - 1) * query.PageSize),
+            new BsonDocument("$limit", query.PageSize),
             new BsonDocument(
                 "$project",
                 new BsonDocument
@@ -95,14 +99,29 @@ public class ImportPreNotificationRepository(IDbContext dbContext) : IImportPreN
             ),
         };
 
-        var aggregate = await dbContext.ImportPreNotificationUpdates.Collection.AggregateAsync<NotificationUpdate>(
-            pipeline,
+        var countPipeline = new[] { new BsonDocument("$match", where), new BsonDocument("$count", "total") };
+
+        var aggregateTask = dbContext.ImportPreNotificationUpdates.Collection.AggregateAsync<NotificationUpdate>(
+            aggregatePipeline,
+            cancellationToken: cancellationToken
+        );
+        var countTask = dbContext.ImportPreNotificationUpdates.Collection.AggregateAsync<BsonDocument>(
+            countPipeline,
             cancellationToken: cancellationToken
         );
 
-        var updates = (await aggregate.ToListAsync(cancellationToken)).ToDictionary(x => x.Id, x => x);
+        await Task.WhenAll(aggregateTask, countTask);
 
-        return updates.Values.Select(x => new ImportPreNotificationUpdate(x.Id, x.Updated)).ToList();
+        var aggregate = await aggregateTask;
+        var count = await countTask;
+
+        var updates = (await aggregate.ToListAsync(cancellationToken)).ToDictionary(x => x.Id, x => x);
+        var total = (await count.FirstOrDefaultAsync(cancellationToken))?.GetValue("total").AsInt32 ?? 0;
+
+        return new ImportPreNotificationUpdates(
+            updates.Values.Select(x => new ImportPreNotificationUpdate(x.Id, x.Updated)).ToList(),
+            total
+        );
     }
 
     // ReSharper disable once ClassNeverInstantiated.Local
