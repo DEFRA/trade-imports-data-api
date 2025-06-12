@@ -38,6 +38,7 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ENVIRONMENT: local
+      AWS_EMF_ENVIRONMENT: Local
       AWS_EMF_NAMESPACE: Defra.TradeImportsDataApi
       PORT: 8080
       Mongo__DatabaseUri: mongodb://mongodb:27017/?directConnection=true
