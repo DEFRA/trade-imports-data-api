@@ -127,26 +127,13 @@ public class ImportPreNotificationServiceTests
         var from = DateTime.UtcNow;
         var to = DateTime.UtcNow.AddDays(1);
         ImportPreNotificationRepository
-            .GetUpdates(
-                from: from,
-                to: to,
-                pointOfEntry: null,
-                type: null,
-                status: null,
-                excludeStatus: null,
-                cancellationToken: CancellationToken.None
-            )
+            .GetUpdates(new ImportPreNotificationUpdateQuery(from, to), cancellationToken: CancellationToken.None)
             .Returns(
                 new ImportPreNotificationUpdates([new ImportPreNotificationUpdate(id, DateTime.UtcNow)], Total: 1)
             );
 
         var result = await Subject.GetImportPreNotificationUpdates(
-            from: from,
-            to: to,
-            pointOfEntry: null,
-            type: null,
-            status: null,
-            excludeStatus: null,
+            new ImportPreNotificationUpdateQuery(from, to),
             cancellationToken: CancellationToken.None
         );
 

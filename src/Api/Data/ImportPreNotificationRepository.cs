@@ -49,22 +49,15 @@ public class ImportPreNotificationRepository(IDbContext dbContext) : IImportPreN
             .FirstOrDefaultAsync(cancellationToken);
 
     public async Task<ImportPreNotificationUpdates> GetUpdates(
-        DateTime from,
-        DateTime to,
-        string[]? pointOfEntry = null,
-        string[]? type = null,
-        string[]? status = null,
-        string[]? excludeStatus = null,
-        int page = 1,
-        int pageSize = 100,
+        ImportPreNotificationUpdateQuery query,
         CancellationToken cancellationToken = default
     )
     {
-        if (page < 1)
-            throw new ArgumentOutOfRangeException(nameof(page), "Page must be greater than 0");
+        if (query.Page < 1)
+            throw new ArgumentOutOfRangeException(nameof(query), "Page must be greater than 0");
 
-        if (pageSize < 1)
-            throw new ArgumentOutOfRangeException(nameof(pageSize), "Page size must be greater than 0");
+        if (query.PageSize < 1)
+            throw new ArgumentOutOfRangeException(nameof(query), "Page size must be greater than 0");
 
         // See UpdatesIdx index and field order - query order matches the index field order
         // _id included in index as final projection produces an update object, which means
@@ -74,28 +67,28 @@ public class ImportPreNotificationRepository(IDbContext dbContext) : IImportPreN
         {
             {
                 "updated",
-                new BsonDocument { { "$gte", from }, { "$lt", to } }
+                new BsonDocument { { "$gte", query.From }, { "$lt", query.To } }
             },
         };
 
-        if (pointOfEntry is { Length: > 0 })
-            where.Add("pointOfEntry", new BsonDocument { { "$in", new BsonArray(pointOfEntry) } });
+        if (query.PointOfEntry is { Length: > 0 })
+            where.Add("pointOfEntry", new BsonDocument { { "$in", new BsonArray(query.PointOfEntry) } });
 
-        if (type is { Length: > 0 })
-            where.Add("importNotificationType", new BsonDocument { { "$in", new BsonArray(type) } });
+        if (query.Type is { Length: > 0 })
+            where.Add("importNotificationType", new BsonDocument { { "$in", new BsonArray(query.Type) } });
 
-        if (status is { Length: > 0 })
-            where.Add("status", new BsonDocument { { "$in", new BsonArray(status) } });
+        if (query.Status is { Length: > 0 })
+            where.Add("status", new BsonDocument { { "$in", new BsonArray(query.Status) } });
 
-        if (excludeStatus is { Length: > 0 })
-            where.Add("status", new BsonDocument { { "$nin", new BsonArray(excludeStatus) } });
+        if (query.ExcludeStatus is { Length: > 0 })
+            where.Add("status", new BsonDocument { { "$nin", new BsonArray(query.ExcludeStatus) } });
 
         var aggregatePipeline = new[]
         {
             new BsonDocument("$match", where),
             new BsonDocument("$sort", new BsonDocument("updated", 1)),
-            new BsonDocument("$skip", (page - 1) * pageSize),
-            new BsonDocument("$limit", pageSize),
+            new BsonDocument("$skip", (query.Page - 1) * query.PageSize),
+            new BsonDocument("$limit", query.PageSize),
             new BsonDocument(
                 "$project",
                 new BsonDocument

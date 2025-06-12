@@ -118,14 +118,12 @@ public class GetUpdatesTests : EndpointTestBase, IClassFixture<WireMockContext>
         var client = CreateClient();
         MockImportPreNotificationService
             .GetImportPreNotificationUpdates(
-                Arg.Any<DateTime>(),
-                Arg.Any<DateTime>(),
-                Arg.Is<string[]?>(x => x == null),
-                Arg.Is<string[]?>(x => x == null),
-                Arg.Is<string[]?>(x => x == null),
-                Arg.Is<string[]?>(x => x == null),
-                Arg.Any<int>(),
-                Arg.Any<int>(),
+                Arg.Is<ImportPreNotificationUpdateQuery>(query =>
+                    query.PointOfEntry == null
+                    && query.Type == null
+                    && query.Status == null
+                    && query.ExcludeStatus == null
+                ),
                 Arg.Any<CancellationToken>()
             )
             .Returns(
@@ -155,14 +153,12 @@ public class GetUpdatesTests : EndpointTestBase, IClassFixture<WireMockContext>
         await MockImportPreNotificationService
             .Received(1)
             .GetImportPreNotificationUpdates(
-                Arg.Any<DateTime>(),
-                Arg.Any<DateTime>(),
-                Arg.Is<string[]?>(x => x == null),
-                Arg.Is<string[]?>(x => x == null),
-                Arg.Is<string[]?>(x => x == null),
-                Arg.Is<string[]?>(x => x == null),
-                Arg.Any<int>(),
-                Arg.Any<int>(),
+                Arg.Is<ImportPreNotificationUpdateQuery>(query =>
+                    query.PointOfEntry == null
+                    && query.Type == null
+                    && query.Status == null
+                    && query.ExcludeStatus == null
+                ),
                 Arg.Any<CancellationToken>()
             );
     }
@@ -181,14 +177,20 @@ public class GetUpdatesTests : EndpointTestBase, IClassFixture<WireMockContext>
         const int pageSize = 10;
         MockImportPreNotificationService
             .GetImportPreNotificationUpdates(
-                from,
-                to,
-                Arg.Is<string[]?>(x => x != null && x.SequenceEqual(pointOfEntry)),
-                Arg.Is<string[]?>(x => x != null && x.SequenceEqual(type)),
-                Arg.Is<string[]?>(x => x != null && x.SequenceEqual(status)),
-                Arg.Is<string[]?>(x => x != null && x.SequenceEqual(excludeStatus)),
-                Arg.Is<int>(x => x == page),
-                Arg.Is<int>(x => x == pageSize),
+                Arg.Is<ImportPreNotificationUpdateQuery>(query =>
+                    query.From == from
+                    && query.To == to
+                    && query.PointOfEntry != null
+                    && query.PointOfEntry.SequenceEqual(pointOfEntry)
+                    && query.Type != null
+                    && query.Type.SequenceEqual(type)
+                    && query.Status != null
+                    && query.Status.SequenceEqual(status)
+                    && query.ExcludeStatus != null
+                    && query.ExcludeStatus.SequenceEqual(excludeStatus)
+                    && query.Page == page
+                    && query.PageSize == pageSize
+                ),
                 Arg.Any<CancellationToken>()
             )
             .Returns(

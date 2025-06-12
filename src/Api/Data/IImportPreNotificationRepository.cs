@@ -25,14 +25,7 @@ public interface IImportPreNotificationRepository
     Task<string?> GetCustomsDeclarationIdentifier(string id, CancellationToken cancellationToken);
 
     Task<ImportPreNotificationUpdates> GetUpdates(
-        DateTime from,
-        DateTime to,
-        string[]? pointOfEntry = null,
-        string[]? type = null,
-        string[]? status = null,
-        string[]? excludeStatus = null,
-        int page = 1,
-        int pageSize = 100,
+        ImportPreNotificationUpdateQuery query,
         CancellationToken cancellationToken = default
     );
 

@@ -1,4 +1,5 @@
 using Defra.TradeImportsDataApi.Api.Authentication;
+using Defra.TradeImportsDataApi.Api.Data;
 using Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations;
 using Defra.TradeImportsDataApi.Api.Endpoints.Gmrs;
 using Defra.TradeImportsDataApi.Api.Exceptions;
@@ -232,14 +233,16 @@ public static class EndpointRouteBuilderExtensions
         var page = request.Page.GetValueOrDefault();
         var pageSize = request.PageSize.GetValueOrDefault();
         var result = await importPreNotificationService.GetImportPreNotificationUpdates(
-            request.From,
-            request.To,
-            request.PointOfEntry,
-            request.Type,
-            request.Status,
-            request.ExcludeStatus,
-            page,
-            pageSize,
+            new ImportPreNotificationUpdateQuery(
+                request.From,
+                request.To,
+                request.PointOfEntry,
+                request.Type,
+                request.Status,
+                request.ExcludeStatus,
+                page,
+                pageSize
+            ),
             cancellationToken
         );
 
