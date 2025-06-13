@@ -69,8 +69,8 @@ public class MongoIndexService(IMongoDatabase database, ILogger<MongoIndexServic
                 .Ascending(x => x.PointOfEntry)
                 .Ascending(x => x.ImportNotificationType)
                 .Ascending(x => x.Status)
-                .Ascending(x => x.Id)
-                .Ascending(x => x.Source!.Updated),
+                .Ascending(x => x.Source!.Updated)
+                .Ascending(x => x.ImportPreNotificationId),
             cancellationToken: cancellationToken
         );
     }
