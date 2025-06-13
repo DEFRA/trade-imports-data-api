@@ -113,6 +113,24 @@ public class GetUpdatesTests : EndpointTestBase, IClassFixture<WireMockContext>
     }
 
     [Fact]
+    public async Task Get_WhenInvalidRequest_PageSizeGreaterThan1000_ShouldBeBadRequest()
+    {
+        var client = CreateClient();
+
+        var response = await client.GetAsync(
+            TradeImportsDataApi.Testing.Endpoints.ImportPreNotifications.GetUpdates(
+                EndpointQuery
+                    .New.Where(EndpointFilter.From(new DateTime(2025, 5, 28, 13, 55, 0, DateTimeKind.Utc)))
+                    .Where(EndpointFilter.To(new DateTime(2025, 5, 28, 14, 15, 0, DateTimeKind.Utc)))
+                    .Where(EndpointFilter.Page(1))
+                    .Where(EndpointFilter.PageSize(1001))
+            )
+        );
+
+        await VerifyJson(await response.Content.ReadAsStringAsync(), _settings);
+    }
+
+    [Fact]
     public async Task Get_WhenInvalidRequest_EmptyStringInArrays_ShouldCallWithNone()
     {
         var client = CreateClient();

@@ -714,10 +714,10 @@
           {
             "name": "pageSize",
             "in": "query",
-            "description": "Number of items per page. Defaults to 100 if not specified",
+            "description": "Number of items per page. Defaults to 100 if not specified. Max of 1000.",
             "schema": {
               "type": "integer",
-              "description": "Number of items per page. Defaults to 100 if not specified",
+              "description": "Number of items per page. Defaults to 100 if not specified. Max of 1000.",
               "format": "int32"
             }
           }
