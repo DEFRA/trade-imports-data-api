@@ -39,7 +39,6 @@ services:
       ASPNETCORE_ENVIRONMENT: Development
       ENVIRONMENT: local
       AWS_EMF_ENVIRONMENT: Local
-      AWS_EMF_NAMESPACE: REAL_VALUE_SET_BY_CDP
       PORT: 8080
       Mongo__DatabaseUri: mongodb://mongodb:27017/?directConnection=true
       AWS__ServiceUrl: http://localstack:4566
