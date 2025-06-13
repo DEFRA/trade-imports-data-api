@@ -74,7 +74,7 @@ public class ImportPreNotificationUpdatesRequest
         init => _page = value;
     }
 
-    [Description("Number of items per page. Defaults to 100 if not specified")]
+    [Description("Number of items per page. Defaults to 100 if not specified. Max of 1000.")]
     [FromQuery(Name = "pageSize")]
     public int? PageSize
     {
@@ -97,6 +97,7 @@ public class ImportPreNotificationUpdatesRequest
                 );
             RuleFor(x => x.Page).GreaterThanOrEqualTo(1);
             RuleFor(x => x.PageSize).GreaterThanOrEqualTo(1);
+            RuleFor(x => x.PageSize).LessThanOrEqualTo(1000);
         }
     }
 }

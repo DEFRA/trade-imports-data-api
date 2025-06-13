@@ -1,0 +1,11 @@
+﻿{
+  type: https://tools.ietf.org/html/rfc9110#section-15.5.1,
+  title: One or more validation errors occurred.,
+  status: 400,
+  errors: {
+    PageSize: [
+      'Page Size' must be less than or equal to '2500'.
+    ]
+  },
+  traceId: {Scrubbed}
+}
