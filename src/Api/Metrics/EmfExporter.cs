@@ -5,40 +5,21 @@ using Amazon.CloudWatch.EMF.Model;
 using Microsoft.Extensions.Logging.Abstractions;
 using Unit = Amazon.CloudWatch.EMF.Model.Unit;
 
+// ReSharper disable InconsistentNaming
+
 namespace Defra.TradeImportsDataApi.Api.Metrics;
-
-[ExcludeFromCodeCoverage]
-public static class EmfExportExtensions
-{
-    public static IApplicationBuilder UseEmfExporter(this IApplicationBuilder builder)
-    {
-        var config = builder.ApplicationServices.GetRequiredService<IConfiguration>();
-        var enabled = config.GetValue("AWS_EMF_ENABLED", true);
-
-        if (enabled)
-        {
-            var ns = config.GetValue<string>("AWS_EMF_NAMESPACE");
-            if (string.IsNullOrWhiteSpace(ns))
-                throw new InvalidOperationException("AWS_EMF_NAMESPACE is not set but metrics are enabled");
-
-            EmfExporter.Init(builder.ApplicationServices.GetRequiredService<ILoggerFactory>(), ns);
-        }
-
-        return builder;
-    }
-}
 
 [ExcludeFromCodeCoverage]
 public static class EmfExporter
 {
     private static readonly MeterListener s_meterListener = new();
-    private static ILogger s_logger = null!;
+    private static ILogger _logger = null!;
     private static ILoggerFactory s_loggerFactory = NullLoggerFactory.Instance;
     private static string? s_awsNamespace;
 
     public static void Init(ILoggerFactory loggerFactory, string? awsNamespace)
     {
-        s_logger = loggerFactory.CreateLogger(nameof(EmfExporter));
+        _logger = loggerFactory.CreateLogger(nameof(EmfExporter));
         s_loggerFactory = loggerFactory;
         s_awsNamespace = awsNamespace;
 
@@ -85,7 +66,7 @@ public static class EmfExporter
         }
         catch (Exception ex)
         {
-            s_logger.LogError(ex, "Failed to push EMF metric");
+            _logger.LogError(ex, "Failed to push EMF metric");
         }
     }
 }
