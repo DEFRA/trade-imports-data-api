@@ -62,7 +62,7 @@ public static class ServiceCollectionExtensions
             ConventionRegistry.Register(nameof(conventionPack), conventionPack, _ => true);
             DomainClassMapConfiguration.Register();
 
-            return client.GetDatabase(options?.Value.DatabaseName);
+            return client.GetDatabase(options.Value.DatabaseName);
         });
 
         return services;
