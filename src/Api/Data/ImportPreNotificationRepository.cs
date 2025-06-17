@@ -11,37 +11,57 @@ namespace Defra.TradeImportsDataApi.Api.Data;
 
 public class ImportPreNotificationRepository(IDbContext dbContext) : IImportPreNotificationRepository
 {
-    public async Task<ImportPreNotificationEntity?> Get(string id, CancellationToken cancellationToken) =>
-        await dbContext.ImportPreNotifications.Find(id, cancellationToken);
+    public async Task<ImportPreNotificationEntity?> Get(string id, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(id))
+            return null;
+
+        return await dbContext.ImportPreNotifications.Find(id, cancellationToken);
+    }
 
     public async Task<ImportPreNotificationEntity?> GetByCustomsDeclarationIdentifier(
         string customsDeclarationIdentifier,
         CancellationToken cancellationToken
-    ) =>
-        (
+    )
+    {
+        if (string.IsNullOrWhiteSpace(customsDeclarationIdentifier))
+            return null;
+
+        return (
             await dbContext
                 .ImportPreNotifications.Where(x => x.CustomsDeclarationIdentifier == customsDeclarationIdentifier)
                 .ToListWithFallbackAsync(cancellationToken)
         ).SingleOrDefault();
+    }
 
     public async Task<List<ImportPreNotificationEntity>> GetAll(
         string[] customsDeclarationIdentifiers,
         CancellationToken cancellationToken
-    ) =>
-        await dbContext
+    )
+    {
+        if (customsDeclarationIdentifiers.Length == 0)
+            return [];
+
+        return await dbContext
             .ImportPreNotifications.Where(x => customsDeclarationIdentifiers.Contains(x.CustomsDeclarationIdentifier))
             .ToListWithFallbackAsync(cancellationToken);
+    }
 
     public async Task<List<ImportPreNotificationEntity>> GetAll(
         Expression<Func<ImportPreNotificationEntity, bool>> predicate,
         CancellationToken cancellationToken
     ) => await dbContext.ImportPreNotifications.Where(predicate).ToListWithFallbackAsync(cancellationToken);
 
-    public async Task<string?> GetCustomsDeclarationIdentifier(string id, CancellationToken cancellationToken) =>
-        await dbContext
+    public async Task<string?> GetCustomsDeclarationIdentifier(string id, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(id))
+            return null;
+
+        return await dbContext
             .ImportPreNotifications.Where(x => x.Id == id)
             .Select(x => x.CustomsDeclarationIdentifier)
             .FirstOrDefaultAsync(cancellationToken);
+    }
 
     public async Task<ImportPreNotificationUpdates> GetUpdates(
         ImportPreNotificationUpdateQuery query,

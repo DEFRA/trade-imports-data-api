@@ -6,8 +6,13 @@ namespace Defra.TradeImportsDataApi.Api.Data;
 
 public class ProcessingErrorRepository(IDbContext dbContext) : IProcessingErrorRepository
 {
-    public async Task<ProcessingErrorEntity?> Get(string id, CancellationToken cancellationToken) =>
-        await dbContext.ProcessingErrors.Find(id, cancellationToken);
+    public async Task<ProcessingErrorEntity?> Get(string id, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(id))
+            return null;
+
+        return await dbContext.ProcessingErrors.Find(id, cancellationToken);
+    }
 
     public async Task<ProcessingErrorEntity> Insert(ProcessingErrorEntity entity, CancellationToken cancellationToken)
     {

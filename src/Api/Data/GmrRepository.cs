@@ -6,14 +6,24 @@ namespace Defra.TradeImportsDataApi.Api.Data;
 
 public class GmrRepository(IDbContext dbContext) : IGmrRepository
 {
-    public Task<GmrEntity?> Get(string id, CancellationToken cancellationToken) =>
-        dbContext.Gmrs.Find(id, cancellationToken);
+    public async Task<GmrEntity?> Get(string id, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(id))
+            return null;
 
-    public async Task<List<GmrEntity>> GetAll(string[] customsDeclarationIds, CancellationToken cancellationToken) =>
-        await dbContext.Gmrs.FindMany(
+        return await dbContext.Gmrs.Find(id, cancellationToken);
+    }
+
+    public async Task<List<GmrEntity>> GetAll(string[] customsDeclarationIds, CancellationToken cancellationToken)
+    {
+        if (customsDeclarationIds.Length == 0)
+            return [];
+
+        return await dbContext.Gmrs.FindMany(
             x => x.CustomsDeclarationIdentifiers.Any(id => customsDeclarationIds.Any(cId => cId == id)),
             cancellationToken
         );
+    }
 
     public async Task<GmrEntity> Insert(GmrEntity entity, CancellationToken cancellationToken)
     {
