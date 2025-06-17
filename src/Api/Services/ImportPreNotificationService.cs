@@ -2,6 +2,7 @@ using Defra.TradeImportsDataApi.Api.Data;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.Events;
+using Defra.TradeImportsDataApi.Domain.Ipaffs;
 
 namespace Defra.TradeImportsDataApi.Api.Services;
 
@@ -42,7 +43,9 @@ public class ImportPreNotificationService(
         await dbContext.SaveChangesAsync(cancellationToken);
 
         await resourceEventPublisher.Publish(
-            inserted.ToResourceEvent(ResourceEventOperations.Created),
+            inserted
+                .ToResourceEvent(ResourceEventOperations.Created)
+                .WithChangeSet(inserted.ImportPreNotification, new ImportPreNotification()),
             cancellationToken
         );
 
@@ -55,14 +58,16 @@ public class ImportPreNotificationService(
         CancellationToken cancellationToken
     )
     {
-        var (_, updated) = await importPreNotificationRepository.Update(entity, etag, cancellationToken);
+        var (existing, updated) = await importPreNotificationRepository.Update(entity, etag, cancellationToken);
 
         await importPreNotificationRepository.TrackImportPreNotificationUpdate(updated, cancellationToken);
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
         await resourceEventPublisher.Publish(
-            updated.ToResourceEvent(ResourceEventOperations.Updated),
+            updated
+                .ToResourceEvent(ResourceEventOperations.Updated)
+                .WithChangeSet(updated.ImportPreNotification, existing.ImportPreNotification),
             cancellationToken
         );
 
