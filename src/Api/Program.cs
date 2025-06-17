@@ -42,15 +42,15 @@ return;
 static WebApplication CreateWebApplication(string[] args)
 {
     var builder = WebApplication.CreateBuilder(args);
+    var generatingOpenApiFromCli = Assembly.GetEntryAssembly()?.GetName().Name == "dotnet-swagger";
 
-    ConfigureWebApplication(builder, args);
+    ConfigureWebApplication(builder, args, generatingOpenApiFromCli);
 
-    return BuildWebApplication(builder);
+    return BuildWebApplication(builder, generatingOpenApiFromCli);
 }
 
-static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args)
+static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args, bool generatingOpenApiFromCli)
 {
-    var generatingOpenApiFromCli = Assembly.GetEntryAssembly()?.GetName().Name == "dotnet-swagger";
     var integrationTest = args.Contains("--integrationTest=true");
     var cdpAppSettingsOptional = generatingOpenApiFromCli || integrationTest;
 
@@ -121,11 +121,13 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
     builder.Services.AddSingleton<RequestMetrics>();
 }
 
-static WebApplication BuildWebApplication(WebApplicationBuilder builder)
+static WebApplication BuildWebApplication(WebApplicationBuilder builder, bool generatingOpenApiFromCli)
 {
     var app = builder.Build();
 
-    app.UseEmfExporter();
+    if (!generatingOpenApiFromCli)
+        app.UseEmfExporter();
+
     app.UseHeaderPropagation();
     app.UseAuthentication();
     app.UseAuthorization();
