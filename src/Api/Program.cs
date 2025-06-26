@@ -3,6 +3,7 @@ using Amazon.SimpleNotificationService;
 using Defra.TradeImportsDataApi.Api.Authentication;
 using Defra.TradeImportsDataApi.Api.Configuration;
 using Defra.TradeImportsDataApi.Api.Data;
+using Defra.TradeImportsDataApi.Api.Endpoints.Admin;
 using Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations;
 using Defra.TradeImportsDataApi.Api.Endpoints.Gmrs;
 using Defra.TradeImportsDataApi.Api.Endpoints.ImportPreNotifications;
@@ -138,6 +139,7 @@ static WebApplication BuildWebApplication(WebApplicationBuilder builder, bool ge
     app.MapCustomsDeclarationEndpoints();
     app.MapProcessingErrorEndpoints();
     app.MapSearchEndpoints();
+    app.MapAdminEndpoints();
     app.UseOpenApi();
     app.UseStatusCodePages();
     app.UseExceptionHandler(
