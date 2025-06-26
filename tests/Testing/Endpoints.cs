@@ -52,4 +52,9 @@ public static class Endpoints
 
         public static string Put(string mrn) => $"{Root}/{mrn}";
     }
+
+    public static class Admin
+    {
+        public static string Latest => "/admin/latest";
+    }
 }
