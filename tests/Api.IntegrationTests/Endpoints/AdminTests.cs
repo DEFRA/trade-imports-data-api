@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using Defra.TradeImportsDataApi.Api.Client;
 using Defra.TradeImportsDataApi.Api.Endpoints.Admin;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
@@ -16,27 +17,29 @@ public class AdminTests : IntegrationTestBase
         await notifications.DeleteManyAsync(FilterDefinition<ImportPreNotificationEntity>.Empty);
 
         var client = CreateDataApiClient();
-        const string chedRef1 = "CHEDA.GB.2024.1234567";
-
-        await client.PutImportPreNotification(
-            chedRef1,
-            new ImportPreNotification { ReferenceNumber = chedRef1, Version = 1 },
-            null,
-            CancellationToken.None
-        );
-        await Task.Delay(1);
-        const string chedRef2 = "CHEDA.GB.2024.1234568";
-        await client.PutImportPreNotification(
-            chedRef2,
-            new ImportPreNotification { ReferenceNumber = chedRef2, Version = 1 },
-            null,
-            CancellationToken.None
-        );
+        await CreateNotification(client, 1);
+        await CreateNotification(client, 2);
+        await CreateNotification(client, 10);
+        await CreateNotification(client, 3);
+        await CreateNotification(client, 8);
+        await CreateNotification(client, 21);
 
         var httpClient = CreateHttpClient();
         var dto = await httpClient.GetFromJsonAsync<MaxIdResponse>(Testing.Endpoints.Admin.MaxId);
 
         dto.Should().NotBeNull();
-        dto.ImportPreNotification.Should().Be(chedRef2);
+        dto.ImportPreNotification.Should().Be("CHEDA.GB.2024.0000021");
+    }
+
+    private static async Task CreateNotification(TradeImportsDataApiClient client, int id)
+    {
+        var chedRef = $"CHEDA.GB.2024.{id.ToString().PadLeft(7, '0')}";
+
+        await client.PutImportPreNotification(
+            chedRef,
+            new ImportPreNotification { ReferenceNumber = chedRef, Version = 1 },
+            null,
+            CancellationToken.None
+        );
     }
 }

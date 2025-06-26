@@ -194,6 +194,17 @@ public class ImportPreNotificationRepository(IDbContext dbContext) : IImportPreN
         CancellationToken cancellationToken
     ) => await TrackImportPreNotificationUpdate(entity, [entity], cancellationToken);
 
+    public async Task<string?> GetMaxId(CancellationToken cancellationToken)
+    {
+        var entity = await dbContext
+            .ImportPreNotifications.Collection.Find(_ => true)
+            .SortByDescending(x => x.CustomsDeclarationIdentifier)
+            .Limit(1)
+            .FirstOrDefaultAsync(cancellationToken: cancellationToken);
+
+        return entity?.Id;
+    }
+
     private async Task TrackImportPreNotificationUpdate(
         IDataEntity source,
         List<ImportPreNotificationEntity> notifications,

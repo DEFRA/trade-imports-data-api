@@ -1,6 +1,5 @@
 using Defra.TradeImportsDataApi.Api.Authentication;
-using Defra.TradeImportsDataApi.Data;
-using Defra.TradeImportsDataApi.Data.Extensions;
+using Defra.TradeImportsDataApi.Api.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Defra.TradeImportsDataApi.Api.Endpoints.Admin;
@@ -13,12 +12,13 @@ public static class EndpointRouteBuilderExtensions
     }
 
     [HttpGet]
-    private static async Task<IResult> MaxId([FromServices] IDbContext dbContext, CancellationToken cancellationToken)
+    private static async Task<IResult> MaxId(
+        [FromServices] IImportPreNotificationRepository importPreNotificationRepository,
+        CancellationToken cancellationToken
+    )
     {
-        var latestNotification = await dbContext
-            .ImportPreNotifications.OrderByDescending(x => x.CustomsDeclarationIdentifier)
-            .FirstOrDefaultWithFallbackAsync(cancellationToken);
+        var maxId = await importPreNotificationRepository.GetMaxId(cancellationToken);
 
-        return Results.Ok(new MaxIdResponse(latestNotification?.Id));
+        return Results.Ok(new MaxIdResponse(maxId));
     }
 }

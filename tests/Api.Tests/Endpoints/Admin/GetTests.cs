@@ -1,12 +1,9 @@
 using System.Net;
-using Defra.TradeImportsDataApi.Api.Tests.Utils.InMemoryData;
-using Defra.TradeImportsDataApi.Data;
-using Defra.TradeImportsDataApi.Data.Entities;
-using Defra.TradeImportsDataApi.Domain.Gvms;
-using Defra.TradeImportsDataApi.Domain.Ipaffs;
+using Defra.TradeImportsDataApi.Api.Data;
 using Defra.TradeImportsDataApi.Testing;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
+using NSubstitute;
 using WireMock.Server;
 using Xunit.Abstractions;
 
@@ -16,7 +13,9 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
 {
     private WireMockServer WireMock { get; }
     private readonly VerifySettings _settings;
-    private MemoryDbContext DbContext { get; } = new();
+
+    private IImportPreNotificationRepository MockImportPreNotificationRepository { get; } =
+        Substitute.For<IImportPreNotificationRepository>();
 
     public GetTests(ApiWebApplicationFactory factory, ITestOutputHelper outputHelper, WireMockContext context)
         : base(factory, outputHelper)
@@ -35,7 +34,7 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
     {
         base.ConfigureTestServices(services);
 
-        services.AddTransient<IDbContext>(_ => DbContext);
+        services.AddTransient<IImportPreNotificationRepository>(_ => MockImportPreNotificationRepository);
     }
 
     [Fact]
@@ -62,23 +61,7 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
     public async Task Get_WhenAuthorized_MaxId_ShouldBeOk()
     {
         var client = CreateClient();
-
-        DbContext.ImportPreNotifications.AddTestData(
-            new ImportPreNotificationEntity
-            {
-                Id = "CHED1",
-                CustomsDeclarationIdentifier = "1234567",
-                ImportPreNotification = new ImportPreNotification(),
-            }
-        );
-        DbContext.ImportPreNotifications.AddTestData(
-            new ImportPreNotificationEntity
-            {
-                Id = "CHED2",
-                CustomsDeclarationIdentifier = "1234568",
-                ImportPreNotification = new ImportPreNotification(),
-            }
-        );
+        MockImportPreNotificationRepository.GetMaxId(Arg.Any<CancellationToken>()).Returns("CHEDA.GB.2024.1234567");
 
         var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.Admin.MaxId);
 
