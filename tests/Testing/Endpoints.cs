@@ -55,6 +55,6 @@ public static class Endpoints
 
     public static class Admin
     {
-        public static string Latest => "/admin/latest";
+        public static string MaxId => "/admin/max-id";
     }
 }

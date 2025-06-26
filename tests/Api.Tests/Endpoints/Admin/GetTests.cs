@@ -43,7 +43,7 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
     {
         var client = CreateClient(addDefaultAuthorizationHeader: false);
 
-        var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.Admin.Latest);
+        var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.Admin.MaxId);
 
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
@@ -53,26 +53,34 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
     {
         var client = CreateClient(testUser: TestUser.WriteOnly);
 
-        var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.Admin.Latest);
+        var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.Admin.MaxId);
 
         response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
     }
 
     [Fact]
-    public async Task Get_WhenAuthorized_ShouldBeOk()
+    public async Task Get_WhenAuthorized_MaxId_ShouldBeOk()
     {
         var client = CreateClient();
 
         DbContext.ImportPreNotifications.AddTestData(
-            new ImportPreNotificationEntity { Id = "CHED", ImportPreNotification = new ImportPreNotification() }
+            new ImportPreNotificationEntity
+            {
+                Id = "CHED1",
+                CustomsDeclarationIdentifier = "1234567",
+                ImportPreNotification = new ImportPreNotification(),
+            }
         );
-        DbContext.CustomsDeclarations.AddTestData(new CustomsDeclarationEntity { Id = "CDS" });
-        DbContext.Gmrs.AddTestData(new GmrEntity { Id = "GMR", Gmr = new Gmr() });
-        DbContext.ProcessingErrors.AddTestData(
-            new ProcessingErrorEntity { Id = "ProcessingError", ProcessingErrors = [] }
+        DbContext.ImportPreNotifications.AddTestData(
+            new ImportPreNotificationEntity
+            {
+                Id = "CHED2",
+                CustomsDeclarationIdentifier = "1234568",
+                ImportPreNotification = new ImportPreNotification(),
+            }
         );
 
-        var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.Admin.Latest);
+        var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.Admin.MaxId);
 
         await VerifyJson(await response.Content.ReadAsStringAsync(), _settings);
     }

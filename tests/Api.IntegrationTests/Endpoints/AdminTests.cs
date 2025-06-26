@@ -1,10 +1,9 @@
 using System.Net.Http.Json;
 using Defra.TradeImportsDataApi.Api.Endpoints.Admin;
-using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
-using Defra.TradeImportsDataApi.Domain.Gvms;
+using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
-using Defra.TradeImportsDataApi.Testing;
 using FluentAssertions;
+using MongoDB.Driver;
 
 namespace Defra.TradeImportsDataApi.Api.IntegrationTests.Endpoints;
 
@@ -13,8 +12,11 @@ public class AdminTests : IntegrationTestBase
     [Fact]
     public async Task WhenDataExists_ShouldReturn()
     {
+        var notifications = GetMongoCollection<ImportPreNotificationEntity>();
+        await notifications.DeleteManyAsync(FilterDefinition<ImportPreNotificationEntity>.Empty);
+
         var client = CreateDataApiClient();
-        var chedRef1 = ImportPreNotificationIdGenerator.Generate();
+        const string chedRef1 = "CHEDA.GB.2024.1234567";
 
         await client.PutImportPreNotification(
             chedRef1,
@@ -23,7 +25,7 @@ public class AdminTests : IntegrationTestBase
             CancellationToken.None
         );
         await Task.Delay(1);
-        var chedRef2 = ImportPreNotificationIdGenerator.Generate();
+        const string chedRef2 = "CHEDA.GB.2024.1234568";
         await client.PutImportPreNotification(
             chedRef2,
             new ImportPreNotification { ReferenceNumber = chedRef2, Version = 1 },
@@ -31,29 +33,10 @@ public class AdminTests : IntegrationTestBase
             CancellationToken.None
         );
 
-        var mrn1 = Guid.NewGuid().ToString();
-        await client.PutCustomsDeclaration(mrn1, new CustomsDeclaration(), null, CancellationToken.None);
-        await Task.Delay(1);
-        var mrn2 = Guid.NewGuid().ToString();
-        await client.PutCustomsDeclaration(mrn2, new CustomsDeclaration(), null, CancellationToken.None);
-
-        var gmr1 = Guid.NewGuid().ToString();
-        await client.PutGmr(gmr1, new Gmr(), null, CancellationToken.None);
-        await Task.Delay(1);
-        var gmr2 = Guid.NewGuid().ToString();
-        await client.PutGmr(gmr2, new Gmr(), null, CancellationToken.None);
-
-        await client.PutProcessingError(mrn1, [], null, CancellationToken.None);
-        await Task.Delay(1);
-        await client.PutProcessingError(mrn2, [], null, CancellationToken.None);
-
         var httpClient = CreateHttpClient();
-        var dto = await httpClient.GetFromJsonAsync<LatestResponse>(Testing.Endpoints.Admin.Latest);
+        var dto = await httpClient.GetFromJsonAsync<MaxIdResponse>(Testing.Endpoints.Admin.MaxId);
 
         dto.Should().NotBeNull();
         dto.ImportPreNotification.Should().Be(chedRef2);
-        dto.CustomsDeclaration.Should().Be(mrn2);
-        dto.Gmr.Should().Be(gmr2);
-        dto.ProcessingError.Should().Be(mrn2);
     }
 }
