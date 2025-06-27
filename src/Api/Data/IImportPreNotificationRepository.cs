@@ -44,4 +44,6 @@ public interface IImportPreNotificationRepository
     );
 
     Task TrackImportPreNotificationUpdate(ImportPreNotificationEntity entity, CancellationToken cancellationToken);
+
+    Task<string?> GetMaxId(CancellationToken cancellationToken);
 }
