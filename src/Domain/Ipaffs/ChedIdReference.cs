@@ -8,18 +8,13 @@ public class ChedIdReference(string value)
 
     public string GetIdentifier()
     {
-        var identifier = ChedReferenceRegexes.DocumentReferenceIdentifier().Match(Value).Value.Replace(".", "");
+        var identifier = ChedReferenceRegexes.DocumentReferenceIdentifier().Match(Value);
 
         if (identifier.Length == 0)
         {
             throw new FormatException($"Invalid value {Value}");
         }
 
-        if (identifier.Length > 7)
-        {
-            identifier = identifier.Substring(identifier.Length - 7);
-        }
-
-        return identifier;
+        return identifier.Value;
     }
 }

@@ -15,13 +15,7 @@ public class ImportDocumentReference(string value)
     {
         if (!IsValid(documentCode))
             return string.Empty;
-        var identifier = ChedReferenceRegexes.DocumentReferenceIdentifier().Match(Value).Value.Replace(".", "");
-
-        if (identifier.Length > 7)
-        {
-            identifier = identifier.Substring(identifier.Length - 7);
-        }
-
-        return identifier;
+        var identifier = ChedReferenceRegexes.DocumentReferenceIdentifier().Match(Value);
+        return identifier.Value;
     }
 }

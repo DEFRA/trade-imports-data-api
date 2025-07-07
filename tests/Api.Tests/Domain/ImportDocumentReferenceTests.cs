@@ -21,8 +21,11 @@ public class ImportDocumentReferenceTests
 
     [Theory]
     [InlineData("CHEDA.GB.2025.1234567", "C640", "1234567")]
-    [InlineData("CHEDA.GB.2025.12345678", "C640", "1234567")]
+    [InlineData("CHEDA.GB.2025.12345678", "C640", "2345678")]
     [InlineData("CHEDA.GB.2025.123456", "C678", null)]
+    [InlineData("GBCHDN.2025.1234567R", "C640", "1234567R")]
+    [InlineData("GBCHDN.2025..1234567R", "C640", "1234567R")]
+    [InlineData("GBCHDN.20251234567R", "C640", "1234567R")]
     public void GetIdentifier(string documentReference, string documentCode, string? identifier)
     {
         if (string.IsNullOrEmpty(identifier))

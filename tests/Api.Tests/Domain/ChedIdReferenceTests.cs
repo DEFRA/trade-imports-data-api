@@ -7,8 +7,8 @@ public class ChedIdReferenceTests
 {
     [Theory]
     [InlineData("CHEDA.GB.2025.1234567", "1234567")]
-    [InlineData("CHEDA.GB.2025.1234567R", "1234567")]
-    [InlineData("CHEDA.GB.2025.12345678", "1234567")]
+    [InlineData("CHEDA.GB.2025.1234567R", "1234567R")]
+    [InlineData("CHEDA.GB.2025.12345678", "2345678")]
     public void ValidTests(string chedId, string identifier)
     {
         new ChedIdReference(chedId).GetIdentifier().Should().Be(identifier);
