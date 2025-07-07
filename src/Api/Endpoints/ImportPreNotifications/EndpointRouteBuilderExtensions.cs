@@ -42,7 +42,7 @@ public static class EndpointRouteBuilderExtensions
 
         app.MapGet("import-pre-notifications/{chedId}/gmrs", GetGmrs)
             .WithName("GetGmrsByChedId")
-            .WithName(groupName)
+            .WithTags(groupName)
             .WithSummary("Get Gmrs by CHED ID")
             .WithDescription("Get associated Gmrs by CHED ID")
             .Produces<GmrsResponse>()
