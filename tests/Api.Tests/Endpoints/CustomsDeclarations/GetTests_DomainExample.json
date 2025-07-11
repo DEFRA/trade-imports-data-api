@@ -169,7 +169,7 @@
     "created": "2024-01-09T04:51:43.0248311",
     "externalVersionNumber": 200,
     "decisionNumber": 116,
-	"sourceVersion": "123",
+    "sourceVersion": "123",
     "items": [
       {
         "itemNumber": 58,
@@ -330,6 +330,35 @@
           }
         ]
       }
+    ],
+    "results": [
+      {
+        "itemNumber": 107,
+        "importPreNotification": "ImportPreNotificationc149f054-24c1-4630-8556-8f02cb129b34",
+        "documentReference": "DocumentReference65438442-d76d-4e4d-b071-758e0722edfb",
+        "checkCode": "CheckCodebfa8d59b-41ab-478e-8eee-4a90ad349029",
+        "decisionCode": "DecisionCode2c266089-c77d-42c9-99b4-498e379075f5",
+        "decisionReason": "DecisionReason3db1782d-5169-4d23-97c3-0d6329001827",
+        "internalDecisionCode": "InternalDecisionCode6e6be68f-ea37-4648-845b-921a3b1d88de"
+      },
+      {
+        "itemNumber": 66,
+        "importPreNotification": "ImportPreNotificationf87ecb2e-1460-416e-a63d-1799a80bc657",
+        "documentReference": "DocumentReference5e1b7096-f15c-4a47-9d25-4b6886d95825",
+        "checkCode": "CheckCode982135be-55e8-4424-a581-26970b7f75fd",
+        "decisionCode": "DecisionCode9a4c5290-723b-401e-aca5-cde861472d52",
+        "decisionReason": "DecisionReason7f9c799f-a400-4f19-954f-f18dbeccae89",
+        "internalDecisionCode": "InternalDecisionCode0338b7f0-4667-45f7-8ac9-44e3ff48d16e"
+      },
+      {
+        "itemNumber": 185,
+        "importPreNotification": "ImportPreNotificationb7483f83-8b99-4cb9-bb20-3058e0ef226b",
+        "documentReference": "DocumentReferencef3f480d5-6b07-423a-b095-5f0697a2dcb5",
+        "checkCode": "CheckCodeb22213f4-9df5-4e35-bda2-e338c847c2d0",
+        "decisionCode": "DecisionCode5fd254f2-693e-42fb-a0ee-ad4ecb5ffd54",
+        "decisionReason": "DecisionReasonc60d0ffb-15f5-4a15-954e-b996a64dcdf1",
+        "internalDecisionCode": "InternalDecisionCodeecf0a8d8-b51a-4d23-8f69-19ac71c9efe4"
+      }
     ]
   },
   "Finalisation": {
@@ -341,65 +370,65 @@
     "isManualRelease": true
   },
   "ExternalErrors": [
-      {
-        "externalCorrelationId": "ExternalCorrelationId5a0fb6fd-70ef-4159-a8ca-51455cab6016",
-        "externalVersion": 194,
-        "messageSentAt": "2026-03-19T09:36:58.823352",
-        "errors": [
-          {
-            "code": "Code05d73f4c-48da-4c60-b677-2dc8160bd332",
-            "message": "Message82f30258-65e0-4d59-b50c-4b8c9403974e"
-          },
-          {
-            "code": "Code5a17896c-1e03-4c0b-bafd-767772abf733",
-            "message": "Message30956315-6693-461e-82e7-31832ab96b75"
-          },
-          {
-            "code": "Codef9127674-2924-44a6-aa27-f771fbd9ecac",
-            "message": "Message1702ffe6-bbaa-4386-8edf-c1a1ad6fc3c0"
-          }
-        ],
-        "message": "Message15ed54b7-4573-40bb-8236-902dcf1a82d7"
-      },
-      {
-        "externalCorrelationId": "ExternalCorrelationIdb19e0c33-34b2-446f-aae2-934a50c5472e",
-        "externalVersion": 170,
-        "messageSentAt": "2026-03-19T09:36:58.823352",
-        "errors": [
-          {
-            "code": "Codee681e46c-e169-4667-99f0-e7cad24ae9fa",
-            "message": "Message1d569ca4-ce24-4a88-a365-298e630b484a"
-          },
-          {
-            "code": "Coded44ab4e5-9f30-49b8-9029-a29b1b68ed20",
-            "message": "Message46868672-47e2-4873-b0f6-aa5c94f90f8d"
-          },
-          {
-            "code": "Codee4d8c3b1-0f57-489c-aa33-856312cfa9e6",
-            "message": "Messagee3938997-64fe-4830-8b53-daeb510c163d"
-          }
-        ],
-        "message": "Message15ed54b7-4573-40bb-8236-902dcf1a82d8"
-      },
-      {
-        "externalCorrelationId": "ExternalCorrelationId4475cf43-6aba-4c98-a0ca-13357a85abb1",
-        "externalVersion": 108,
-        "messageSentAt": "2026-03-19T09:36:58.823352",
-        "errors": [
-          {
-            "code": "Code9e3906b5-f906-4b50-9087-0c7e8ec7ea83",
-            "message": "Message5b28bfb2-73be-4be8-a408-7e909f8868f5"
-          },
-          {
-            "code": "Codec6335c38-8f1b-4423-9cb4-2b7af184d0c2",
-            "message": "Messaged19a819e-c0b0-4f24-9830-894782c485e3"
-          },
-          {
-            "code": "Code01c7adcc-98ed-452d-93de-171f926a051b",
-            "message": "Messagefecd9c5b-8818-45bc-b874-f43ccdeb59c2"
-          }
-        ],
-        "message": "Message15ed54b7-4573-40bb-8236-902dcf1a82d9"
-      }
-    ]
+    {
+      "externalCorrelationId": "ExternalCorrelationId5a0fb6fd-70ef-4159-a8ca-51455cab6016",
+      "externalVersion": 194,
+      "messageSentAt": "2026-03-19T09:36:58.823352",
+      "errors": [
+        {
+          "code": "Code05d73f4c-48da-4c60-b677-2dc8160bd332",
+          "message": "Message82f30258-65e0-4d59-b50c-4b8c9403974e"
+        },
+        {
+          "code": "Code5a17896c-1e03-4c0b-bafd-767772abf733",
+          "message": "Message30956315-6693-461e-82e7-31832ab96b75"
+        },
+        {
+          "code": "Codef9127674-2924-44a6-aa27-f771fbd9ecac",
+          "message": "Message1702ffe6-bbaa-4386-8edf-c1a1ad6fc3c0"
+        }
+      ],
+      "message": "Message15ed54b7-4573-40bb-8236-902dcf1a82d7"
+    },
+    {
+      "externalCorrelationId": "ExternalCorrelationIdb19e0c33-34b2-446f-aae2-934a50c5472e",
+      "externalVersion": 170,
+      "messageSentAt": "2026-03-19T09:36:58.823352",
+      "errors": [
+        {
+          "code": "Codee681e46c-e169-4667-99f0-e7cad24ae9fa",
+          "message": "Message1d569ca4-ce24-4a88-a365-298e630b484a"
+        },
+        {
+          "code": "Coded44ab4e5-9f30-49b8-9029-a29b1b68ed20",
+          "message": "Message46868672-47e2-4873-b0f6-aa5c94f90f8d"
+        },
+        {
+          "code": "Codee4d8c3b1-0f57-489c-aa33-856312cfa9e6",
+          "message": "Messagee3938997-64fe-4830-8b53-daeb510c163d"
+        }
+      ],
+      "message": "Message15ed54b7-4573-40bb-8236-902dcf1a82d8"
+    },
+    {
+      "externalCorrelationId": "ExternalCorrelationId4475cf43-6aba-4c98-a0ca-13357a85abb1",
+      "externalVersion": 108,
+      "messageSentAt": "2026-03-19T09:36:58.823352",
+      "errors": [
+        {
+          "code": "Code9e3906b5-f906-4b50-9087-0c7e8ec7ea83",
+          "message": "Message5b28bfb2-73be-4be8-a408-7e909f8868f5"
+        },
+        {
+          "code": "Codec6335c38-8f1b-4423-9cb4-2b7af184d0c2",
+          "message": "Messaged19a819e-c0b0-4f24-9830-894782c485e3"
+        },
+        {
+          "code": "Code01c7adcc-98ed-452d-93de-171f926a051b",
+          "message": "Messagefecd9c5b-8818-45bc-b874-f43ccdeb59c2"
+        }
+      ],
+      "message": "Message15ed54b7-4573-40bb-8236-902dcf1a82d9"
+    }
+  ]
 }
