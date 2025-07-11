@@ -330,6 +330,35 @@
           }
         ]
       }
+    ],
+    "results": [
+      {
+        "itemNumber": 107,
+        "importPreNotification": "ImportPreNotificationc149f054-24c1-4630-8556-8f02cb129b34",
+        "documentReference": "DocumentReference65438442-d76d-4e4d-b071-758e0722edfb",
+        "checkCode": "CheckCodebfa8d59b-41ab-478e-8eee-4a90ad349029",
+        "decisionCode": "DecisionCode2c266089-c77d-42c9-99b4-498e379075f5",
+        "decisionReason": "DecisionReason3db1782d-5169-4d23-97c3-0d6329001827",
+        "internalDecisionCode": "InternalDecisionCode6e6be68f-ea37-4648-845b-921a3b1d88de"
+      },
+      {
+        "itemNumber": 66,
+        "importPreNotification": "ImportPreNotificationf87ecb2e-1460-416e-a63d-1799a80bc657",
+        "documentReference": "DocumentReference5e1b7096-f15c-4a47-9d25-4b6886d95825",
+        "checkCode": "CheckCode982135be-55e8-4424-a581-26970b7f75fd",
+        "decisionCode": "DecisionCode9a4c5290-723b-401e-aca5-cde861472d52",
+        "decisionReason": "DecisionReason7f9c799f-a400-4f19-954f-f18dbeccae89",
+        "internalDecisionCode": "InternalDecisionCode0338b7f0-4667-45f7-8ac9-44e3ff48d16e"
+      },
+      {
+        "itemNumber": 185,
+        "importPreNotification": "ImportPreNotificationb7483f83-8b99-4cb9-bb20-3058e0ef226b",
+        "documentReference": "DocumentReferencef3f480d5-6b07-423a-b095-5f0697a2dcb5",
+        "checkCode": "CheckCodeb22213f4-9df5-4e35-bda2-e338c847c2d0",
+        "decisionCode": "DecisionCode5fd254f2-693e-42fb-a0ee-ad4ecb5ffd54",
+        "decisionReason": "DecisionReasonc60d0ffb-15f5-4a15-954e-b996a64dcdf1",
+        "internalDecisionCode": "InternalDecisionCodeecf0a8d8-b51a-4d23-8f69-19ac71c9efe4"
+      }
     ]
   },
   "Finalisation": {

@@ -1503,6 +1503,13 @@
             "items": {
               "$ref": "#/components/schemas/Defra.TradeImportsDataApi.ClearanceDecisionItem"
             }
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.ClearanceDecisionResult"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -1557,6 +1564,40 @@
             "items": {
               "$ref": "#/components/schemas/Defra.TradeImportsDataApi.ClearanceDecisionCheck"
             }
+          }
+        },
+        "additionalProperties": false
+      },
+      "Defra.TradeImportsDataApi.ClearanceDecisionResult": {
+        "type": "object",
+        "properties": {
+          "itemNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "importPreNotification": {
+            "type": "string",
+            "nullable": true
+          },
+          "documentReference": {
+            "type": "string",
+            "nullable": true
+          },
+          "checkCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "decisionCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "decisionReason": {
+            "type": "string",
+            "nullable": true
+          },
+          "internalDecisionCode": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
