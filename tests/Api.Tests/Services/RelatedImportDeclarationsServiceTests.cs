@@ -268,13 +268,14 @@ public class RelatedImportDeclarationsServiceTests
         response.ImportPreNotifications.Length.Should().Be(1);
     }
 
-
     [Theory]
     [InlineData("CHEDA.GB.2025.1234567R")]
     [InlineData("2025.1234567R")]
     [InlineData("20251234567R")]
     [InlineData("1234567R")]
-    public async Task GivenSearchByChedId_WithSplitConsignmentRejected_WhenExists_AndNoCustomDeclarationsExist_ThenShouldReturn(string searchChedId)
+    public async Task GivenSearchByChedId_WithSplitConsignmentRejected_WhenExists_AndNoCustomDeclarationsExist_ThenShouldReturn(
+        string searchChedId
+    )
     {
         var memoryDbContext = new MemoryDbContext();
 
@@ -307,7 +308,9 @@ public class RelatedImportDeclarationsServiceTests
     [InlineData("2025.1234567V")]
     [InlineData("20251234567V")]
     [InlineData("1234567V")]
-    public async Task GivenSearchByChedId_WithSplitConsignmentValidated_WhenExists_AndNoCustomDeclarationsExist_ThenShouldReturn(string searchChedId)
+    public async Task GivenSearchByChedId_WithSplitConsignmentValidated_WhenExists_AndNoCustomDeclarationsExist_ThenShouldReturn(
+        string searchChedId
+    )
     {
         var memoryDbContext = new MemoryDbContext();
 
