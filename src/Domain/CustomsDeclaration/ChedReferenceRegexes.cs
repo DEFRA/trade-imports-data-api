@@ -6,5 +6,5 @@ namespace Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 public static partial class ChedReferenceRegexes
 {
     [GeneratedRegex("\\d{7}(v|r)?$", RegexOptions.Compiled | RegexOptions.IgnoreCase)]
-    internal static partial Regex DocumentReferenceIdentifier();
+    public static partial Regex DocumentReferenceIdentifier();
 }
