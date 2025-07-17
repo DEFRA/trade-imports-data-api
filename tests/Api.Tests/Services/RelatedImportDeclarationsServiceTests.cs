@@ -268,6 +268,76 @@ public class RelatedImportDeclarationsServiceTests
         response.ImportPreNotifications.Length.Should().Be(1);
     }
 
+    [Theory]
+    [InlineData("CHEDA.GB.2025.1234567R")]
+    [InlineData("2025.1234567R")]
+    [InlineData("20251234567R")]
+    [InlineData("1234567R")]
+    public async Task GivenSearchByChedId_WithSplitConsignmentRejected_WhenExists_AndNoCustomDeclarationsExist_ThenShouldReturn(
+        string searchChedId
+    )
+    {
+        var memoryDbContext = new MemoryDbContext();
+
+        memoryDbContext.ImportPreNotifications.AddTestData(
+            new ImportPreNotificationEntity
+            {
+                Id = "CHEDA.GB.2025.1234567",
+                CustomsDeclarationIdentifier = "1234567R",
+                ImportPreNotification = new ImportPreNotification(),
+                Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+                ETag = "etag",
+            }
+        );
+
+        var subject = CreateSubject(memoryDbContext);
+
+        var response = await subject.Search(
+            new RelatedImportDeclarationsRequest { ChedId = searchChedId },
+            CancellationToken.None
+        );
+
+        response.Should().NotBeNull();
+        response.CustomsDeclarations.Length.Should().Be(0);
+        response.ImportPreNotifications.Length.Should().Be(1);
+    }
+
+    [Theory]
+    [InlineData("CHEDA.GB.2025.1234567V")]
+    [InlineData("2025.1234567V")]
+    [InlineData("20251234567V")]
+    [InlineData("1234567V")]
+    public async Task GivenSearchByChedId_WithSplitConsignmentValidated_WhenExists_AndNoCustomDeclarationsExist_ThenShouldReturn(
+        string searchChedId
+    )
+    {
+        var memoryDbContext = new MemoryDbContext();
+
+        memoryDbContext.ImportPreNotifications.AddTestData(
+            new ImportPreNotificationEntity
+            {
+                Id = "CHEDA.GB.2025.1234567",
+                CustomsDeclarationIdentifier = "1234567V",
+                ImportPreNotification = new ImportPreNotification(),
+                Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+                ETag = "etag",
+            }
+        );
+
+        var subject = CreateSubject(memoryDbContext);
+
+        var response = await subject.Search(
+            new RelatedImportDeclarationsRequest { ChedId = searchChedId },
+            CancellationToken.None
+        );
+
+        response.Should().NotBeNull();
+        response.CustomsDeclarations.Length.Should().Be(0);
+        response.ImportPreNotifications.Length.Should().Be(1);
+    }
+
     [Fact]
     public async Task GivenSearchByChedId_WhenNotExists_ThenShouldReturnEmpty()
     {
