@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using Defra.TradeImportsDataApi.Api.Data;
 using Defra.TradeImportsDataApi.Api.Endpoints.RelatedImportDeclarations;
 using Defra.TradeImportsDataApi.Data.Entities;
+using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 
 namespace Defra.TradeImportsDataApi.Api.Services;
 
@@ -82,7 +83,7 @@ public class RelatedImportDeclarationsService(
         ImportPreNotificationEntity[] ImportPreNotifications
     )> StartFromImportPreNotification(string chedId, int maxDepth, CancellationToken cancellationToken)
     {
-        var identifier = chedId.Substring(chedId.Length - 7);
+        var identifier = ChedReferenceRegexes.DocumentReferenceIdentifier().Match(chedId).Value;
 
         var notification = await importPreNotificationRepository.GetByCustomsDeclarationIdentifier(
             identifier,
