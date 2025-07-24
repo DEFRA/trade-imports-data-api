@@ -9,8 +9,6 @@ public interface IMongoCollectionSet<T> : IQueryable<T>
 {
     IMongoCollection<T> Collection { get; }
 
-    int PendingChanges { get; }
-
     Task<T?> Find(string id, CancellationToken cancellationToken = default);
 
     Task<T?> Find(Expression<Func<T, bool>> query, CancellationToken cancellationToken = default);
@@ -25,5 +23,5 @@ public interface IMongoCollectionSet<T> : IQueryable<T>
 
     Task Update(T item, string etag, CancellationToken cancellationToken = default);
 
-    Task PersistAsync(CancellationToken cancellationToken);
+    Task Save(CancellationToken cancellationToken);
 }

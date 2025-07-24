@@ -69,6 +69,7 @@ public class CustomsDeclarationServiceTests
 
         await Subject.Insert(entity, CancellationToken.None);
 
+        await DbContext.Received().StartTransaction(CancellationToken.None);
         await CustomsDeclarationRepository.Received().Insert(entity, CancellationToken.None);
         await ImportPreNotificationRepository
             .Received()
@@ -77,7 +78,7 @@ public class CustomsDeclarationServiceTests
                 Arg.Is<string[]>(x => x.SequenceEqual(entity.ImportPreNotificationIdentifiers)),
                 CancellationToken.None
             );
-        await DbContext.Received().SaveChangesAsync(CancellationToken.None);
+        await DbContext.Received().SaveChanges(CancellationToken.None);
         await ResourceEventPublisher
             .Received()
             .Publish(
@@ -86,6 +87,7 @@ public class CustomsDeclarationServiceTests
                 ),
                 CancellationToken.None
             );
+        await DbContext.Received().CommitTransaction(CancellationToken.None);
     }
 
     [Fact]
@@ -107,8 +109,9 @@ public class CustomsDeclarationServiceTests
 
         await Subject.Update(entity, "etag", CancellationToken.None);
 
+        await DbContext.Received().StartTransaction(CancellationToken.None);
         await CustomsDeclarationRepository.Received().Update(entity, "etag", CancellationToken.None);
-        await DbContext.Received().SaveChangesAsync(CancellationToken.None);
+        await DbContext.Received().SaveChanges(CancellationToken.None);
         await ResourceEventPublisher
             .Received()
             .Publish(
@@ -117,6 +120,7 @@ public class CustomsDeclarationServiceTests
                 ),
                 CancellationToken.None
             );
+        await DbContext.Received().CommitTransaction(CancellationToken.None);
     }
 
     [Fact]

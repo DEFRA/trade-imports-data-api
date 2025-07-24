@@ -36,11 +36,13 @@ public class ImportPreNotificationService(
         CancellationToken cancellationToken
     )
     {
+        await dbContext.StartTransaction(cancellationToken);
+
         var inserted = await importPreNotificationRepository.Insert(entity, cancellationToken);
 
         await importPreNotificationRepository.TrackImportPreNotificationUpdate(inserted, cancellationToken);
 
-        await dbContext.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChanges(cancellationToken);
 
         await resourceEventPublisher.Publish(
             inserted
@@ -48,6 +50,8 @@ public class ImportPreNotificationService(
                 .WithChangeSet(inserted.ImportPreNotification, new ImportPreNotification()),
             cancellationToken
         );
+
+        await dbContext.CommitTransaction(cancellationToken);
 
         return inserted;
     }
@@ -58,11 +62,13 @@ public class ImportPreNotificationService(
         CancellationToken cancellationToken
     )
     {
+        await dbContext.StartTransaction(cancellationToken);
+
         var (existing, updated) = await importPreNotificationRepository.Update(entity, etag, cancellationToken);
 
         await importPreNotificationRepository.TrackImportPreNotificationUpdate(updated, cancellationToken);
 
-        await dbContext.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChanges(cancellationToken);
 
         await resourceEventPublisher.Publish(
             updated
@@ -70,6 +76,8 @@ public class ImportPreNotificationService(
                 .WithChangeSet(updated.ImportPreNotification, existing.ImportPreNotification),
             cancellationToken
         );
+
+        await dbContext.CommitTransaction(cancellationToken);
 
         return updated;
     }

@@ -14,5 +14,9 @@ public interface IDbContext
 
     IMongoCollectionSet<ProcessingErrorEntity> ProcessingErrors { get; }
 
-    Task SaveChangesAsync(CancellationToken cancellationToken);
+    Task SaveChanges(CancellationToken cancellationToken);
+
+    Task StartTransaction(CancellationToken cancellationToken);
+
+    Task CommitTransaction(CancellationToken cancellationToken);
 }
