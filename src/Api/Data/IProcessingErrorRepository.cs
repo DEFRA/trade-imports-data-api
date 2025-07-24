@@ -6,7 +6,7 @@ public interface IProcessingErrorRepository
 {
     Task<ProcessingErrorEntity?> Get(string id, CancellationToken cancellationToken);
 
-    Task<ProcessingErrorEntity> Insert(ProcessingErrorEntity entity, CancellationToken cancellationToken);
+    ProcessingErrorEntity Insert(ProcessingErrorEntity entity);
 
     Task<(ProcessingErrorEntity Existing, ProcessingErrorEntity Updated)> Update(
         ProcessingErrorEntity entity,

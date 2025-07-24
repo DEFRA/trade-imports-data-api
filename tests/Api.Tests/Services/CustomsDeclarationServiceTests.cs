@@ -60,8 +60,8 @@ public class CustomsDeclarationServiceTests
             },
         };
         CustomsDeclarationRepository
-            .Insert(entity, CancellationToken.None)
-            .Returns(x =>
+            .Insert(entity)
+            .Returns(_ =>
             {
                 entity.OnSave();
                 return entity;
@@ -70,7 +70,7 @@ public class CustomsDeclarationServiceTests
         await Subject.Insert(entity, CancellationToken.None);
 
         await DbContext.Received().StartTransaction(CancellationToken.None);
-        await CustomsDeclarationRepository.Received().Insert(entity, CancellationToken.None);
+        CustomsDeclarationRepository.Received().Insert(entity);
         await ImportPreNotificationRepository
             .Received()
             .TrackImportPreNotificationUpdate(

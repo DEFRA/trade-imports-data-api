@@ -38,9 +38,9 @@ public class ImportPreNotificationService(
     {
         await dbContext.StartTransaction(cancellationToken);
 
-        var inserted = await importPreNotificationRepository.Insert(entity, cancellationToken);
+        var inserted = importPreNotificationRepository.Insert(entity);
 
-        await importPreNotificationRepository.TrackImportPreNotificationUpdate(inserted, cancellationToken);
+        importPreNotificationRepository.TrackImportPreNotificationUpdate(inserted);
 
         await dbContext.SaveChanges(cancellationToken);
 
@@ -66,7 +66,7 @@ public class ImportPreNotificationService(
 
         var (existing, updated) = await importPreNotificationRepository.Update(entity, etag, cancellationToken);
 
-        await importPreNotificationRepository.TrackImportPreNotificationUpdate(updated, cancellationToken);
+        importPreNotificationRepository.TrackImportPreNotificationUpdate(updated);
 
         await dbContext.SaveChanges(cancellationToken);
 

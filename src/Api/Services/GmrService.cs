@@ -37,7 +37,7 @@ public class GmrService(
     {
         await dbContext.StartTransaction(cancellationToken);
 
-        var inserted = await gmrRepository.Insert(entity, cancellationToken);
+        var inserted = gmrRepository.Insert(entity);
 
         await TrackImportPreNotificationUpdate(inserted, cancellationToken);
 

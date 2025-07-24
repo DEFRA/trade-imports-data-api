@@ -15,15 +15,9 @@ public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionNa
 
     private IQueryable<T> EntityQueryable => Collection.AsQueryable();
 
-    public IEnumerator<T> GetEnumerator()
-    {
-        return EntityQueryable.GetEnumerator();
-    }
+    public IEnumerator<T> GetEnumerator() => EntityQueryable.GetEnumerator();
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return EntityQueryable.GetEnumerator();
-    }
+    IEnumerator IEnumerable.GetEnumerator() => EntityQueryable.GetEnumerator();
 
     public Type ElementType => EntityQueryable.ElementType;
     public Expression Expression => EntityQueryable.Expression;
@@ -34,20 +28,11 @@ public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionNa
             ? dbContext.Database.GetCollection<T>(typeof(T).Name.Replace("Entity", ""))
             : dbContext.Database.GetCollection<T>(collectionName);
 
-    public async Task<T?> Find(string id, CancellationToken cancellationToken = default)
-    {
-        return await EntityQueryable.SingleOrDefaultAsync(x => x.Id == id, cancellationToken: cancellationToken);
-    }
+    public async Task<T?> Find(string id, CancellationToken cancellationToken) =>
+        await EntityQueryable.SingleOrDefaultAsync(x => x.Id == id, cancellationToken: cancellationToken);
 
-    public async Task<T?> Find(Expression<Func<T, bool>> query, CancellationToken cancellationToken = default)
-    {
-        return await EntityQueryable.FirstOrDefaultAsync(query, cancellationToken: cancellationToken);
-    }
-
-    public async Task<List<T>> FindMany(Expression<Func<T, bool>> query, CancellationToken cancellationToken = default)
-    {
-        return await EntityQueryable.Where(query).ToListAsync(cancellationToken);
-    }
+    public async Task<List<T>> FindMany(Expression<Func<T, bool>> query, CancellationToken cancellationToken) =>
+        await EntityQueryable.Where(query).ToListAsync(cancellationToken);
 
     public async Task Save(CancellationToken cancellationToken)
     {
@@ -107,34 +92,19 @@ public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionNa
         }
     }
 
-    public Task Insert(T item, CancellationToken cancellationToken = default)
+    public void Insert(T item)
     {
         item.Created = item.Updated = DateTime.UtcNow;
         item.OnSave();
 
         _entitiesToInsert.Add(item);
-
-        return Task.CompletedTask;
     }
 
-    public async Task Update(T item, CancellationToken cancellationToken = default)
-    {
-        await Update(item, item.ETag, cancellationToken);
-    }
-
-    public async Task Update(List<T> items, CancellationToken cancellationToken = default)
-    {
-        foreach (var item in items)
-        {
-            await Update(item, cancellationToken);
-        }
-    }
-
-    public Task Update(T item, string etag, CancellationToken cancellationToken = default)
+    public void Update(T item, string etag)
     {
         if (_entitiesToInsert.Exists(x => x.Id == item.Id))
         {
-            return Task.CompletedTask;
+            return;
         }
 
         ArgumentNullException.ThrowIfNull(etag);
@@ -145,7 +115,5 @@ public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionNa
         item.OnSave();
 
         _entitiesToUpdate.Add(new ValueTuple<T, string>(item, etag));
-
-        return Task.CompletedTask;
     }
 }
