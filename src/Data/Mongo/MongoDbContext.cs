@@ -13,6 +13,7 @@ public class MongoDbContext : IDbContext
     public MongoDbContext(IMongoDatabase database, ILogger<MongoDbContext> logger)
     {
         _logger = logger;
+
         Database = database;
         ImportPreNotifications = new MongoCollectionSet<ImportPreNotificationEntity>(this);
         ImportPreNotificationUpdates = new MongoCollectionSet<ImportPreNotificationUpdateEntity>(this);
@@ -30,64 +31,35 @@ public class MongoDbContext : IDbContext
     public IMongoCollectionSet<GmrEntity> Gmrs { get; }
     public IMongoCollectionSet<ProcessingErrorEntity> ProcessingErrors { get; }
 
-    private async Task<IDbTransaction> StartTransaction(CancellationToken cancellationToken)
+    public async Task StartTransaction(CancellationToken cancellationToken)
     {
         var session = await Database.Client.StartSessionAsync(cancellationToken: cancellationToken);
         session.StartTransaction();
 
         ActiveTransaction = new MongoDbTransaction(session);
-
-        return ActiveTransaction;
     }
 
-    public async Task SaveChangesAsync(CancellationToken cancellationToken)
+    public async Task CommitTransaction(CancellationToken cancellationToken)
     {
-        switch (GetChangedRecordsCount())
-        {
-            case 0:
-                return;
-            case 1:
-                await SaveChanges(cancellationToken);
-                break;
-            default:
-                await SaveChangesWithinTransaction(cancellationToken);
-                break;
-        }
+        if (ActiveTransaction is null)
+            throw new InvalidOperationException("No active transaction");
+
+        await ActiveTransaction.Commit(cancellationToken);
+
+        ActiveTransaction = null;
     }
 
-    private async Task SaveChangesWithinTransaction(CancellationToken cancellationToken)
-    {
-        using var transaction = await StartTransaction(cancellationToken);
-
-        await SaveChanges(cancellationToken);
-
-        // If the transaction is not committed within the using scope,
-        // then it will be rolled back automatically by the transaction
-        await transaction.Commit(cancellationToken);
-    }
-
-    private int GetChangedRecordsCount()
-    {
-        // This logic needs to be reviewed as it's easy to forget to include any new collection sets
-        return ImportPreNotifications.PendingChanges
-            + ImportPreNotificationUpdates.PendingChanges
-            + CustomsDeclarations.PendingChanges
-            + Gmrs.PendingChanges
-            + ProcessingErrors.PendingChanges;
-    }
-
-    private async Task SaveChanges(CancellationToken cancellationToken)
+    public async Task SaveChanges(CancellationToken cancellationToken)
     {
         try
         {
-            // This logic needs to be reviewed as it's easy to forget to include any new collection sets
-            await ImportPreNotifications.PersistAsync(cancellationToken);
-            await CustomsDeclarations.PersistAsync(cancellationToken);
-            await Gmrs.PersistAsync(cancellationToken);
-            await ProcessingErrors.PersistAsync(cancellationToken);
+            await ImportPreNotifications.Save(cancellationToken);
+            await CustomsDeclarations.Save(cancellationToken);
+            await Gmrs.Save(cancellationToken);
+            await ProcessingErrors.Save(cancellationToken);
 
             // Keep this last as upserts above will impact those below
-            await ImportPreNotificationUpdates.PersistAsync(cancellationToken);
+            await ImportPreNotificationUpdates.Save(cancellationToken);
         }
         catch (MongoCommandException mongoCommandException) when (mongoCommandException.Code == 112)
         {

@@ -24,11 +24,13 @@ public class CustomsDeclarationService(
         CancellationToken cancellationToken
     )
     {
+        await dbContext.StartTransaction(cancellationToken);
+
         var inserted = await customsDeclarationRepository.Insert(entity, cancellationToken);
 
         await TrackImportPreNotificationUpdate(inserted, cancellationToken);
 
-        await dbContext.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChanges(cancellationToken);
 
         await resourceEventPublisher.Publish(
             inserted
@@ -45,6 +47,8 @@ public class CustomsDeclarationService(
                 ),
             cancellationToken
         );
+
+        await dbContext.CommitTransaction(cancellationToken);
 
         return inserted;
     }
@@ -65,11 +69,13 @@ public class CustomsDeclarationService(
         CancellationToken cancellationToken
     )
     {
+        await dbContext.StartTransaction(cancellationToken);
+
         var (existing, updated) = await customsDeclarationRepository.Update(entity, etag, cancellationToken);
 
         await TrackImportPreNotificationUpdate(updated, cancellationToken);
 
-        await dbContext.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChanges(cancellationToken);
 
         await resourceEventPublisher.Publish(
             updated
@@ -92,6 +98,8 @@ public class CustomsDeclarationService(
                 ),
             cancellationToken
         );
+
+        await dbContext.CommitTransaction(cancellationToken);
 
         return updated;
     }

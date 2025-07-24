@@ -29,7 +29,6 @@ public class MemoryCollectionSet<T> : IMongoCollectionSet<T>
     public IQueryProvider Provider => EntityQueryable.Provider;
 
     public IMongoCollection<T> Collection => throw new NotImplementedException();
-    public int PendingChanges => 0;
 
     internal void AddTestData(T item)
     {
@@ -81,7 +80,7 @@ public class MemoryCollectionSet<T> : IMongoCollectionSet<T>
         throw new NotImplementedException();
     }
 
-    public Task PersistAsync(CancellationToken cancellationToken)
+    public Task Save(CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

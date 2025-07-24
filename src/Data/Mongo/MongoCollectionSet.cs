@@ -34,8 +34,6 @@ public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionNa
             ? dbContext.Database.GetCollection<T>(typeof(T).Name.Replace("Entity", ""))
             : dbContext.Database.GetCollection<T>(collectionName);
 
-    public int PendingChanges => _entitiesToInsert.Count + _entitiesToUpdate.Count;
-
     public async Task<T?> Find(string id, CancellationToken cancellationToken = default)
     {
         return await EntityQueryable.SingleOrDefaultAsync(x => x.Id == id, cancellationToken: cancellationToken);
@@ -51,57 +49,58 @@ public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionNa
         return await EntityQueryable.Where(query).ToListAsync(cancellationToken);
     }
 
-    public async Task PersistAsync(CancellationToken cancellationToken)
+    public async Task Save(CancellationToken cancellationToken)
     {
-        await InsertDocuments(cancellationToken);
-
-        await UpdateDocuments(cancellationToken);
+        await Insert(cancellationToken);
+        await Update(cancellationToken);
     }
 
-    private async Task UpdateDocuments(CancellationToken cancellationToken)
+    private async Task Update(CancellationToken cancellationToken)
     {
         var builder = Builders<T>.Filter;
 
         if (_entitiesToUpdate.Count != 0)
         {
+            if (dbContext.ActiveTransaction is null)
+                throw new InvalidOperationException("Transaction has not been started");
+
             foreach (var item in _entitiesToUpdate)
             {
                 var filter = builder.Eq(x => x.Id, item.Item.Id) & builder.Eq(x => x.ETag, item.Etag);
 
                 item.Item.ETag = BsonObjectIdGenerator.Instance.GenerateId(null, null).ToString()!;
 
-                var session = dbContext.ActiveTransaction?.Session;
-                var updateResult = session is not null
-                    ? await Collection.ReplaceOneAsync(session, filter, item.Item, cancellationToken: cancellationToken)
-                    : await Collection.ReplaceOneAsync(filter, item.Item, cancellationToken: cancellationToken);
+                var updateResult = await Collection.ReplaceOneAsync(
+                    dbContext.ActiveTransaction.Session,
+                    filter,
+                    item.Item,
+                    cancellationToken: cancellationToken
+                );
 
                 if (updateResult.ModifiedCount == 0)
-                {
-                    throw new ConcurrencyException(item.Item.Id!, item.Etag);
-                }
+                    throw new ConcurrencyException(item.Item.Id, item.Etag);
             }
 
             _entitiesToUpdate.Clear();
         }
     }
 
-    private async Task InsertDocuments(CancellationToken cancellationToken)
+    private async Task Insert(CancellationToken cancellationToken)
     {
         if (_entitiesToInsert.Count != 0)
         {
+            if (dbContext.ActiveTransaction is null)
+                throw new InvalidOperationException("Transaction has not been started");
+
             foreach (var item in _entitiesToInsert)
             {
                 item.ETag = BsonObjectIdGenerator.Instance.GenerateId(null, null).ToString()!;
 
-                var session = dbContext.ActiveTransaction?.Session;
-                if (session is not null)
-                {
-                    await Collection.InsertOneAsync(session, item, cancellationToken: cancellationToken);
-                }
-                else
-                {
-                    await Collection.InsertOneAsync(item, cancellationToken: cancellationToken);
-                }
+                await Collection.InsertOneAsync(
+                    dbContext.ActiveTransaction.Session,
+                    item,
+                    cancellationToken: cancellationToken
+                );
             }
 
             _entitiesToInsert.Clear();
