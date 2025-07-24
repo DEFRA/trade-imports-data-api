@@ -26,7 +26,7 @@ public class CustomsDeclarationService(
     {
         await dbContext.StartTransaction(cancellationToken);
 
-        var inserted = await customsDeclarationRepository.Insert(entity, cancellationToken);
+        var inserted = customsDeclarationRepository.Insert(entity);
 
         await TrackImportPreNotificationUpdate(inserted, cancellationToken);
 

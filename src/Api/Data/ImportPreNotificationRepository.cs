@@ -149,12 +149,9 @@ public class ImportPreNotificationRepository(IDbContext dbContext) : IImportPreN
     // ReSharper disable once ClassNeverInstantiated.Local
     private sealed record NotificationUpdate(string Id, DateTime Updated);
 
-    public async Task<ImportPreNotificationEntity> Insert(
-        ImportPreNotificationEntity entity,
-        CancellationToken cancellationToken
-    )
+    public ImportPreNotificationEntity Insert(ImportPreNotificationEntity entity)
     {
-        await dbContext.ImportPreNotifications.Insert(entity, cancellationToken);
+        dbContext.ImportPreNotifications.Insert(entity);
 
         return entity;
     }
@@ -173,7 +170,7 @@ public class ImportPreNotificationRepository(IDbContext dbContext) : IImportPreN
 
         entity.Created = existing.Created;
 
-        await dbContext.ImportPreNotifications.Update(entity, etag, cancellationToken);
+        dbContext.ImportPreNotifications.Update(entity, etag);
 
         return (existing, entity);
     }
@@ -186,13 +183,11 @@ public class ImportPreNotificationRepository(IDbContext dbContext) : IImportPreN
     {
         var notifications = await GetAll(customsDeclarationIdentifiers, cancellationToken);
 
-        await TrackImportPreNotificationUpdate(source, notifications, cancellationToken);
+        TrackImportPreNotificationUpdate(source, notifications);
     }
 
-    public async Task TrackImportPreNotificationUpdate(
-        ImportPreNotificationEntity entity,
-        CancellationToken cancellationToken
-    ) => await TrackImportPreNotificationUpdate(entity, [entity], cancellationToken);
+    public void TrackImportPreNotificationUpdate(ImportPreNotificationEntity entity) =>
+        TrackImportPreNotificationUpdate(entity, [entity]);
 
     public async Task<string?> GetMaxId(CancellationToken cancellationToken)
     {
@@ -205,11 +200,7 @@ public class ImportPreNotificationRepository(IDbContext dbContext) : IImportPreN
         return entity?.Id;
     }
 
-    private async Task TrackImportPreNotificationUpdate(
-        IDataEntity source,
-        List<ImportPreNotificationEntity> notifications,
-        CancellationToken cancellationToken
-    )
+    private void TrackImportPreNotificationUpdate(IDataEntity source, List<ImportPreNotificationEntity> notifications)
     {
         if (notifications.Count == 0)
             return;
@@ -227,7 +218,7 @@ public class ImportPreNotificationRepository(IDbContext dbContext) : IImportPreN
         {
             update.SetSource(source);
 
-            await dbContext.ImportPreNotificationUpdates.Insert(update, cancellationToken);
+            dbContext.ImportPreNotificationUpdates.Insert(update);
         }
     }
 }

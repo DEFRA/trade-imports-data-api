@@ -40,12 +40,12 @@ public class ImportPreNotificationServiceTests
             Id = "id",
             ImportPreNotification = new ImportPreNotification { Version = 1 },
         };
-        ImportPreNotificationRepository.Insert(entity, CancellationToken.None).Returns(entity);
+        ImportPreNotificationRepository.Insert(entity).Returns(entity);
 
         await Subject.Insert(entity, CancellationToken.None);
 
         await DbContext.Received().StartTransaction(CancellationToken.None);
-        await ImportPreNotificationRepository.Received().Insert(entity, CancellationToken.None);
+        ImportPreNotificationRepository.Received().Insert(entity);
         await DbContext.Received().SaveChanges(CancellationToken.None);
         await ResourceEventPublisher
             .Received()

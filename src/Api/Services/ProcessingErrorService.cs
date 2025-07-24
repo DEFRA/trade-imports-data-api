@@ -19,7 +19,7 @@ public class ProcessingErrorService(
     {
         await dbContext.StartTransaction(cancellationToken);
 
-        var inserted = await processingErrorRepository.Insert(entity, cancellationToken);
+        var inserted = processingErrorRepository.Insert(entity);
 
         await dbContext.SaveChanges(cancellationToken);
 
