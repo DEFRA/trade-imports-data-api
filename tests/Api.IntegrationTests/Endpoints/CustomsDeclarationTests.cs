@@ -1,3 +1,4 @@
+using System.Net;
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using Defra.TradeImportsDataApi.Testing;
@@ -126,5 +127,54 @@ public class CustomsDeclarationTests(ITestOutputHelper testOutputHelper) : SqsTe
         Assert.True(
             await AsyncWaiter.WaitForAsync(async () => (await GetQueueAttributes()).ApproximateNumberOfMessages == 1)
         );
+    }
+
+    [Fact]
+    public async Task WhenWritingTwoSubResourceProperties_ShouldNotChangeDbState()
+    {
+        var client = CreateDataApiClient();
+        var mrn = Guid.NewGuid().ToString("N");
+        const int version = 1;
+
+        var result = await client.GetCustomsDeclaration(mrn, CancellationToken.None);
+        result.Should().BeNull();
+
+        await client.PutCustomsDeclaration(
+            mrn,
+            new CustomsDeclaration { ClearanceRequest = new ClearanceRequest { ExternalVersion = version } },
+            null,
+            CancellationToken.None
+        );
+
+        result = await client.GetCustomsDeclaration(mrn, CancellationToken.None);
+        result.Should().NotBeNull();
+        result.ClearanceRequest?.ExternalVersion.Should().Be(version);
+
+        HttpRequestException? exception = null;
+
+        try
+        {
+            await client.PutCustomsDeclaration(
+                mrn,
+                new CustomsDeclaration
+                {
+                    ClearanceRequest = new ClearanceRequest { ExternalVersion = 2 },
+                    ClearanceDecision = new ClearanceDecision { Items = [] },
+                },
+                result.ETag,
+                CancellationToken.None
+            );
+        }
+        catch (HttpRequestException ex)
+        {
+            exception = ex;
+        }
+
+        exception.Should().NotBeNull();
+        exception.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+
+        var result2 = await client.GetCustomsDeclaration(mrn, CancellationToken.None);
+        result2.Should().NotBeNull();
+        result2.ClearanceRequest?.ExternalVersion.Should().Be(version);
     }
 }

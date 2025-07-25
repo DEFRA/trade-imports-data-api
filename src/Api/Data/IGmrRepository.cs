@@ -8,7 +8,7 @@ public interface IGmrRepository
 
     Task<List<GmrEntity>> GetAll(string[] customsDeclarationIds, CancellationToken cancellationToken);
 
-    Task<GmrEntity> Insert(GmrEntity entity, CancellationToken cancellationToken);
+    GmrEntity Insert(GmrEntity entity);
 
     Task<(GmrEntity Existing, GmrEntity Updated)> Update(
         GmrEntity entity,

@@ -33,18 +33,20 @@ public class ProcessingErrorServiceTests
             Id = "id",
             ProcessingErrors = [new ProcessingError { ExternalVersion = 1 }],
         };
-        ProcessingErrorRepository.Insert(entity, CancellationToken.None).Returns(entity);
+        ProcessingErrorRepository.Insert(entity).Returns(entity);
 
         await Subject.Insert(entity, CancellationToken.None);
 
-        await ProcessingErrorRepository.Received().Insert(entity, CancellationToken.None);
-        await DbContext.Received().SaveChangesAsync(CancellationToken.None);
+        await DbContext.Received().StartTransaction(CancellationToken.None);
+        ProcessingErrorRepository.Received().Insert(entity);
+        await DbContext.Received().SaveChanges(CancellationToken.None);
         await ResourceEventPublisher
             .Received()
             .Publish(
                 Arg.Is<ResourceEvent<ProcessingErrorEntity>>(x => x.Operation == "Created" && x.ChangeSet.Count > 0),
                 CancellationToken.None
             );
+        await DbContext.Received().CommitTransaction(CancellationToken.None);
     }
 
     [Fact]
@@ -70,14 +72,16 @@ public class ProcessingErrorServiceTests
 
         await Subject.Update(entity, "etag", CancellationToken.None);
 
+        await DbContext.Received().StartTransaction(CancellationToken.None);
         await ProcessingErrorRepository.Received().Update(entity, "etag", CancellationToken.None);
-        await DbContext.Received().SaveChangesAsync(CancellationToken.None);
+        await DbContext.Received().SaveChanges(CancellationToken.None);
         await ResourceEventPublisher
             .Received()
             .Publish(
                 Arg.Is<ResourceEvent<ProcessingErrorEntity>>(x => x.Operation == "Updated" && x.ChangeSet.Count > 0),
                 CancellationToken.None
             );
+        await DbContext.Received().CommitTransaction(CancellationToken.None);
     }
 
     [Fact]

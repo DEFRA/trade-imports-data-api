@@ -29,7 +29,7 @@ public interface IImportPreNotificationRepository
         CancellationToken cancellationToken = default
     );
 
-    Task<ImportPreNotificationEntity> Insert(ImportPreNotificationEntity entity, CancellationToken cancellationToken);
+    ImportPreNotificationEntity Insert(ImportPreNotificationEntity entity);
 
     Task<(ImportPreNotificationEntity Existing, ImportPreNotificationEntity Updated)> Update(
         ImportPreNotificationEntity entity,
@@ -43,7 +43,7 @@ public interface IImportPreNotificationRepository
         CancellationToken cancellationToken
     );
 
-    Task TrackImportPreNotificationUpdate(ImportPreNotificationEntity entity, CancellationToken cancellationToken);
+    void TrackImportPreNotificationUpdate(ImportPreNotificationEntity entity);
 
     Task<string?> GetMaxId(CancellationToken cancellationToken);
 }
