@@ -15,7 +15,8 @@ public interface ITradeImportsDataApiClient
         string chedId,
         Domain.Ipaffs.ImportPreNotification data,
         string? etag,
-        CancellationToken cancellationToken
+        CancellationToken cancellationToken,
+        string? requestId = null
     );
 
     Task<GmrResponse?> GetGmr(string gmrId, CancellationToken cancellationToken);

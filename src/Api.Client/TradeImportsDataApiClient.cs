@@ -58,7 +58,8 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
         string chedId,
         ImportPreNotification data,
         string? etag,
-        CancellationToken cancellationToken
+        CancellationToken cancellationToken,
+        string? requestId = null
     )
     {
         var requestUri = Endpoints.ImportPreNotifications(chedId);
@@ -195,7 +196,8 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
         T data,
         string? etag,
         string requestUri,
-        CancellationToken cancellationToken
+        CancellationToken cancellationToken,
+        string? requestId = null
     )
     {
         var message = CreateMessage(HttpMethod.Put, requestUri);
@@ -203,6 +205,9 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
 
         if (!string.IsNullOrEmpty(etag))
             message.Headers.IfMatch.Add(new EntityTagHeaderValue(etag));
+
+        if (!string.IsNullOrEmpty(requestId))
+            message.Headers.Add("X-Request-ID", requestId);
 
         return await httpClient.SendAsync(message, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
     }
