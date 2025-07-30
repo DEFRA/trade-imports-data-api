@@ -36,6 +36,27 @@ public class ImportPreNotificationService(
         CancellationToken cancellationToken
     )
     {
+        // If changes in this PR were adopted, use of a transaction would
+        // be removed in the knowledge that retries would push the same
+        // data via the PUT call again. So we would be eventually consistent
+        // if there were no persistent errors.
+        //
+        // We would also change our write model so it favours consistency
+        // over throughput.
+        //
+        // Code below would then become:
+        //
+        // var inserted = importPreNotificationRepository.Insert(entity)
+        // importPreNotificationRepository.TrackImportPreNotificationUpdate(inserted)
+        // await dbContext.SaveChanges(cancellationToken)
+        // await resourceEventPublisher.Publish(
+        //     inserted
+        //         .ToResourceEvent(ResourceEventOperations.Created)
+        //         .WithChangeSet(inserted.ImportPreNotification, new ImportPreNotification()),
+        //     cancellationToken
+        // )
+        // return inserted
+
         await dbContext.StartTransaction(cancellationToken);
 
         var inserted = importPreNotificationRepository.Insert(entity);
@@ -62,6 +83,27 @@ public class ImportPreNotificationService(
         CancellationToken cancellationToken
     )
     {
+        // If changes in this PR were adopted, use of a transaction would
+        // be removed in the knowledge that retries would push the same
+        // data via the PUT call again. So we would be eventually consistent
+        // if there were no persistent errors.
+        //
+        // We would also change our write model so it favours consistency
+        // over throughput.
+        //
+        // Code below would then become:
+        //
+        // var (existing, updated) = await importPreNotificationRepository.Update(entity, etag, cancellationToken)
+        // importPreNotificationRepository.TrackImportPreNotificationUpdate(updated)
+        // await dbContext.SaveChanges(cancellationToken)
+        // await resourceEventPublisher.Publish(
+        //     updated
+        //         .ToResourceEvent(ResourceEventOperations.Updated)
+        //         .WithChangeSet(updated.ImportPreNotification, existing.ImportPreNotification),
+        //     cancellationToken
+        // )
+        // return updated
+
         await dbContext.StartTransaction(cancellationToken);
 
         var (existing, updated) = await importPreNotificationRepository.Update(entity, etag, cancellationToken);
