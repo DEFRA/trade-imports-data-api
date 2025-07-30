@@ -29,6 +29,7 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
         return result with
         {
             ETag = response.Headers.ETag?.Tag,
+            RequestId = response.Headers.TryGetValues("X-Request-ID", out var values) ? values.FirstOrDefault() : null,
         };
     }
 

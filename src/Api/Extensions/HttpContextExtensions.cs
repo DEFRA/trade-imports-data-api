@@ -6,4 +6,9 @@ public static class HttpContextExtensions
     {
         context.Response.Headers.ETag = $"\"{etag}\"";
     }
+
+    public static void SetRequestId(this HttpContext context, string? requestId)
+    {
+        context.Response.Headers.Append("X-Request-ID", requestId);
+    }
 }

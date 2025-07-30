@@ -100,6 +100,7 @@ public static class EndpointRouteBuilderExtensions
         }
 
         context.SetResponseEtag(importPreNotificationEntity.ETag);
+        context.SetRequestId(importPreNotificationEntity.RequestId);
 
         return Results.Ok(
             new ImportPreNotificationResponse(
@@ -175,6 +176,7 @@ public static class EndpointRouteBuilderExtensions
     /// <param name="context"></param>
     /// <param name="importPreNotification"></param>
     /// <param name="ifMatch"></param>
+    /// <param name="requestId"></param>
     /// <param name="importPreNotificationService"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
@@ -184,6 +186,7 @@ public static class EndpointRouteBuilderExtensions
         HttpContext context,
         [FromBody] ImportPreNotification importPreNotification,
         [FromHeader(Name = "If-Match")] string? ifMatch,
+        [FromHeader(Name = "X-Request-ID")] string? requestId,
         [FromServices] IImportPreNotificationService importPreNotificationService,
         CancellationToken cancellationToken
     )
@@ -192,6 +195,7 @@ public static class EndpointRouteBuilderExtensions
         {
             Id = chedId,
             ImportPreNotification = importPreNotification,
+            RequestId = requestId,
         };
 
         var etag = ETags.ValidateAndParseFirst(ifMatch);

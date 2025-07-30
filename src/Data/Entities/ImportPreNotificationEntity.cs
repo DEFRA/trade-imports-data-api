@@ -16,6 +16,8 @@ public class ImportPreNotificationEntity : IDataEntity
 
     public required ImportPreNotification ImportPreNotification { get; set; }
 
+    public string? RequestId { get; set; }
+
     public void OnSave()
     {
         CustomsDeclarationIdentifier = new ChedIdReference(Id).GetIdentifier();

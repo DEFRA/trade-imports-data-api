@@ -447,6 +447,14 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "X-Request-ID",
+            "in": "header",
+            "description": "",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "requestBody": {
