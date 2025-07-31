@@ -10,7 +10,8 @@ public class ImportPreNotificationService(
     IDbContext dbContext,
     IResourceEventPublisher resourceEventPublisher,
     IImportPreNotificationRepository importPreNotificationRepository,
-    ICustomsDeclarationRepository customsDeclarationRepository
+    ICustomsDeclarationRepository customsDeclarationRepository,
+    IResourceEventRepository resourceEventRepository
 ) : IImportPreNotificationService
 {
     public async Task<ImportPreNotificationEntity?> GetImportPreNotification(
@@ -42,16 +43,16 @@ public class ImportPreNotificationService(
 
         importPreNotificationRepository.TrackImportPreNotificationUpdate(inserted);
 
+        var resourceEvent = inserted
+            .ToResourceEvent(ResourceEventOperations.Created)
+            .WithChangeSet(inserted.ImportPreNotification, new ImportPreNotification());
+
+        resourceEventRepository.Insert(resourceEvent);
+
         await dbContext.SaveChanges(cancellationToken);
-
-        await resourceEventPublisher.Publish(
-            inserted
-                .ToResourceEvent(ResourceEventOperations.Created)
-                .WithChangeSet(inserted.ImportPreNotification, new ImportPreNotification()),
-            cancellationToken
-        );
-
         await dbContext.CommitTransaction(cancellationToken);
+
+        await resourceEventPublisher.Publish(resourceEvent, cancellationToken);
 
         return inserted;
     }
@@ -68,16 +69,16 @@ public class ImportPreNotificationService(
 
         importPreNotificationRepository.TrackImportPreNotificationUpdate(updated);
 
+        var resourceEvent = updated
+            .ToResourceEvent(ResourceEventOperations.Updated)
+            .WithChangeSet(updated.ImportPreNotification, existing.ImportPreNotification);
+
+        resourceEventRepository.Insert(resourceEvent);
+
         await dbContext.SaveChanges(cancellationToken);
-
-        await resourceEventPublisher.Publish(
-            updated
-                .ToResourceEvent(ResourceEventOperations.Updated)
-                .WithChangeSet(updated.ImportPreNotification, existing.ImportPreNotification),
-            cancellationToken
-        );
-
         await dbContext.CommitTransaction(cancellationToken);
+
+        await resourceEventPublisher.Publish(resourceEvent, cancellationToken);
 
         return updated;
     }

@@ -1,3 +1,5 @@
+using Defra.TradeImportsDataApi.Data.Entities;
+using Defra.TradeImportsDataApi.Domain.Events;
 using Defra.TradeImportsDataApi.Domain.Gvms;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using MongoDB.Bson.Serialization;
@@ -11,6 +13,33 @@ public static class DomainClassMapConfiguration
     {
         RegisterGvms();
         RegisterIpaffs();
+        RegisterResourceEvents();
+    }
+
+    private static void RegisterResourceEvents()
+    {
+        BsonClassMap.RegisterClassMap<ResourceEventEntity>(cm =>
+        {
+            cm.AutoMap();
+            cm.GetMemberMap(c => c.ResourceEvent)
+                .SetSerializer(
+                    new ObjectSerializer(type =>
+                        type.IsGenericType && type.GetGenericTypeDefinition() == typeof(ResourceEvent<>)
+                        || typeof(ResourceEvent<>).IsAssignableFrom(type)
+                    )
+                );
+        });
+
+        BsonClassMap.RegisterClassMap<ResourceEvent<ImportPreNotificationEntity>>(cm =>
+        {
+            cm.AutoMap();
+            cm.SetDiscriminator("ResourceEvent_ImportPreNotification"); // Intentional fixed string
+        });
+        BsonClassMap.RegisterClassMap<ResourceEvent<CustomsDeclarationEntity>>(cm =>
+        {
+            cm.AutoMap();
+            cm.SetDiscriminator("ResourceEvent_CustomsDeclaration"); // Intentional fixed string
+        });
     }
 
     private static void RegisterIpaffs()

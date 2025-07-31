@@ -14,6 +14,7 @@ public class MongoIndexService(IMongoDatabase database, ILogger<MongoIndexServic
         await CreateImportPreNotificationIndexes(cancellationToken);
         await CreateCustomsDeclarationIndexes(cancellationToken);
         await CreateGmrIndexes(cancellationToken);
+        await CreateResourceEventIndexes(cancellationToken);
     }
 
     private async Task CreateGmrIndexes(CancellationToken cancellationToken)
@@ -71,6 +72,15 @@ public class MongoIndexService(IMongoDatabase database, ILogger<MongoIndexServic
                 .Ascending(x => x.Status)
                 .Ascending(x => x.Source!.Updated)
                 .Ascending(x => x.ImportPreNotificationId),
+            cancellationToken: cancellationToken
+        );
+    }
+
+    private async Task CreateResourceEventIndexes(CancellationToken cancellationToken)
+    {
+        await CreateIndex(
+            "ResourceIdIdx",
+            Builders<ResourceEventEntity>.IndexKeys.Ascending(x => x.ResourceId),
             cancellationToken: cancellationToken
         );
     }

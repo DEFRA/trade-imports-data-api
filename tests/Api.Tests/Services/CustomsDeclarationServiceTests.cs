@@ -16,6 +16,7 @@ public class CustomsDeclarationServiceTests
     private IResourceEventPublisher ResourceEventPublisher { get; }
     private ICustomsDeclarationRepository CustomsDeclarationRepository { get; }
     private IImportPreNotificationRepository ImportPreNotificationRepository { get; }
+    private IResourceEventRepository ResourceEventRepository { get; }
     private CustomsDeclarationService Subject { get; }
 
     public CustomsDeclarationServiceTests()
@@ -24,12 +25,14 @@ public class CustomsDeclarationServiceTests
         ResourceEventPublisher = Substitute.For<IResourceEventPublisher>();
         CustomsDeclarationRepository = Substitute.For<ICustomsDeclarationRepository>();
         ImportPreNotificationRepository = Substitute.For<IImportPreNotificationRepository>();
+        ResourceEventRepository = Substitute.For<IResourceEventRepository>();
 
         Subject = new CustomsDeclarationService(
             DbContext,
             ResourceEventPublisher,
             CustomsDeclarationRepository,
-            ImportPreNotificationRepository
+            ImportPreNotificationRepository,
+            ResourceEventRepository
         );
     }
 

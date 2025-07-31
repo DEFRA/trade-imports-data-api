@@ -11,7 +11,8 @@ public class CustomsDeclarationService(
     IDbContext dbContext,
     IResourceEventPublisher resourceEventPublisher,
     ICustomsDeclarationRepository customsDeclarationRepository,
-    IImportPreNotificationRepository importPreNotificationRepository
+    IImportPreNotificationRepository importPreNotificationRepository,
+    IResourceEventRepository resourceEventRepository
 ) : ICustomsDeclarationService
 {
     public async Task<CustomsDeclarationEntity?> GetCustomsDeclaration(
@@ -30,25 +31,25 @@ public class CustomsDeclarationService(
 
         await TrackImportPreNotificationUpdate(inserted, cancellationToken);
 
+        var resourceEvent = inserted
+            .ToResourceEvent(ResourceEventOperations.Created)
+            .WithChangeSet(
+                new CustomsDeclaration
+                {
+                    ClearanceRequest = inserted.ClearanceRequest,
+                    ClearanceDecision = inserted.ClearanceDecision,
+                    Finalisation = inserted.Finalisation,
+                    ExternalErrors = inserted.ExternalErrors,
+                },
+                new CustomsDeclaration()
+            );
+
+        resourceEventRepository.Insert(resourceEvent);
+
         await dbContext.SaveChanges(cancellationToken);
-
-        await resourceEventPublisher.Publish(
-            inserted
-                .ToResourceEvent(ResourceEventOperations.Created)
-                .WithChangeSet(
-                    new CustomsDeclaration
-                    {
-                        ClearanceRequest = inserted.ClearanceRequest,
-                        ClearanceDecision = inserted.ClearanceDecision,
-                        Finalisation = inserted.Finalisation,
-                        ExternalErrors = inserted.ExternalErrors,
-                    },
-                    new CustomsDeclaration()
-                ),
-            cancellationToken
-        );
-
         await dbContext.CommitTransaction(cancellationToken);
+
+        await resourceEventPublisher.Publish(resourceEvent, cancellationToken);
 
         return inserted;
     }
@@ -75,31 +76,31 @@ public class CustomsDeclarationService(
 
         await TrackImportPreNotificationUpdate(updated, cancellationToken);
 
+        var resourceEvent = updated
+            .ToResourceEvent(ResourceEventOperations.Updated)
+            .WithChangeSet(
+                new CustomsDeclaration
+                {
+                    ClearanceRequest = updated.ClearanceRequest,
+                    ClearanceDecision = updated.ClearanceDecision,
+                    Finalisation = updated.Finalisation,
+                    ExternalErrors = updated.ExternalErrors,
+                },
+                new CustomsDeclaration
+                {
+                    ClearanceRequest = existing.ClearanceRequest,
+                    ClearanceDecision = existing.ClearanceDecision,
+                    Finalisation = existing.Finalisation,
+                    ExternalErrors = existing.ExternalErrors,
+                }
+            );
+
+        resourceEventRepository.Insert(resourceEvent);
+
         await dbContext.SaveChanges(cancellationToken);
-
-        await resourceEventPublisher.Publish(
-            updated
-                .ToResourceEvent(ResourceEventOperations.Updated)
-                .WithChangeSet(
-                    new CustomsDeclaration
-                    {
-                        ClearanceRequest = updated.ClearanceRequest,
-                        ClearanceDecision = updated.ClearanceDecision,
-                        Finalisation = updated.Finalisation,
-                        ExternalErrors = updated.ExternalErrors,
-                    },
-                    new CustomsDeclaration
-                    {
-                        ClearanceRequest = existing.ClearanceRequest,
-                        ClearanceDecision = existing.ClearanceDecision,
-                        Finalisation = existing.Finalisation,
-                        ExternalErrors = existing.ExternalErrors,
-                    }
-                ),
-            cancellationToken
-        );
-
         await dbContext.CommitTransaction(cancellationToken);
+
+        await resourceEventPublisher.Publish(resourceEvent, cancellationToken);
 
         return updated;
     }

@@ -9,6 +9,7 @@ using Defra.TradeImportsDataApi.Api.Endpoints.Gmrs;
 using Defra.TradeImportsDataApi.Api.Endpoints.ImportPreNotifications;
 using Defra.TradeImportsDataApi.Api.Endpoints.ProcessingErrors;
 using Defra.TradeImportsDataApi.Api.Endpoints.RelatedImportDeclarations;
+using Defra.TradeImportsDataApi.Api.Endpoints.ResourceEvents;
 using Defra.TradeImportsDataApi.Api.Health;
 using Defra.TradeImportsDataApi.Api.Metrics;
 using Defra.TradeImportsDataApi.Api.OpenApi;
@@ -115,6 +116,7 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
     builder.Services.AddTransient<ICustomsDeclarationRepository, CustomsDeclarationRepository>();
     builder.Services.AddTransient<IGmrRepository, GmrRepository>();
     builder.Services.AddTransient<IProcessingErrorRepository, ProcessingErrorRepository>();
+    builder.Services.AddTransient<IResourceEventRepository, ResourceEventRepository>();
 
     builder.Services.AddAuthenticationAuthorization();
 
@@ -140,6 +142,7 @@ static WebApplication BuildWebApplication(WebApplicationBuilder builder, bool ge
     app.MapProcessingErrorEndpoints();
     app.MapSearchEndpoints();
     app.MapAdminEndpoints();
+    app.MapResourceEventEndpoints();
     app.UseOpenApi();
     app.UseStatusCodePages();
     app.UseExceptionHandler(
