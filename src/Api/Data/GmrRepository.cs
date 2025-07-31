@@ -25,9 +25,9 @@ public class GmrRepository(IDbContext dbContext) : IGmrRepository
         );
     }
 
-    public GmrEntity Insert(GmrEntity entity)
+    public async Task<GmrEntity> Insert(GmrEntity entity, CancellationToken cancellationToken)
     {
-        dbContext.Gmrs.Insert(entity);
+        await dbContext.Gmrs.Insert(entity, cancellationToken);
 
         return entity;
     }
@@ -46,7 +46,7 @@ public class GmrRepository(IDbContext dbContext) : IGmrRepository
 
         entity.Created = existing.Created;
 
-        dbContext.Gmrs.Update(entity, etag);
+        await dbContext.Gmrs.Update(entity, etag, cancellationToken);
 
         return (existing, entity);
     }

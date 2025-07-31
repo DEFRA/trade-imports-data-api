@@ -14,9 +14,9 @@ public class ProcessingErrorRepository(IDbContext dbContext) : IProcessingErrorR
         return await dbContext.ProcessingErrors.Find(id, cancellationToken);
     }
 
-    public ProcessingErrorEntity Insert(ProcessingErrorEntity entity)
+    public async Task<ProcessingErrorEntity> Insert(ProcessingErrorEntity entity, CancellationToken cancellationToken)
     {
-        dbContext.ProcessingErrors.Insert(entity);
+        await dbContext.ProcessingErrors.Insert(entity, cancellationToken);
 
         return entity;
     }
@@ -35,7 +35,7 @@ public class ProcessingErrorRepository(IDbContext dbContext) : IProcessingErrorR
 
         entity.Created = existing.Created;
 
-        dbContext.ProcessingErrors.Update(entity, etag);
+        await dbContext.ProcessingErrors.Update(entity, etag, cancellationToken);
 
         return (existing, entity);
     }

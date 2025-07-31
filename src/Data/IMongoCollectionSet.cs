@@ -9,13 +9,21 @@ public interface IMongoCollectionSet<T> : IQueryable<T>
 {
     IMongoCollection<T> Collection { get; }
 
-    Task<T?> Find(string id, CancellationToken cancellationToken);
+    int PendingChanges { get; }
 
-    Task<List<T>> FindMany(Expression<Func<T, bool>> query, CancellationToken cancellationToken);
+    Task<T?> Find(string id, CancellationToken cancellationToken = default);
 
-    void Insert(T item);
+    Task<T?> Find(Expression<Func<T, bool>> query, CancellationToken cancellationToken = default);
 
-    void Update(T item, string etag);
+    Task<List<T>> FindMany(Expression<Func<T, bool>> query, CancellationToken cancellationToken = default);
 
-    Task Save(CancellationToken cancellationToken);
+    Task Insert(T item, CancellationToken cancellationToken = default);
+
+    Task Update(T item, CancellationToken cancellationToken = default);
+
+    Task Update(List<T> items, CancellationToken cancellationToken = default);
+
+    Task Update(T item, string etag, CancellationToken cancellationToken = default);
+
+    Task PersistAsync(CancellationToken cancellationToken);
 }
