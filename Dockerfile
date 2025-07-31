@@ -69,7 +69,11 @@ RUN lsof openapi.json 2>/dev/null || echo "No file locks found"
 RUN echo "=== File content check ==="
 RUN timeout 10s head -n 5 openapi.json || echo "Cannot read file or timeout"
 RUN echo "=== End diagnostics ==="
-RUN cat openapi.json
+RUN ls -lh openapi.json
+RUN echo "OpenAPI file generated successfully ($(wc -l < openapi.json) lines, $(wc -c < openapi.json) bytes)"
+RUN head -n 10 openapi.json
+RUN echo "... (file truncated for display) ..."
+RUN tail -n 10 openapi.json
 RUN vacuum lint -d -r .vacuum.yml openapi.json
 
 RUN dotnet test --no-restore --filter "Category!=IntegrationTest"
