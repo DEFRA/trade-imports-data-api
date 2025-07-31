@@ -60,6 +60,7 @@ RUN dotnet build src/Api/Api.csproj --no-restore -c Release
 
 COPY src/Api/appsettings.json .
 RUN dotnet swagger tofile --output openapi.json ./src/Api/bin/Release/net9.0/Defra.TradeImportsDataApi.Api.dll v1
+RUN cat openapi.json
 RUN vacuum lint -d -r .vacuum.yml openapi.json
 
 RUN dotnet test --no-restore --filter "Category!=IntegrationTest"
