@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Data.Extensions;
@@ -17,10 +18,17 @@ public class ResourceEventRepository(IDbContext dbContext) : IResourceEventRepos
             Id = ObjectId.GenerateNewId().ToString(),
             ResourceId = @event.ResourceId,
             ResourceType = @event.ResourceType,
-            ResourceEvent = @event,
+            Message = JsonSerializer.Serialize(@event),
         };
 
         dbContext.ResourceEvents.Insert(entity);
+
+        return entity;
+    }
+
+    public ResourceEventEntity Update(ResourceEventEntity entity)
+    {
+        dbContext.ResourceEvents.Update(entity, entity.ETag);
 
         return entity;
     }

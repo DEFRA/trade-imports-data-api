@@ -15,6 +15,8 @@ public class ProcessingErrorService(
     public async Task<ProcessingErrorEntity?> GetProcessingError(string mrn, CancellationToken cancellationToken) =>
         await processingErrorRepository.Get(mrn, cancellationToken);
 
+    // Service still needs to be updated inline with others
+
     public async Task<ProcessingErrorEntity> Insert(ProcessingErrorEntity entity, CancellationToken cancellationToken)
     {
         await dbContext.StartTransaction(cancellationToken);

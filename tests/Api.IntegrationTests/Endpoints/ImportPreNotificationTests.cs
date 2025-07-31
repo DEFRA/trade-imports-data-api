@@ -1,3 +1,4 @@
+using System.Net.Http.Json;
 using System.Text.Json;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
@@ -18,6 +19,7 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
         var body = ImportPreNotificationFixtures.CreateFromSample(GetType(), "ImportPreNotificationTests_Sample.json");
         var chedRef = ImportPreNotificationIdGenerator.Generate();
         var client = CreateDataApiClient();
+        var httpClient = CreateHttpClient();
 
         var result = await client.GetImportPreNotification(chedRef, CancellationToken.None);
         result.Should().BeNull();
@@ -26,6 +28,15 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
 
         result = await client.GetImportPreNotification(chedRef, CancellationToken.None);
         result.Should().NotBeNull();
+
+        var allResourceEvents = await httpClient.GetFromJsonAsyncSafe<object[]>(
+            Testing.Endpoints.ResourceEvents.GetAll(chedRef)
+        );
+        allResourceEvents.Length.Should().Be(1);
+        var unpublishedResourceEvents = await httpClient.GetFromJsonAsyncSafe<object[]>(
+            Testing.Endpoints.ResourceEvents.Unpublished(chedRef)
+        );
+        unpublishedResourceEvents.Length.Should().Be(0);
     }
 
     [Fact]
@@ -233,6 +244,7 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
     public async Task WhenCreating_ThenUpdating_ShouldEmitResourceEvents()
     {
         var client = CreateDataApiClient();
+        var httpClient = CreateHttpClient();
         var chedRef = ImportPreNotificationIdGenerator.Generate();
 
         await DrainAllMessages();
@@ -279,6 +291,25 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
                     resourceEvent.Resource.Id.Should().Be(chedRef);
                     resourceEvent.Resource.ETag.Should().Be(etag);
                     resourceEvent.ETag.Should().Be(etag);
+
+                    var response = await httpClient.GetAsync(Testing.Endpoints.ResourceEvents.GetAll(chedRef));
+                    var content = await response.Content.ReadAsStringAsync();
+
+                    await VerifyJson(content)
+                        .ScrubMember("id")
+                        .ScrubMember("resourceId")
+                        .ScrubMember("etag")
+                        .ScrubMember("message")
+                        .UseStrictJson()
+                        .UseMethodName(
+                            $"{nameof(WhenCreating_ThenUpdating_ShouldEmitResourceEvents)}_Created_ResourceEvents"
+                        );
+
+                    var resourceEventEntities = JsonSerializer.Deserialize<ResourceEventEntity[]>(content);
+                    resourceEventEntities.Should().NotBeNull();
+                    resourceEventEntities.Length.Should().Be(1);
+
+                    message.Body.Should().Be(resourceEventEntities[0].Message);
                 }
 
                 return expectedMessageCount;
@@ -327,6 +358,25 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
                     resourceEvent.Resource.Id.Should().Be(chedRef);
                     resourceEvent.Resource.ETag.Should().Be(etag);
                     resourceEvent.ETag.Should().Be(etag);
+
+                    var response = await httpClient.GetAsync(Testing.Endpoints.ResourceEvents.GetAll(chedRef));
+                    var content = await response.Content.ReadAsStringAsync();
+
+                    await VerifyJson(content)
+                        .ScrubMember("id")
+                        .ScrubMember("resourceId")
+                        .ScrubMember("etag")
+                        .ScrubMember("message")
+                        .UseStrictJson()
+                        .UseMethodName(
+                            $"{nameof(WhenCreating_ThenUpdating_ShouldEmitResourceEvents)}_Updated_ResourceEvents"
+                        );
+
+                    var resourceEventEntities = JsonSerializer.Deserialize<ResourceEventEntity[]>(content);
+                    resourceEventEntities.Should().NotBeNull();
+                    resourceEventEntities.Length.Should().Be(2);
+
+                    message.Body.Should().Be(resourceEventEntities[1].Message);
                 }
 
                 return expectedMessageCount;

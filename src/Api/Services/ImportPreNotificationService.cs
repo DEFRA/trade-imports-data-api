@@ -11,7 +11,8 @@ public class ImportPreNotificationService(
     IResourceEventPublisher resourceEventPublisher,
     IImportPreNotificationRepository importPreNotificationRepository,
     ICustomsDeclarationRepository customsDeclarationRepository,
-    IResourceEventRepository resourceEventRepository
+    IResourceEventRepository resourceEventRepository,
+    ILogger<ImportPreNotificationService> logger
 ) : IImportPreNotificationService
 {
     public async Task<ImportPreNotificationEntity?> GetImportPreNotification(
@@ -47,12 +48,12 @@ public class ImportPreNotificationService(
             .ToResourceEvent(ResourceEventOperations.Created)
             .WithChangeSet(inserted.ImportPreNotification, new ImportPreNotification());
 
-        resourceEventRepository.Insert(resourceEvent);
+        var resourceEventEntity = resourceEventRepository.Insert(resourceEvent);
 
         await dbContext.SaveChanges(cancellationToken);
         await dbContext.CommitTransaction(cancellationToken);
 
-        await resourceEventPublisher.Publish(resourceEvent, cancellationToken);
+        await PublishResourceEvent(resourceEvent, resourceEventEntity, cancellationToken);
 
         return inserted;
     }
@@ -73,12 +74,12 @@ public class ImportPreNotificationService(
             .ToResourceEvent(ResourceEventOperations.Updated)
             .WithChangeSet(updated.ImportPreNotification, existing.ImportPreNotification);
 
-        resourceEventRepository.Insert(resourceEvent);
+        var resourceEventEntity = resourceEventRepository.Insert(resourceEvent);
 
         await dbContext.SaveChanges(cancellationToken);
         await dbContext.CommitTransaction(cancellationToken);
 
-        await resourceEventPublisher.Publish(resourceEvent, cancellationToken);
+        await PublishResourceEvent(resourceEvent, resourceEventEntity, cancellationToken);
 
         return updated;
     }
@@ -87,4 +88,35 @@ public class ImportPreNotificationService(
         ImportPreNotificationUpdateQuery query,
         CancellationToken cancellationToken
     ) => await importPreNotificationRepository.GetUpdates(query, cancellationToken);
+
+    private async Task PublishResourceEvent(
+        ResourceEvent<ImportPreNotificationEntity> resourceEvent,
+        ResourceEventEntity resourceEventEntity,
+        CancellationToken cancellationToken
+    )
+    {
+        try
+        {
+            await dbContext.StartTransaction(cancellationToken);
+
+            await resourceEventPublisher.Publish(resourceEvent, cancellationToken);
+
+            resourceEventEntity.Published = DateTime.UtcNow;
+
+            resourceEventRepository.Update(resourceEventEntity);
+
+            await dbContext.SaveChanges(cancellationToken);
+            await dbContext.CommitTransaction(cancellationToken);
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception exception)
+        {
+            logger.LogError(exception, "Failed to publish resource event");
+
+            // Intentionally swallowed
+        }
+    }
 }

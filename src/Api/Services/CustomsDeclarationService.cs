@@ -12,7 +12,8 @@ public class CustomsDeclarationService(
     IResourceEventPublisher resourceEventPublisher,
     ICustomsDeclarationRepository customsDeclarationRepository,
     IImportPreNotificationRepository importPreNotificationRepository,
-    IResourceEventRepository resourceEventRepository
+    IResourceEventRepository resourceEventRepository,
+    ILogger<CustomsDeclarationService> logger
 ) : ICustomsDeclarationService
 {
     public async Task<CustomsDeclarationEntity?> GetCustomsDeclaration(
@@ -44,12 +45,12 @@ public class CustomsDeclarationService(
                 new CustomsDeclaration()
             );
 
-        resourceEventRepository.Insert(resourceEvent);
+        var resourceEventEntity = resourceEventRepository.Insert(resourceEvent);
 
         await dbContext.SaveChanges(cancellationToken);
         await dbContext.CommitTransaction(cancellationToken);
 
-        await resourceEventPublisher.Publish(resourceEvent, cancellationToken);
+        await PublishResourceEvent(resourceEvent, resourceEventEntity, cancellationToken);
 
         return inserted;
     }
@@ -95,14 +96,45 @@ public class CustomsDeclarationService(
                 }
             );
 
-        resourceEventRepository.Insert(resourceEvent);
+        var resourceEventEntity = resourceEventRepository.Insert(resourceEvent);
 
         await dbContext.SaveChanges(cancellationToken);
         await dbContext.CommitTransaction(cancellationToken);
 
-        await resourceEventPublisher.Publish(resourceEvent, cancellationToken);
+        await PublishResourceEvent(resourceEvent, resourceEventEntity, cancellationToken);
 
         return updated;
+    }
+
+    private async Task PublishResourceEvent(
+        ResourceEvent<CustomsDeclarationEntity> resourceEvent,
+        ResourceEventEntity resourceEventEntity,
+        CancellationToken cancellationToken
+    )
+    {
+        try
+        {
+            await dbContext.StartTransaction(cancellationToken);
+
+            await resourceEventPublisher.Publish(resourceEvent, cancellationToken);
+
+            resourceEventEntity.Published = DateTime.UtcNow;
+
+            resourceEventRepository.Update(resourceEventEntity);
+
+            await dbContext.SaveChanges(cancellationToken);
+            await dbContext.CommitTransaction(cancellationToken);
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception exception)
+        {
+            logger.LogError(exception, "Failed to publish resource event");
+
+            // Intentionally swallowed
+        }
     }
 
     private async Task TrackImportPreNotificationUpdate(

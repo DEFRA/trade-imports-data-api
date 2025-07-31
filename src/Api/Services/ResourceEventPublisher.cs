@@ -77,6 +77,8 @@ public class ResourceEventPublisher(
 
     private static (string message, bool compressed) SerializeEvent<T>(ResourceEvent<T> @event)
     {
+        // Serialisation will have already happened, don't need it again
+
         var message = JsonSerializer.Serialize(@event);
         if (message.Length <= CompressionThreshold)
             return (message, false);
