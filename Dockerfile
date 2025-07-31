@@ -74,6 +74,7 @@ RUN echo "OpenAPI file generated successfully ($(wc -l < openapi.json) lines, $(
 RUN head -n 10 openapi.json
 RUN echo "... (file truncated for display) ..."
 RUN tail -n 10 openapi.json
+RUN timeout 10s cat openapi.json || echo "cat timed out"
 RUN vacuum lint -d -r .vacuum.yml openapi.json
 
 RUN dotnet test --no-restore --filter "Category!=IntegrationTest"
