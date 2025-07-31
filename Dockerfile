@@ -60,7 +60,15 @@ RUN dotnet build src/Api/Api.csproj --no-restore -c Release
 
 COPY src/Api/appsettings.json .
 RUN dotnet swagger tofile --output openapi.json ./src/Api/bin/Release/net9.0/Defra.TradeImportsDataApi.Api.dll v1
-RUN cat openapi.json
+RUN echo "=== File system check ==="
+RUN ls -la openapi.json || echo "File does not exist"
+RUN echo "=== Process check ==="
+RUN ps aux | grep -v grep | grep -E "(dotnet|swagger)" || echo "No relevant processes"
+RUN echo "=== File lock check ==="
+RUN lsof openapi.json 2>/dev/null || echo "No file locks found"
+RUN echo "=== File content check ==="
+RUN timeout 10s head -n 5 openapi.json || echo "Cannot read file or timeout"
+RUN echo "=== End diagnostics ==="
 RUN vacuum lint -d -r .vacuum.yml openapi.json
 
 RUN dotnet test --no-restore --filter "Category!=IntegrationTest"
