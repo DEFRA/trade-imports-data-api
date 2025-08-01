@@ -15,7 +15,7 @@ public class SqsTestBase(ITestOutputHelper testOutputHelper) : IntegrationTestBa
         new AmazonSQSConfig { AuthenticationRegion = "eu-west-2", ServiceURL = "http://localhost:4566" }
     );
 
-    private Task<ReceiveMessageResponse> ReceiveMessage()
+    protected Task<ReceiveMessageResponse> ReceiveMessage()
     {
         return _sqsClient.ReceiveMessageAsync(
             new ReceiveMessageRequest

@@ -1,0 +1,56 @@
+﻿{
+  "resourceId": "{Scrubbed}",
+  "resourceType": "ImportPreNotification",
+  "subResourceType": null,
+  "operation": "Updated",
+  "resource": {
+    "Id": "{Scrubbed}",
+    "CustomsDeclarationIdentifier": "{Scrubbed}",
+    "ETag": "{Scrubbed}",
+    "Created": "DateTimeOffset_1",
+    "Updated": "DateTimeOffset_2",
+    "ImportPreNotification": {
+      "ipaffsId": null,
+      "etag": "{Scrubbed}",
+      "externalReferences": null,
+      "referenceNumber": "{Scrubbed}",
+      "version": 2,
+      "updatedSource": null,
+      "lastUpdatedBy": null,
+      "importNotificationType": null,
+      "replaces": null,
+      "replacedBy": null,
+      "status": null,
+      "splitConsignment": null,
+      "childNotification": null,
+      "riskAssessment": null,
+      "journeyRiskCategorisation": null,
+      "isHighRiskEuImport": null,
+      "partOne": null,
+      "decisionBy": null,
+      "decisionDate": null,
+      "partTwo": null,
+      "partThree": null,
+      "officialVeterinarian": null,
+      "consignmentValidations": null,
+      "agencyOrganisationId": null,
+      "riskDecisionLockedOn": null,
+      "isRiskDecisionLocked": null,
+      "isAutoClearanceExempted": null,
+      "isBulkUploadInProgress": null,
+      "requestId": null,
+      "isCdsFullMatched": null,
+      "chedTypeVersion": null,
+      "isGMRMatched": null
+    }
+  },
+  "etag": "{Scrubbed}",
+  "timestamp": "DateTimeOffset_3",
+  "changeSet": [
+    {
+      "path": "/version",
+      "operation": "Replace",
+      "value": "2"
+    }
+  ]
+}
