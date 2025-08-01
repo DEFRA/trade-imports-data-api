@@ -66,6 +66,7 @@ public static class Endpoints
 
         public static string Unpublished(string resourceId) => $"{Root}/{resourceId}/unpublished";
 
-        public static string Publish(string resourceId) => $"{Root}/{resourceId}/publish";
+        public static string Publish(string resourceId, string resourceEventId) =>
+            $"{Root}/{resourceId}/publish?resourceEventId={resourceEventId}";
     }
 }
