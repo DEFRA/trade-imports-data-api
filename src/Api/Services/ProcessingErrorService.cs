@@ -1,17 +1,15 @@
 using Defra.TradeImportsDataApi.Api.Data;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
-using Defra.TradeImportsDataApi.Domain.Errors;
 using Defra.TradeImportsDataApi.Domain.Events;
 
 namespace Defra.TradeImportsDataApi.Api.Services;
 
 public class ProcessingErrorService(
     IDbContext dbContext,
-    IResourceEventPublisher resourceEventPublisher,
     IProcessingErrorRepository processingErrorRepository,
     IResourceEventRepository resourceEventRepository,
-    ILogger<ProcessingErrorService> logger
+    IResourceEventService resourceEventService
 ) : IProcessingErrorService
 {
     public async Task<ProcessingErrorEntity?> GetProcessingError(string mrn, CancellationToken cancellationToken) =>
@@ -32,7 +30,7 @@ public class ProcessingErrorService(
         await dbContext.SaveChanges(cancellationToken);
         await dbContext.CommitTransaction(cancellationToken);
 
-        await PublishResourceEvent(resourceEvent, resourceEventEntity, cancellationToken);
+        await resourceEventService.Publish(resourceEventEntity, cancellationToken);
 
         return inserted;
     }
@@ -56,39 +54,8 @@ public class ProcessingErrorService(
         await dbContext.SaveChanges(cancellationToken);
         await dbContext.CommitTransaction(cancellationToken);
 
-        await PublishResourceEvent(resourceEvent, resourceEventEntity, cancellationToken);
+        await resourceEventService.Publish(resourceEventEntity, cancellationToken);
 
         return updated;
-    }
-
-    private async Task PublishResourceEvent(
-        ResourceEvent<ProcessingErrorEntity> resourceEvent,
-        ResourceEventEntity resourceEventEntity,
-        CancellationToken cancellationToken
-    )
-    {
-        try
-        {
-            await dbContext.StartTransaction(cancellationToken);
-
-            await resourceEventPublisher.Publish(resourceEvent, cancellationToken);
-
-            resourceEventEntity.Published = DateTime.UtcNow;
-
-            resourceEventRepository.Update(resourceEventEntity);
-
-            await dbContext.SaveChanges(cancellationToken);
-            await dbContext.CommitTransaction(cancellationToken);
-        }
-        catch (OperationCanceledException)
-        {
-            throw;
-        }
-        catch (Exception exception)
-        {
-            logger.LogError(exception, "Failed to publish resource event");
-
-            // Intentionally swallowed
-        }
     }
 }

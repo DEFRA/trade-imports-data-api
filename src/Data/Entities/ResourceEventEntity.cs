@@ -29,6 +29,9 @@ public class ResourceEventEntity : IDataEntity
     [JsonPropertyName("subResourceType")]
     public string? SubResourceType { get; set; }
 
+    [JsonPropertyName("operation")]
+    public required string Operation { get; set; }
+
     [JsonPropertyName("message")]
     public required string Message { get; set; }
 

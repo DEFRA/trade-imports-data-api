@@ -1,5 +1,4 @@
 using System.Diagnostics.Metrics;
-using Amazon.Runtime;
 using Defra.TradeImportsDataApi.Api.Metrics;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;

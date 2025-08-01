@@ -8,11 +8,10 @@ namespace Defra.TradeImportsDataApi.Api.Services;
 
 public class ImportPreNotificationService(
     IDbContext dbContext,
-    IResourceEventPublisher resourceEventPublisher,
     IImportPreNotificationRepository importPreNotificationRepository,
     ICustomsDeclarationRepository customsDeclarationRepository,
     IResourceEventRepository resourceEventRepository,
-    ILogger<ImportPreNotificationService> logger
+    IResourceEventService resourceEventService
 ) : IImportPreNotificationService
 {
     public async Task<ImportPreNotificationEntity?> GetImportPreNotification(
@@ -53,7 +52,7 @@ public class ImportPreNotificationService(
         await dbContext.SaveChanges(cancellationToken);
         await dbContext.CommitTransaction(cancellationToken);
 
-        await PublishResourceEvent(resourceEvent, resourceEventEntity, cancellationToken);
+        await resourceEventService.Publish(resourceEventEntity, cancellationToken);
 
         return inserted;
     }
@@ -79,7 +78,7 @@ public class ImportPreNotificationService(
         await dbContext.SaveChanges(cancellationToken);
         await dbContext.CommitTransaction(cancellationToken);
 
-        await PublishResourceEvent(resourceEvent, resourceEventEntity, cancellationToken);
+        await resourceEventService.Publish(resourceEventEntity, cancellationToken);
 
         return updated;
     }
@@ -88,35 +87,4 @@ public class ImportPreNotificationService(
         ImportPreNotificationUpdateQuery query,
         CancellationToken cancellationToken
     ) => await importPreNotificationRepository.GetUpdates(query, cancellationToken);
-
-    private async Task PublishResourceEvent(
-        ResourceEvent<ImportPreNotificationEntity> resourceEvent,
-        ResourceEventEntity resourceEventEntity,
-        CancellationToken cancellationToken
-    )
-    {
-        try
-        {
-            await dbContext.StartTransaction(cancellationToken);
-
-            await resourceEventPublisher.Publish(resourceEvent, cancellationToken);
-
-            resourceEventEntity.Published = DateTime.UtcNow;
-
-            resourceEventRepository.Update(resourceEventEntity);
-
-            await dbContext.SaveChanges(cancellationToken);
-            await dbContext.CommitTransaction(cancellationToken);
-        }
-        catch (OperationCanceledException)
-        {
-            throw;
-        }
-        catch (Exception exception)
-        {
-            logger.LogError(exception, "Failed to publish resource event");
-
-            // Intentionally swallowed
-        }
-    }
 }

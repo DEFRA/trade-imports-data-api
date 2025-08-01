@@ -19,6 +19,7 @@ public class ResourceEventRepository(IDbContext dbContext) : IResourceEventRepos
             ResourceId = @event.ResourceId,
             ResourceType = @event.ResourceType,
             SubResourceType = @event.SubResourceType,
+            Operation = @event.Operation,
             Message = JsonSerializer.Serialize(@event),
             ExpiresAt = DateTime.UtcNow.Add(s_defaultTtl), // See index for where TTL if enforced
         };

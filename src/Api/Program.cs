@@ -108,6 +108,7 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
     builder.Services.AddTransient<IProcessingErrorService, ProcessingErrorService>();
     builder.Services.AddOptions<ResourceEventOptions>().BindConfiguration("ResourceEvents").ValidateOptions();
     builder.Services.AddSingleton<IResourceEventPublisher, ResourceEventPublisher>();
+    builder.Services.AddTransient<IResourceEventService, ResourceEventService>();
     builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
     builder.Services.AddAWSService<IAmazonSimpleNotificationService>();
 

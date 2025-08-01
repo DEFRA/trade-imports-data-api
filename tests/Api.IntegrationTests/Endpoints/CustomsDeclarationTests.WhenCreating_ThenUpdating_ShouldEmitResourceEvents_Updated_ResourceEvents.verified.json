@@ -7,6 +7,7 @@
     "resourceId": "{Scrubbed}",
     "resourceType": "CustomsDeclaration",
     "subResourceType": "ClearanceRequest",
+    "operation": "Created",
     "message": "{Scrubbed}",
     "published": "DateTimeOffset_2",
     "expiresAt": "DateTimeOffset_3"
@@ -19,6 +20,7 @@
     "resourceId": "{Scrubbed}",
     "resourceType": "CustomsDeclaration",
     "subResourceType": "ClearanceDecision",
+    "operation": "Updated",
     "message": "{Scrubbed}",
     "published": "DateTimeOffset_5",
     "expiresAt": "DateTimeOffset_6"

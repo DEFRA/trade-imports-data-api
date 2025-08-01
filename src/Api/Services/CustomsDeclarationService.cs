@@ -9,11 +9,10 @@ namespace Defra.TradeImportsDataApi.Api.Services;
 
 public class CustomsDeclarationService(
     IDbContext dbContext,
-    IResourceEventPublisher resourceEventPublisher,
     ICustomsDeclarationRepository customsDeclarationRepository,
     IImportPreNotificationRepository importPreNotificationRepository,
     IResourceEventRepository resourceEventRepository,
-    ILogger<CustomsDeclarationService> logger
+    IResourceEventService resourceEventService
 ) : ICustomsDeclarationService
 {
     public async Task<CustomsDeclarationEntity?> GetCustomsDeclaration(
@@ -50,7 +49,7 @@ public class CustomsDeclarationService(
         await dbContext.SaveChanges(cancellationToken);
         await dbContext.CommitTransaction(cancellationToken);
 
-        await PublishResourceEvent(resourceEvent, resourceEventEntity, cancellationToken);
+        await resourceEventService.Publish(resourceEventEntity, cancellationToken);
 
         return inserted;
     }
@@ -101,40 +100,9 @@ public class CustomsDeclarationService(
         await dbContext.SaveChanges(cancellationToken);
         await dbContext.CommitTransaction(cancellationToken);
 
-        await PublishResourceEvent(resourceEvent, resourceEventEntity, cancellationToken);
+        await resourceEventService.Publish(resourceEventEntity, cancellationToken);
 
         return updated;
-    }
-
-    private async Task PublishResourceEvent(
-        ResourceEvent<CustomsDeclarationEntity> resourceEvent,
-        ResourceEventEntity resourceEventEntity,
-        CancellationToken cancellationToken
-    )
-    {
-        try
-        {
-            await dbContext.StartTransaction(cancellationToken);
-
-            await resourceEventPublisher.Publish(resourceEvent, cancellationToken);
-
-            resourceEventEntity.Published = DateTime.UtcNow;
-
-            resourceEventRepository.Update(resourceEventEntity);
-
-            await dbContext.SaveChanges(cancellationToken);
-            await dbContext.CommitTransaction(cancellationToken);
-        }
-        catch (OperationCanceledException)
-        {
-            throw;
-        }
-        catch (Exception exception)
-        {
-            logger.LogError(exception, "Failed to publish resource event");
-
-            // Intentionally swallowed
-        }
     }
 
     private async Task TrackImportPreNotificationUpdate(
