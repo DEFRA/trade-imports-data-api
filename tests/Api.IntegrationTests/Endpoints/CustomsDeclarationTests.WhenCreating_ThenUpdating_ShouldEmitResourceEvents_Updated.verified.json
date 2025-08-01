@@ -1,0 +1,47 @@
+﻿{
+  "resourceId": "{Scrubbed}",
+  "resourceType": "CustomsDeclaration",
+  "subResourceType": "ClearanceDecision",
+  "operation": "Updated",
+  "resource": {
+    "Id": "{Scrubbed}",
+    "ETag": "{Scrubbed}",
+    "Created": "DateTimeOffset_1",
+    "Updated": "DateTimeOffset_2",
+    "ClearanceRequest": {
+      "externalCorrelationId": null,
+      "messageSentAt": "Date_MinValue",
+      "externalVersion": null,
+      "previousExternalVersion": null,
+      "declarationUcr": null,
+      "declarationPartNumber": null,
+      "declarationType": null,
+      "arrivesAt": null,
+      "submitterTurn": null,
+      "declarantId": null,
+      "declarantName": null,
+      "dispatchCountryCode": null,
+      "goodsLocationCode": null,
+      "masterUcr": null,
+      "commodities": null
+    },
+    "ClearanceDecision": {
+      "correlationId": null,
+      "created": "Date_MinValue",
+      "externalVersionNumber": null,
+      "decisionNumber": null,
+      "sourceVersion": null
+    },
+    "Finalisation": null,
+    "ExternalErrors": null
+  },
+  "etag": "{Scrubbed}",
+  "timestamp": "DateTimeOffset_3",
+  "changeSet": [
+    {
+      "path": "/ClearanceDecision",
+      "operation": "Replace",
+      "value": "{\n  \"correlationId\": null,\n  \"created\": \"0001-01-01T00:00:00\",\n  \"externalVersionNumber\": null,\n  \"decisionNumber\": null,\n  \"sourceVersion\": null,\n  \"items\": [],\n  \"results\": []\n}"
+    }
+  ]
+}

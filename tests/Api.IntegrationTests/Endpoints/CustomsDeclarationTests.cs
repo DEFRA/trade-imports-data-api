@@ -1,4 +1,7 @@
+using System.Text.Json;
+using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
+using Defra.TradeImportsDataApi.Domain.Events;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using Defra.TradeImportsDataApi.Testing;
 using FluentAssertions;
@@ -110,10 +113,11 @@ public class CustomsDeclarationTests(ITestOutputHelper testOutputHelper) : SqsTe
     }
 
     [Fact]
-    public async Task WhenCreating_ShouldEmitCreatedMessage()
+    public async Task WhenCreating_ThenUpdating_ShouldEmitResourceEvents()
     {
         var client = CreateDataApiClient();
         var mrn = Guid.NewGuid().ToString("N");
+
         await DrainAllMessages();
 
         await client.PutCustomsDeclaration(
@@ -123,8 +127,93 @@ public class CustomsDeclarationTests(ITestOutputHelper testOutputHelper) : SqsTe
             CancellationToken.None
         );
 
+        var customsDeclaration = await client.GetCustomsDeclaration(mrn, CancellationToken.None);
+        customsDeclaration.Should().NotBeNull();
+        var etag = customsDeclaration.ETag?.Replace("\"", "") ?? throw new InvalidOperationException("No etag");
+
         Assert.True(
-            await AsyncWaiter.WaitForAsync(async () => (await GetQueueAttributes()).ApproximateNumberOfMessages == 1)
+            await AsyncWaiter.WaitForAsync(async () =>
+            {
+                var expectedMessageCount = (await GetQueueAttributes()).ApproximateNumberOfMessages == 1;
+
+                if (expectedMessageCount)
+                {
+                    var messageResponse = await ReceiveMessage();
+                    var message = messageResponse.Messages[0];
+
+                    await VerifyJson(message.Body)
+                        .ScrubMember("resourceId")
+                        .ScrubMember("ETag")
+                        .ScrubMember("etag")
+                        .ScrubMember("Id")
+                        .UseStrictJson()
+                        .UseMethodName($"{nameof(WhenCreating_ThenUpdating_ShouldEmitResourceEvents)}_Created");
+
+                    var resourceEvent = JsonSerializer.Deserialize<ResourceEvent<CustomsDeclarationEntity>>(
+                        message.Body
+                    );
+
+                    resourceEvent.Should().NotBeNull();
+                    resourceEvent.ResourceId.Should().Be(mrn);
+                    resourceEvent.Resource.Should().NotBeNull();
+                    resourceEvent.Resource.Id.Should().Be(mrn);
+                    resourceEvent.Resource.ETag.Should().Be(etag);
+                    resourceEvent.ETag.Should().Be(etag);
+                }
+
+                return expectedMessageCount;
+            })
+        );
+
+        await client.PutCustomsDeclaration(
+            mrn,
+            new CustomsDeclaration
+            {
+                ClearanceRequest = customsDeclaration.ClearanceRequest,
+                ClearanceDecision = new ClearanceDecision { Items = [] },
+                ExternalErrors = customsDeclaration.ExternalErrors,
+                Finalisation = customsDeclaration.Finalisation,
+            },
+            customsDeclaration.ETag,
+            CancellationToken.None
+        );
+
+        customsDeclaration = await client.GetCustomsDeclaration(mrn, CancellationToken.None);
+        customsDeclaration.Should().NotBeNull();
+        etag = customsDeclaration.ETag?.Replace("\"", "") ?? throw new InvalidOperationException("No etag");
+
+        Assert.True(
+            await AsyncWaiter.WaitForAsync(async () =>
+            {
+                var expectedMessageCount = (await GetQueueAttributes()).ApproximateNumberOfMessages == 1;
+
+                if (expectedMessageCount)
+                {
+                    var messageResponse = await ReceiveMessage();
+                    var message = messageResponse.Messages[0];
+
+                    await VerifyJson(message.Body)
+                        .ScrubMember("resourceId")
+                        .ScrubMember("ETag")
+                        .ScrubMember("etag")
+                        .ScrubMember("Id")
+                        .UseStrictJson()
+                        .UseMethodName($"{nameof(WhenCreating_ThenUpdating_ShouldEmitResourceEvents)}_Updated");
+
+                    var resourceEvent = JsonSerializer.Deserialize<ResourceEvent<CustomsDeclarationEntity>>(
+                        message.Body
+                    );
+
+                    resourceEvent.Should().NotBeNull();
+                    resourceEvent.ResourceId.Should().Be(mrn);
+                    resourceEvent.Resource.Should().NotBeNull();
+                    resourceEvent.Resource.Id.Should().Be(mrn);
+                    resourceEvent.Resource.ETag.Should().Be(etag);
+                    resourceEvent.ETag.Should().Be(etag);
+                }
+
+                return expectedMessageCount;
+            })
         );
     }
 }
