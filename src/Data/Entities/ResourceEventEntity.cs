@@ -35,5 +35,8 @@ public class ResourceEventEntity : IDataEntity
     [JsonPropertyName("published")]
     public DateTime? Published { get; set; }
 
+    [JsonPropertyName("expiresAt")]
+    public DateTime? ExpiresAt { get; set; }
+
     public void OnSave() { }
 }

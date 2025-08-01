@@ -9,10 +9,10 @@ namespace Defra.TradeImportsDataApi.Api.Data;
 
 public class ResourceEventRepository(IDbContext dbContext) : IResourceEventRepository
 {
+    private static readonly TimeSpan s_defaultTtl = TimeSpan.FromDays(30);
+
     public ResourceEventEntity Insert<T>(ResourceEvent<T> @event)
     {
-        // Needs to set TTL
-
         var entity = new ResourceEventEntity
         {
             Id = ObjectId.GenerateNewId().ToString(),
@@ -20,6 +20,7 @@ public class ResourceEventRepository(IDbContext dbContext) : IResourceEventRepos
             ResourceType = @event.ResourceType,
             SubResourceType = @event.SubResourceType,
             Message = JsonSerializer.Serialize(@event),
+            ExpiresAt = DateTime.UtcNow.Add(s_defaultTtl), // See index for where TTL if enforced
         };
 
         dbContext.ResourceEvents.Insert(entity);

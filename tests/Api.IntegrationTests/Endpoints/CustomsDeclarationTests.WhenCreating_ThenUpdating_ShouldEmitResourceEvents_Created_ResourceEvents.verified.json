@@ -8,6 +8,7 @@
     "resourceType": "CustomsDeclaration",
     "subResourceType": "ClearanceRequest",
     "message": "{Scrubbed}",
-    "published": "DateTimeOffset_2"
+    "published": "DateTimeOffset_2",
+    "expiresAt": "DateTimeOffset_3"
   }
 ]

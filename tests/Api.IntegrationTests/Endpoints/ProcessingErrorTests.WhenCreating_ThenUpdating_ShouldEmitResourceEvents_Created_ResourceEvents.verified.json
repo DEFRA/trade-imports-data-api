@@ -8,6 +8,7 @@
     "resourceType": "ProcessingError",
     "subResourceType": null,
     "message": "{Scrubbed}",
-    "published": "DateTimeOffset_2"
+    "published": "DateTimeOffset_2",
+    "expiresAt": "DateTimeOffset_3"
   }
 ]
