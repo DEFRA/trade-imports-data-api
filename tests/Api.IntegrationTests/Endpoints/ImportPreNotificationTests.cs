@@ -1,4 +1,7 @@
+using System.Text.Json;
+using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
+using Defra.TradeImportsDataApi.Domain.Events;
 using Defra.TradeImportsDataApi.Domain.Gvms;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using Defra.TradeImportsDataApi.Testing;
@@ -227,7 +230,7 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
     }
 
     [Fact]
-    public async Task WhenCreating_ShouldEmitCreatedMessage()
+    public async Task WhenCreating_ThenUpdating_ShouldEmitResourceEvents()
     {
         var client = CreateDataApiClient();
         var chedRef = ImportPreNotificationIdGenerator.Generate();
@@ -241,8 +244,93 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
             CancellationToken.None
         );
 
+        var notification = await client.GetImportPreNotification(chedRef, CancellationToken.None);
+        notification.Should().NotBeNull();
+        var etag = notification.ETag?.Replace("\"", "") ?? throw new InvalidOperationException("No etag");
+
         Assert.True(
-            await AsyncWaiter.WaitForAsync(async () => (await GetQueueAttributes()).ApproximateNumberOfMessages == 1)
+            await AsyncWaiter.WaitForAsync(async () =>
+            {
+                var expectedMessageCount = (await GetQueueAttributes()).ApproximateNumberOfMessages == 1;
+
+                if (expectedMessageCount)
+                {
+                    var messageResponse = await ReceiveMessage();
+                    var message = messageResponse.Messages[0];
+
+                    await VerifyJson(message.Body)
+                        .ScrubMember("resourceId")
+                        .ScrubMember("referenceNumber")
+                        .ScrubMember("CustomsDeclarationIdentifier")
+                        .ScrubMember("ETag")
+                        .ScrubMember("etag")
+                        .ScrubMember("Id")
+                        .ScrubMember("value")
+                        .UseStrictJson()
+                        .UseMethodName($"{nameof(WhenCreating_ThenUpdating_ShouldEmitResourceEvents)}_Created");
+
+                    var resourceEvent = JsonSerializer.Deserialize<ResourceEvent<ImportPreNotificationEntity>>(
+                        message.Body
+                    );
+
+                    resourceEvent.Should().NotBeNull();
+                    resourceEvent.ResourceId.Should().Be(chedRef);
+                    resourceEvent.Resource.Should().NotBeNull();
+                    resourceEvent.Resource.Id.Should().Be(chedRef);
+                    resourceEvent.Resource.ETag.Should().Be(etag);
+                    resourceEvent.ETag.Should().Be(etag);
+                }
+
+                return expectedMessageCount;
+            })
+        );
+
+        notification.ImportPreNotification.Version = 2;
+        await client.PutImportPreNotification(
+            chedRef,
+            notification.ImportPreNotification,
+            notification.ETag,
+            CancellationToken.None
+        );
+
+        notification = await client.GetImportPreNotification(chedRef, CancellationToken.None);
+        notification.Should().NotBeNull();
+        etag = notification.ETag?.Replace("\"", "") ?? throw new InvalidOperationException("No etag");
+
+        Assert.True(
+            await AsyncWaiter.WaitForAsync(async () =>
+            {
+                var expectedMessageCount = (await GetQueueAttributes()).ApproximateNumberOfMessages == 1;
+
+                if (expectedMessageCount)
+                {
+                    var messageResponse = await ReceiveMessage();
+                    var message = messageResponse.Messages[0];
+
+                    await VerifyJson(message.Body)
+                        .ScrubMember("resourceId")
+                        .ScrubMember("referenceNumber")
+                        .ScrubMember("CustomsDeclarationIdentifier")
+                        .ScrubMember("ETag")
+                        .ScrubMember("etag")
+                        .ScrubMember("Id")
+                        .UseStrictJson()
+                        .UseMethodName($"{nameof(WhenCreating_ThenUpdating_ShouldEmitResourceEvents)}_Updated");
+
+                    var resourceEvent = JsonSerializer.Deserialize<ResourceEvent<ImportPreNotificationEntity>>(
+                        message.Body
+                    );
+
+                    resourceEvent.Should().NotBeNull();
+                    resourceEvent.ResourceId.Should().Be(chedRef);
+                    resourceEvent.Resource.Should().NotBeNull();
+                    resourceEvent.Resource.Id.Should().Be(chedRef);
+                    resourceEvent.Resource.ETag.Should().Be(etag);
+                    resourceEvent.ETag.Should().Be(etag);
+                }
+
+                return expectedMessageCount;
+            })
         );
     }
 }

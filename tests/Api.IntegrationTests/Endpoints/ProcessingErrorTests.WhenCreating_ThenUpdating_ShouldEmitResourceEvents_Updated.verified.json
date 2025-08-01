@@ -1,0 +1,37 @@
+﻿{
+  "resourceId": "{Scrubbed}",
+  "resourceType": "ProcessingError",
+  "subResourceType": null,
+  "operation": "Updated",
+  "resource": {
+    "Id": "{Scrubbed}",
+    "ETag": "{Scrubbed}",
+    "Created": "DateTimeOffset_1",
+    "Updated": "DateTimeOffset_2",
+    "ProcessingErrors": [
+      {
+        "correlationId": null,
+        "sourceExternalCorrelationId": null,
+        "externalVersion": null,
+        "created": null,
+        "message": null
+      },
+      {
+        "correlationId": null,
+        "sourceExternalCorrelationId": null,
+        "externalVersion": null,
+        "created": null,
+        "message": "New error"
+      }
+    ]
+  },
+  "etag": "{Scrubbed}",
+  "timestamp": "DateTimeOffset_3",
+  "changeSet": [
+    {
+      "path": "/1",
+      "operation": "Add",
+      "value": "{\n  \"correlationId\": null,\n  \"sourceExternalCorrelationId\": null,\n  \"externalVersion\": null,\n  \"created\": null,\n  \"errors\": [],\n  \"message\": \"New error\"\n}"
+    }
+  ]
+}
