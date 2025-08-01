@@ -14,7 +14,7 @@ RUN apt update && \
 
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 
-ARG VACUUM_VERSION=0.14.2
+ARG VACUUM_VERSION=0.17.6
 WORKDIR /tmp/vacuum
 RUN wget --secure-protocol=TLSv1_2 "https://github.com/daveshanley/vacuum/releases/download/v${VACUUM_VERSION}/vacuum_${VACUUM_VERSION}_linux_x86_64.tar.gz" -q -O vacuum.tar.gz && \
     tar zxvf "vacuum.tar.gz" && \
@@ -60,7 +60,7 @@ RUN dotnet build src/Api/Api.csproj --no-restore -c Release
 
 COPY src/Api/appsettings.json .
 RUN dotnet swagger tofile --output openapi.json ./src/Api/bin/Release/net9.0/Defra.TradeImportsDataApi.Api.dll v1
-RUN vacuum lint -d -r .vacuum.yml openapi.json
+RUN vacuum lint -e -r .vacuum.yml openapi.json
 
 RUN dotnet test --no-restore --filter "Category!=IntegrationTest"
 
