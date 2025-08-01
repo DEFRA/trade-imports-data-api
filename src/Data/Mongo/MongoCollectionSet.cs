@@ -53,7 +53,7 @@ public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionNa
             {
                 var filter = builder.Eq(x => x.Id, item.Item.Id) & builder.Eq(x => x.ETag, item.Etag);
 
-                item.Item.ETag = BsonObjectIdGenerator.Instance.GenerateId(null, null).ToString()!;
+                // item.Item.ETag = BsonObjectIdGenerator.Instance.GenerateId(null, null).ToString()!
 
                 var updateResult = await Collection.ReplaceOneAsync(
                     dbContext.ActiveTransaction.Session,
@@ -79,7 +79,7 @@ public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionNa
 
             foreach (var item in _entitiesToInsert)
             {
-                item.ETag = BsonObjectIdGenerator.Instance.GenerateId(null, null).ToString()!;
+                // item.ETag = BsonObjectIdGenerator.Instance.GenerateId(null, null).ToString()!
 
                 await Collection.InsertOneAsync(
                     dbContext.ActiveTransaction.Session,
@@ -95,6 +95,7 @@ public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionNa
     public void Insert(T item)
     {
         item.Created = item.Updated = DateTime.UtcNow;
+        item.ETag = BsonObjectIdGenerator.Instance.GenerateId(null, null).ToString()!;
         item.OnSave();
 
         _entitiesToInsert.Add(item);
@@ -112,6 +113,7 @@ public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionNa
         _entitiesToUpdate.RemoveAll(x => x.Item.Id == item.Id);
 
         item.Updated = DateTime.UtcNow;
+        item.ETag = BsonObjectIdGenerator.Instance.GenerateId(null, null).ToString()!;
         item.OnSave();
 
         _entitiesToUpdate.Add(new ValueTuple<T, string>(item, etag));

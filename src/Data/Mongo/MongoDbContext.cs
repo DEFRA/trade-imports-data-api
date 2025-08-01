@@ -20,6 +20,7 @@ public class MongoDbContext : IDbContext
         CustomsDeclarations = new MongoCollectionSet<CustomsDeclarationEntity>(this);
         Gmrs = new MongoCollectionSet<GmrEntity>(this);
         ProcessingErrors = new MongoCollectionSet<ProcessingErrorEntity>(this);
+        ResourceEvents = new MongoCollectionSet<ResourceEventEntity>(this);
     }
 
     internal IMongoDatabase Database { get; }
@@ -30,6 +31,7 @@ public class MongoDbContext : IDbContext
     public IMongoCollectionSet<CustomsDeclarationEntity> CustomsDeclarations { get; }
     public IMongoCollectionSet<GmrEntity> Gmrs { get; }
     public IMongoCollectionSet<ProcessingErrorEntity> ProcessingErrors { get; }
+    public IMongoCollectionSet<ResourceEventEntity> ResourceEvents { get; }
 
     public async Task StartTransaction(CancellationToken cancellationToken)
     {
@@ -57,6 +59,7 @@ public class MongoDbContext : IDbContext
             await CustomsDeclarations.Save(cancellationToken);
             await Gmrs.Save(cancellationToken);
             await ProcessingErrors.Save(cancellationToken);
+            await ResourceEvents.Save(cancellationToken);
 
             // Keep this last as upserts above will impact those below
             await ImportPreNotificationUpdates.Save(cancellationToken);

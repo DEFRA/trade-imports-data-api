@@ -13,23 +13,26 @@ namespace Defra.TradeImportsDataApi.Api.Tests.Services;
 public class CustomsDeclarationServiceTests
 {
     private IDbContext DbContext { get; }
-    private IResourceEventPublisher ResourceEventPublisher { get; }
     private ICustomsDeclarationRepository CustomsDeclarationRepository { get; }
     private IImportPreNotificationRepository ImportPreNotificationRepository { get; }
+    private IResourceEventRepository ResourceEventRepository { get; }
+    private IResourceEventService ResourceEventService { get; }
     private CustomsDeclarationService Subject { get; }
 
     public CustomsDeclarationServiceTests()
     {
         DbContext = Substitute.For<IDbContext>();
-        ResourceEventPublisher = Substitute.For<IResourceEventPublisher>();
         CustomsDeclarationRepository = Substitute.For<ICustomsDeclarationRepository>();
         ImportPreNotificationRepository = Substitute.For<IImportPreNotificationRepository>();
+        ResourceEventRepository = Substitute.For<IResourceEventRepository>();
+        ResourceEventService = Substitute.For<IResourceEventService>();
 
         Subject = new CustomsDeclarationService(
             DbContext,
-            ResourceEventPublisher,
             CustomsDeclarationRepository,
-            ImportPreNotificationRepository
+            ImportPreNotificationRepository,
+            ResourceEventRepository,
+            ResourceEventService
         );
     }
 
@@ -37,9 +40,10 @@ public class CustomsDeclarationServiceTests
     public async Task Insert_ShouldInsertAndPublish()
     {
         var (_, chedId) = ImportPreNotificationIdGenerator.GenerateReturnId();
+        const string id = "id";
         var entity = new CustomsDeclarationEntity
         {
-            Id = "id",
+            Id = id,
             ClearanceRequest = new ClearanceRequest
             {
                 ExternalVersion = 1,
@@ -66,10 +70,30 @@ public class CustomsDeclarationServiceTests
                 entity.OnSave();
                 return entity;
             });
+        var resourceEventEntityId = Guid.NewGuid().ToString();
+        ResourceEventRepository
+            .Insert(Arg.Any<ResourceEvent<CustomsDeclarationEntity>>())
+            .Returns(call =>
+            {
+                var resourceEvent = call.Arg<ResourceEvent<CustomsDeclarationEntity>>();
+
+                return new ResourceEventEntity
+                {
+                    Id = resourceEventEntityId,
+                    ResourceId = resourceEvent.ResourceId,
+                    ResourceType = resourceEvent.ResourceType,
+                    SubResourceType = resourceEvent.SubResourceType,
+                    Operation = resourceEvent.Operation,
+                    Message = "message body",
+                };
+            });
 
         await Subject.Insert(entity, CancellationToken.None);
 
-        await DbContext.Received().StartTransaction(CancellationToken.None);
+        await DbContext.Received(1).StartTransaction(CancellationToken.None);
+        await DbContext.Received(1).SaveChanges(CancellationToken.None);
+        await DbContext.Received(1).CommitTransaction(CancellationToken.None);
+
         CustomsDeclarationRepository.Received().Insert(entity);
         await ImportPreNotificationRepository
             .Received()
@@ -78,16 +102,16 @@ public class CustomsDeclarationServiceTests
                 Arg.Is<string[]>(x => x.SequenceEqual(entity.ImportPreNotificationIdentifiers)),
                 CancellationToken.None
             );
-        await DbContext.Received().SaveChanges(CancellationToken.None);
-        await ResourceEventPublisher
+        ResourceEventRepository
             .Received()
-            .Publish(
+            .Insert(
                 Arg.Is<ResourceEvent<CustomsDeclarationEntity>>(x =>
                     x.Operation == "Created" && x.ChangeSet.Count > 0 && x.SubResourceType != null
-                ),
-                CancellationToken.None
+                )
             );
-        await DbContext.Received().CommitTransaction(CancellationToken.None);
+        await ResourceEventService
+            .Received()
+            .Publish(Arg.Is<ResourceEventEntity>(x => x.Id == resourceEventEntityId), CancellationToken.None);
     }
 
     [Fact]
@@ -106,21 +130,41 @@ public class CustomsDeclarationServiceTests
             ClearanceRequest = new ClearanceRequest { ExternalVersion = 2 },
         };
         CustomsDeclarationRepository.Update(entity, "etag", CancellationToken.None).Returns((existing, entity));
+        var resourceEventEntityId = Guid.NewGuid().ToString();
+        ResourceEventRepository
+            .Insert(Arg.Any<ResourceEvent<CustomsDeclarationEntity>>())
+            .Returns(call =>
+            {
+                var resourceEvent = call.Arg<ResourceEvent<CustomsDeclarationEntity>>();
+
+                return new ResourceEventEntity
+                {
+                    Id = resourceEventEntityId,
+                    ResourceId = resourceEvent.ResourceId,
+                    ResourceType = resourceEvent.ResourceType,
+                    SubResourceType = resourceEvent.SubResourceType,
+                    Operation = resourceEvent.Operation,
+                    Message = "message body",
+                };
+            });
 
         await Subject.Update(entity, "etag", CancellationToken.None);
 
-        await DbContext.Received().StartTransaction(CancellationToken.None);
+        await DbContext.Received(1).StartTransaction(CancellationToken.None);
+        await DbContext.Received(1).SaveChanges(CancellationToken.None);
+        await DbContext.Received(1).CommitTransaction(CancellationToken.None);
+
         await CustomsDeclarationRepository.Received().Update(entity, "etag", CancellationToken.None);
-        await DbContext.Received().SaveChanges(CancellationToken.None);
-        await ResourceEventPublisher
+        ResourceEventRepository
             .Received()
-            .Publish(
+            .Insert(
                 Arg.Is<ResourceEvent<CustomsDeclarationEntity>>(x =>
                     x.Operation == "Updated" && x.ChangeSet.Count > 0 && x.SubResourceType != null
-                ),
-                CancellationToken.None
+                )
             );
-        await DbContext.Received().CommitTransaction(CancellationToken.None);
+        await ResourceEventService
+            .Received()
+            .Publish(Arg.Is<ResourceEventEntity>(x => x.Id == resourceEventEntityId), CancellationToken.None);
     }
 
     [Fact]

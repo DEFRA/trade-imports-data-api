@@ -1,0 +1,28 @@
+﻿[
+  {
+    "id": "{Scrubbed}",
+    "etag": "{Scrubbed}",
+    "created": "DateTimeOffset_1",
+    "updated": "DateTimeOffset_2",
+    "resourceId": "{Scrubbed}",
+    "resourceType": "ProcessingError",
+    "subResourceType": null,
+    "operation": "Created",
+    "message": "{Scrubbed}",
+    "published": "DateTimeOffset_2",
+    "expiresAt": "DateTimeOffset_3"
+  },
+  {
+    "id": "{Scrubbed}",
+    "etag": "{Scrubbed}",
+    "created": "DateTimeOffset_4",
+    "updated": "DateTimeOffset_5",
+    "resourceId": "{Scrubbed}",
+    "resourceType": "ProcessingError",
+    "subResourceType": null,
+    "operation": "Updated",
+    "message": "{Scrubbed}",
+    "published": "DateTimeOffset_5",
+    "expiresAt": "DateTimeOffset_6"
+  }
+]

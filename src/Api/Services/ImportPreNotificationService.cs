@@ -8,9 +8,10 @@ namespace Defra.TradeImportsDataApi.Api.Services;
 
 public class ImportPreNotificationService(
     IDbContext dbContext,
-    IResourceEventPublisher resourceEventPublisher,
     IImportPreNotificationRepository importPreNotificationRepository,
-    ICustomsDeclarationRepository customsDeclarationRepository
+    ICustomsDeclarationRepository customsDeclarationRepository,
+    IResourceEventRepository resourceEventRepository,
+    IResourceEventService resourceEventService
 ) : IImportPreNotificationService
 {
     public async Task<ImportPreNotificationEntity?> GetImportPreNotification(
@@ -42,16 +43,16 @@ public class ImportPreNotificationService(
 
         importPreNotificationRepository.TrackImportPreNotificationUpdate(inserted);
 
+        var resourceEvent = inserted
+            .ToResourceEvent(ResourceEventOperations.Created)
+            .WithChangeSet(inserted.ImportPreNotification, new ImportPreNotification());
+
+        var resourceEventEntity = resourceEventRepository.Insert(resourceEvent);
+
         await dbContext.SaveChanges(cancellationToken);
-
-        await resourceEventPublisher.Publish(
-            inserted
-                .ToResourceEvent(ResourceEventOperations.Created)
-                .WithChangeSet(inserted.ImportPreNotification, new ImportPreNotification()),
-            cancellationToken
-        );
-
         await dbContext.CommitTransaction(cancellationToken);
+
+        await resourceEventService.Publish(resourceEventEntity, cancellationToken);
 
         return inserted;
     }
@@ -68,16 +69,16 @@ public class ImportPreNotificationService(
 
         importPreNotificationRepository.TrackImportPreNotificationUpdate(updated);
 
+        var resourceEvent = updated
+            .ToResourceEvent(ResourceEventOperations.Updated)
+            .WithChangeSet(updated.ImportPreNotification, existing.ImportPreNotification);
+
+        var resourceEventEntity = resourceEventRepository.Insert(resourceEvent);
+
         await dbContext.SaveChanges(cancellationToken);
-
-        await resourceEventPublisher.Publish(
-            updated
-                .ToResourceEvent(ResourceEventOperations.Updated)
-                .WithChangeSet(updated.ImportPreNotification, existing.ImportPreNotification),
-            cancellationToken
-        );
-
         await dbContext.CommitTransaction(cancellationToken);
+
+        await resourceEventService.Publish(resourceEventEntity, cancellationToken);
 
         return updated;
     }

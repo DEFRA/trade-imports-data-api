@@ -12,23 +12,26 @@ namespace Defra.TradeImportsDataApi.Api.Tests.Services;
 public class ImportPreNotificationServiceTests
 {
     private IDbContext DbContext { get; }
-    private IResourceEventPublisher ResourceEventPublisher { get; }
     private IImportPreNotificationRepository ImportPreNotificationRepository { get; }
     private ICustomsDeclarationRepository CustomsDeclarationRepository { get; }
+    private IResourceEventRepository ResourceEventRepository { get; }
+    private IResourceEventService ResourceEventService { get; }
     private ImportPreNotificationService Subject { get; }
 
     public ImportPreNotificationServiceTests()
     {
         DbContext = Substitute.For<IDbContext>();
-        ResourceEventPublisher = Substitute.For<IResourceEventPublisher>();
         ImportPreNotificationRepository = Substitute.For<IImportPreNotificationRepository>();
         CustomsDeclarationRepository = Substitute.For<ICustomsDeclarationRepository>();
+        ResourceEventRepository = Substitute.For<IResourceEventRepository>();
+        ResourceEventService = Substitute.For<IResourceEventService>();
 
         Subject = new ImportPreNotificationService(
             DbContext,
-            ResourceEventPublisher,
             ImportPreNotificationRepository,
-            CustomsDeclarationRepository
+            CustomsDeclarationRepository,
+            ResourceEventRepository,
+            ResourceEventService
         );
     }
 
@@ -41,21 +44,41 @@ public class ImportPreNotificationServiceTests
             ImportPreNotification = new ImportPreNotification { Version = 1 },
         };
         ImportPreNotificationRepository.Insert(entity).Returns(entity);
+        var resourceEventEntityId = Guid.NewGuid().ToString();
+        ResourceEventRepository
+            .Insert(Arg.Any<ResourceEvent<ImportPreNotificationEntity>>())
+            .Returns(call =>
+            {
+                var resourceEvent = call.Arg<ResourceEvent<ImportPreNotificationEntity>>();
+
+                return new ResourceEventEntity
+                {
+                    Id = resourceEventEntityId,
+                    ResourceId = resourceEvent.ResourceId,
+                    ResourceType = resourceEvent.ResourceType,
+                    SubResourceType = resourceEvent.SubResourceType,
+                    Operation = resourceEvent.Operation,
+                    Message = "message body",
+                };
+            });
 
         await Subject.Insert(entity, CancellationToken.None);
 
-        await DbContext.Received().StartTransaction(CancellationToken.None);
+        await DbContext.Received(1).StartTransaction(CancellationToken.None);
+        await DbContext.Received(1).SaveChanges(CancellationToken.None);
+        await DbContext.Received(1).CommitTransaction(CancellationToken.None);
+
         ImportPreNotificationRepository.Received().Insert(entity);
-        await DbContext.Received().SaveChanges(CancellationToken.None);
-        await ResourceEventPublisher
+        ResourceEventRepository
             .Received()
-            .Publish(
+            .Insert(
                 Arg.Is<ResourceEvent<ImportPreNotificationEntity>>(x =>
                     x.Operation == "Created" && x.ChangeSet.Count > 0
-                ),
-                CancellationToken.None
+                )
             );
-        await DbContext.Received().CommitTransaction(CancellationToken.None);
+        await ResourceEventService
+            .Received()
+            .Publish(Arg.Is<ResourceEventEntity>(x => x.Id == resourceEventEntityId), CancellationToken.None);
     }
 
     [Fact]
@@ -74,21 +97,41 @@ public class ImportPreNotificationServiceTests
             ImportPreNotification = new ImportPreNotification { Version = 2 },
         };
         ImportPreNotificationRepository.Update(entity, "etag", CancellationToken.None).Returns((existing, entity));
+        var resourceEventEntityId = Guid.NewGuid().ToString();
+        ResourceEventRepository
+            .Insert(Arg.Any<ResourceEvent<ImportPreNotificationEntity>>())
+            .Returns(call =>
+            {
+                var resourceEvent = call.Arg<ResourceEvent<ImportPreNotificationEntity>>();
+
+                return new ResourceEventEntity
+                {
+                    Id = resourceEventEntityId,
+                    ResourceId = resourceEvent.ResourceId,
+                    ResourceType = resourceEvent.ResourceType,
+                    SubResourceType = resourceEvent.SubResourceType,
+                    Operation = resourceEvent.Operation,
+                    Message = "message body",
+                };
+            });
 
         await Subject.Update(entity, "etag", CancellationToken.None);
 
-        await DbContext.Received().StartTransaction(CancellationToken.None);
+        await DbContext.Received(1).StartTransaction(CancellationToken.None);
+        await DbContext.Received(1).SaveChanges(CancellationToken.None);
+        await DbContext.Received(1).CommitTransaction(CancellationToken.None);
+
         await ImportPreNotificationRepository.Received().Update(entity, "etag", CancellationToken.None);
-        await DbContext.Received().SaveChanges(CancellationToken.None);
-        await ResourceEventPublisher
+        ResourceEventRepository
             .Received()
-            .Publish(
+            .Insert(
                 Arg.Is<ResourceEvent<ImportPreNotificationEntity>>(x =>
                     x.Operation == "Updated" && x.ChangeSet.Count > 0
-                ),
-                CancellationToken.None
+                )
             );
-        await DbContext.Received().CommitTransaction(CancellationToken.None);
+        await ResourceEventService
+            .Received()
+            .Publish(Arg.Is<ResourceEventEntity>(x => x.Id == resourceEventEntityId), CancellationToken.None);
     }
 
     [Fact]

@@ -27,6 +27,9 @@ public abstract class IntegrationTestBase
     protected static IMongoDatabase GetMongoDatabase()
     {
         var settings = MongoClientSettings.FromConnectionString("mongodb://127.0.0.1:27017/?directConnection=true");
+        settings.ServerSelectionTimeout = TimeSpan.FromSeconds(5);
+        settings.ConnectTimeout = TimeSpan.FromSeconds(5);
+        settings.SocketTimeout = TimeSpan.FromSeconds(5);
 
         return new MongoClient(settings).GetDatabase("trade-imports-data-api");
     }

@@ -1,6 +1,5 @@
 using System.Text.Json.Serialization;
 using Defra.TradeImportsDataApi.Domain.Attributes;
-using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 
 namespace Defra.TradeImportsDataApi.Domain.Ipaffs;
 
