@@ -18,6 +18,7 @@ public class ResourceEventRepository(IDbContext dbContext) : IResourceEventRepos
             Id = ObjectId.GenerateNewId().ToString(),
             ResourceId = @event.ResourceId,
             ResourceType = @event.ResourceType,
+            SubResourceType = @event.SubResourceType,
             Message = JsonSerializer.Serialize(@event),
         };
 

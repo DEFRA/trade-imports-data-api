@@ -6,6 +6,7 @@
     "updated": "DateTimeOffset_2",
     "resourceId": "{Scrubbed}",
     "resourceType": "CustomsDeclaration",
+    "subResourceType": "ClearanceRequest",
     "message": "{Scrubbed}",
     "published": "DateTimeOffset_2"
   }
