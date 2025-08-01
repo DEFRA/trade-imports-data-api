@@ -17,14 +17,18 @@ public class ProcessingErrorService(
 
     public async Task<ProcessingErrorEntity> Insert(ProcessingErrorEntity entity, CancellationToken cancellationToken)
     {
-        var inserted = await processingErrorRepository.Insert(entity, cancellationToken);
+        await dbContext.StartTransaction(cancellationToken);
 
-        await dbContext.SaveChangesAsync(cancellationToken);
+        var inserted = processingErrorRepository.Insert(entity);
+
+        await dbContext.SaveChanges(cancellationToken);
 
         await resourceEventPublisher.Publish(
             inserted.ToResourceEvent(ResourceEventOperations.Created).WithChangeSet(inserted.ProcessingErrors, []),
             cancellationToken
         );
+
+        await dbContext.CommitTransaction(cancellationToken);
 
         return inserted;
     }
@@ -35,9 +39,11 @@ public class ProcessingErrorService(
         CancellationToken cancellationToken
     )
     {
+        await dbContext.StartTransaction(cancellationToken);
+
         var (existing, updated) = await processingErrorRepository.Update(entity, etag, cancellationToken);
 
-        await dbContext.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChanges(cancellationToken);
 
         await resourceEventPublisher.Publish(
             updated
@@ -45,6 +51,8 @@ public class ProcessingErrorService(
                 .WithChangeSet(updated.ProcessingErrors, existing.ProcessingErrors),
             cancellationToken
         );
+
+        await dbContext.CommitTransaction(cancellationToken);
 
         return updated;
     }

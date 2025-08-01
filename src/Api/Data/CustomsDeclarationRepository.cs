@@ -82,12 +82,9 @@ public class CustomsDeclarationRepository(IDbContext dbContext) : ICustomsDeclar
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<CustomsDeclarationEntity> Insert(
-        CustomsDeclarationEntity entity,
-        CancellationToken cancellationToken
-    )
+    public CustomsDeclarationEntity Insert(CustomsDeclarationEntity entity)
     {
-        await dbContext.CustomsDeclarations.Insert(entity, cancellationToken);
+        dbContext.CustomsDeclarations.Insert(entity);
 
         return entity;
     }
@@ -106,7 +103,7 @@ public class CustomsDeclarationRepository(IDbContext dbContext) : ICustomsDeclar
 
         entity.Created = existing.Created;
 
-        await dbContext.CustomsDeclarations.Update(entity, etag, cancellationToken);
+        dbContext.CustomsDeclarations.Update(entity, etag);
 
         return (existing, entity);
     }

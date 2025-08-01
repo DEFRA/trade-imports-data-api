@@ -114,8 +114,8 @@ public class GmrServiceTests
             Gmr = new Gmr { Declarations = new Declarations { Customs = [new Customs { Id = mrn }] } },
         };
         GmrRepository
-            .Insert(entity, CancellationToken.None)
-            .Returns(x =>
+            .Insert(entity)
+            .Returns(_ =>
             {
                 entity.OnSave();
                 return entity;
@@ -129,7 +129,8 @@ public class GmrServiceTests
 
         await Subject.Insert(entity, CancellationToken.None);
 
-        await GmrRepository.Received().Insert(entity, CancellationToken.None);
+        await DbContext.Received().StartTransaction(CancellationToken.None);
+        GmrRepository.Received().Insert(entity);
         await ImportPreNotificationRepository
             .Received()
             .TrackImportPreNotificationUpdate(
@@ -137,7 +138,8 @@ public class GmrServiceTests
                 Arg.Is<string[]>(x => x.SequenceEqual(importPreNotificationIdentifiers)),
                 CancellationToken.None
             );
-        await DbContext.Received().SaveChangesAsync(CancellationToken.None);
+        await DbContext.Received().SaveChanges(CancellationToken.None);
+        await DbContext.Received().CommitTransaction(CancellationToken.None);
     }
 
     [Fact]
@@ -159,8 +161,10 @@ public class GmrServiceTests
 
         await Subject.Update(entity, "etag", CancellationToken.None);
 
+        await DbContext.Received().StartTransaction(CancellationToken.None);
         await GmrRepository.Received().Update(entity, "etag", CancellationToken.None);
-        await DbContext.Received().SaveChangesAsync(CancellationToken.None);
+        await DbContext.Received().SaveChanges(CancellationToken.None);
+        await DbContext.Received().CommitTransaction(CancellationToken.None);
     }
 
     [Fact]

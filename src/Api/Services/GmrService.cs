@@ -35,22 +35,30 @@ public class GmrService(
 
     public async Task<GmrEntity> Insert(GmrEntity entity, CancellationToken cancellationToken)
     {
-        var inserted = await gmrRepository.Insert(entity, cancellationToken);
+        await dbContext.StartTransaction(cancellationToken);
+
+        var inserted = gmrRepository.Insert(entity);
 
         await TrackImportPreNotificationUpdate(inserted, cancellationToken);
 
-        await dbContext.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChanges(cancellationToken);
+
+        await dbContext.CommitTransaction(cancellationToken);
 
         return inserted;
     }
 
     public async Task<GmrEntity> Update(GmrEntity entity, string etag, CancellationToken cancellationToken)
     {
+        await dbContext.StartTransaction(cancellationToken);
+
         var (_, updated) = await gmrRepository.Update(entity, etag, cancellationToken);
 
         await TrackImportPreNotificationUpdate(updated, cancellationToken);
 
-        await dbContext.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChanges(cancellationToken);
+
+        await dbContext.CommitTransaction(cancellationToken);
 
         return updated;
     }
