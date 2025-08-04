@@ -53,8 +53,6 @@ public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionNa
             {
                 var filter = builder.Eq(x => x.Id, item.Item.Id) & builder.Eq(x => x.ETag, item.Etag);
 
-                // item.Item.ETag = BsonObjectIdGenerator.Instance.GenerateId(null, null).ToString()!
-
                 var updateResult = await Collection.ReplaceOneAsync(
                     dbContext.ActiveTransaction.Session,
                     filter,
@@ -79,8 +77,6 @@ public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionNa
 
             foreach (var item in _entitiesToInsert)
             {
-                // item.ETag = BsonObjectIdGenerator.Instance.GenerateId(null, null).ToString()!
-
                 await Collection.InsertOneAsync(
                     dbContext.ActiveTransaction.Session,
                     item,
