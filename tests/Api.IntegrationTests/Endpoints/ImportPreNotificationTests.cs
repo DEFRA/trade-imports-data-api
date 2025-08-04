@@ -259,13 +259,19 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
         notification.Should().NotBeNull();
         var etag = notification.ETag?.Replace("\"", "") ?? throw new InvalidOperationException("No etag");
 
+        string? resourceEventId = null;
+        DateTime? publishedDate = null;
+        string? messageBody = null;
+
         Assert.True(
             await AsyncWaiter.WaitForAsync(async () =>
             {
+                // Expect single resource event to have been emitted
                 var expectedMessageCount = (await GetQueueAttributes()).ApproximateNumberOfMessages == 1;
 
                 if (expectedMessageCount)
                 {
+                    // Get the resource event message
                     var messageResponse = await ReceiveMessage();
                     var message = messageResponse.Messages[0];
 
@@ -308,7 +314,53 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
                     resourceEventEntities.Should().NotBeNull();
                     resourceEventEntities.Length.Should().Be(1);
 
+                    // Resource event body should match what was saved
                     message.Body.Should().Be(resourceEventEntities[0].Message);
+
+                    // Store the following for republish checking
+                    resourceEventId = resourceEventEntities[0].Id;
+                    publishedDate = resourceEventEntities[0].Published;
+                    messageBody = message.Body;
+                }
+
+                return expectedMessageCount;
+            })
+        );
+
+        resourceEventId.Should().NotBeNull();
+
+        await DrainAllMessages();
+
+        // Republish the already sent resource event
+        await httpClient.PutAsync(
+            Testing.Endpoints.ResourceEvents.Publish(chedRef, resourceEventId, force: true),
+            null
+        );
+
+        Assert.True(
+            await AsyncWaiter.WaitForAsync(async () =>
+            {
+                // Expect single resource event to have been emitted
+                var expectedMessageCount = (await GetQueueAttributes()).ApproximateNumberOfMessages == 1;
+
+                if (expectedMessageCount)
+                {
+                    // Get the resource event message
+                    var messageResponse = await ReceiveMessage();
+                    var message = messageResponse.Messages[0];
+
+                    // Message should not have changed
+                    message.Body.Should().Be(messageBody);
+
+                    var response = await httpClient.GetAsync(Testing.Endpoints.ResourceEvents.GetAll(chedRef));
+                    var content = await response.Content.ReadAsStringAsync();
+
+                    var resourceEventEntities = JsonSerializer.Deserialize<ResourceEventEntity[]>(content);
+                    resourceEventEntities.Should().NotBeNull();
+                    resourceEventEntities.Length.Should().Be(1);
+
+                    // Published field should now be different as it was republished
+                    resourceEventEntities[0].Published.Should().BeAfter(publishedDate.GetValueOrDefault());
                 }
 
                 return expectedMessageCount;

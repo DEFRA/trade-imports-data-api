@@ -15,16 +15,7 @@ public class ResourceEventService(
     {
         try
         {
-            await dbContext.StartTransaction(cancellationToken);
-
-            await resourceEventPublisher.Publish(entity, cancellationToken);
-
-            entity.Published = DateTime.UtcNow;
-
-            resourceEventRepository.Update(entity);
-
-            await dbContext.SaveChanges(cancellationToken);
-            await dbContext.CommitTransaction(cancellationToken);
+            await PublishInternal(entity, cancellationToken);
         }
         catch (OperationCanceledException)
         {
@@ -36,5 +27,24 @@ public class ResourceEventService(
 
             // Intentionally swallowed
         }
+    }
+
+    public async Task PublishAllowException(ResourceEventEntity entity, CancellationToken cancellationToken)
+    {
+        await PublishInternal(entity, cancellationToken);
+    }
+
+    private async Task PublishInternal(ResourceEventEntity entity, CancellationToken cancellationToken)
+    {
+        await dbContext.StartTransaction(cancellationToken);
+
+        await resourceEventPublisher.Publish(entity, cancellationToken);
+
+        entity.Published = DateTime.UtcNow;
+
+        resourceEventRepository.Update(entity);
+
+        await dbContext.SaveChanges(cancellationToken);
+        await dbContext.CommitTransaction(cancellationToken);
     }
 }
