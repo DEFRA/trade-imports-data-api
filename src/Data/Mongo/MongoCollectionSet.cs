@@ -25,7 +25,7 @@ public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionNa
 
     public IMongoCollection<T> Collection { get; } =
         string.IsNullOrEmpty(collectionName)
-            ? dbContext.Database.GetCollection<T>(typeof(T).Name.Replace("Entity", ""))
+            ? dbContext.Database.GetCollection<T>(typeof(T).DataEntityName())
             : dbContext.Database.GetCollection<T>(collectionName);
 
     public async Task<T?> Find(string id, CancellationToken cancellationToken) =>

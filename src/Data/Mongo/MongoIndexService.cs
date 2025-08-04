@@ -114,17 +114,12 @@ public class MongoIndexService(IMongoDatabase database, ILogger<MongoIndexServic
                 }
             );
             await database
-                .GetCollection<T>(typeof(T).Name.Replace("Entity", ""))
+                .GetCollection<T>(typeof(T).DataEntityName())
                 .Indexes.CreateOneAsync(indexModel, cancellationToken: cancellationToken);
         }
         catch (Exception e)
         {
-            logger.LogError(
-                e,
-                "Failed to Create index {Name} on {Collection}",
-                name,
-                typeof(T).Name.Replace("Entity", "")
-            );
+            logger.LogError(e, "Failed to Create index {Name} on {Collection}", name, typeof(T).DataEntityName());
         }
     }
 
@@ -147,17 +142,12 @@ public class MongoIndexService(IMongoDatabase database, ILogger<MongoIndexServic
                 }
             );
             await database
-                .GetCollection<T>(typeof(T).Name.Replace("Entity", ""))
+                .GetCollection<T>(typeof(T).DataEntityName())
                 .Indexes.CreateOneAsync(indexModel, cancellationToken: cancellationToken);
         }
         catch (Exception e)
         {
-            logger.LogError(
-                e,
-                "Failed to Create TTL index {Name} on {Collection}",
-                name,
-                typeof(T).Name.Replace("Entity", "")
-            );
+            logger.LogError(e, "Failed to Create TTL index {Name} on {Collection}", name, typeof(T).DataEntityName());
         }
     }
 }

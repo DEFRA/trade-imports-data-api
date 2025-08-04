@@ -1,5 +1,6 @@
 using System.Net.Http.Headers;
 using Defra.TradeImportsDataApi.Api.Client;
+using Defra.TradeImportsDataApi.Data.Entities;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
@@ -35,10 +36,11 @@ public abstract class IntegrationTestBase
     }
 
     protected static IMongoCollection<T> GetMongoCollection<T>()
+        where T : IDataEntity
     {
         var db = GetMongoDatabase();
 
-        return db.GetCollection<T>(typeof(T).Name.Replace("Entity", ""));
+        return db.GetCollection<T>(typeof(T).DataEntityName());
     }
 
     protected IntegrationTestBase()
