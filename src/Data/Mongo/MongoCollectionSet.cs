@@ -47,14 +47,14 @@ public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionNa
 
         if (_entitiesToUpdate.Count != 0)
         {
-            var transaction = GetActiveTransaction();
+            var session = GetSession();
 
             foreach (var item in _entitiesToUpdate)
             {
                 var filter = builder.Eq(x => x.Id, item.Item.Id) & builder.Eq(x => x.ETag, item.Etag);
 
                 var updateResult = await Collection.ReplaceOneAsync(
-                    transaction.Session,
+                    session,
                     filter,
                     item.Item,
                     cancellationToken: cancellationToken
@@ -69,14 +69,14 @@ public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionNa
 
         if (_entitiesToPatch.Count != 0)
         {
-            var transaction = GetActiveTransaction();
+            var session = GetSession();
 
             foreach (var item in _entitiesToPatch)
             {
                 var filter = builder.Eq(x => x.Id, item.Id) & builder.Eq(x => x.ETag, item.Etag);
 
                 var updateResult = await Collection.UpdateOneAsync(
-                    transaction.Session,
+                    session,
                     filter,
                     item.Patch,
                     cancellationToken: cancellationToken
@@ -94,23 +94,23 @@ public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionNa
     {
         if (_entitiesToInsert.Count != 0)
         {
-            var transaction = GetActiveTransaction();
+            var session = GetSession();
 
             foreach (var item in _entitiesToInsert)
             {
-                await Collection.InsertOneAsync(transaction.Session, item, cancellationToken: cancellationToken);
+                await Collection.InsertOneAsync(session, item, cancellationToken: cancellationToken);
             }
 
             _entitiesToInsert.Clear();
         }
     }
 
-    private MongoDbTransaction GetActiveTransaction()
+    private IClientSessionHandle? GetSession()
     {
         if (dbContext.ActiveTransaction is null)
             throw new InvalidOperationException("Transaction has not been started");
 
-        return dbContext.ActiveTransaction;
+        return dbContext.ActiveTransaction.Session;
     }
 
     public void Insert(T item)
