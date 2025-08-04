@@ -7,7 +7,7 @@ public interface IResourceEventRepository
 {
     ResourceEventEntity Insert<T>(ResourceEvent<T> @event);
 
-    ResourceEventEntity Update(ResourceEventEntity entity);
+    ResourceEventEntity UpdateProcessed(ResourceEventEntity entity);
 
     Task<List<ResourceEventEntity>> GetAll(string resourceId, CancellationToken cancellationToken);
 }

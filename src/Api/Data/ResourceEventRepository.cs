@@ -29,9 +29,19 @@ public class ResourceEventRepository(IDbContext dbContext) : IResourceEventRepos
         return entity;
     }
 
-    public ResourceEventEntity Update(ResourceEventEntity entity)
+    public ResourceEventEntity UpdateProcessed(ResourceEventEntity entity)
     {
-        dbContext.ResourceEvents.Update(entity, entity.ETag);
+        dbContext.ResourceEvents.Update(
+            entity,
+            x =>
+            {
+                // Update in memory item now and set field to match value,
+                // but will only be saved if Save is called
+                entity.Published = DateTime.UtcNow;
+                x.Set(y => y.Published, entity.Published);
+            },
+            entity.ETag
+        );
 
         return entity;
     }

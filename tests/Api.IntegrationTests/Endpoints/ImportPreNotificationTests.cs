@@ -314,12 +314,21 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
                     resourceEventEntities.Should().NotBeNull();
                     resourceEventEntities.Length.Should().Be(1);
 
+                    var resourceEventEntity = resourceEventEntities[0];
+
                     // Resource event body should match what was saved
-                    message.Body.Should().Be(resourceEventEntities[0].Message);
+                    message.Body.Should().Be(resourceEventEntity.Message);
+
+                    // Updated should be greater than created as resource event is created first as part of main
+                    // save, then updated once SNS write is complete
+                    resourceEventEntity.Updated.Should().BeAfter(resourceEventEntity.Created);
+
+                    // Updated should match Published due to above comment
+                    resourceEventEntity.Published.Should().Be(resourceEventEntity.Updated);
 
                     // Store the following for republish checking
-                    resourceEventId = resourceEventEntities[0].Id;
-                    publishedDate = resourceEventEntities[0].Published;
+                    resourceEventId = resourceEventEntity.Id;
+                    publishedDate = resourceEventEntity.Published;
                     messageBody = message.Body;
                 }
 

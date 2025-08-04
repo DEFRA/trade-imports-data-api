@@ -12,6 +12,7 @@ public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionNa
 {
     private readonly List<T> _entitiesToInsert = [];
     private readonly List<(T Item, string Etag)> _entitiesToUpdate = [];
+    private readonly List<(string Id, UpdateDefinition<T> Patch, string Etag)> _entitiesToPatch = [];
 
     private IQueryable<T> EntityQueryable => Collection.AsQueryable();
 
@@ -46,15 +47,14 @@ public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionNa
 
         if (_entitiesToUpdate.Count != 0)
         {
-            if (dbContext.ActiveTransaction is null)
-                throw new InvalidOperationException("Transaction has not been started");
+            var transaction = GetActiveTransaction();
 
             foreach (var item in _entitiesToUpdate)
             {
                 var filter = builder.Eq(x => x.Id, item.Item.Id) & builder.Eq(x => x.ETag, item.Etag);
 
                 var updateResult = await Collection.ReplaceOneAsync(
-                    dbContext.ActiveTransaction.Session,
+                    transaction.Session,
                     filter,
                     item.Item,
                     cancellationToken: cancellationToken
@@ -66,30 +66,56 @@ public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionNa
 
             _entitiesToUpdate.Clear();
         }
+
+        if (_entitiesToPatch.Count != 0)
+        {
+            var transaction = GetActiveTransaction();
+
+            foreach (var item in _entitiesToPatch)
+            {
+                var filter = builder.Eq(x => x.Id, item.Id) & builder.Eq(x => x.ETag, item.Etag);
+
+                var updateResult = await Collection.UpdateOneAsync(
+                    transaction.Session,
+                    filter,
+                    item.Patch,
+                    cancellationToken: cancellationToken
+                );
+
+                if (updateResult.ModifiedCount == 0)
+                    throw new ConcurrencyException(item.Id, item.Etag);
+            }
+
+            _entitiesToPatch.Clear();
+        }
     }
 
     private async Task Insert(CancellationToken cancellationToken)
     {
         if (_entitiesToInsert.Count != 0)
         {
-            if (dbContext.ActiveTransaction is null)
-                throw new InvalidOperationException("Transaction has not been started");
+            var transaction = GetActiveTransaction();
 
             foreach (var item in _entitiesToInsert)
             {
-                await Collection.InsertOneAsync(
-                    dbContext.ActiveTransaction.Session,
-                    item,
-                    cancellationToken: cancellationToken
-                );
+                await Collection.InsertOneAsync(transaction.Session, item, cancellationToken: cancellationToken);
             }
 
             _entitiesToInsert.Clear();
         }
     }
 
+    private MongoDbTransaction GetActiveTransaction()
+    {
+        if (dbContext.ActiveTransaction is null)
+            throw new InvalidOperationException("Transaction has not been started");
+
+        return dbContext.ActiveTransaction;
+    }
+
     public void Insert(T item)
     {
+        // Update in memory item now but will only be saved if Save is called
         item.Created = item.Updated = DateTime.UtcNow;
         item.ETag = BsonObjectIdGenerator.Instance.GenerateId(null, null).ToString()!;
         item.OnSave();
@@ -100,18 +126,49 @@ public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionNa
     public void Update(T item, string etag)
     {
         if (_entitiesToInsert.Exists(x => x.Id == item.Id))
-        {
             return;
-        }
 
         ArgumentNullException.ThrowIfNull(etag);
 
         _entitiesToUpdate.RemoveAll(x => x.Item.Id == item.Id);
 
+        // Update in memory item now but will only be saved if Save is called
         item.Updated = DateTime.UtcNow;
         item.ETag = BsonObjectIdGenerator.Instance.GenerateId(null, null).ToString()!;
         item.OnSave();
 
         _entitiesToUpdate.Add(new ValueTuple<T, string>(item, etag));
+    }
+
+    public void Update(T item, Action<IFieldUpdateBuilder<T>> patch, string etag)
+    {
+        if (_entitiesToInsert.Exists(x => x.Id == item.Id))
+            throw new InvalidOperationException("Cannot patch an entity due for insert");
+
+        if (_entitiesToUpdate.Exists(x => x.Item.Id == item.Id))
+            throw new InvalidOperationException("Cannot patch an entity due for update");
+
+        ArgumentNullException.ThrowIfNull(etag);
+
+        _entitiesToPatch.RemoveAll(x => x.Id == item.Id);
+
+        var fieldUpdateBuilder = new MongoFieldUpdateBuilder<T>();
+        patch(fieldUpdateBuilder);
+
+        // Update in memory item now but will only be saved if Save is called
+        item.Updated = DateTime.UtcNow;
+        item.ETag = BsonObjectIdGenerator.Instance.GenerateId(null, null).ToString()!;
+
+        _entitiesToPatch.Add(
+            new ValueTuple<string, UpdateDefinition<T>, string>(
+                item.Id,
+                Builders<T>
+                    .Update.Combine(fieldUpdateBuilder.Build())
+                    // Update fields based on in memory item values
+                    .Set(x => x.Updated, item.Updated)
+                    .Set(x => x.ETag, item.ETag),
+                etag
+            )
+        );
     }
 }
