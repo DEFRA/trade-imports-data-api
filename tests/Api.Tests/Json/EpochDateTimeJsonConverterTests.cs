@@ -19,6 +19,8 @@ public class EpochDateTimeJsonConverterTests
     [Theory]
     [InlineData("{\"TestDate\":\"2025-05-08T14:21:50.286Z\"}", DateTimeKind.Utc)]
     [InlineData("{\"TestDate\":\"2025-05-08T14:21:50.286\"}", DateTimeKind.Unspecified)]
+    [InlineData("{\"TestDate\":1723127967 }", DateTimeKind.Utc)]
+    [InlineData("{\"TestDate\":1712851200000 }", DateTimeKind.Utc)]
     public void DeserializeTests(string json, DateTimeKind expected)
     {
         var result = JsonSerializer.Deserialize<TestObject>(json);
