@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Defra.TradeImportsDataApi.Domain.Json;
 using FluentAssertions;
 
@@ -13,5 +14,21 @@ public class EpochDateTimeJsonConverterTests
         var result = EpochDateTimeJsonConverter.DateTimeFromString(date);
 
         result.Kind.Should().Be(expected);
+    }
+
+    [Theory]
+    [InlineData("{\"TestDate\":\"2025-05-08T14:21:50.286Z\"}", DateTimeKind.Utc)]
+    [InlineData("{\"TestDate\":\"2025-05-08T14:21:50.286\"}", DateTimeKind.Unspecified)]
+    public void DeserializeTests(string json, DateTimeKind expected)
+    {
+        var result = JsonSerializer.Deserialize<TestObject>(json);
+
+        result?.TestDate.Kind.Should().Be(expected);
+    }
+
+    public class TestObject
+    {
+        [EpochDateTimeJsonConverter]
+        public DateTime TestDate { get; set; }
     }
 }
