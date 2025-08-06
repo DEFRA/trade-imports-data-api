@@ -31,7 +31,7 @@ public class EpochDateTimeJsonConverter : JsonConverter<DateTime>
             var s = reader.GetString();
             if (!ulong.TryParse(s, out number))
             {
-                return DateTime.Parse(s!, CultureInfo.CurrentCulture);
+                return DateTimeFromString(s!);
             }
         }
 
@@ -54,5 +54,10 @@ public class EpochDateTimeJsonConverter : JsonConverter<DateTime>
     public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
     {
         writer.WriteNumberValue(new DateTimeOffset(value).ToUnixTimeMilliseconds());
+    }
+
+    public static DateTime DateTimeFromString(string s)
+    {
+        return DateTime.Parse(s, DateTimeFormatInfo.InvariantInfo, DateTimeStyles.RoundtripKind);
     }
 }
