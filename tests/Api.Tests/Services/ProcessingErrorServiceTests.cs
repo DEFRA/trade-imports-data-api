@@ -31,7 +31,10 @@ public class ProcessingErrorServiceTests
         var entity = new ProcessingErrorEntity
         {
             Id = "id",
-            ProcessingErrors = [new ProcessingError { ExternalVersion = 1 }],
+            ProcessingErrors =
+            [
+                new ProcessingError { ExternalVersion = 1, Errors = [new ErrorItem() { Code = "ALVS101" }] },
+            ],
         };
         ProcessingErrorRepository.Insert(entity).Returns(entity);
 
@@ -50,7 +53,66 @@ public class ProcessingErrorServiceTests
     }
 
     [Fact]
+    public async Task Insert_ShouldInsertAndNotPublish()
+    {
+        var entity = new ProcessingErrorEntity
+        {
+            Id = "id",
+            ProcessingErrors = [new ProcessingError { ExternalVersion = 1 }],
+        };
+        ProcessingErrorRepository.Insert(entity).Returns(entity);
+
+        await Subject.Insert(entity, CancellationToken.None);
+
+        await DbContext.Received().StartTransaction(CancellationToken.None);
+        ProcessingErrorRepository.Received().Insert(entity);
+        await DbContext.Received().SaveChanges(CancellationToken.None);
+        await ResourceEventPublisher
+            .Received(0)
+            .Publish(
+                Arg.Is<ResourceEvent<ProcessingErrorEntity>>(x => x.Operation == "Created" && x.ChangeSet.Count > 0),
+                CancellationToken.None
+            );
+        await DbContext.Received().CommitTransaction(CancellationToken.None);
+    }
+
+    [Fact]
     public async Task Update_ShouldUpdateAndPublish()
+    {
+        const string id = "id";
+        var existing = new ProcessingErrorEntity
+        {
+            Id = "id",
+            ProcessingErrors = [new ProcessingError { ExternalVersion = 1 }],
+        };
+        ProcessingErrorRepository.Get(id, CancellationToken.None).Returns(existing);
+        var entity = new ProcessingErrorEntity
+        {
+            Id = "id",
+            ProcessingErrors =
+            [
+                new ProcessingError { ExternalVersion = 1 },
+                new ProcessingError { ExternalVersion = 2, Errors = [new ErrorItem() { Code = "ALVS101" }] },
+            ],
+        };
+        ProcessingErrorRepository.Update(entity, "etag", CancellationToken.None).Returns((existing, entity));
+
+        await Subject.Update(entity, "etag", CancellationToken.None);
+
+        await DbContext.Received().StartTransaction(CancellationToken.None);
+        await ProcessingErrorRepository.Received().Update(entity, "etag", CancellationToken.None);
+        await DbContext.Received().SaveChanges(CancellationToken.None);
+        await ResourceEventPublisher
+            .Received()
+            .Publish(
+                Arg.Is<ResourceEvent<ProcessingErrorEntity>>(x => x.Operation == "Updated" && x.ChangeSet.Count > 0),
+                CancellationToken.None
+            );
+        await DbContext.Received().CommitTransaction(CancellationToken.None);
+    }
+
+    [Fact]
+    public async Task Update_ShouldUpdateAndNotPublish()
     {
         const string id = "id";
         var existing = new ProcessingErrorEntity
@@ -76,7 +138,45 @@ public class ProcessingErrorServiceTests
         await ProcessingErrorRepository.Received().Update(entity, "etag", CancellationToken.None);
         await DbContext.Received().SaveChanges(CancellationToken.None);
         await ResourceEventPublisher
-            .Received()
+            .Received(0)
+            .Publish(
+                Arg.Is<ResourceEvent<ProcessingErrorEntity>>(x => x.Operation == "Updated" && x.ChangeSet.Count > 0),
+                CancellationToken.None
+            );
+        await DbContext.Received().CommitTransaction(CancellationToken.None);
+    }
+
+    [Fact]
+    public async Task Update_ShouldUpdateAndNotPublishWhenNewErrorIsJustSchema()
+    {
+        const string id = "id";
+        var existing = new ProcessingErrorEntity
+        {
+            Id = "id",
+            ProcessingErrors =
+            [
+                new ProcessingError { ExternalVersion = 1, Errors = [new ErrorItem() { Code = "ALVS101" }] },
+            ],
+        };
+        ProcessingErrorRepository.Get(id, CancellationToken.None).Returns(existing);
+        var entity = new ProcessingErrorEntity
+        {
+            Id = "id",
+            ProcessingErrors =
+            [
+                new ProcessingError { ExternalVersion = 1 },
+                new ProcessingError { ExternalVersion = 2 },
+            ],
+        };
+        ProcessingErrorRepository.Update(entity, "etag", CancellationToken.None).Returns((existing, entity));
+
+        await Subject.Update(entity, "etag", CancellationToken.None);
+
+        await DbContext.Received().StartTransaction(CancellationToken.None);
+        await ProcessingErrorRepository.Received().Update(entity, "etag", CancellationToken.None);
+        await DbContext.Received().SaveChanges(CancellationToken.None);
+        await ResourceEventPublisher
+            .Received(0)
             .Publish(
                 Arg.Is<ResourceEvent<ProcessingErrorEntity>>(x => x.Operation == "Updated" && x.ChangeSet.Count > 0),
                 CancellationToken.None

@@ -23,10 +23,13 @@ public class ProcessingErrorService(
 
         await dbContext.SaveChanges(cancellationToken);
 
-        await resourceEventPublisher.Publish(
-            inserted.ToResourceEvent(ResourceEventOperations.Created).WithChangeSet(inserted.ProcessingErrors, []),
-            cancellationToken
-        );
+        if (entity.ProcessingErrors.Any(x => x.Errors.Any(e => e.Code != null)))
+        {
+            await resourceEventPublisher.Publish(
+                inserted.ToResourceEvent(ResourceEventOperations.Created).WithChangeSet(inserted.ProcessingErrors, []),
+                cancellationToken
+            );
+        }
 
         await dbContext.CommitTransaction(cancellationToken);
 
@@ -45,12 +48,15 @@ public class ProcessingErrorService(
 
         await dbContext.SaveChanges(cancellationToken);
 
-        await resourceEventPublisher.Publish(
-            updated
-                .ToResourceEvent(ResourceEventOperations.Updated)
-                .WithChangeSet(updated.ProcessingErrors, existing.ProcessingErrors),
-            cancellationToken
-        );
+        if (entity.ProcessingErrors.Any(x => x.Errors.Any(e => e.Code != null)))
+        {
+            await resourceEventPublisher.Publish(
+                updated
+                    .ToResourceEvent(ResourceEventOperations.Updated)
+                    .WithChangeSet(updated.ProcessingErrors, existing.ProcessingErrors),
+                cancellationToken
+            );
+        }
 
         await dbContext.CommitTransaction(cancellationToken);
 
