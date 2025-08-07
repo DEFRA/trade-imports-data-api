@@ -205,6 +205,7 @@ public class Decision
     [System.ComponentModel.Description("Detailed decision for consignment")]
     [PossibleValue("Non Acceptable")]
     [PossibleValue("Acceptable for Internal Market")]
+    [PossibleValue("Acceptable for Non Internal Market")]
     [PossibleValue("Acceptable if Channeled")]
     [PossibleValue("Acceptable for Transhipment")]
     [PossibleValue("Acceptable for Transit")]
