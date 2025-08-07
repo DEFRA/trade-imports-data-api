@@ -14,6 +14,12 @@
         "sourceExternalCorrelationId": null,
         "externalVersion": null,
         "created": null,
+        "errors": [
+          {
+            "code": "ALVS01",
+            "message": null
+          }
+        ],
         "message": null
       },
       {

@@ -58,7 +58,12 @@ public class ProcessingErrorTests(ITestOutputHelper testOutputHelper) : SqsTestB
 
         await DrainAllMessages();
 
-        await client.PutProcessingError(mrn, [new ProcessingError()], null, CancellationToken.None);
+        await client.PutProcessingError(
+            mrn,
+            [new ProcessingError() { Errors = [new ErrorItem() { Code = "ALVS01" }] }],
+            null,
+            CancellationToken.None
+        );
 
         var processingError = await client.GetProcessingError(mrn, CancellationToken.None);
         processingError.Should().NotBeNull();

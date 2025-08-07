@@ -14,6 +14,12 @@
         "sourceExternalCorrelationId": null,
         "externalVersion": null,
         "created": null,
+        "errors": [
+          {
+            "code": "ALVS01",
+            "message": null
+          }
+        ],
         "message": null
       }
     ]
@@ -24,7 +30,7 @@
     {
       "path": "/0",
       "operation": "Add",
-      "value": "{\n  \"correlationId\": null,\n  \"sourceExternalCorrelationId\": null,\n  \"externalVersion\": null,\n  \"created\": null,\n  \"errors\": [],\n  \"message\": null\n}"
+      "value": "{\n  \"correlationId\": null,\n  \"sourceExternalCorrelationId\": null,\n  \"externalVersion\": null,\n  \"created\": null,\n  \"errors\": [\n    {\n      \"code\": \"ALVS01\",\n      \"message\": null\n    }\n  ],\n  \"message\": null\n}"
     }
   ]
 }

@@ -2970,7 +2970,8 @@
         "type": "object",
         "properties": {
           "code": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "message": {
             "type": "string"
