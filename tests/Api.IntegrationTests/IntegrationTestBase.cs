@@ -11,11 +11,15 @@ namespace Defra.TradeImportsDataApi.Api.IntegrationTests;
 [Collection("Integration Tests")]
 public abstract class IntegrationTestBase
 {
-    protected static TradeImportsDataApiClient CreateDataApiClient() => new(CreateHttpClient());
+    protected const int DefaultDataApiPort = 8080;
+    protected const int DataApiWithInvalidSnsTopic = 8081;
 
-    protected static HttpClient CreateHttpClient()
+    protected static TradeImportsDataApiClient CreateDataApiClient(int port = DefaultDataApiPort) =>
+        new(CreateHttpClient(port));
+
+    protected static HttpClient CreateHttpClient(int port = DefaultDataApiPort)
     {
-        var httpClient = new HttpClient { BaseAddress = new Uri("http://localhost:8080") };
+        var httpClient = new HttpClient { BaseAddress = new Uri($"http://localhost:{port}") };
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
             "Basic",
             // See compose.yml for username, password and scope configuration

@@ -443,4 +443,52 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
             })
         );
     }
+
+    [Fact]
+    public async Task WhenCreating_AndCannotWriteToSns_ResourceEventShouldBeSavedButNotPublished()
+    {
+        var client = CreateDataApiClient(DataApiWithInvalidSnsTopic);
+        var httpClient = CreateHttpClient(DataApiWithInvalidSnsTopic);
+        var chedRef = ImportPreNotificationIdGenerator.Generate();
+
+        await DrainAllMessages();
+
+        await client.PutImportPreNotification(
+            chedRef,
+            new ImportPreNotification { ReferenceNumber = chedRef, Version = 1 },
+            null,
+            CancellationToken.None
+        );
+
+        var notification = await client.GetImportPreNotification(chedRef, CancellationToken.None);
+        notification.Should().NotBeNull();
+
+        var allResourceEvents = await httpClient.GetFromJsonAsyncSafe<object[]>(
+            Testing.Endpoints.ResourceEvents.GetAll(chedRef)
+        );
+        allResourceEvents.Length.Should().Be(1);
+        var unpublishedResourceEvents = await httpClient.GetFromJsonAsyncSafe<ResourceEventEntity[]>(
+            Testing.Endpoints.ResourceEvents.Unpublished(chedRef)
+        );
+        unpublishedResourceEvents.Length.Should().Be(1);
+
+        // Move to the data API we know works against SNS
+        httpClient = CreateHttpClient();
+
+        await httpClient.PutAsync(
+            Testing.Endpoints.ResourceEvents.Publish(chedRef, unpublishedResourceEvents[0].Id, force: false),
+            null
+        );
+
+        allResourceEvents = await httpClient.GetFromJsonAsyncSafe<object[]>(
+            Testing.Endpoints.ResourceEvents.GetAll(chedRef)
+        );
+        allResourceEvents.Length.Should().Be(1);
+        unpublishedResourceEvents = await httpClient.GetFromJsonAsyncSafe<ResourceEventEntity[]>(
+            Testing.Endpoints.ResourceEvents.Unpublished(chedRef)
+        );
+
+        // Should not be no unpublished resource events
+        unpublishedResourceEvents.Length.Should().Be(0);
+    }
 }

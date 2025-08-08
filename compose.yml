@@ -54,6 +54,38 @@ services:
       timeout: 5s
       retries: 10
       start_period: 5s
+  
+  data-api-invalid-upserts-topic:
+    build:
+      dockerfile: Dockerfile
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      localstack:
+        condition: service_healthy
+    env_file:
+      - 'compose/aws.env'
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ENVIRONMENT: local
+      AWS_EMF_ENVIRONMENT: Local
+      PORT: 8080
+      Mongo__DatabaseUri: mongodb://mongodb:27017/?directConnection=true
+      AWS__ServiceUrl: http://localstack:4566
+      AWS__AuthenticationRegion: eu-west-2
+      Acl__Clients__IntegrationTests__Secret: integration-tests-pwd
+      Acl__Clients__IntegrationTests__Scopes__0: read
+      Acl__Clients__IntegrationTests__Scopes__1: write
+      # This setting makes publishing to SNS impossible
+      ResourceEvents__TopicName: invalid_topic_name
+    ports:
+      - "8081:8080"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/health/all" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
 
   localstack:
     image: localstack/localstack:4
