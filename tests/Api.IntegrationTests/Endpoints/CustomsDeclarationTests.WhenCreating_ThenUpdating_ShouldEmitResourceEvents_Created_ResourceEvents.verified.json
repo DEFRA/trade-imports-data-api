@@ -1,0 +1,15 @@
+﻿[
+  {
+    "id": "{Scrubbed}",
+    "etag": "{Scrubbed}",
+    "created": "DateTimeOffset_1",
+    "updated": "DateTimeOffset_2",
+    "resourceId": "{Scrubbed}",
+    "resourceType": "CustomsDeclaration",
+    "subResourceType": "ClearanceRequest",
+    "operation": "Created",
+    "message": "{Scrubbed}",
+    "published": "DateTimeOffset_2",
+    "expiresAt": "DateTimeOffset_3"
+  }
+]

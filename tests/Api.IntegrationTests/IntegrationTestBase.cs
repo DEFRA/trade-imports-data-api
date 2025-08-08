@@ -1,5 +1,6 @@
 using System.Net.Http.Headers;
 using Defra.TradeImportsDataApi.Api.Client;
+using Defra.TradeImportsDataApi.Data.Entities;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
@@ -10,11 +11,15 @@ namespace Defra.TradeImportsDataApi.Api.IntegrationTests;
 [Collection("Integration Tests")]
 public abstract class IntegrationTestBase
 {
-    protected static TradeImportsDataApiClient CreateDataApiClient() => new(CreateHttpClient());
+    protected const int DefaultDataApiPort = 8080;
+    protected const int DataApiWithInvalidSnsTopic = 8081;
 
-    protected static HttpClient CreateHttpClient()
+    protected static TradeImportsDataApiClient CreateDataApiClient(int port = DefaultDataApiPort) =>
+        new(CreateHttpClient(port));
+
+    protected static HttpClient CreateHttpClient(int port = DefaultDataApiPort)
     {
-        var httpClient = new HttpClient { BaseAddress = new Uri("http://localhost:8080") };
+        var httpClient = new HttpClient { BaseAddress = new Uri($"http://localhost:{port}") };
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
             "Basic",
             // See compose.yml for username, password and scope configuration
@@ -27,15 +32,19 @@ public abstract class IntegrationTestBase
     protected static IMongoDatabase GetMongoDatabase()
     {
         var settings = MongoClientSettings.FromConnectionString("mongodb://127.0.0.1:27017/?directConnection=true");
+        settings.ServerSelectionTimeout = TimeSpan.FromSeconds(5);
+        settings.ConnectTimeout = TimeSpan.FromSeconds(5);
+        settings.SocketTimeout = TimeSpan.FromSeconds(5);
 
         return new MongoClient(settings).GetDatabase("trade-imports-data-api");
     }
 
     protected static IMongoCollection<T> GetMongoCollection<T>()
+        where T : IDataEntity
     {
         var db = GetMongoDatabase();
 
-        return db.GetCollection<T>(typeof(T).Name.Replace("Entity", ""));
+        return db.GetCollection<T>(typeof(T).DataEntityName());
     }
 
     protected IntegrationTestBase()

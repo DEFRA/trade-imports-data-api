@@ -1,11 +1,10 @@
 using System.IO.Compression;
 using System.Text;
-using System.Text.Json;
 using Amazon.SimpleNotificationService;
 using Amazon.SimpleNotificationService.Model;
 using Defra.TradeImportsDataApi.Api.Configuration;
 using Defra.TradeImportsDataApi.Api.Utils.Logging;
-using Defra.TradeImportsDataApi.Domain.Events;
+using Defra.TradeImportsDataApi.Data.Entities;
 using Microsoft.AspNetCore.HeaderPropagation;
 using Microsoft.Extensions.Options;
 
@@ -23,27 +22,27 @@ public class ResourceEventPublisher(
     private const int CompressionThreshold = 256 * 1000;
     private const string DataTypeString = "String";
 
-    public async Task Publish<T>(ResourceEvent<T> @event, CancellationToken cancellationToken)
+    public async Task Publish(ResourceEventEntity entity, CancellationToken cancellationToken)
     {
-        var (message, compressed) = SerializeEvent(@event);
+        var (message, compressed) = SerializeEvent(entity);
 
         var messageAttributes = new Dictionary<string, MessageAttributeValue>
         {
             {
-                nameof(@event.ResourceType),
-                new MessageAttributeValue { StringValue = @event.ResourceType, DataType = DataTypeString }
+                nameof(entity.ResourceType),
+                new MessageAttributeValue { StringValue = entity.ResourceType, DataType = DataTypeString }
             },
             {
-                nameof(@event.ResourceId),
-                new MessageAttributeValue { StringValue = @event.ResourceId, DataType = DataTypeString }
+                nameof(entity.ResourceId),
+                new MessageAttributeValue { StringValue = entity.ResourceId, DataType = DataTypeString }
             },
         };
 
-        if (@event.SubResourceType is not null)
+        if (entity.SubResourceType is not null)
         {
             messageAttributes.Add(
-                nameof(@event.SubResourceType),
-                new MessageAttributeValue { StringValue = @event.SubResourceType, DataType = DataTypeString }
+                nameof(entity.SubResourceType),
+                new MessageAttributeValue { StringValue = entity.SubResourceType, DataType = DataTypeString }
             );
         }
 
@@ -68,16 +67,16 @@ public class ResourceEventPublisher(
 
         logger.LogInformation(
             "Published resource event {ResourceType} {Operation} {SubResourceType} (compressed {Compressed})",
-            @event.ResourceType,
-            @event.Operation,
-            @event.SubResourceType,
+            entity.ResourceType,
+            entity.Operation,
+            entity.SubResourceType,
             compressed
         );
     }
 
-    private static (string message, bool compressed) SerializeEvent<T>(ResourceEvent<T> @event)
+    private static (string message, bool compressed) SerializeEvent(ResourceEventEntity entity)
     {
-        var message = JsonSerializer.Serialize(@event);
+        var message = entity.Message;
         if (message.Length <= CompressionThreshold)
             return (message, false);
 
