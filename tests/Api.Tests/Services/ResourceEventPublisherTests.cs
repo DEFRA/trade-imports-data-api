@@ -1,13 +1,11 @@
 using System.IO.Compression;
 using System.Text;
-using System.Text.Json;
 using Amazon.SimpleNotificationService;
 using Amazon.SimpleNotificationService.Model;
 using Defra.TradeImportsDataApi.Api.Configuration;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Api.Utils.Logging;
 using Defra.TradeImportsDataApi.Data.Entities;
-using Defra.TradeImportsDataApi.Domain.Events;
 using FluentAssertions;
 using Microsoft.AspNetCore.HeaderPropagation;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -34,12 +32,13 @@ public class ResourceEventPublisherTests
         );
 
         await subject.Publish(
-            new ResourceEvent<FixtureEntity>
+            new ResourceEventEntity
             {
+                Id = "id",
                 ResourceId = "resourceId",
                 ResourceType = "resourceType",
                 Operation = "operation",
-                Timestamp = new DateTime(2025, 4, 16, 7, 0, 0, DateTimeKind.Utc),
+                Message = "message",
             },
             CancellationToken.None
         );
@@ -53,8 +52,7 @@ public class ResourceEventPublisherTests
                     && x.MessageAttributes["ResourceType"].StringValue == "resourceType"
                     && x.MessageAttributes.ContainsKey("ResourceId")
                     && x.MessageAttributes["ResourceId"].StringValue == "resourceId"
-                    && x.Message
-                        == "{\"resourceId\":\"resourceId\",\"resourceType\":\"resourceType\",\"subResourceType\":null,\"operation\":\"operation\",\"resource\":null,\"etag\":null,\"timestamp\":\"2025-04-16T07:00:00Z\",\"changeSet\":[]}"
+                    && x.Message == "message"
                 ),
                 CancellationToken.None
             );
@@ -74,7 +72,7 @@ public class ResourceEventPublisherTests
             NullLogger<ResourceEventPublisher>.Instance
         );
 
-        var largerThanCompressionThreshold = 256 * 1000 + 1;
+        const int largerThanCompressionThreshold = 256 * 1000 + 1;
         var sb = new StringBuilder(largerThanCompressionThreshold);
         const char pattern = 'A';
         for (var i = 0; i < largerThanCompressionThreshold; i++)
@@ -84,30 +82,29 @@ public class ResourceEventPublisherTests
         var largeMessage = sb.ToString();
         largeMessage.Length.Should().Be(largerThanCompressionThreshold);
 
-        var resource = new FixtureEntity { Id = largeMessage };
-
-        var @event = new ResourceEvent<FixtureEntity>
+        var entity = new ResourceEventEntity
         {
+            Id = "id",
             ResourceId = "resourceId",
             ResourceType = "resourceType",
             Operation = "operation",
-            Resource = resource,
+            Message = largeMessage,
         };
 
-        await subject.Publish(@event, CancellationToken.None);
+        await subject.Publish(entity, CancellationToken.None);
 
         await mockSimpleNotificationService
             .Received()
             .PublishAsync(
                 Arg.Is<PublishRequest>(x =>
                     x.MessageAttributes["Content-Encoding"].StringValue == "gzip, base64"
-                    && DecodeAndDecompressTo<ResourceEvent<FixtureEntity>>(x.Message).Resource != resource
+                    && DecompressTo(x.Message) == largeMessage
                 ),
                 CancellationToken.None
             );
     }
 
-    private static T DecodeAndDecompressTo<T>(string compressedMessage)
+    private static string DecompressTo(string compressedMessage)
     {
         compressedMessage.Length.Should().BeLessThan(256 * 1000);
         var compressedBytes = Convert.FromBase64String(compressedMessage);
@@ -117,9 +114,7 @@ public class ResourceEventPublisherTests
         using var reader = new StreamReader(gzipStream, Encoding.UTF8);
         var result = reader.ReadToEnd();
 
-        var deserialised = JsonSerializer.Deserialize<T>(result);
-        deserialised.Should().NotBeNull();
-        return deserialised;
+        return result;
     }
 
     [Fact]
@@ -140,11 +135,13 @@ public class ResourceEventPublisherTests
         headerPropagationValues.Headers = new Dictionary<string, StringValues> { { "trace-id", "trace-id-value" } };
 
         await subject.Publish(
-            new ResourceEvent<FixtureEntity>
+            new ResourceEventEntity
             {
+                Id = "id",
                 ResourceId = "resourceId",
                 ResourceType = "resourceType",
                 Operation = "operation",
+                Message = "message",
             },
             CancellationToken.None
         );
@@ -175,12 +172,14 @@ public class ResourceEventPublisherTests
         );
 
         await subject.Publish(
-            new ResourceEvent<FixtureEntity>
+            new ResourceEventEntity
             {
+                Id = "id",
                 ResourceId = "resourceId",
                 ResourceType = "resourceType",
                 SubResourceType = "subResourceType",
                 Operation = "operation",
+                Message = "message",
             },
             CancellationToken.None
         );
@@ -194,16 +193,5 @@ public class ResourceEventPublisherTests
                 ),
                 CancellationToken.None
             );
-    }
-
-    private class FixtureEntity : IDataEntity
-    {
-        public string Name { get; set; } = null!;
-        public string Id { get; set; } = null!;
-        public string ETag { get; set; } = null!;
-        public DateTime Created { get; set; }
-        public DateTime Updated { get; set; }
-
-        public void OnSave() { }
     }
 }

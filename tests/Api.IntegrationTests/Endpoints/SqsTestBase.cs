@@ -12,7 +12,13 @@ public class SqsTestBase(ITestOutputHelper testOutputHelper) : IntegrationTestBa
 
     private readonly AmazonSQSClient _sqsClient = new(
         new BasicAWSCredentials("test", "test"),
-        new AmazonSQSConfig { AuthenticationRegion = "eu-west-2", ServiceURL = "http://localhost:4566" }
+        new AmazonSQSConfig
+        {
+            AuthenticationRegion = "eu-west-2",
+            ServiceURL = "http://localhost:4566",
+            Timeout = TimeSpan.FromSeconds(5),
+            MaxErrorRetry = 0,
+        }
     );
 
     protected Task<ReceiveMessageResponse> ReceiveMessage()
@@ -46,6 +52,11 @@ public class SqsTestBase(ITestOutputHelper testOutputHelper) : IntegrationTestBa
                 foreach (var message in response.Messages)
                 {
                     testOutputHelper?.WriteLine("Drain message: {0} {1}", message.MessageId, message.Body);
+
+                    await _sqsClient.DeleteMessageAsync(
+                        new DeleteMessageRequest { QueueUrl = QueueUrl, ReceiptHandle = message.ReceiptHandle },
+                        CancellationToken.None
+                    );
                 }
 
                 var approximateNumberOfMessages = (await GetQueueAttributes()).ApproximateNumberOfMessages;

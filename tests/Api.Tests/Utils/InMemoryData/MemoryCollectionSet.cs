@@ -35,5 +35,8 @@ public class MemoryCollectionSet<T> : IMongoCollectionSet<T>
 
     public void Update(T item, string etag) => throw new NotImplementedException();
 
+    public void Update(T item, Action<IFieldUpdateBuilder<T>> patch, string etag) =>
+        throw new NotImplementedException();
+
     public Task Save(CancellationToken cancellationToken) => throw new NotImplementedException();
 }

@@ -12,17 +12,24 @@ namespace Defra.TradeImportsDataApi.Api.Tests.Services;
 public class ProcessingErrorServiceTests
 {
     private IDbContext DbContext { get; }
-    private IResourceEventPublisher ResourceEventPublisher { get; }
     private IProcessingErrorRepository ProcessingErrorRepository { get; }
+    private IResourceEventRepository ResourceEventRepository { get; }
+    private IResourceEventService ResourceEventService { get; }
     private ProcessingErrorService Subject { get; }
 
     public ProcessingErrorServiceTests()
     {
         DbContext = Substitute.For<IDbContext>();
-        ResourceEventPublisher = Substitute.For<IResourceEventPublisher>();
         ProcessingErrorRepository = Substitute.For<IProcessingErrorRepository>();
+        ResourceEventRepository = Substitute.For<IResourceEventRepository>();
+        ResourceEventService = Substitute.For<IResourceEventService>();
 
-        Subject = new ProcessingErrorService(DbContext, ResourceEventPublisher, ProcessingErrorRepository);
+        Subject = new ProcessingErrorService(
+            DbContext,
+            ProcessingErrorRepository,
+            ResourceEventRepository,
+            ResourceEventService
+        );
     }
 
     [Fact]
@@ -34,19 +41,39 @@ public class ProcessingErrorServiceTests
             ProcessingErrors = [new ProcessingError { ExternalVersion = 1 }],
         };
         ProcessingErrorRepository.Insert(entity).Returns(entity);
+        var resourceEventEntityId = Guid.NewGuid().ToString();
+        ResourceEventRepository
+            .Insert(Arg.Any<ResourceEvent<ProcessingErrorEntity>>())
+            .Returns(call =>
+            {
+                var resourceEvent = call.Arg<ResourceEvent<ProcessingErrorEntity>>();
+
+                return new ResourceEventEntity
+                {
+                    Id = resourceEventEntityId,
+                    ResourceId = resourceEvent.ResourceId,
+                    ResourceType = resourceEvent.ResourceType,
+                    SubResourceType = resourceEvent.SubResourceType,
+                    Operation = resourceEvent.Operation,
+                    Message = "message body",
+                };
+            });
 
         await Subject.Insert(entity, CancellationToken.None);
 
-        await DbContext.Received().StartTransaction(CancellationToken.None);
+        await DbContext.Received(1).StartTransaction(CancellationToken.None);
+        await DbContext.Received(1).SaveChanges(CancellationToken.None);
+        await DbContext.Received(1).CommitTransaction(CancellationToken.None);
+
         ProcessingErrorRepository.Received().Insert(entity);
-        await DbContext.Received().SaveChanges(CancellationToken.None);
-        await ResourceEventPublisher
+        ResourceEventRepository
             .Received()
-            .Publish(
-                Arg.Is<ResourceEvent<ProcessingErrorEntity>>(x => x.Operation == "Created" && x.ChangeSet.Count > 0),
-                CancellationToken.None
+            .Insert(
+                Arg.Is<ResourceEvent<ProcessingErrorEntity>>(x => x.Operation == "Created" && x.ChangeSet.Count > 0)
             );
-        await DbContext.Received().CommitTransaction(CancellationToken.None);
+        await ResourceEventService
+            .Received()
+            .Publish(Arg.Is<ResourceEventEntity>(x => x.Id == resourceEventEntityId), CancellationToken.None);
     }
 
     [Fact]
@@ -69,19 +96,39 @@ public class ProcessingErrorServiceTests
             ],
         };
         ProcessingErrorRepository.Update(entity, "etag", CancellationToken.None).Returns((existing, entity));
+        var resourceEventEntityId = Guid.NewGuid().ToString();
+        ResourceEventRepository
+            .Insert(Arg.Any<ResourceEvent<ProcessingErrorEntity>>())
+            .Returns(call =>
+            {
+                var resourceEvent = call.Arg<ResourceEvent<ProcessingErrorEntity>>();
+
+                return new ResourceEventEntity
+                {
+                    Id = resourceEventEntityId,
+                    ResourceId = resourceEvent.ResourceId,
+                    ResourceType = resourceEvent.ResourceType,
+                    SubResourceType = resourceEvent.SubResourceType,
+                    Operation = resourceEvent.Operation,
+                    Message = "message body",
+                };
+            });
 
         await Subject.Update(entity, "etag", CancellationToken.None);
 
-        await DbContext.Received().StartTransaction(CancellationToken.None);
+        await DbContext.Received(1).StartTransaction(CancellationToken.None);
+        await DbContext.Received(1).SaveChanges(CancellationToken.None);
+        await DbContext.Received(1).CommitTransaction(CancellationToken.None);
+
         await ProcessingErrorRepository.Received().Update(entity, "etag", CancellationToken.None);
-        await DbContext.Received().SaveChanges(CancellationToken.None);
-        await ResourceEventPublisher
+        ResourceEventRepository
             .Received()
-            .Publish(
-                Arg.Is<ResourceEvent<ProcessingErrorEntity>>(x => x.Operation == "Updated" && x.ChangeSet.Count > 0),
-                CancellationToken.None
+            .Insert(
+                Arg.Is<ResourceEvent<ProcessingErrorEntity>>(x => x.Operation == "Updated" && x.ChangeSet.Count > 0)
             );
-        await DbContext.Received().CommitTransaction(CancellationToken.None);
+        await ResourceEventService
+            .Received()
+            .Publish(Arg.Is<ResourceEventEntity>(x => x.Id == resourceEventEntityId), CancellationToken.None);
     }
 
     [Fact]

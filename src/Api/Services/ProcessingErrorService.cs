@@ -1,15 +1,15 @@
 using Defra.TradeImportsDataApi.Api.Data;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
-using Defra.TradeImportsDataApi.Domain.Errors;
 using Defra.TradeImportsDataApi.Domain.Events;
 
 namespace Defra.TradeImportsDataApi.Api.Services;
 
 public class ProcessingErrorService(
     IDbContext dbContext,
-    IResourceEventPublisher resourceEventPublisher,
-    IProcessingErrorRepository processingErrorRepository
+    IProcessingErrorRepository processingErrorRepository,
+    IResourceEventRepository resourceEventRepository,
+    IResourceEventService resourceEventService
 ) : IProcessingErrorService
 {
     public async Task<ProcessingErrorEntity?> GetProcessingError(string mrn, CancellationToken cancellationToken) =>
@@ -21,14 +21,16 @@ public class ProcessingErrorService(
 
         var inserted = processingErrorRepository.Insert(entity);
 
+        var resourceEvent = inserted
+            .ToResourceEvent(ResourceEventOperations.Created)
+            .WithChangeSet(inserted.ProcessingErrors, []);
+
+        var resourceEventEntity = resourceEventRepository.Insert(resourceEvent);
+
         await dbContext.SaveChanges(cancellationToken);
-
-        await resourceEventPublisher.Publish(
-            inserted.ToResourceEvent(ResourceEventOperations.Created).WithChangeSet(inserted.ProcessingErrors, []),
-            cancellationToken
-        );
-
         await dbContext.CommitTransaction(cancellationToken);
+
+        await resourceEventService.Publish(resourceEventEntity, cancellationToken);
 
         return inserted;
     }
@@ -43,16 +45,16 @@ public class ProcessingErrorService(
 
         var (existing, updated) = await processingErrorRepository.Update(entity, etag, cancellationToken);
 
+        var resourceEvent = updated
+            .ToResourceEvent(ResourceEventOperations.Updated)
+            .WithChangeSet(updated.ProcessingErrors, existing.ProcessingErrors);
+
+        var resourceEventEntity = resourceEventRepository.Insert(resourceEvent);
+
         await dbContext.SaveChanges(cancellationToken);
-
-        await resourceEventPublisher.Publish(
-            updated
-                .ToResourceEvent(ResourceEventOperations.Updated)
-                .WithChangeSet(updated.ProcessingErrors, existing.ProcessingErrors),
-            cancellationToken
-        );
-
         await dbContext.CommitTransaction(cancellationToken);
+
+        await resourceEventService.Publish(resourceEventEntity, cancellationToken);
 
         return updated;
     }
