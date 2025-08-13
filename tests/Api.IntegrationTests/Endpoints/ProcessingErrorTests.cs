@@ -2,6 +2,7 @@ using System.Text.Json;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.Errors;
 using Defra.TradeImportsDataApi.Domain.Events;
+using Defra.TradeImportsDataApi.Testing;
 using FluentAssertions;
 using Xunit.Abstractions;
 
@@ -13,6 +14,7 @@ public class ProcessingErrorTests(ITestOutputHelper testOutputHelper) : SqsTestB
     public async Task WhenDoesNotExist_ShouldCreateAndRead()
     {
         var client = CreateDataApiClient();
+        var httpClient = CreateHttpClient();
         var mrn = Guid.NewGuid().ToString("N");
 
         var result = await client.GetProcessingError(mrn, CancellationToken.None);
@@ -22,6 +24,15 @@ public class ProcessingErrorTests(ITestOutputHelper testOutputHelper) : SqsTestB
 
         result = await client.GetProcessingError(mrn, CancellationToken.None);
         result.Should().NotBeNull();
+
+        var allResourceEvents = await httpClient.GetFromJsonAsyncSafe<object[]>(
+            Testing.Endpoints.ResourceEvents.GetAll(mrn)
+        );
+        allResourceEvents.Length.Should().Be(1);
+        var unpublishedResourceEvents = await httpClient.GetFromJsonAsyncSafe<object[]>(
+            Testing.Endpoints.ResourceEvents.Unpublished(mrn)
+        );
+        unpublishedResourceEvents.Length.Should().Be(0);
     }
 
     [Fact]
@@ -54,6 +65,7 @@ public class ProcessingErrorTests(ITestOutputHelper testOutputHelper) : SqsTestB
     public async Task WhenCreating_ThenUpdating_ShouldEmitResourceEvents()
     {
         var client = CreateDataApiClient();
+        var httpClient = CreateHttpClient();
         var mrn = Guid.NewGuid().ToString("N");
 
         await DrainAllMessages();
@@ -90,6 +102,25 @@ public class ProcessingErrorTests(ITestOutputHelper testOutputHelper) : SqsTestB
                     resourceEvent.Resource.Id.Should().Be(mrn);
                     resourceEvent.Resource.ETag.Should().Be(etag);
                     resourceEvent.ETag.Should().Be(etag);
+
+                    var response = await httpClient.GetAsync(Testing.Endpoints.ResourceEvents.GetAll(mrn));
+                    var content = await response.Content.ReadAsStringAsync();
+
+                    await VerifyJson(content)
+                        .ScrubMember("id")
+                        .ScrubMember("resourceId")
+                        .ScrubMember("etag")
+                        .ScrubMember("message")
+                        .UseStrictJson()
+                        .UseMethodName(
+                            $"{nameof(WhenCreating_ThenUpdating_ShouldEmitResourceEvents)}_Created_ResourceEvents"
+                        );
+
+                    var resourceEventEntities = JsonSerializer.Deserialize<ResourceEventEntity[]>(content);
+                    resourceEventEntities.Should().NotBeNull();
+                    resourceEventEntities.Length.Should().Be(1);
+
+                    message.Body.Should().Be(resourceEventEntities[0].Message);
                 }
 
                 return expectedMessageCount;
@@ -133,6 +164,25 @@ public class ProcessingErrorTests(ITestOutputHelper testOutputHelper) : SqsTestB
                     resourceEvent.Resource.Id.Should().Be(mrn);
                     resourceEvent.Resource.ETag.Should().Be(etag);
                     resourceEvent.ETag.Should().Be(etag);
+
+                    var response = await httpClient.GetAsync(Testing.Endpoints.ResourceEvents.GetAll(mrn));
+                    var content = await response.Content.ReadAsStringAsync();
+
+                    await VerifyJson(content)
+                        .ScrubMember("id")
+                        .ScrubMember("resourceId")
+                        .ScrubMember("etag")
+                        .ScrubMember("message")
+                        .UseStrictJson()
+                        .UseMethodName(
+                            $"{nameof(WhenCreating_ThenUpdating_ShouldEmitResourceEvents)}_Updated_ResourceEvents"
+                        );
+
+                    var resourceEventEntities = JsonSerializer.Deserialize<ResourceEventEntity[]>(content);
+                    resourceEventEntities.Should().NotBeNull();
+                    resourceEventEntities.Length.Should().Be(2);
+
+                    message.Body.Should().Be(resourceEventEntities[1].Message);
                 }
 
                 return expectedMessageCount;

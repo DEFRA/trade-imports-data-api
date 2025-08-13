@@ -35,7 +35,7 @@ public static class DataEntityExtensions
     private static string ResourceTypeName<TDataEntity>()
         where TDataEntity : IDataEntity
     {
-        var name = typeof(TDataEntity).Name.Replace("Entity", string.Empty);
+        var name = typeof(TDataEntity).DataEntityName();
 
         return name switch
         {

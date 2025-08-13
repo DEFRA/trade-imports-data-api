@@ -18,6 +18,7 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
         var body = ImportPreNotificationFixtures.CreateFromSample(GetType(), "ImportPreNotificationTests_Sample.json");
         var chedRef = ImportPreNotificationIdGenerator.Generate();
         var client = CreateDataApiClient();
+        var httpClient = CreateHttpClient();
 
         var result = await client.GetImportPreNotification(chedRef, CancellationToken.None);
         result.Should().BeNull();
@@ -26,6 +27,15 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
 
         result = await client.GetImportPreNotification(chedRef, CancellationToken.None);
         result.Should().NotBeNull();
+
+        var allResourceEvents = await httpClient.GetFromJsonAsyncSafe<object[]>(
+            Testing.Endpoints.ResourceEvents.GetAll(chedRef)
+        );
+        allResourceEvents.Length.Should().Be(1);
+        var unpublishedResourceEvents = await httpClient.GetFromJsonAsyncSafe<object[]>(
+            Testing.Endpoints.ResourceEvents.Unpublished(chedRef)
+        );
+        unpublishedResourceEvents.Length.Should().Be(0);
     }
 
     [Fact]
@@ -233,6 +243,7 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
     public async Task WhenCreating_ThenUpdating_ShouldEmitResourceEvents()
     {
         var client = CreateDataApiClient();
+        var httpClient = CreateHttpClient();
         var chedRef = ImportPreNotificationIdGenerator.Generate();
 
         await DrainAllMessages();
@@ -248,13 +259,19 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
         notification.Should().NotBeNull();
         var etag = notification.ETag?.Replace("\"", "") ?? throw new InvalidOperationException("No etag");
 
+        string? resourceEventId = null;
+        DateTime? publishedDate = null;
+        string? messageBody = null;
+
         Assert.True(
             await AsyncWaiter.WaitForAsync(async () =>
             {
+                // Expect single resource event to have been emitted
                 var expectedMessageCount = (await GetQueueAttributes()).ApproximateNumberOfMessages == 1;
 
                 if (expectedMessageCount)
                 {
+                    // Get the resource event message
                     var messageResponse = await ReceiveMessage();
                     var message = messageResponse.Messages[0];
 
@@ -279,6 +296,80 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
                     resourceEvent.Resource.Id.Should().Be(chedRef);
                     resourceEvent.Resource.ETag.Should().Be(etag);
                     resourceEvent.ETag.Should().Be(etag);
+
+                    var response = await httpClient.GetAsync(Testing.Endpoints.ResourceEvents.GetAll(chedRef));
+                    var content = await response.Content.ReadAsStringAsync();
+
+                    await VerifyJson(content)
+                        .ScrubMember("id")
+                        .ScrubMember("resourceId")
+                        .ScrubMember("etag")
+                        .ScrubMember("message")
+                        .UseStrictJson()
+                        .UseMethodName(
+                            $"{nameof(WhenCreating_ThenUpdating_ShouldEmitResourceEvents)}_Created_ResourceEvents"
+                        );
+
+                    var resourceEventEntities = JsonSerializer.Deserialize<ResourceEventEntity[]>(content);
+                    resourceEventEntities.Should().NotBeNull();
+                    resourceEventEntities.Length.Should().Be(1);
+
+                    var resourceEventEntity = resourceEventEntities[0];
+
+                    // Resource event body should match what was saved
+                    message.Body.Should().Be(resourceEventEntity.Message);
+
+                    // Updated should be greater than created as resource event is created first as part of main
+                    // save, then updated once SNS write is complete
+                    resourceEventEntity.Updated.Should().BeAfter(resourceEventEntity.Created);
+
+                    // Updated should match Published due to above comment
+                    resourceEventEntity.Published.Should().Be(resourceEventEntity.Updated);
+
+                    // Store the following for republish checking
+                    resourceEventId = resourceEventEntity.Id;
+                    publishedDate = resourceEventEntity.Published;
+                    messageBody = message.Body;
+                }
+
+                return expectedMessageCount;
+            })
+        );
+
+        resourceEventId.Should().NotBeNull();
+
+        await DrainAllMessages();
+
+        // Republish the already sent resource event
+        await httpClient.PutAsync(
+            Testing.Endpoints.ResourceEvents.Publish(chedRef, resourceEventId, force: true),
+            null
+        );
+
+        Assert.True(
+            await AsyncWaiter.WaitForAsync(async () =>
+            {
+                // Expect single resource event to have been emitted
+                var expectedMessageCount = (await GetQueueAttributes()).ApproximateNumberOfMessages == 1;
+
+                if (expectedMessageCount)
+                {
+                    // Get the resource event message
+                    var messageResponse = await ReceiveMessage();
+                    var message = messageResponse.Messages[0];
+
+                    // Message should not have changed
+                    message.Body.Should().Be(messageBody);
+
+                    var response = await httpClient.GetAsync(Testing.Endpoints.ResourceEvents.GetAll(chedRef));
+                    var content = await response.Content.ReadAsStringAsync();
+
+                    var resourceEventEntities = JsonSerializer.Deserialize<ResourceEventEntity[]>(content);
+                    resourceEventEntities.Should().NotBeNull();
+                    resourceEventEntities.Length.Should().Be(1);
+
+                    // Published field should now be different as it was republished
+                    resourceEventEntities[0].Published.Should().BeAfter(publishedDate.GetValueOrDefault());
                 }
 
                 return expectedMessageCount;
@@ -327,10 +418,77 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
                     resourceEvent.Resource.Id.Should().Be(chedRef);
                     resourceEvent.Resource.ETag.Should().Be(etag);
                     resourceEvent.ETag.Should().Be(etag);
+
+                    var response = await httpClient.GetAsync(Testing.Endpoints.ResourceEvents.GetAll(chedRef));
+                    var content = await response.Content.ReadAsStringAsync();
+
+                    await VerifyJson(content)
+                        .ScrubMember("id")
+                        .ScrubMember("resourceId")
+                        .ScrubMember("etag")
+                        .ScrubMember("message")
+                        .UseStrictJson()
+                        .UseMethodName(
+                            $"{nameof(WhenCreating_ThenUpdating_ShouldEmitResourceEvents)}_Updated_ResourceEvents"
+                        );
+
+                    var resourceEventEntities = JsonSerializer.Deserialize<ResourceEventEntity[]>(content);
+                    resourceEventEntities.Should().NotBeNull();
+                    resourceEventEntities.Length.Should().Be(2);
+
+                    message.Body.Should().Be(resourceEventEntities[1].Message);
                 }
 
                 return expectedMessageCount;
             })
         );
+    }
+
+    [Fact]
+    public async Task WhenCreating_AndCannotWriteToSns_ResourceEventShouldBeSavedButNotPublished()
+    {
+        var client = CreateDataApiClient(DataApiWithInvalidSnsTopic);
+        var httpClient = CreateHttpClient(DataApiWithInvalidSnsTopic);
+        var chedRef = ImportPreNotificationIdGenerator.Generate();
+
+        await DrainAllMessages();
+
+        await client.PutImportPreNotification(
+            chedRef,
+            new ImportPreNotification { ReferenceNumber = chedRef, Version = 1 },
+            null,
+            CancellationToken.None
+        );
+
+        var notification = await client.GetImportPreNotification(chedRef, CancellationToken.None);
+        notification.Should().NotBeNull();
+
+        var allResourceEvents = await httpClient.GetFromJsonAsyncSafe<object[]>(
+            Testing.Endpoints.ResourceEvents.GetAll(chedRef)
+        );
+        allResourceEvents.Length.Should().Be(1);
+        var unpublishedResourceEvents = await httpClient.GetFromJsonAsyncSafe<ResourceEventEntity[]>(
+            Testing.Endpoints.ResourceEvents.Unpublished(chedRef)
+        );
+        unpublishedResourceEvents.Length.Should().Be(1);
+
+        // Move to the data API we know works against SNS
+        httpClient = CreateHttpClient();
+
+        await httpClient.PutAsync(
+            Testing.Endpoints.ResourceEvents.Publish(chedRef, unpublishedResourceEvents[0].Id, force: false),
+            null
+        );
+
+        allResourceEvents = await httpClient.GetFromJsonAsyncSafe<object[]>(
+            Testing.Endpoints.ResourceEvents.GetAll(chedRef)
+        );
+        allResourceEvents.Length.Should().Be(1);
+        unpublishedResourceEvents = await httpClient.GetFromJsonAsyncSafe<ResourceEventEntity[]>(
+            Testing.Endpoints.ResourceEvents.Unpublished(chedRef)
+        );
+
+        // Should not be no unpublished resource events
+        unpublishedResourceEvents.Length.Should().Be(0);
     }
 }

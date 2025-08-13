@@ -57,4 +57,16 @@ public static class Endpoints
     {
         public static string MaxId => "/admin/max-id";
     }
+
+    public static class ResourceEvents
+    {
+        private const string Root = "/resource-events";
+
+        public static string GetAll(string resourceId) => $"{Root}/{resourceId}";
+
+        public static string Unpublished(string resourceId) => $"{Root}/{resourceId}/unpublished";
+
+        public static string Publish(string resourceId, string resourceEventId, bool? force = null) =>
+            $"{Root}/{resourceId}/publish?resourceEventId={resourceEventId}{(force is not null ? $"&force={force.ToString()?.ToLower()}" : "")}";
+    }
 }
