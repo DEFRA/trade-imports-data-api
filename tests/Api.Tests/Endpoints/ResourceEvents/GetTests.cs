@@ -117,4 +117,52 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
 
         await VerifyJson(await response.Content.ReadAsStringAsync(), _settings);
     }
+
+    [Fact]
+    public async Task Message_WhenFound_ShouldBeAsList()
+    {
+        var client = CreateClient();
+        MockResourceEventRepository
+            .GetAll(ResourceId, Arg.Any<CancellationToken>())
+            .Returns(
+                [
+                    new ResourceEventEntity
+                    {
+                        Id = "id1",
+                        ResourceId = "resourceId",
+                        ResourceType = "resourceType",
+                        Operation = "operation",
+                        Message = "message",
+                        Published = DateTime.UtcNow,
+                    },
+                    new ResourceEventEntity
+                    {
+                        Id = "id2",
+                        ResourceId = "resourceId2",
+                        ResourceType = "resourceType2",
+                        Operation = "operation2",
+                        Message = "{\"resourceId\":\"resourceId2\"}",
+                    },
+                ]
+            );
+
+        var response = await client.GetAsync(
+            TradeImportsDataApi.Testing.Endpoints.ResourceEvents.Message(ResourceId, "id2")
+        );
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        await VerifyJson(await response.Content.ReadAsStringAsync(), _settings);
+    }
+
+    [Fact]
+    public async Task Message_WhenNotFound_ShouldBeNotFound()
+    {
+        var client = CreateClient();
+        MockResourceEventRepository.GetAll(ResourceId, Arg.Any<CancellationToken>()).Returns([]);
+
+        var response = await client.GetAsync(
+            TradeImportsDataApi.Testing.Endpoints.ResourceEvents.Message(ResourceId, "id2")
+        );
+        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+    }
 }

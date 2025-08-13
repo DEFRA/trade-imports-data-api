@@ -20,6 +20,10 @@ public static class EndpointRouteBuilderExtensions
         app.MapPut("resource-events/{resourceId}/publish", Publish)
             .ExcludeFromDescription()
             .RequireAuthorization(PolicyNames.Write);
+
+        app.MapGet("resource-events/{resourceId}/message", Message)
+            .ExcludeFromDescription()
+            .RequireAuthorization(PolicyNames.Write);
     }
 
     [HttpGet]
@@ -68,5 +72,22 @@ public static class EndpointRouteBuilderExtensions
         await resourceEventService.PublishAllowException(resourceEvent, cancellationToken);
 
         return Results.NoContent();
+    }
+
+    [HttpGet]
+    private static async Task<IResult> Message(
+        [FromRoute] string resourceId,
+        [FromQuery] string? resourceEventId,
+        [FromServices] IResourceEventRepository resourceEventRepository,
+        CancellationToken cancellationToken
+    )
+    {
+        var resourceEvents = await resourceEventRepository.GetAll(resourceId, cancellationToken);
+        var resourceEvent = resourceEvents.FirstOrDefault(x => x.Id == resourceEventId);
+
+        if (resourceEvent is null)
+            return Results.NotFound();
+
+        return Results.Content(resourceEvent.Message, "application/json");
     }
 }

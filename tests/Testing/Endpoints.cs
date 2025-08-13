@@ -68,5 +68,8 @@ public static class Endpoints
 
         public static string Publish(string resourceId, string resourceEventId, bool? force = null) =>
             $"{Root}/{resourceId}/publish?resourceEventId={resourceEventId}{(force is not null ? $"&force={force.ToString()?.ToLower()}" : "")}";
+
+        public static string Message(string resourceId, string resourceEventId) =>
+            $"{Root}/{resourceId}/message?resourceEventId={resourceEventId}";
     }
 }
