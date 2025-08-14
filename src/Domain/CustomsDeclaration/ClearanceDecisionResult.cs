@@ -13,6 +13,9 @@ public class ClearanceDecisionResult
     [JsonPropertyName("documentReference")]
     public string? DocumentReference { get; set; }
 
+    [JsonPropertyName("documentCode")]
+    public string? DocumentCode { get; set; }
+
     [JsonPropertyName("checkCode")]
     public string? CheckCode { get; set; }
 

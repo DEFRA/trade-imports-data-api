@@ -1583,6 +1583,10 @@
             "type": "string",
             "nullable": true
           },
+          "documentCode": {
+            "type": "string",
+            "nullable": true
+          },
           "checkCode": {
             "type": "string",
             "nullable": true
