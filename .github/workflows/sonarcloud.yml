@@ -19,7 +19,7 @@ jobs:
           java-version: 17
           distribution: "zulu"
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - name: Set up .NET 9.0
