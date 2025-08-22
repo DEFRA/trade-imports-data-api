@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Defra.TradeImportsDataApi.Api.Metrics;
 
 [ExcludeFromCodeCoverage]
-public class MetricsMiddleware(RequestMetrics requestMetrics) : IMiddleware
+public class MetricsMiddleware(RequestMetrics requestMetrics, ILogger<MetricsMiddleware> logger) : IMiddleware
 {
     private static readonly string[] s_startsWith = ["/apple-", "/favicon", "/redoc", "/.well-known/openapi"];
 
@@ -24,12 +24,24 @@ public class MetricsMiddleware(RequestMetrics requestMetrics) : IMiddleware
         {
             if (!IgnoreRequest(path))
             {
+                var totalMilliseconds = TimeProvider.System.GetElapsedTime(startingTimestamp).TotalMilliseconds;
                 requestMetrics.RequestCompleted(
                     path,
                     context.Request.Method,
                     context.Response.StatusCode,
-                    TimeProvider.System.GetElapsedTime(startingTimestamp).TotalMilliseconds
+                    totalMilliseconds
                 );
+
+                if (totalMilliseconds > 750)
+                {
+                    logger.LogWarning(
+                        "Slow request - {Method} : {Path} : {StatusCode} : {TotalMilliseconds}",
+                        context.Request.Method,
+                        context.Request.Path,
+                        context.Response.StatusCode,
+                        totalMilliseconds
+                    );
+                }
             }
         }
     }

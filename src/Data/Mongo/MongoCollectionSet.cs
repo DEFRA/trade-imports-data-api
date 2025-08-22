@@ -75,12 +75,15 @@ public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionNa
             {
                 var filter = builder.Eq(x => x.Id, item.Id) & builder.Eq(x => x.ETag, item.Etag);
 
-                var updateResult = await Collection.UpdateOneAsync(
-                    session,
-                    filter,
-                    item.Patch,
-                    cancellationToken: cancellationToken
-                );
+                var updateResult =
+                    session == null
+                        ? await Collection.UpdateOneAsync(filter, item.Patch, cancellationToken: cancellationToken)
+                        : await Collection.UpdateOneAsync(
+                            session,
+                            filter,
+                            item.Patch,
+                            cancellationToken: cancellationToken
+                        );
 
                 if (updateResult.ModifiedCount == 0)
                     throw new ConcurrencyException(item.Id, item.Etag);
@@ -107,10 +110,7 @@ public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionNa
 
     private IClientSessionHandle? GetSession()
     {
-        if (dbContext.ActiveTransaction is null)
-            throw new InvalidOperationException("Transaction has not been started");
-
-        return dbContext.ActiveTransaction.Session;
+        return dbContext.ActiveTransaction?.Session;
     }
 
     public void Insert(T item)
