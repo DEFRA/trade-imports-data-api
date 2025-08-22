@@ -41,14 +41,11 @@ public class ResourceEventService(
         CancellationToken cancellationToken
     )
     {
-        await dbContext.StartTransaction(cancellationToken);
-
         await resourceEventPublisher.Publish(entity, cancellationToken);
 
         entity = resourceEventRepository.UpdateProcessed(entity);
 
         await dbContext.SaveChanges(cancellationToken);
-        await dbContext.CommitTransaction(cancellationToken);
 
         return entity;
     }
