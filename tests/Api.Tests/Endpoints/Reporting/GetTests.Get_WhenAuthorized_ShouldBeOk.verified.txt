@@ -1,6 +1,0 @@
-﻿{
-  importPreNotification: CHED,
-  customsDeclaration: CDS,
-  gmr: GMR,
-  processingError: ProcessingError
-}

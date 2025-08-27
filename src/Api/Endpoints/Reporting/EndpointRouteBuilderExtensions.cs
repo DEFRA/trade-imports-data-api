@@ -22,6 +22,11 @@ public static class EndpointRouteBuilderExtensions
         CancellationToken cancellationToken
     )
     {
+        if (from > to || to.Subtract(from).Days > 31)
+        {
+            return Results.BadRequest();
+        }
+
         var query = dbContext
             .CustomsDeclarations.Where(x =>
                 x.Finalisation!.MessageSentAt >= from && x.Finalisation!.MessageSentAt <= to

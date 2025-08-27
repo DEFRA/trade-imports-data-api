@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Net;
 using System.Text.Json;
 using Defra.TradeImportsDataApi.Api.Data;
@@ -67,6 +68,30 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
     }
 
     [Fact]
+    public async Task Get_WhenFromIsGreaterThanTo_ShouldBeBadRequest()
+    {
+        var client = CreateClient();
+
+        var response = await client.GetAsync(
+            TradeImportsDataApi.Testing.Endpoints.Reporting.ManualRelease(DateTime.UtcNow.AddHours(1), DateTime.UtcNow)
+        );
+
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
+    [Fact]
+    public async Task Get_WheSpanIsMoreThan31Days_ShouldBeBadRequest()
+    {
+        var client = CreateClient();
+
+        var response = await client.GetAsync(
+            TradeImportsDataApi.Testing.Endpoints.Reporting.ManualRelease(DateTime.UtcNow.AddDays(32), DateTime.UtcNow)
+        );
+
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
+    [Fact]
     public async Task Get_WhenAuthorized_Report_ShouldBeOk()
     {
         var body = EmbeddedResource.GetBody(GetType(), "GetTests_DomainExample.json");
@@ -126,7 +151,10 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
         );
 
         var response = await client.GetAsync(
-            TradeImportsDataApi.Testing.Endpoints.Reporting.ManualRelease(DateTime.UtcNow.AddYears(-5), DateTime.UtcNow)
+            TradeImportsDataApi.Testing.Endpoints.Reporting.ManualRelease(
+                DateTime.Parse("2024-02-16", CultureInfo.CurrentCulture),
+                DateTime.Parse("2024-02-20", CultureInfo.CurrentCulture)
+            )
         );
 
         await VerifyJson(await response.Content.ReadAsStringAsync(), _settings);
