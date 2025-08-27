@@ -1,0 +1,39 @@
+using Defra.TradeImportsDataApi.Api.Authentication;
+using Defra.TradeImportsDataApi.Api.Data;
+using Defra.TradeImportsDataApi.Data;
+using Defra.TradeImportsDataApi.Data.Extensions;
+using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver.Linq;
+
+namespace Defra.TradeImportsDataApi.Api.Endpoints.Reporting;
+
+public static class EndpointRouteBuilderExtensions
+{
+    public static void MapReportingEndpoints(this IEndpointRouteBuilder app)
+    {
+        app.MapGet("reporting/manual-release", ManualRelease).ExcludeFromDescription(); ////.RequireAuthorization(PolicyNames.Read);
+    }
+
+    [HttpGet]
+    private static async Task<IResult> ManualRelease(
+        [FromQuery] DateTime from,
+        [FromQuery] DateTime to,
+        [FromServices] IDbContext dbContext,
+        CancellationToken cancellationToken
+    )
+    {
+        var query = dbContext
+            .CustomsDeclarations.Where(x =>
+                x.Finalisation!.MessageSentAt >= from && x.Finalisation!.MessageSentAt <= to
+            )
+            .Select(x => new { x.Id, x.Finalisation!.IsManualRelease });
+
+        var dbResult = await query.ToListWithFallbackAsync(cancellationToken);
+
+        var total = dbResult.Count;
+        var manualMrns = dbResult.Where(x => x.IsManualRelease).Select(x => x.Id).ToArray();
+        var autoReleaseCounts = dbResult.Count(x => !x.IsManualRelease);
+
+        return Results.Ok(new ManualReleaseReportResponse(total, autoReleaseCounts, manualMrns.Length, manualMrns));
+    }
+}

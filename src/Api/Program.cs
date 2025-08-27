@@ -9,6 +9,7 @@ using Defra.TradeImportsDataApi.Api.Endpoints.Gmrs;
 using Defra.TradeImportsDataApi.Api.Endpoints.ImportPreNotifications;
 using Defra.TradeImportsDataApi.Api.Endpoints.ProcessingErrors;
 using Defra.TradeImportsDataApi.Api.Endpoints.RelatedImportDeclarations;
+using Defra.TradeImportsDataApi.Api.Endpoints.Reporting;
 using Defra.TradeImportsDataApi.Api.Endpoints.ResourceEvents;
 using Defra.TradeImportsDataApi.Api.Health;
 using Defra.TradeImportsDataApi.Api.Metrics;
@@ -143,6 +144,7 @@ static WebApplication BuildWebApplication(WebApplicationBuilder builder, bool ge
     app.MapProcessingErrorEndpoints();
     app.MapSearchEndpoints();
     app.MapAdminEndpoints();
+    app.MapReportingEndpoints();
     app.MapResourceEventEndpoints();
     app.UseOpenApi();
     app.UseStatusCodePages();

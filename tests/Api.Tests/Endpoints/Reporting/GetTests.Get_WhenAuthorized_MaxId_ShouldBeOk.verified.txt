@@ -1,0 +1,8 @@
+﻿{
+  total: 2,
+  automaticRelease: 1,
+  manualRelease: 1,
+  manualReleaseMrns: [
+    Mrn1
+  ]
+}

@@ -69,4 +69,10 @@ public static class Endpoints
         public static string Publish(string resourceId, string resourceEventId, bool? force = null) =>
             $"{Root}/{resourceId}/publish?resourceEventId={resourceEventId}{(force is not null ? $"&force={force.ToString()?.ToLower()}" : "")}";
     }
+
+    public static class Reporting
+    {
+        public static string ManualRelease(DateTime from, DateTime to) =>
+            $"/reporting/manual-release?from={from:s}&to={to:s}";
+    }
 }

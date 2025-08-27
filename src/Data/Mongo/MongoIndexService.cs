@@ -48,6 +48,11 @@ public class MongoIndexService(IMongoDatabase database, ILogger<MongoIndexServic
             Builders<CustomsDeclarationEntity>.IndexKeys.Ascending(x => x.Updated),
             cancellationToken: cancellationToken
         );
+        await CreateIndex(
+            "FinalisationMessageSentAtIdx",
+            Builders<CustomsDeclarationEntity>.IndexKeys.Ascending(x => x.Finalisation!.MessageSentAt),
+            cancellationToken: cancellationToken
+        );
     }
 
     private async Task CreateImportPreNotificationIndexes(CancellationToken cancellationToken)
