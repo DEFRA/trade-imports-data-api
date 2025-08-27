@@ -1,9 +1,7 @@
 using Defra.TradeImportsDataApi.Api.Authentication;
-using Defra.TradeImportsDataApi.Api.Data;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Extensions;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Driver.Linq;
 
 namespace Defra.TradeImportsDataApi.Api.Endpoints.Reporting;
 
@@ -11,7 +9,9 @@ public static class EndpointRouteBuilderExtensions
 {
     public static void MapReportingEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapGet("reporting/manual-release", ManualRelease).ExcludeFromDescription(); ////.RequireAuthorization(PolicyNames.Read);
+        app.MapGet("reporting/manual-release", ManualRelease)
+            .ExcludeFromDescription()
+            .RequireAuthorization(PolicyNames.Read);
     }
 
     [HttpGet]
