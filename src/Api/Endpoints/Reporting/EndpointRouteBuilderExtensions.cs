@@ -49,9 +49,7 @@ public static class EndpointRouteBuilderExtensions
         }
 
         var query = dbContext
-            .CustomsDeclarations.Where(x =>
-                x.Finalisation!.MessageSentAt >= from && x.Finalisation!.MessageSentAt < to
-            )
+            .CustomsDeclarations.Where(x => x.Finalisation!.MessageSentAt >= from && x.Finalisation!.MessageSentAt < to)
             .Select(x => new { x.Id, x.Finalisation!.IsManualRelease });
 
         var dbResult = await query.ToListWithFallbackAsync(cancellationToken);
