@@ -72,7 +72,11 @@ public static class Endpoints
 
     public static class Reporting
     {
-        public static string ManualRelease(DateTime from, DateTime to) =>
-            $"/reporting/manual-release?from={from:s}&to={to:s}";
+        public static string ManualRelease(DateTime from, DateTime to)
+        {
+            var fromString = from.Kind == DateTimeKind.Utc ? $"{from:u}" : $"{from:s}";
+            var toString = from.Kind == DateTimeKind.Utc ? $"{to:u}" : $"{to:s}";
+            return $"/reporting/manual-release?from={fromString}&to={toString}";
+        }
     }
 }

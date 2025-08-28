@@ -77,6 +77,8 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
         );
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+        await VerifyJson(await response.Content.ReadAsStringAsync(), _settings);
     }
 
     [Fact]
@@ -85,10 +87,26 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
         var client = CreateClient();
 
         var response = await client.GetAsync(
-            TradeImportsDataApi.Testing.Endpoints.Reporting.ManualRelease(DateTime.UtcNow.AddDays(32), DateTime.UtcNow)
+            TradeImportsDataApi.Testing.Endpoints.Reporting.ManualRelease(DateTime.UtcNow.AddDays(-32), DateTime.UtcNow)
         );
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+        await VerifyJson(await response.Content.ReadAsStringAsync(), _settings);
+    }
+
+    [Fact]
+    public async Task Get_WheDatesAreNotUtc_ShouldBeBadRequest()
+    {
+        var client = CreateClient();
+
+        var response = await client.GetAsync(
+            TradeImportsDataApi.Testing.Endpoints.Reporting.ManualRelease(DateTime.Now.AddDays(-1), DateTime.Now)
+        );
+
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+        await VerifyJson(await response.Content.ReadAsStringAsync(), _settings);
     }
 
     [Fact]
@@ -152,8 +170,8 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
 
         var response = await client.GetAsync(
             TradeImportsDataApi.Testing.Endpoints.Reporting.ManualRelease(
-                DateTime.Parse("2024-02-16", CultureInfo.CurrentCulture),
-                DateTime.Parse("2024-02-20", CultureInfo.CurrentCulture)
+                DateTime.Parse("2024-02-16", CultureInfo.CurrentCulture).ToUniversalTime(),
+                DateTime.Parse("2024-02-20", CultureInfo.CurrentCulture).ToUniversalTime()
             )
         );
 

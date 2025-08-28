@@ -22,9 +22,30 @@ public static class EndpointRouteBuilderExtensions
         CancellationToken cancellationToken
     )
     {
-        if (from > to || to.Subtract(from).Days > 31)
+        var errors = new Dictionary<string, string[]>();
+        if (from > to)
         {
-            return Results.BadRequest();
+            errors.Add("from", ["from cannot be greater than to"]);
+        }
+
+        if (to.Subtract(from).Days > 31)
+        {
+            errors.Add("", ["date span cannot be greater than 31 days"]);
+        }
+
+        if (from.Kind != DateTimeKind.Utc)
+        {
+            errors.Add("from", ["date must be UTC"]);
+        }
+
+        if (to.Kind != DateTimeKind.Utc)
+        {
+            errors.Add("to", ["date must be UTC"]);
+        }
+
+        if (errors.Any())
+        {
+            return Results.ValidationProblem(errors);
         }
 
         var query = dbContext
