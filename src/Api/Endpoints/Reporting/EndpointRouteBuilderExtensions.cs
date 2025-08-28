@@ -43,7 +43,7 @@ public static class EndpointRouteBuilderExtensions
             errors.Add("to", ["date must be UTC"]);
         }
 
-        if (errors.Any())
+        if (errors.Count > 0)
         {
             return Results.ValidationProblem(errors);
         }
