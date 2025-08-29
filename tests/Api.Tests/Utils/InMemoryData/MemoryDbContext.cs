@@ -22,6 +22,18 @@ public class MemoryDbContext : IDbContext
     public IMongoCollectionSet<ResourceEventEntity> ResourceEvents { get; } =
         new MemoryCollectionSet<ResourceEventEntity>();
 
+    public IMongoCollectionSet<ReportClearanceRequestEntity> ReportClearanceRequests { get; } =
+        new MemoryCollectionSet<ReportClearanceRequestEntity>();
+
+    public IMongoCollectionSet<ReportClearanceDecisionEntity> ReportClearanceDecisions { get; } =
+        new MemoryCollectionSet<ReportClearanceDecisionEntity>();
+
+    public IMongoCollectionSet<ReportFinalisationEntity> ReportFinalisations { get; } =
+        new MemoryCollectionSet<ReportFinalisationEntity>();
+
+    public IMongoCollectionSet<ReportImportPreNotificationEntity> ReportImportPreNotifications { get; } =
+        new MemoryCollectionSet<ReportImportPreNotificationEntity>();
+
     public Task SaveChanges(CancellationToken cancellationToken) => throw new NotImplementedException();
 
     public Task StartTransaction(CancellationToken cancellationToken) => throw new NotImplementedException();

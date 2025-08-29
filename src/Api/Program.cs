@@ -119,6 +119,7 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
     builder.Services.AddTransient<IGmrRepository, GmrRepository>();
     builder.Services.AddTransient<IProcessingErrorRepository, ProcessingErrorRepository>();
     builder.Services.AddTransient<IResourceEventRepository, ResourceEventRepository>();
+    builder.Services.AddTransient<IReportRepository, ReportRepository>();
 
     builder.Services.AddAuthenticationAuthorization();
 

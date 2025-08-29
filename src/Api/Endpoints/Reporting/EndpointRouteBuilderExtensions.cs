@@ -1,4 +1,5 @@
 using Defra.TradeImportsDataApi.Api.Authentication;
+using Defra.TradeImportsDataApi.Api.Data;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Extensions;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +13,8 @@ public static class EndpointRouteBuilderExtensions
         app.MapGet("reporting/manual-release", ManualRelease)
             .ExcludeFromDescription()
             .RequireAuthorization(PolicyNames.Read);
+
+        app.MapGet("reporting/decisions", Decisions).ExcludeFromDescription().RequireAuthorization(PolicyNames.Read);
     }
 
     [HttpGet]
@@ -59,5 +62,38 @@ public static class EndpointRouteBuilderExtensions
         var autoReleaseCounts = dbResult.Count(x => !x.IsManualRelease);
 
         return Results.Ok(new ManualReleaseReportResponse(total, autoReleaseCounts, manualMrns.Length, manualMrns));
+    }
+
+    [HttpGet]
+    private static async Task<IResult> Decisions(
+        [FromQuery] DateTime day,
+        [FromServices] IReportRepository reportRepository,
+        CancellationToken cancellationToken
+    )
+    {
+        var clearanceDecisions = await reportRepository.GetClearanceDecisions(day, cancellationToken);
+        var buckets = Enumerable.Range(0, 24).ToArray();
+        var matchBuckets = new List<int>();
+        var noMatchBuckets = new List<int>();
+
+        foreach (var bucket in buckets)
+        {
+            // This repeated lookup is poor, refactor
+            var match = clearanceDecisions.FirstOrDefault(x => x.Bucket.Hour == bucket && x.Match);
+            var noMatch = clearanceDecisions.FirstOrDefault(x => x.Bucket.Hour == bucket && !x.Match);
+
+            matchBuckets.Add(match?.Count ?? 0);
+            noMatchBuckets.Add(noMatch?.Count ?? 0);
+        }
+
+        var response = new ReportResponse(
+            buckets.Select(x => $"{x:00}:00").ToArray(),
+            [
+                new ReportDataset("Match", matchBuckets.ToArray()),
+                new ReportDataset("No Match", noMatchBuckets.ToArray()),
+            ]
+        );
+
+        return Results.Ok(response);
     }
 }

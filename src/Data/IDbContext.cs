@@ -13,7 +13,16 @@ public interface IDbContext
     IMongoCollectionSet<GmrEntity> Gmrs { get; }
 
     IMongoCollectionSet<ProcessingErrorEntity> ProcessingErrors { get; }
+
     IMongoCollectionSet<ResourceEventEntity> ResourceEvents { get; }
+
+    IMongoCollectionSet<ReportClearanceRequestEntity> ReportClearanceRequests { get; }
+
+    IMongoCollectionSet<ReportClearanceDecisionEntity> ReportClearanceDecisions { get; }
+
+    IMongoCollectionSet<ReportFinalisationEntity> ReportFinalisations { get; }
+
+    IMongoCollectionSet<ReportImportPreNotificationEntity> ReportImportPreNotifications { get; }
 
     Task SaveChanges(CancellationToken cancellationToken);
 
