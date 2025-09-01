@@ -40,6 +40,10 @@ public static class ServiceCollectionExtensions
                 sp.GetService<IOptions<MongoDbOptions>>() ?? throw new InvalidOperationException("Options not found");
             var settings = MongoClientSettings.FromConnectionString(options.Value.DatabaseUri);
 
+            settings.ReadPreference = ReadPreference.Primary;
+            settings.WriteConcern = WriteConcern.WMajority;
+            settings.ReadConcern = ReadConcern.Majority;
+
             if (options.Value.QueryLogging)
             {
                 var commandTracker = sp.GetRequiredService<MongoCommandTracker>();
