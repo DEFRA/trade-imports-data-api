@@ -39,6 +39,7 @@ public static class ServiceCollectionExtensions
             var options =
                 sp.GetService<IOptions<MongoDbOptions>>() ?? throw new InvalidOperationException("Options not found");
             var settings = MongoClientSettings.FromConnectionString(options.Value.DatabaseUri);
+            settings.UsePrimaryMajorityConsistency(journal: true);
 
             if (options.Value.QueryLogging)
             {

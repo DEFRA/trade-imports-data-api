@@ -1,6 +1,7 @@
 using System.Net.Http.Headers;
 using Defra.TradeImportsDataApi.Api.Client;
 using Defra.TradeImportsDataApi.Data.Entities;
+using Defra.TradeImportsDataApi.Data.Extensions;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
@@ -35,6 +36,7 @@ public abstract class IntegrationTestBase
         settings.ServerSelectionTimeout = TimeSpan.FromSeconds(5);
         settings.ConnectTimeout = TimeSpan.FromSeconds(5);
         settings.SocketTimeout = TimeSpan.FromSeconds(5);
+        settings.UsePrimaryMajorityConsistency(journal: true);
 
         return new MongoClient(settings).GetDatabase("trade-imports-data-api");
     }
