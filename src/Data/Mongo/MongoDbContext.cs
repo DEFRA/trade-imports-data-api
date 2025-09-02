@@ -21,6 +21,10 @@ public class MongoDbContext : IDbContext
         Gmrs = new MongoCollectionSet<GmrEntity>(this);
         ProcessingErrors = new MongoCollectionSet<ProcessingErrorEntity>(this);
         ResourceEvents = new MongoCollectionSet<ResourceEventEntity>(this);
+        ReportClearanceRequests = new MongoCollectionSet<ReportClearanceRequestEntity>(this);
+        ReportClearanceDecisions = new MongoCollectionSet<ReportClearanceDecisionEntity>(this);
+        ReportFinalisations = new MongoCollectionSet<ReportFinalisationEntity>(this);
+        ReportImportPreNotifications = new MongoCollectionSet<ReportImportPreNotificationEntity>(this);
     }
 
     internal IMongoDatabase Database { get; }
@@ -32,9 +36,16 @@ public class MongoDbContext : IDbContext
     public IMongoCollectionSet<GmrEntity> Gmrs { get; }
     public IMongoCollectionSet<ProcessingErrorEntity> ProcessingErrors { get; }
     public IMongoCollectionSet<ResourceEventEntity> ResourceEvents { get; }
+    public IMongoCollectionSet<ReportClearanceRequestEntity> ReportClearanceRequests { get; }
+    public IMongoCollectionSet<ReportClearanceDecisionEntity> ReportClearanceDecisions { get; }
+    public IMongoCollectionSet<ReportFinalisationEntity> ReportFinalisations { get; }
+    public IMongoCollectionSet<ReportImportPreNotificationEntity> ReportImportPreNotifications { get; }
 
     public async Task StartTransaction(CancellationToken cancellationToken)
     {
+        if (ActiveTransaction is not null)
+            throw new InvalidOperationException("Transaction already started");
+
         var session = await Database.Client.StartSessionAsync(cancellationToken: cancellationToken);
         session.StartTransaction();
 
@@ -60,6 +71,11 @@ public class MongoDbContext : IDbContext
             await Gmrs.Save(cancellationToken);
             await ProcessingErrors.Save(cancellationToken);
             await ResourceEvents.Save(cancellationToken);
+
+            await ReportClearanceRequests.Save(cancellationToken);
+            await ReportClearanceDecisions.Save(cancellationToken);
+            await ReportFinalisations.Save(cancellationToken);
+            await ReportImportPreNotifications.Save(cancellationToken);
 
             // Keep this last as upserts above will impact those below
             await ImportPreNotificationUpdates.Save(cancellationToken);

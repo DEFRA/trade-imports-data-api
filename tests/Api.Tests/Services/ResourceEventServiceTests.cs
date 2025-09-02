@@ -26,7 +26,8 @@ public class ResourceEventServiceTests
             DbContext,
             ResourceEventRepository,
             ResourceEventPublisher,
-            NullLogger<ResourceEventService>.Instance
+            NullLogger<ResourceEventService>.Instance,
+            Substitute.For<IReportRepository>()
         );
     }
 

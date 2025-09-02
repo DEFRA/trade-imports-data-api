@@ -1,0 +1,12 @@
+﻿[
+  {
+    Bucket: DateTime_1,
+    Match: false,
+    Count: 3
+  },
+  {
+    Bucket: DateTime_2,
+    Match: true,
+    Count: 2
+  }
+]
