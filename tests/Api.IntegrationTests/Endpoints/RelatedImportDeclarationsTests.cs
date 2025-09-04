@@ -1,5 +1,6 @@
 using Defra.TradeImportsDataApi.Api.Client;
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
+using Defra.TradeImportsDataApi.Domain.Gvms;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using Defra.TradeImportsDataApi.Testing;
 using FluentAssertions;
@@ -72,6 +73,22 @@ public class RelatedImportDeclarationsTests : IntegrationTestBase
         response.ImportPreNotifications.Length.Should().Be(4);
     }
 
+    [Fact]
+    public async Task GivenSearchByGmrId_WhenExists_AndHasIndirectNotification_AndNoMaxDepth_ThenIndirectNotificationShouldBeReturned()
+    {
+        var client = CreateDataApiClient();
+        var (_, random) = await InsertTestData(client);
+
+        var response = await client.RelatedImportDeclarations(
+            new RelatedImportDeclarationsRequest { GmrId = $"{random}-gMr1" },
+            CancellationToken.None
+        );
+
+        response.Should().NotBeNull();
+        response.CustomsDeclarations.Length.Should().Be(3);
+        response.ImportPreNotifications.Length.Should().Be(4);
+    }
+
     private static async Task<(string ChedRef, string Random)> InsertTestData(TradeImportsDataApiClient client)
     {
         var chedRef1 = ImportPreNotificationIdGenerator.Generate();
@@ -87,6 +104,7 @@ public class RelatedImportDeclarationsTests : IntegrationTestBase
         await CreateCustomsDeclaration(client, $"{random}-mrn1", $"{random}-ducr1", [chedRef3, chedRef4]);
         await CreateCustomsDeclaration(client, $"{random}-mrn2", $"{random}-ducr2", [chedRef2, chedRef3]);
         await CreateCustomsDeclaration(client, $"{random}-mrn3", $"{random}-ducr3", [chedRef1, chedRef2]);
+        await CreateGmr(client, $"{random}-gmr1", [$"{random}-mrn1", $"{random}-mrn2"]);
 
         return (chedRef4, random);
     }
@@ -123,6 +141,28 @@ public class RelatedImportDeclarationsTests : IntegrationTestBase
         await client.PutImportPreNotification(
             chedId,
             new ImportPreNotification { ReferenceNumber = chedId, Version = 1 },
+            null,
+            CancellationToken.None
+        );
+    }
+
+    private static async Task CreateGmr(
+        TradeImportsDataApiClient client,
+        string gmrId,
+        List<string> customsDeclarationIdentifiers
+    )
+    {
+        await client.PutGmr(
+            gmrId,
+            new Gmr
+            {
+                Id = gmrId,
+                Declarations = new Declarations
+                {
+                    Customs = [.. customsDeclarationIdentifiers.Select(id => new Customs { Id = id })],
+                    Transits = [],
+                },
+            },
             null,
             CancellationToken.None
         );
