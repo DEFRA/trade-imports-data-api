@@ -3,12 +3,14 @@ using Defra.TradeImportsDataApi.Api.Data;
 using Defra.TradeImportsDataApi.Api.Endpoints.RelatedImportDeclarations;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
+using Defra.TradeImportsDataApi.Domain.Gvms;
 
 namespace Defra.TradeImportsDataApi.Api.Services;
 
 public class RelatedImportDeclarationsService(
     ICustomsDeclarationRepository customsDeclarationRepository,
-    IImportPreNotificationRepository importPreNotificationRepository
+    IImportPreNotificationRepository importPreNotificationRepository,
+    IGmrRepository gmrRepository
 ) : IRelatedImportDeclarationsService
 {
     public async Task<(
@@ -49,6 +51,18 @@ public class RelatedImportDeclarationsService(
         if (!string.IsNullOrEmpty(request.ChedId))
         {
             return await StartFromImportPreNotification(request.ChedId, maxDepth, cancellationToken);
+        }
+
+        if (!string.IsNullOrEmpty(request.GmrId))
+        {
+            return await StartFromGmrId(
+#pragma warning disable CA1862
+                // MongoDB driver does not support string.Equals()
+                x => x.Id.ToLowerInvariant() == request.GmrId.ToLowerInvariant(),
+#pragma warning restore CA1862
+                maxDepth,
+                cancellationToken
+            );
         }
 
         return new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[]>([], []);
@@ -103,6 +117,40 @@ public class RelatedImportDeclarationsService(
             new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[]>(
                 customsDeclarations.ToArray(),
                 [notification]
+            ),
+            0,
+            maxDepth,
+            cancellationToken
+        );
+    }
+
+    private async Task<(
+        CustomsDeclarationEntity[] CustomsDeclarations,
+        ImportPreNotificationEntity[] ImportPreNotifications
+    )> StartFromGmrId(Expression<Func<GmrEntity, bool>> predicate, int maxDepth, CancellationToken cancellationToken)
+    {
+        var gmr = await gmrRepository.Get(predicate, cancellationToken);
+        if (gmr == null)
+        {
+            return new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[]>([], []);
+        }
+
+        var customsDeclarations = await customsDeclarationRepository.GetAll(
+            x => gmr.CustomsDeclarationIdentifiers.Contains(x.Id),
+            cancellationToken
+        );
+        var customsImportDeclarationIdentifiers = customsDeclarations
+            .SelectMany(x => x.ImportPreNotificationIdentifiers)
+            .Distinct();
+        var notifications = await importPreNotificationRepository.GetAll(
+            [.. customsImportDeclarationIdentifiers],
+            cancellationToken
+        );
+
+        return await IncludeIndirectLinks(
+            new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[]>(
+                [.. customsDeclarations],
+                [.. notifications]
             ),
             0,
             maxDepth,
