@@ -1,6 +1,8 @@
+using System.Linq.Expressions;
 using Defra.TradeImportsDataApi.Api.Exceptions;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
+using Defra.TradeImportsDataApi.Data.Extensions;
 
 namespace Defra.TradeImportsDataApi.Api.Data;
 
@@ -12,6 +14,11 @@ public class GmrRepository(IDbContext dbContext) : IGmrRepository
             return null;
 
         return await dbContext.Gmrs.Find(id, cancellationToken);
+    }
+
+    public async Task<GmrEntity?> Get(Expression<Func<GmrEntity, bool>> predicate, CancellationToken cancellationToken)
+    {
+        return await dbContext.Gmrs.Where(predicate).FirstOrDefaultWithFallbackAsync(cancellationToken);
     }
 
     public async Task<List<GmrEntity>> GetAll(string[] customsDeclarationIds, CancellationToken cancellationToken)
