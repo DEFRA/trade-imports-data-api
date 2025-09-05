@@ -168,6 +168,42 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
             }
         );
 
+        customsDeclaration =
+            JsonSerializer.Deserialize<CustomsDeclaration>(body, s_jsonOptions)
+            ?? throw new InvalidOperationException();
+        customsDeclaration.Finalisation!.FinalState = "1";
+        MemoryDbContext.CustomsDeclarations.AddTestData(
+            new CustomsDeclarationEntity
+            {
+                Id = "Mrn4",
+                ClearanceRequest = customsDeclaration.ClearanceRequest,
+                ClearanceDecision = customsDeclaration.ClearanceDecision,
+                Finalisation = customsDeclaration.Finalisation,
+                ExternalErrors = customsDeclaration.ExternalErrors,
+                Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+                ETag = "etag",
+            }
+        );
+
+        customsDeclaration =
+            JsonSerializer.Deserialize<CustomsDeclaration>(body, s_jsonOptions)
+            ?? throw new InvalidOperationException();
+        customsDeclaration.Finalisation!.FinalState = "2";
+        MemoryDbContext.CustomsDeclarations.AddTestData(
+            new CustomsDeclarationEntity
+            {
+                Id = "Mrn5",
+                ClearanceRequest = customsDeclaration.ClearanceRequest,
+                ClearanceDecision = customsDeclaration.ClearanceDecision,
+                Finalisation = customsDeclaration.Finalisation,
+                ExternalErrors = customsDeclaration.ExternalErrors,
+                Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+                ETag = "etag",
+            }
+        );
+
         var response = await client.GetAsync(
             TradeImportsDataApi.Testing.Endpoints.Reporting.ManualRelease(
                 DateTime.Parse("2024-02-16", CultureInfo.CurrentCulture).ToUniversalTime(),
