@@ -11,4 +11,7 @@ public class ResourceEventOptions
     public required string TopicName { get; init; }
 
     public string TopicArn => $"{ArnPrefix}:{TopicName}";
+
+    [Range(1, 180)]
+    public int TtlDays { get; init; } = 30;
 }
