@@ -13,6 +13,7 @@ public class ImportDocumentReferenceTests
     [InlineData("9115", true)]
     [InlineData("C085", true)]
     [InlineData("N002", true)]
+    [InlineData("N852", true)]
     [InlineData("Invalid", false)]
     public void IsValid(string documentCode, bool valid)
     {
