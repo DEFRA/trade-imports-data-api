@@ -3,7 +3,6 @@ using Defra.TradeImportsDataApi.Api.Data;
 using Defra.TradeImportsDataApi.Api.Endpoints.RelatedImportDeclarations;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
-using Defra.TradeImportsDataApi.Domain.Gvms;
 
 namespace Defra.TradeImportsDataApi.Api.Services;
 
@@ -15,7 +14,8 @@ public class RelatedImportDeclarationsService(
 {
     public async Task<(
         CustomsDeclarationEntity[] CustomsDeclarations,
-        ImportPreNotificationEntity[] ImportPreNotifications
+        ImportPreNotificationEntity[] ImportPreNotifications,
+        GmrEntity[] Gmrs
     )> Search(RelatedImportDeclarationsRequest request, CancellationToken cancellationToken)
     {
         var maxDepth = 3;
@@ -65,12 +65,13 @@ public class RelatedImportDeclarationsService(
             );
         }
 
-        return new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[]>([], []);
+        return new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>([], [], []);
     }
 
     private async Task<(
         CustomsDeclarationEntity[] CustomsDeclarations,
-        ImportPreNotificationEntity[] ImportPreNotifications
+        ImportPreNotificationEntity[] ImportPreNotifications,
+        GmrEntity[] Gmrs
     )> StartFromCustomsDeclaration(
         Expression<Func<CustomsDeclarationEntity, bool>> predicate,
         int maxDepth,
@@ -82,9 +83,10 @@ public class RelatedImportDeclarationsService(
         var notifications = await importPreNotificationRepository.GetAll(identifiers.ToArray(), cancellationToken);
 
         return await IncludeIndirectLinks(
-            new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[]>(
+            new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>(
                 customsDeclarations.ToArray(),
-                notifications.ToArray()
+                notifications.ToArray(),
+                []
             ),
             0,
             maxDepth,
@@ -94,7 +96,8 @@ public class RelatedImportDeclarationsService(
 
     private async Task<(
         CustomsDeclarationEntity[] CustomsDeclarations,
-        ImportPreNotificationEntity[] ImportPreNotifications
+        ImportPreNotificationEntity[] ImportPreNotifications,
+        GmrEntity[] Gmrs
     )> StartFromImportPreNotification(string chedId, int maxDepth, CancellationToken cancellationToken)
     {
         var identifier = ChedReferenceRegexes.DocumentReferenceIdentifier().Match(chedId).Value;
@@ -105,7 +108,7 @@ public class RelatedImportDeclarationsService(
         );
         if (notification == null)
         {
-            return new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[]>([], []);
+            return new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>([], [], []);
         }
 
         var customsDeclarations = await customsDeclarationRepository.GetAll(
@@ -114,9 +117,10 @@ public class RelatedImportDeclarationsService(
         );
 
         return await IncludeIndirectLinks(
-            new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[]>(
+            new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>(
                 customsDeclarations.ToArray(),
-                [notification]
+                [notification],
+                []
             ),
             0,
             maxDepth,
@@ -126,13 +130,14 @@ public class RelatedImportDeclarationsService(
 
     private async Task<(
         CustomsDeclarationEntity[] CustomsDeclarations,
-        ImportPreNotificationEntity[] ImportPreNotifications
+        ImportPreNotificationEntity[] ImportPreNotifications,
+        GmrEntity[] Gmrs
     )> StartFromGmrId(Expression<Func<GmrEntity, bool>> predicate, int maxDepth, CancellationToken cancellationToken)
     {
         var gmr = await gmrRepository.Get(predicate, cancellationToken);
         if (gmr == null)
         {
-            return new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[]>([], []);
+            return new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>([], [], []);
         }
 
         var customsDeclarations = await customsDeclarationRepository.GetAll(
@@ -148,9 +153,10 @@ public class RelatedImportDeclarationsService(
         );
 
         return await IncludeIndirectLinks(
-            new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[]>(
+            new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>(
                 [.. customsDeclarations],
-                [.. notifications]
+                [.. notifications],
+                [gmr]
             ),
             0,
             maxDepth,
@@ -160,9 +166,14 @@ public class RelatedImportDeclarationsService(
 
     private async Task<(
         CustomsDeclarationEntity[] CustomsDeclarations,
-        ImportPreNotificationEntity[] ImportPreNotifications
+        ImportPreNotificationEntity[] ImportPreNotifications,
+        GmrEntity[] Gmrs
     )> IncludeIndirectLinks(
-        (CustomsDeclarationEntity[] CustomsDeclarations, ImportPreNotificationEntity[] ImportPreNotifications) data,
+        (
+            CustomsDeclarationEntity[] CustomsDeclarations,
+            ImportPreNotificationEntity[] ImportPreNotifications,
+            GmrEntity[] Gmrs
+        ) data,
         int currentDepth,
         int maxDepth,
         CancellationToken cancellationToken
@@ -206,9 +217,10 @@ public class RelatedImportDeclarationsService(
             );
         }
 
-        var response = new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[]>(
+        var response = new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>(
             customsDeclarations.ToArray(),
-            importPreNotifications.ToArray()
+            importPreNotifications.ToArray(),
+            data.Gmrs
         );
 
         // bail out of the recursive loop if there are no records loaded
@@ -221,9 +233,10 @@ public class RelatedImportDeclarationsService(
         }
 
         return await IncludeIndirectLinks(
-            new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[]>(
+            new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>(
                 customsDeclarations.ToArray(),
-                importPreNotifications.ToArray()
+                importPreNotifications.ToArray(),
+                data.Gmrs
             ),
             currentDepth + 1,
             maxDepth,

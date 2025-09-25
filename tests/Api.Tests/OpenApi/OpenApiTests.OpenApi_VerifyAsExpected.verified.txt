@@ -5084,6 +5084,12 @@
             "items": {
               "$ref": "#/components/schemas/Defra.TradeImportsDataApi.ImportPreNotificationResponse"
             }
+          },
+          "goodsMovements": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.GmrResponse"
+            }
           }
         },
         "additionalProperties": false
