@@ -8,7 +8,7 @@ public class ImportDocumentReference(string value)
         "C678",
         "N853",
         "N851",
-        "N851",
+        "N852",
         "9115",
         "C085",
         "N002",
