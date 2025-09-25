@@ -2,7 +2,17 @@ namespace Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 
 public class ImportDocumentReference(string value)
 {
-    private static readonly string[] _validDocumentCodes = ["C640", "C678", "N853", "N851", "9115", "C085", "N002"];
+    private static readonly string[] _validDocumentCodes =
+    [
+        "C640",
+        "C678",
+        "N853",
+        "N851",
+        "N852",
+        "9115",
+        "C085",
+        "N002",
+    ];
 
     public string Value { get; set; } = value;
 
