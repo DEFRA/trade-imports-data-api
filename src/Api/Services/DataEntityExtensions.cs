@@ -57,7 +57,7 @@ public static class DataEntityExtensions
             Operation = operation,
             ETag = entity.ETag,
             Resource = includeEntityAsResource ? entity : default,
-            ChangeSet = changeSet,
+            ChangeSet = operation is ResourceEventOperations.Updated ? changeSet : [],
             SubResourceType = knownSubResourceTypes.FirstOrDefault(),
         };
     }

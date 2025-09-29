@@ -35,6 +35,18 @@ public class DataEntityExtensionsTests
             .WithMessage("Operation must be either Updated or Created (Parameter 'operation')");
     }
 
+    [Theory]
+    [InlineData(ResourceEventOperations.Created, 0)]
+    [InlineData(ResourceEventOperations.Updated, 1)]
+    public void WhenToResourceEvent_AndOperation_ChangeSetShouldBeExpectedCount(string operation, int expectedCount)
+    {
+        var subject = new FixtureEntity { Id = "id", ETag = "etag" };
+
+        var result = subject.ToResourceEvent(operation, new FixtureDomain { Id = 1 }, new FixtureDomain());
+
+        result.ChangeSet.Count.Should().Be(expectedCount);
+    }
+
     [Fact]
     public void WhenToResourceEvent_AndEntityShouldNotBeIncludedAsResource_ResourceShouldBeNull()
     {
@@ -124,7 +136,7 @@ public class DataEntityExtensionsTests
             ETag = "etag",
             FixtureType = FixtureType.Value2,
         };
-        var result = current.ToResourceEvent(ResourceEventOperations.Created, current, previous);
+        var result = current.ToResourceEvent(ResourceEventOperations.Updated, current, previous);
 
         result.ChangeSet.Count.Should().Be(2);
         result.ChangeSet[0].Operation.Should().Be("Replace");
@@ -266,7 +278,8 @@ public class DataEntityExtensionsTests
         Value2,
     }
 
-#pragma warning disable S2094
-    private class FixtureDomain;
-#pragma warning restore S2094
+    private class FixtureDomain
+    {
+        public int Id { get; set; }
+    }
 }
