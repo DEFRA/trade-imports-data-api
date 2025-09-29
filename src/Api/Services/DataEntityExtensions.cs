@@ -25,6 +25,9 @@ public static class DataEntityExtensions
         where TDataEntity : IDataEntity
         where TDomain : class
     {
+        if (operation is not ResourceEventOperations.Updated and not ResourceEventOperations.Created)
+            throw new ArgumentException("Operation must be either Updated or Created", nameof(operation));
+
         var result = new ResourceEvent<TDataEntity>
         {
             ResourceId = entity.Id,
