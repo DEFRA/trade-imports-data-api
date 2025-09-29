@@ -13,7 +13,7 @@ public class DataEntityExtensionsTests
     {
         var subject = new FixtureEntity { Id = "id", ETag = "etag" };
 
-        var result = subject.ToResourceEvent("operation");
+        var result = subject.ToResourceEvent("operation", new FixtureDomain(), new FixtureDomain());
 
         result.ResourceId.Should().Be("id");
         result.ResourceType.Should().Be("Fixture");
@@ -27,7 +27,12 @@ public class DataEntityExtensionsTests
     {
         var subject = new FixtureEntity { Id = "id", ETag = "etag" };
 
-        var result = subject.ToResourceEvent("operation", includeEntityAsResource: false);
+        var result = subject.ToResourceEvent(
+            "operation",
+            new FixtureDomain(),
+            new FixtureDomain(),
+            includeEntityAsResource: false
+        );
 
         result.Resource.Should().BeNull();
     }
@@ -41,7 +46,7 @@ public class DataEntityExtensionsTests
             ImportPreNotification = new ImportPreNotification(),
         };
 
-        var result = subject.ToResourceEvent("operation");
+        var result = subject.ToResourceEvent("operation", new FixtureDomain(), new FixtureDomain());
 
         result.ResourceType.Should().Be("ImportPreNotification");
     }
@@ -51,7 +56,7 @@ public class DataEntityExtensionsTests
     {
         var subject = new CustomsDeclarationEntity { Id = "id" };
 
-        var result = subject.ToResourceEvent("operation");
+        var result = subject.ToResourceEvent("operation", new FixtureDomain(), new FixtureDomain());
 
         result.ResourceType.Should().Be("CustomsDeclaration");
     }
@@ -61,7 +66,7 @@ public class DataEntityExtensionsTests
     {
         var subject = new ProcessingErrorEntity { Id = "id", ProcessingErrors = [] };
 
-        var result = subject.ToResourceEvent("operation");
+        var result = subject.ToResourceEvent("operation", new FixtureDomain(), new FixtureDomain());
 
         result.ResourceType.Should().Be("ProcessingError");
     }
@@ -83,9 +88,8 @@ public class DataEntityExtensionsTests
             ETag = "etag",
             FixtureType = FixtureType.Value2,
         };
-        var subject = current.ToResourceEvent("operation");
 
-        var act = () => subject.WithChangeSet(current, previous);
+        var act = () => current.ToResourceEvent("operation", current, previous);
 
         act.Should().NotThrow<InvalidOperationException>();
     }
@@ -107,9 +111,7 @@ public class DataEntityExtensionsTests
             ETag = "etag",
             FixtureType = FixtureType.Value2,
         };
-        var subject = current.ToResourceEvent("operation");
-
-        var result = subject.WithChangeSet(current, previous);
+        var result = current.ToResourceEvent("operation", current, previous);
 
         result.ChangeSet.Count.Should().Be(2);
         result.ChangeSet[0].Operation.Should().Be("Replace");
@@ -137,9 +139,7 @@ public class DataEntityExtensionsTests
             ETag = "etag",
             FixtureType = FixtureType.Value1,
         };
-        var subject = current.ToResourceEvent("operation");
-
-        var result = subject.WithChangeSet(current, previous);
+        var result = current.ToResourceEvent("operation", current, previous);
 
         result.SubResourceType.Should().BeNull();
     }
@@ -151,7 +151,7 @@ public class DataEntityExtensionsTests
         var previous = new CustomsDeclaration();
         var current = new CustomsDeclaration { ClearanceRequest = new ClearanceRequest() };
 
-        var result = subject.ToResourceEvent("operation").WithChangeSet(current, previous);
+        var result = subject.ToResourceEvent("operation", current, previous);
 
         result.SubResourceType.Should().Be("ClearanceRequest");
     }
@@ -163,7 +163,7 @@ public class DataEntityExtensionsTests
         var previous = new CustomsDeclaration { ClearanceRequest = new ClearanceRequest { ExternalVersion = 1 } };
         var current = new CustomsDeclaration { ClearanceRequest = new ClearanceRequest { ExternalVersion = 2 } };
 
-        var result = subject.ToResourceEvent("operation").WithChangeSet(current, previous);
+        var result = subject.ToResourceEvent("operation", current, previous);
 
         result.SubResourceType.Should().Be("ClearanceRequest");
     }
@@ -175,7 +175,7 @@ public class DataEntityExtensionsTests
         var previous = new CustomsDeclaration();
         var current = new CustomsDeclaration { ClearanceDecision = new ClearanceDecision { Items = [] } };
 
-        var result = subject.ToResourceEvent("operation").WithChangeSet(current, previous);
+        var result = subject.ToResourceEvent("operation", current, previous);
 
         result.SubResourceType.Should().Be("ClearanceDecision");
     }
@@ -195,7 +195,7 @@ public class DataEntityExtensionsTests
             },
         };
 
-        var result = subject.ToResourceEvent("operation").WithChangeSet(current, previous);
+        var result = subject.ToResourceEvent("operation", current, previous);
 
         result.SubResourceType.Should().Be("Finalisation");
     }
@@ -207,7 +207,7 @@ public class DataEntityExtensionsTests
         var previous = new CustomsDeclaration();
         var current = new CustomsDeclaration { ExternalErrors = [new ExternalError()] };
 
-        var result = subject.ToResourceEvent("operation").WithChangeSet(current, previous);
+        var result = subject.ToResourceEvent("operation", current, previous);
 
         result.SubResourceType.Should().Be("ExternalError");
     }
@@ -230,7 +230,7 @@ public class DataEntityExtensionsTests
             ExternalErrors = [],
         };
 
-        var act = () => subject.ToResourceEvent("operation").WithChangeSet(current, previous);
+        var act = () => subject.ToResourceEvent("operation", current, previous);
 
         act.Should().Throw<InvalidOperationException>();
     }
@@ -252,4 +252,8 @@ public class DataEntityExtensionsTests
         Value1,
         Value2,
     }
+
+#pragma warning disable S2094
+    private class FixtureDomain;
+#pragma warning restore S2094
 }

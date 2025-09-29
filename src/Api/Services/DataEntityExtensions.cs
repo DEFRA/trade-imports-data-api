@@ -15,14 +15,17 @@ public static class DataEntityExtensions
         Converters = { new JsonStringEnumConverter() },
     };
 
-    public static ResourceEvent<TDataEntity> ToResourceEvent<TDataEntity>(
+    public static ResourceEvent<TDataEntity> ToResourceEvent<TDataEntity, TDomain>(
         this TDataEntity entity,
         string operation,
+        TDomain current,
+        TDomain previous,
         bool includeEntityAsResource = true
     )
         where TDataEntity : IDataEntity
+        where TDomain : class
     {
-        return new ResourceEvent<TDataEntity>
+        var result = new ResourceEvent<TDataEntity>
         {
             ResourceId = entity.Id,
             ResourceType = ResourceTypeName<TDataEntity>(),
@@ -30,6 +33,8 @@ public static class DataEntityExtensions
             ETag = entity.ETag,
             Resource = includeEntityAsResource ? entity : default,
         };
+
+        return result.WithChangeSet(current, previous);
     }
 
     private static string ResourceTypeName<TDataEntity>()
@@ -46,7 +51,7 @@ public static class DataEntityExtensions
         };
     }
 
-    public static ResourceEvent<TDataEntity> WithChangeSet<TDataEntity, TDomain>(
+    private static ResourceEvent<TDataEntity> WithChangeSet<TDataEntity, TDomain>(
         this ResourceEvent<TDataEntity> @event,
         TDomain current,
         TDomain previous
