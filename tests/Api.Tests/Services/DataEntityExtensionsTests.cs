@@ -97,7 +97,7 @@ public class DataEntityExtensionsTests
     }
 
     [Fact]
-    public void WhenWithChangeSet_AndMultipleUnknownSubFieldsChanging_ShouldNotThrow()
+    public void WhenToResourceEvent_AndMultipleUnknownSubFieldsChanging_ShouldNotThrow()
     {
         var previous = new FixtureEntity
         {
@@ -120,7 +120,7 @@ public class DataEntityExtensionsTests
     }
 
     [Fact]
-    public void WhenWithChangeSet_ShouldCreateChangeSet()
+    public void WhenToResourceEvent_ShouldCreateChangeSet()
     {
         var previous = new FixtureEntity
         {
@@ -148,7 +148,7 @@ public class DataEntityExtensionsTests
     }
 
     [Fact]
-    public void WhenWithChangeSet_AndSubResourceTypeIsUnknown_ShouldNotSetSubResourceType()
+    public void WhenToResourceEvent_AndSubResourceTypeIsUnknown_ShouldNotSetSubResourceType()
     {
         var previous = new FixtureEntity
         {
@@ -170,7 +170,7 @@ public class DataEntityExtensionsTests
     }
 
     [Fact]
-    public void WhenWithChangeSet_AndSubResourceTypeIsClearanceRequest_ShouldSetSubResourceType()
+    public void WhenToResourceEvent_AndSubResourceTypeIsClearanceRequest_ShouldSetSubResourceType()
     {
         var subject = new FixtureEntity { Id = "id", ETag = "etag" };
         var previous = new CustomsDeclaration();
@@ -182,7 +182,7 @@ public class DataEntityExtensionsTests
     }
 
     [Fact]
-    public void WhenWithChangeSet_AndSubResourceTypeIsClearanceRequest_WithChildPropertyChange_ShouldSetSubResourceType()
+    public void WhenToResourceEvent_AndSubResourceTypeIsClearanceRequest_WithChildPropertyChange_ShouldSetSubResourceType()
     {
         var subject = new FixtureEntity { Id = "id", ETag = "etag" };
         var previous = new CustomsDeclaration { ClearanceRequest = new ClearanceRequest { ExternalVersion = 1 } };
@@ -194,7 +194,7 @@ public class DataEntityExtensionsTests
     }
 
     [Fact]
-    public void WhenWithChangeSet_AndSubResourceTypeIsClearanceDecision_ShouldSetSubResourceType()
+    public void WhenToResourceEvent_AndSubResourceTypeIsClearanceDecision_ShouldSetSubResourceType()
     {
         var subject = new FixtureEntity { Id = "id", ETag = "etag" };
         var previous = new CustomsDeclaration();
@@ -206,7 +206,7 @@ public class DataEntityExtensionsTests
     }
 
     [Fact]
-    public void WhenWithChangeSet_AndSubResourceTypeIsFinalisation_ShouldSetSubResourceType()
+    public void WhenToResourceEvent_AndSubResourceTypeIsFinalisation_ShouldSetSubResourceType()
     {
         var subject = new FixtureEntity { Id = "id", ETag = "etag" };
         var previous = new CustomsDeclaration();
@@ -226,7 +226,7 @@ public class DataEntityExtensionsTests
     }
 
     [Fact]
-    public void WhenWithChangeSet_AndSubResourceTypeIsExternalError_ShouldSetSubResourceType()
+    public void WhenToResourceEvent_AndSubResourceTypeIsExternalError_ShouldSetSubResourceType()
     {
         var subject = new FixtureEntity { Id = "id", ETag = "etag" };
         var previous = new CustomsDeclaration();
@@ -238,7 +238,7 @@ public class DataEntityExtensionsTests
     }
 
     [Fact]
-    public void WhenWithChangeSet_AndMultipleKnownSubResourceTypes_ShouldThrow()
+    public void WhenToResourceEvent_AndMultipleKnownSubResourceTypes_ShouldThrow()
     {
         var subject = new FixtureEntity { Id = "id", ETag = "etag" };
         var previous = new CustomsDeclaration();
