@@ -1,3 +1,4 @@
+using Defra.TradeImportsDataApi.Data.Extensions;
 using Defra.TradeImportsDataApi.Domain.Gvms;
 
 namespace Defra.TradeImportsDataApi.Data.Entities;
@@ -22,7 +23,8 @@ public class GmrEntity : IDataEntity
 
         var customs = Gmr.Declarations?.Customs?.Select(x => x.Id) ?? [];
         var transits = Gmr.Declarations?.Transits?.Select(x => x.Id) ?? [];
+        var unique = customs.Concat(transits).Where(x => !string.IsNullOrWhiteSpace(x)).NotNull().Distinct();
 
-        CustomsDeclarationIdentifiers.AddRange(customs.Concat(transits).Where(x => !string.IsNullOrWhiteSpace(x))!);
+        CustomsDeclarationIdentifiers.AddRange(unique);
     }
 }
