@@ -106,7 +106,7 @@ public class CustomsDeclarationServiceTests
             .Received()
             .Insert(
                 Arg.Is<ResourceEvent<CustomsDeclarationEntity>>(x =>
-                    x.Operation == "Created" && x.ChangeSet.Count > 0 && x.SubResourceType != null
+                    x.Operation == "Created" && x.ChangeSet.Count == 0 && x.SubResourceType != null
                 )
             );
         await ResourceEventService

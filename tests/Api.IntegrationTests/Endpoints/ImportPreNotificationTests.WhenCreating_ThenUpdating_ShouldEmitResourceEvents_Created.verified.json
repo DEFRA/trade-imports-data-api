@@ -46,16 +46,5 @@
   },
   "etag": "{Scrubbed}",
   "timestamp": "DateTimeOffset_2",
-  "changeSet": [
-    {
-      "path": "/referenceNumber",
-      "operation": "Replace",
-      "value": "{Scrubbed}"
-    },
-    {
-      "path": "/version",
-      "operation": "Replace",
-      "value": "{Scrubbed}"
-    }
-  ]
+  "changeSet": []
 }

@@ -5,6 +5,7 @@
   "operation": "Updated",
   "resource": {
     "Id": "{Scrubbed}",
+    "ImportPreNotificationIdentifiers": [],
     "ETag": "{Scrubbed}",
     "Created": "DateTimeOffset_1",
     "Updated": "DateTimeOffset_2",
@@ -30,7 +31,9 @@
       "created": "Date_MinValue",
       "externalVersionNumber": null,
       "decisionNumber": null,
-      "sourceVersion": null
+      "sourceVersion": null,
+      "items": [],
+      "results": []
     },
     "Finalisation": null,
     "ExternalErrors": null

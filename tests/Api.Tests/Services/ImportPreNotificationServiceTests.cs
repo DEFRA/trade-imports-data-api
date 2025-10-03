@@ -73,7 +73,7 @@ public class ImportPreNotificationServiceTests
             .Received()
             .Insert(
                 Arg.Is<ResourceEvent<ImportPreNotificationEntity>>(x =>
-                    x.Operation == "Created" && x.ChangeSet.Count > 0
+                    x.Operation == "Created" && x.ChangeSet.Count == 0
                 )
             );
         await ResourceEventService

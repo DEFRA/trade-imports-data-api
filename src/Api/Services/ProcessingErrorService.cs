@@ -21,9 +21,7 @@ public class ProcessingErrorService(
 
         var inserted = processingErrorRepository.Insert(entity);
 
-        var resourceEvent = inserted
-            .ToResourceEvent(ResourceEventOperations.Created)
-            .WithChangeSet(inserted.ProcessingErrors, []);
+        var resourceEvent = inserted.ToResourceEvent(ResourceEventOperations.Created, inserted.ProcessingErrors, []);
 
         var resourceEventEntity = resourceEventRepository.Insert(resourceEvent);
 
@@ -45,9 +43,11 @@ public class ProcessingErrorService(
 
         var (existing, updated) = await processingErrorRepository.Update(entity, etag, cancellationToken);
 
-        var resourceEvent = updated
-            .ToResourceEvent(ResourceEventOperations.Updated)
-            .WithChangeSet(updated.ProcessingErrors, existing.ProcessingErrors);
+        var resourceEvent = updated.ToResourceEvent(
+            ResourceEventOperations.Updated,
+            updated.ProcessingErrors,
+            existing.ProcessingErrors
+        );
 
         var resourceEventEntity = resourceEventRepository.Insert(resourceEvent);
 
