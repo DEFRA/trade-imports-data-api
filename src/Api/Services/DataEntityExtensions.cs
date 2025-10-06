@@ -15,45 +15,19 @@ public static class DataEntityExtensions
         Converters = { new JsonStringEnumConverter() },
     };
 
-    public static ResourceEvent<TDataEntity> ToResourceEvent<TDataEntity>(
+    public static ResourceEvent<TDataEntity> ToResourceEvent<TDataEntity, TDomain>(
         this TDataEntity entity,
         string operation,
-        bool includeEntityAsResource = true
-    )
-        where TDataEntity : IDataEntity
-    {
-        return new ResourceEvent<TDataEntity>
-        {
-            ResourceId = entity.Id,
-            ResourceType = ResourceTypeName<TDataEntity>(),
-            Operation = operation,
-            ETag = entity.ETag,
-            Resource = includeEntityAsResource ? entity : default,
-        };
-    }
-
-    private static string ResourceTypeName<TDataEntity>()
-        where TDataEntity : IDataEntity
-    {
-        var name = typeof(TDataEntity).DataEntityName();
-
-        return name switch
-        {
-            ResourceEventResourceTypes.ImportPreNotification => ResourceEventResourceTypes.ImportPreNotification,
-            ResourceEventResourceTypes.CustomsDeclaration => ResourceEventResourceTypes.CustomsDeclaration,
-            ResourceEventResourceTypes.ProcessingError => ResourceEventResourceTypes.ProcessingError,
-            _ => name,
-        };
-    }
-
-    public static ResourceEvent<TDataEntity> WithChangeSet<TDataEntity, TDomain>(
-        this ResourceEvent<TDataEntity> @event,
         TDomain current,
-        TDomain previous
+        TDomain previous,
+        bool includeEntityAsResource = true
     )
         where TDataEntity : IDataEntity
         where TDomain : class
     {
+        if (operation is not ResourceEventOperations.Updated and not ResourceEventOperations.Created)
+            throw new ArgumentException("Operation must be either Updated or Created", nameof(operation));
+
         var changeSet = CreateChangeSet(current, previous);
         var knownSubResourceTypes = changeSet
             .Select(x => x.Path.Split('/', StringSplitOptions.RemoveEmptyEntries).FirstOrDefault())
@@ -76,10 +50,29 @@ public static class DataEntityExtensions
                 $"Change set contains multiple known sub resource types \"{string.Join(", ", knownSubResourceTypes)}\", only one changing at a time is currently expected"
             );
 
-        return @event with
+        return new ResourceEvent<TDataEntity>
         {
-            ChangeSet = changeSet,
+            ResourceId = entity.Id,
+            ResourceType = ResourceTypeName<TDataEntity>(),
+            Operation = operation,
+            ETag = entity.ETag,
+            Resource = includeEntityAsResource ? entity : default,
+            ChangeSet = operation is ResourceEventOperations.Updated ? changeSet : [],
             SubResourceType = knownSubResourceTypes.FirstOrDefault(),
+        };
+    }
+
+    private static string ResourceTypeName<TDataEntity>()
+        where TDataEntity : IDataEntity
+    {
+        var name = typeof(TDataEntity).DataEntityName();
+
+        return name switch
+        {
+            ResourceEventResourceTypes.ImportPreNotification => ResourceEventResourceTypes.ImportPreNotification,
+            ResourceEventResourceTypes.CustomsDeclaration => ResourceEventResourceTypes.CustomsDeclaration,
+            ResourceEventResourceTypes.ProcessingError => ResourceEventResourceTypes.ProcessingError,
+            _ => name,
         };
     }
 

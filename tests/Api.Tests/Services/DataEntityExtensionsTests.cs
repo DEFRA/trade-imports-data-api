@@ -1,6 +1,7 @@
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
+using Defra.TradeImportsDataApi.Domain.Events;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using FluentAssertions;
 
@@ -13,13 +14,37 @@ public class DataEntityExtensionsTests
     {
         var subject = new FixtureEntity { Id = "id", ETag = "etag" };
 
-        var result = subject.ToResourceEvent("operation");
+        var result = subject.ToResourceEvent(ResourceEventOperations.Created, new FixtureDomain(), new FixtureDomain());
 
         result.ResourceId.Should().Be("id");
         result.ResourceType.Should().Be("Fixture");
-        result.Operation.Should().Be("operation");
+        result.Operation.Should().Be(ResourceEventOperations.Created);
         result.ETag.Should().Be("etag");
         result.Resource.Should().Be(subject);
+    }
+
+    [Fact]
+    public void WhenToResourceEvent_AndOperationIsUnknown_ShouldThrow()
+    {
+        var subject = new FixtureEntity { Id = "id", ETag = "etag" };
+
+        var act = () => subject.ToResourceEvent("unknown", new FixtureDomain(), new FixtureDomain());
+
+        act.Should()
+            .Throw<ArgumentException>()
+            .WithMessage("Operation must be either Updated or Created (Parameter 'operation')");
+    }
+
+    [Theory]
+    [InlineData(ResourceEventOperations.Created, 0)]
+    [InlineData(ResourceEventOperations.Updated, 1)]
+    public void WhenToResourceEvent_AndOperation_ChangeSetShouldBeExpectedCount(string operation, int expectedCount)
+    {
+        var subject = new FixtureEntity { Id = "id", ETag = "etag" };
+
+        var result = subject.ToResourceEvent(operation, new FixtureDomain { Id = 1 }, new FixtureDomain());
+
+        result.ChangeSet.Count.Should().Be(expectedCount);
     }
 
     [Fact]
@@ -27,7 +52,12 @@ public class DataEntityExtensionsTests
     {
         var subject = new FixtureEntity { Id = "id", ETag = "etag" };
 
-        var result = subject.ToResourceEvent("operation", includeEntityAsResource: false);
+        var result = subject.ToResourceEvent(
+            ResourceEventOperations.Created,
+            new FixtureDomain(),
+            new FixtureDomain(),
+            includeEntityAsResource: false
+        );
 
         result.Resource.Should().BeNull();
     }
@@ -41,7 +71,7 @@ public class DataEntityExtensionsTests
             ImportPreNotification = new ImportPreNotification(),
         };
 
-        var result = subject.ToResourceEvent("operation");
+        var result = subject.ToResourceEvent(ResourceEventOperations.Created, new FixtureDomain(), new FixtureDomain());
 
         result.ResourceType.Should().Be("ImportPreNotification");
     }
@@ -51,7 +81,7 @@ public class DataEntityExtensionsTests
     {
         var subject = new CustomsDeclarationEntity { Id = "id" };
 
-        var result = subject.ToResourceEvent("operation");
+        var result = subject.ToResourceEvent(ResourceEventOperations.Created, new FixtureDomain(), new FixtureDomain());
 
         result.ResourceType.Should().Be("CustomsDeclaration");
     }
@@ -61,13 +91,13 @@ public class DataEntityExtensionsTests
     {
         var subject = new ProcessingErrorEntity { Id = "id", ProcessingErrors = [] };
 
-        var result = subject.ToResourceEvent("operation");
+        var result = subject.ToResourceEvent(ResourceEventOperations.Created, new FixtureDomain(), new FixtureDomain());
 
         result.ResourceType.Should().Be("ProcessingError");
     }
 
     [Fact]
-    public void WhenWithChangeSet_AndMultipleUnknownSubFieldsChanging_ShouldNotThrow()
+    public void WhenToResourceEvent_AndMultipleUnknownSubFieldsChanging_ShouldNotThrow()
     {
         var previous = new FixtureEntity
         {
@@ -83,15 +113,14 @@ public class DataEntityExtensionsTests
             ETag = "etag",
             FixtureType = FixtureType.Value2,
         };
-        var subject = current.ToResourceEvent("operation");
 
-        var act = () => subject.WithChangeSet(current, previous);
+        var act = () => current.ToResourceEvent(ResourceEventOperations.Created, current, previous);
 
         act.Should().NotThrow<InvalidOperationException>();
     }
 
     [Fact]
-    public void WhenWithChangeSet_ShouldCreateChangeSet()
+    public void WhenToResourceEvent_ShouldCreateChangeSet()
     {
         var previous = new FixtureEntity
         {
@@ -107,9 +136,7 @@ public class DataEntityExtensionsTests
             ETag = "etag",
             FixtureType = FixtureType.Value2,
         };
-        var subject = current.ToResourceEvent("operation");
-
-        var result = subject.WithChangeSet(current, previous);
+        var result = current.ToResourceEvent(ResourceEventOperations.Updated, current, previous);
 
         result.ChangeSet.Count.Should().Be(2);
         result.ChangeSet[0].Operation.Should().Be("Replace");
@@ -121,7 +148,7 @@ public class DataEntityExtensionsTests
     }
 
     [Fact]
-    public void WhenWithChangeSet_AndSubResourceTypeIsUnknown_ShouldNotSetSubResourceType()
+    public void WhenToResourceEvent_AndSubResourceTypeIsUnknown_ShouldNotSetSubResourceType()
     {
         var previous = new FixtureEntity
         {
@@ -137,51 +164,49 @@ public class DataEntityExtensionsTests
             ETag = "etag",
             FixtureType = FixtureType.Value1,
         };
-        var subject = current.ToResourceEvent("operation");
-
-        var result = subject.WithChangeSet(current, previous);
+        var result = current.ToResourceEvent(ResourceEventOperations.Created, current, previous);
 
         result.SubResourceType.Should().BeNull();
     }
 
     [Fact]
-    public void WhenWithChangeSet_AndSubResourceTypeIsClearanceRequest_ShouldSetSubResourceType()
+    public void WhenToResourceEvent_AndSubResourceTypeIsClearanceRequest_ShouldSetSubResourceType()
     {
         var subject = new FixtureEntity { Id = "id", ETag = "etag" };
         var previous = new CustomsDeclaration();
         var current = new CustomsDeclaration { ClearanceRequest = new ClearanceRequest() };
 
-        var result = subject.ToResourceEvent("operation").WithChangeSet(current, previous);
+        var result = subject.ToResourceEvent(ResourceEventOperations.Created, current, previous);
 
         result.SubResourceType.Should().Be("ClearanceRequest");
     }
 
     [Fact]
-    public void WhenWithChangeSet_AndSubResourceTypeIsClearanceRequest_WithChildPropertyChange_ShouldSetSubResourceType()
+    public void WhenToResourceEvent_AndSubResourceTypeIsClearanceRequest_WithChildPropertyChange_ShouldSetSubResourceType()
     {
         var subject = new FixtureEntity { Id = "id", ETag = "etag" };
         var previous = new CustomsDeclaration { ClearanceRequest = new ClearanceRequest { ExternalVersion = 1 } };
         var current = new CustomsDeclaration { ClearanceRequest = new ClearanceRequest { ExternalVersion = 2 } };
 
-        var result = subject.ToResourceEvent("operation").WithChangeSet(current, previous);
+        var result = subject.ToResourceEvent(ResourceEventOperations.Created, current, previous);
 
         result.SubResourceType.Should().Be("ClearanceRequest");
     }
 
     [Fact]
-    public void WhenWithChangeSet_AndSubResourceTypeIsClearanceDecision_ShouldSetSubResourceType()
+    public void WhenToResourceEvent_AndSubResourceTypeIsClearanceDecision_ShouldSetSubResourceType()
     {
         var subject = new FixtureEntity { Id = "id", ETag = "etag" };
         var previous = new CustomsDeclaration();
         var current = new CustomsDeclaration { ClearanceDecision = new ClearanceDecision { Items = [] } };
 
-        var result = subject.ToResourceEvent("operation").WithChangeSet(current, previous);
+        var result = subject.ToResourceEvent(ResourceEventOperations.Created, current, previous);
 
         result.SubResourceType.Should().Be("ClearanceDecision");
     }
 
     [Fact]
-    public void WhenWithChangeSet_AndSubResourceTypeIsFinalisation_ShouldSetSubResourceType()
+    public void WhenToResourceEvent_AndSubResourceTypeIsFinalisation_ShouldSetSubResourceType()
     {
         var subject = new FixtureEntity { Id = "id", ETag = "etag" };
         var previous = new CustomsDeclaration();
@@ -195,25 +220,25 @@ public class DataEntityExtensionsTests
             },
         };
 
-        var result = subject.ToResourceEvent("operation").WithChangeSet(current, previous);
+        var result = subject.ToResourceEvent(ResourceEventOperations.Created, current, previous);
 
         result.SubResourceType.Should().Be("Finalisation");
     }
 
     [Fact]
-    public void WhenWithChangeSet_AndSubResourceTypeIsExternalError_ShouldSetSubResourceType()
+    public void WhenToResourceEvent_AndSubResourceTypeIsExternalError_ShouldSetSubResourceType()
     {
         var subject = new FixtureEntity { Id = "id", ETag = "etag" };
         var previous = new CustomsDeclaration();
         var current = new CustomsDeclaration { ExternalErrors = [new ExternalError()] };
 
-        var result = subject.ToResourceEvent("operation").WithChangeSet(current, previous);
+        var result = subject.ToResourceEvent(ResourceEventOperations.Created, current, previous);
 
         result.SubResourceType.Should().Be("ExternalError");
     }
 
     [Fact]
-    public void WhenWithChangeSet_AndMultipleKnownSubResourceTypes_ShouldThrow()
+    public void WhenToResourceEvent_AndMultipleKnownSubResourceTypes_ShouldThrow()
     {
         var subject = new FixtureEntity { Id = "id", ETag = "etag" };
         var previous = new CustomsDeclaration();
@@ -230,7 +255,7 @@ public class DataEntityExtensionsTests
             ExternalErrors = [],
         };
 
-        var act = () => subject.ToResourceEvent("operation").WithChangeSet(current, previous);
+        var act = () => subject.ToResourceEvent(ResourceEventOperations.Created, current, previous);
 
         act.Should().Throw<InvalidOperationException>();
     }
@@ -251,5 +276,10 @@ public class DataEntityExtensionsTests
     {
         Value1,
         Value2,
+    }
+
+    private class FixtureDomain
+    {
+        public int Id { get; set; }
     }
 }

@@ -14,17 +14,12 @@
         "sourceExternalCorrelationId": null,
         "externalVersion": null,
         "created": null,
+        "errors": [],
         "message": null
       }
     ]
   },
   "etag": "{Scrubbed}",
   "timestamp": "DateTimeOffset_2",
-  "changeSet": [
-    {
-      "path": "/0",
-      "operation": "Add",
-      "value": "{\n  \"correlationId\": null,\n  \"sourceExternalCorrelationId\": null,\n  \"externalVersion\": null,\n  \"created\": null,\n  \"errors\": [],\n  \"message\": null\n}"
-    }
-  ]
+  "changeSet": []
 }

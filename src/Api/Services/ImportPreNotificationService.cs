@@ -43,9 +43,11 @@ public class ImportPreNotificationService(
 
         importPreNotificationRepository.TrackImportPreNotificationUpdate(inserted);
 
-        var resourceEvent = inserted
-            .ToResourceEvent(ResourceEventOperations.Created)
-            .WithChangeSet(inserted.ImportPreNotification, new ImportPreNotification());
+        var resourceEvent = inserted.ToResourceEvent(
+            ResourceEventOperations.Created,
+            inserted.ImportPreNotification,
+            new ImportPreNotification()
+        );
 
         var resourceEventEntity = resourceEventRepository.Insert(resourceEvent);
 
@@ -69,9 +71,11 @@ public class ImportPreNotificationService(
 
         importPreNotificationRepository.TrackImportPreNotificationUpdate(updated);
 
-        var resourceEvent = updated
-            .ToResourceEvent(ResourceEventOperations.Updated)
-            .WithChangeSet(updated.ImportPreNotification, existing.ImportPreNotification);
+        var resourceEvent = updated.ToResourceEvent(
+            ResourceEventOperations.Updated,
+            updated.ImportPreNotification,
+            existing.ImportPreNotification
+        );
 
         var resourceEventEntity = resourceEventRepository.Insert(resourceEvent);
 
