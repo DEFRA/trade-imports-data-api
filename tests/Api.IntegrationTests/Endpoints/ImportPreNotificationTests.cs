@@ -284,6 +284,7 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
                         .ScrubMember("Id")
                         .ScrubMember("value")
                         .UseStrictJson()
+                        .DontIgnoreEmptyCollections()
                         .UseMethodName($"{nameof(WhenCreating_ThenUpdating_ShouldEmitResourceEvents)}_Created");
 
                     var resourceEvent = JsonSerializer.Deserialize<ResourceEvent<ImportPreNotificationEntity>>(
@@ -306,6 +307,7 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
                         .ScrubMember("etag")
                         .ScrubMember("message")
                         .UseStrictJson()
+                        .DontIgnoreEmptyCollections()
                         .UseMethodName(
                             $"{nameof(WhenCreating_ThenUpdating_ShouldEmitResourceEvents)}_Created_ResourceEvents"
                         );
@@ -406,6 +408,7 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
                         .ScrubMember("etag")
                         .ScrubMember("Id")
                         .UseStrictJson()
+                        .DontIgnoreEmptyCollections()
                         .UseMethodName($"{nameof(WhenCreating_ThenUpdating_ShouldEmitResourceEvents)}_Updated");
 
                     var resourceEvent = JsonSerializer.Deserialize<ResourceEvent<ImportPreNotificationEntity>>(
@@ -428,6 +431,7 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
                         .ScrubMember("etag")
                         .ScrubMember("message")
                         .UseStrictJson()
+                        .DontIgnoreEmptyCollections()
                         .UseMethodName(
                             $"{nameof(WhenCreating_ThenUpdating_ShouldEmitResourceEvents)}_Updated_ResourceEvents"
                         );

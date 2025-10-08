@@ -5,6 +5,7 @@
   "operation": "Created",
   "resource": {
     "Id": "{Scrubbed}",
+    "ImportPreNotificationIdentifiers": [],
     "ETag": "{Scrubbed}",
     "Created": "DateTimeOffset_1",
     "Updated": "DateTimeOffset_1",
@@ -31,11 +32,5 @@
   },
   "etag": "{Scrubbed}",
   "timestamp": "DateTimeOffset_2",
-  "changeSet": [
-    {
-      "path": "/ClearanceRequest",
-      "operation": "Replace",
-      "value": "{\n  \"externalCorrelationId\": null,\n  \"messageSentAt\": \"0001-01-01T00:00:00\",\n  \"externalVersion\": null,\n  \"previousExternalVersion\": null,\n  \"declarationUcr\": null,\n  \"declarationPartNumber\": null,\n  \"declarationType\": null,\n  \"arrivesAt\": null,\n  \"submitterTurn\": null,\n  \"declarantId\": null,\n  \"declarantName\": null,\n  \"dispatchCountryCode\": null,\n  \"goodsLocationCode\": null,\n  \"masterUcr\": null,\n  \"commodities\": null\n}"
-    }
-  ]
+  "changeSet": []
 }

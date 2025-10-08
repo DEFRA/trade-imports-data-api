@@ -92,6 +92,7 @@ public class ProcessingErrorTests(ITestOutputHelper testOutputHelper) : SqsTestB
                         .ScrubMember("etag")
                         .ScrubMember("Id")
                         .UseStrictJson()
+                        .DontIgnoreEmptyCollections()
                         .UseMethodName($"{nameof(WhenCreating_ThenUpdating_ShouldEmitResourceEvents)}_Created");
 
                     var resourceEvent = JsonSerializer.Deserialize<ResourceEvent<ProcessingErrorEntity>>(message.Body);
@@ -112,6 +113,7 @@ public class ProcessingErrorTests(ITestOutputHelper testOutputHelper) : SqsTestB
                         .ScrubMember("etag")
                         .ScrubMember("message")
                         .UseStrictJson()
+                        .DontIgnoreEmptyCollections()
                         .UseMethodName(
                             $"{nameof(WhenCreating_ThenUpdating_ShouldEmitResourceEvents)}_Created_ResourceEvents"
                         );
@@ -154,6 +156,7 @@ public class ProcessingErrorTests(ITestOutputHelper testOutputHelper) : SqsTestB
                         .ScrubMember("etag")
                         .ScrubMember("Id")
                         .UseStrictJson()
+                        .DontIgnoreEmptyCollections()
                         .UseMethodName($"{nameof(WhenCreating_ThenUpdating_ShouldEmitResourceEvents)}_Updated");
 
                     var resourceEvent = JsonSerializer.Deserialize<ResourceEvent<ProcessingErrorEntity>>(message.Body);
@@ -174,6 +177,7 @@ public class ProcessingErrorTests(ITestOutputHelper testOutputHelper) : SqsTestB
                         .ScrubMember("etag")
                         .ScrubMember("message")
                         .UseStrictJson()
+                        .DontIgnoreEmptyCollections()
                         .UseMethodName(
                             $"{nameof(WhenCreating_ThenUpdating_ShouldEmitResourceEvents)}_Updated_ResourceEvents"
                         );

@@ -69,7 +69,7 @@ public class ProcessingErrorServiceTests
         ResourceEventRepository
             .Received()
             .Insert(
-                Arg.Is<ResourceEvent<ProcessingErrorEntity>>(x => x.Operation == "Created" && x.ChangeSet.Count > 0)
+                Arg.Is<ResourceEvent<ProcessingErrorEntity>>(x => x.Operation == "Created" && x.ChangeSet.Count == 0)
             );
         await ResourceEventService
             .Received()

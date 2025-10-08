@@ -31,18 +31,17 @@ public class CustomsDeclarationService(
 
         await TrackImportPreNotificationUpdate(inserted, cancellationToken);
 
-        var resourceEvent = inserted
-            .ToResourceEvent(ResourceEventOperations.Created)
-            .WithChangeSet(
-                new CustomsDeclaration
-                {
-                    ClearanceRequest = inserted.ClearanceRequest,
-                    ClearanceDecision = inserted.ClearanceDecision,
-                    Finalisation = inserted.Finalisation,
-                    ExternalErrors = inserted.ExternalErrors,
-                },
-                new CustomsDeclaration()
-            );
+        var resourceEvent = inserted.ToResourceEvent(
+            ResourceEventOperations.Created,
+            new CustomsDeclaration
+            {
+                ClearanceRequest = inserted.ClearanceRequest,
+                ClearanceDecision = inserted.ClearanceDecision,
+                Finalisation = inserted.Finalisation,
+                ExternalErrors = inserted.ExternalErrors,
+            },
+            new CustomsDeclaration()
+        );
 
         var resourceEventEntity = resourceEventRepository.Insert(resourceEvent);
 
@@ -76,24 +75,23 @@ public class CustomsDeclarationService(
 
         await TrackImportPreNotificationUpdate(updated, cancellationToken);
 
-        var resourceEvent = updated
-            .ToResourceEvent(ResourceEventOperations.Updated)
-            .WithChangeSet(
-                new CustomsDeclaration
-                {
-                    ClearanceRequest = updated.ClearanceRequest,
-                    ClearanceDecision = updated.ClearanceDecision,
-                    Finalisation = updated.Finalisation,
-                    ExternalErrors = updated.ExternalErrors,
-                },
-                new CustomsDeclaration
-                {
-                    ClearanceRequest = existing.ClearanceRequest,
-                    ClearanceDecision = existing.ClearanceDecision,
-                    Finalisation = existing.Finalisation,
-                    ExternalErrors = existing.ExternalErrors,
-                }
-            );
+        var resourceEvent = updated.ToResourceEvent(
+            ResourceEventOperations.Updated,
+            new CustomsDeclaration
+            {
+                ClearanceRequest = updated.ClearanceRequest,
+                ClearanceDecision = updated.ClearanceDecision,
+                Finalisation = updated.Finalisation,
+                ExternalErrors = updated.ExternalErrors,
+            },
+            new CustomsDeclaration
+            {
+                ClearanceRequest = existing.ClearanceRequest,
+                ClearanceDecision = existing.ClearanceDecision,
+                Finalisation = existing.Finalisation,
+                ExternalErrors = existing.ExternalErrors,
+            }
+        );
 
         var resourceEventEntity = resourceEventRepository.Insert(resourceEvent);
 
