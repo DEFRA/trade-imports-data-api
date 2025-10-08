@@ -4,5 +4,6 @@ namespace Defra.TradeImportsDataApi.Api.Client;
 
 public record RelatedImportDeclarationsResponse(
     [property: JsonPropertyName("customsDeclarations")] CustomsDeclarationResponse[] CustomsDeclarations,
-    [property: JsonPropertyName("importPreNotifications")] ImportPreNotificationResponse[] ImportPreNotifications
+    [property: JsonPropertyName("importPreNotifications")] ImportPreNotificationResponse[] ImportPreNotifications,
+    [property: JsonPropertyName("goodsMovements")] GmrResponse[] GoodsMovements
 );
