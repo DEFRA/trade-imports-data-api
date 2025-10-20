@@ -8,9 +8,9 @@
     <RootNamespace>Defra.TradeImportsDataApi.Api.Client.Tests</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.8" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4">
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.10" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -20,6 +20,8 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Verify.Xunit" Version="31.0.3" />
+    <PackageReference Include="WireMock.Net.FluentAssertions" Version="1.14.0" />
     <ProjectReference Include="..\..\src\Api.Client\Api.Client.csproj" />
     <ProjectReference Include="..\..\src\Api\Api.csproj" />
     <ProjectReference Include="..\Testing\Testing.csproj" />
