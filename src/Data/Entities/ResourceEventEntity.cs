@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Defra.TradeImportsDataApi.Data.Configuration;
 
 namespace Defra.TradeImportsDataApi.Data.Entities;
 
@@ -6,6 +7,7 @@ namespace Defra.TradeImportsDataApi.Data.Entities;
 // that should be on the other entities, which will be added in due course
 // as part of a future change
 
+[DbCollection("ResourceEvent")]
 public class ResourceEventEntity : IDataEntity
 {
     [JsonPropertyName("id")]

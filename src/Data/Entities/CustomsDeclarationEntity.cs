@@ -1,7 +1,9 @@
+using Defra.TradeImportsDataApi.Data.Configuration;
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 
 namespace Defra.TradeImportsDataApi.Data.Entities;
 
+[DbCollection("CustomsDeclaration")]
 public class CustomsDeclarationEntity : IDataEntity
 {
     public required string Id { get; set; }
