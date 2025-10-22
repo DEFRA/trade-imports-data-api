@@ -47,20 +47,14 @@ static WebApplication CreateWebApplication(string[] args)
     var builder = WebApplication.CreateBuilder(args);
     var generatingOpenApiFromCli = Assembly.GetEntryAssembly()?.GetName().Name == "dotnet-swagger";
 
-    ConfigureWebApplication(builder, args, generatingOpenApiFromCli);
+    ConfigureWebApplication(builder, args);
 
     return BuildWebApplication(builder, generatingOpenApiFromCli);
 }
 
-static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args, bool generatingOpenApiFromCli)
+static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args)
 {
     var integrationTest = args.Contains("--integrationTest=true");
-    var cdpAppSettingsOptional = generatingOpenApiFromCli || integrationTest;
-
-    builder.Configuration.AddJsonFile(
-        $"appsettings.cdp.{Environment.GetEnvironmentVariable("ENVIRONMENT")?.ToLower()}.json",
-        cdpAppSettingsOptional
-    );
     builder.Configuration.AddEnvironmentVariables();
 
     // This must happen before Mongo and Http client connections
