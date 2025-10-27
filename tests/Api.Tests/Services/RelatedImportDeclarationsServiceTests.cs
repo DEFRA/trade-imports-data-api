@@ -410,7 +410,7 @@ public class RelatedImportDeclarationsServiceTests
 
         response.Should().NotBeNull();
         response.CustomsDeclarations.Length.Should().Be(3);
-        response.ImportPreNotifications.Length.Should().Be(4);
+        response.ImportPreNotifications.Length.Should().Be(0);
         response.Gmrs.Length.Should().Be(1);
     }
 
