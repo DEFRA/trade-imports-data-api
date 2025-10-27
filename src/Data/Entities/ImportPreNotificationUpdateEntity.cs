@@ -1,5 +1,8 @@
+using Defra.TradeImportsDataApi.Data.Configuration;
+
 namespace Defra.TradeImportsDataApi.Data.Entities;
 
+[DbCollection("ImportPreNotificationUpdate")]
 public class ImportPreNotificationUpdateEntity : IDataEntity
 {
     private IDataEntity? _source;
