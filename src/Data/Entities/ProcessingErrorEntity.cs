@@ -1,7 +1,9 @@
+using Defra.TradeImportsDataApi.Data.Configuration;
 using Defra.TradeImportsDataApi.Domain.Errors;
 
 namespace Defra.TradeImportsDataApi.Data.Entities;
 
+[DbCollection("ProcessingError")]
 public class ProcessingErrorEntity : IDataEntity
 {
     public required string Id { get; set; }
