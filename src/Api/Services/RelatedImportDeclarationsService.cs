@@ -144,13 +144,6 @@ public class RelatedImportDeclarationsService(
             x => gmr.CustomsDeclarationIdentifiers.Contains(x.Id),
             cancellationToken
         );
-        ////var customsImportDeclarationIdentifiers = customsDeclarations
-        ////    .SelectMany(x => x.ImportPreNotificationIdentifiers)
-        ////    .Distinct();
-        ////var notifications = await importPreNotificationRepository.GetAll(
-        ////    [.. customsImportDeclarationIdentifiers],
-        ////    cancellationToken
-        ////);
 
         var result = await IncludeIndirectLinks(
             new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>(
