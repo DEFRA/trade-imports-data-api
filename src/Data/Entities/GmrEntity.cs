@@ -1,8 +1,10 @@
+using Defra.TradeImportsDataApi.Data.Configuration;
 using Defra.TradeImportsDataApi.Data.Extensions;
 using Defra.TradeImportsDataApi.Domain.Gvms;
 
 namespace Defra.TradeImportsDataApi.Data.Entities;
 
+[DbCollection("Gmr")]
 public class GmrEntity : IDataEntity
 {
     public required string Id { get; set; }

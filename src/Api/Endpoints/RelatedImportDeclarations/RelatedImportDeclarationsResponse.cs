@@ -8,5 +8,5 @@ namespace Defra.TradeImportsDataApi.Api.Endpoints.RelatedImportDeclarations;
 public record RelatedImportDeclarationsResponse(
     [property: JsonPropertyName("customsDeclarations")] CustomsDeclarationResponse[] CustomsDeclarations,
     [property: JsonPropertyName("importPreNotifications")] ImportPreNotificationResponse[] ImportPreNotifications,
-    [property: JsonPropertyName("goodsMovements")] GmrResponse[] GoodsMovements
+    [property: JsonPropertyName("goodsVehicleMovements")] GmrResponse[] GoodsMovements
 );

@@ -60,7 +60,6 @@ public class RelatedImportDeclarationsService(
                 // MongoDB driver does not support string.Equals()
                 x => x.Id.ToLowerInvariant() == request.GmrId.ToLowerInvariant(),
 #pragma warning restore CA1862
-                maxDepth,
                 cancellationToken
             );
         }
@@ -82,15 +81,20 @@ public class RelatedImportDeclarationsService(
         var identifiers = customsDeclarations.SelectMany(x => x.ImportPreNotificationIdentifiers);
         var notifications = await importPreNotificationRepository.GetAll(identifiers.ToArray(), cancellationToken);
 
-        return await IncludeIndirectLinks(
-            new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>(
+        var result = await IncludeIndirectLinks(
+            new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[]>(
                 customsDeclarations.ToArray(),
-                notifications.ToArray(),
-                []
+                notifications.ToArray()
             ),
             0,
             maxDepth,
             cancellationToken
+        );
+
+        return new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>(
+            result.CustomsDeclarations,
+            result.ImportPreNotifications,
+            []
         );
     }
 
@@ -116,15 +120,20 @@ public class RelatedImportDeclarationsService(
             cancellationToken
         );
 
-        return await IncludeIndirectLinks(
-            new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>(
+        var result = await IncludeIndirectLinks(
+            new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[]>(
                 customsDeclarations.ToArray(),
-                [notification],
-                []
+                [notification]
             ),
             0,
             maxDepth,
             cancellationToken
+        );
+
+        return new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>(
+            result.CustomsDeclarations,
+            result.ImportPreNotifications,
+            []
         );
     }
 
@@ -132,7 +141,7 @@ public class RelatedImportDeclarationsService(
         CustomsDeclarationEntity[] CustomsDeclarations,
         ImportPreNotificationEntity[] ImportPreNotifications,
         GmrEntity[] Gmrs
-    )> StartFromGmrId(Expression<Func<GmrEntity, bool>> predicate, int maxDepth, CancellationToken cancellationToken)
+    )> StartFromGmrId(Expression<Func<GmrEntity, bool>> predicate, CancellationToken cancellationToken)
     {
         var gmr = await gmrRepository.Get(predicate, cancellationToken);
         if (gmr == null)
@@ -145,34 +154,18 @@ public class RelatedImportDeclarationsService(
             cancellationToken
         );
 
-        var result = await IncludeIndirectLinks(
-            new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>(
-                [.. customsDeclarations],
-                [],
-                [gmr]
-            ),
-            0,
-            maxDepth,
-            cancellationToken
-        );
-
         return new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>(
-            result.CustomsDeclarations,
+            [.. customsDeclarations],
             [],
-            result.Gmrs
+            [gmr]
         );
     }
 
     private async Task<(
         CustomsDeclarationEntity[] CustomsDeclarations,
-        ImportPreNotificationEntity[] ImportPreNotifications,
-        GmrEntity[] Gmrs
+        ImportPreNotificationEntity[] ImportPreNotifications
     )> IncludeIndirectLinks(
-        (
-            CustomsDeclarationEntity[] CustomsDeclarations,
-            ImportPreNotificationEntity[] ImportPreNotifications,
-            GmrEntity[] Gmrs
-        ) data,
+        (CustomsDeclarationEntity[] CustomsDeclarations, ImportPreNotificationEntity[] ImportPreNotifications) data,
         int currentDepth,
         int maxDepth,
         CancellationToken cancellationToken
@@ -216,10 +209,9 @@ public class RelatedImportDeclarationsService(
             );
         }
 
-        var response = new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>(
+        var response = new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[]>(
             customsDeclarations.ToArray(),
-            importPreNotifications.ToArray(),
-            data.Gmrs
+            importPreNotifications.ToArray()
         );
 
         // bail out of the recursive loop if there are no records loaded
@@ -232,10 +224,9 @@ public class RelatedImportDeclarationsService(
         }
 
         return await IncludeIndirectLinks(
-            new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>(
+            new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[]>(
                 customsDeclarations.ToArray(),
-                importPreNotifications.ToArray(),
-                data.Gmrs
+                importPreNotifications.ToArray()
             ),
             currentDepth + 1,
             maxDepth,
