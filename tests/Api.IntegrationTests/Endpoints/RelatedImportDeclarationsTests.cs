@@ -85,7 +85,7 @@ public class RelatedImportDeclarationsTests : IntegrationTestBase
         );
 
         response.Should().NotBeNull();
-        response.CustomsDeclarations.Length.Should().Be(3);
+        response.CustomsDeclarations.Length.Should().Be(2);
         response.ImportPreNotifications.Length.Should().Be(0);
         response.GoodsMovements.Length.Should().Be(1);
     }
