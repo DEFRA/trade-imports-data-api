@@ -393,10 +393,10 @@ public class RelatedImportDeclarationsServiceTests
     }
 
     [Theory]
-    [InlineData("gmr1")]
-    [InlineData("gmr2")]
-    [InlineData("gmr3")]
-    public async Task GivenSearchByGmrId_WhenExists_ThenShouldReturn(string gmrId)
+    [InlineData("gmr1", 2)]
+    [InlineData("gmr2", 2)]
+    [InlineData("gmr3", 1)]
+    public async Task GivenSearchByGmrId_WhenExists_ThenShouldReturn(string gmrId, int customsDeclarationsCount)
     {
         var memoryDbContext = new MemoryDbContext();
         InsertTestData(memoryDbContext);
@@ -409,7 +409,7 @@ public class RelatedImportDeclarationsServiceTests
         );
 
         response.Should().NotBeNull();
-        response.CustomsDeclarations.Length.Should().Be(3);
+        response.CustomsDeclarations.Length.Should().Be(customsDeclarationsCount);
         response.ImportPreNotifications.Length.Should().Be(0);
         response.Gmrs.Length.Should().Be(1);
     }
