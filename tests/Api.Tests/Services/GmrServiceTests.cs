@@ -177,4 +177,17 @@ public class GmrServiceTests
 
         result.Should().NotBeNull();
     }
+
+    [Fact]
+    public async Task GetGmr_WithPredicate_ShouldReturn()
+    {
+        const string id = "id";
+        GmrRepository
+            .Get(Arg.Any<System.Linq.Expressions.Expression<Func<GmrEntity, bool>>>(), CancellationToken.None)
+            .Returns(new GmrEntity { Id = id, Gmr = new Gmr() });
+
+        var result = await Subject.GetGmr(x => x.Id == id, CancellationToken.None);
+
+        result.Should().NotBeNull();
+    }
 }
