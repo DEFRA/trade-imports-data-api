@@ -43,10 +43,10 @@ public class ProcessingErrorServiceTests
         ProcessingErrorRepository.Insert(entity).Returns(entity);
         var resourceEventEntityId = Guid.NewGuid().ToString();
         ResourceEventRepository
-            .Insert(Arg.Any<ResourceEvent<ProcessingErrorEntity>>())
+            .Insert(Arg.Any<ResourceEvent<ProcessingErrorEvent>>())
             .Returns(call =>
             {
-                var resourceEvent = call.Arg<ResourceEvent<ProcessingErrorEntity>>();
+                var resourceEvent = call.Arg<ResourceEvent<ProcessingErrorEvent>>();
 
                 return new ResourceEventEntity
                 {
@@ -69,7 +69,7 @@ public class ProcessingErrorServiceTests
         ResourceEventRepository
             .Received()
             .Insert(
-                Arg.Is<ResourceEvent<ProcessingErrorEntity>>(x => x.Operation == "Created" && x.ChangeSet.Count == 0)
+                Arg.Is<ResourceEvent<ProcessingErrorEvent>>(x => x.Operation == "Created" && x.ChangeSet.Count == 0)
             );
         await ResourceEventService
             .Received()
@@ -98,10 +98,10 @@ public class ProcessingErrorServiceTests
         ProcessingErrorRepository.Update(entity, "etag", CancellationToken.None).Returns((existing, entity));
         var resourceEventEntityId = Guid.NewGuid().ToString();
         ResourceEventRepository
-            .Insert(Arg.Any<ResourceEvent<ProcessingErrorEntity>>())
+            .Insert(Arg.Any<ResourceEvent<ProcessingErrorEvent>>())
             .Returns(call =>
             {
-                var resourceEvent = call.Arg<ResourceEvent<ProcessingErrorEntity>>();
+                var resourceEvent = call.Arg<ResourceEvent<ProcessingErrorEvent>>();
 
                 return new ResourceEventEntity
                 {
@@ -124,7 +124,7 @@ public class ProcessingErrorServiceTests
         ResourceEventRepository
             .Received()
             .Insert(
-                Arg.Is<ResourceEvent<ProcessingErrorEntity>>(x => x.Operation == "Updated" && x.ChangeSet.Count > 0)
+                Arg.Is<ResourceEvent<ProcessingErrorEvent>>(x => x.Operation == "Updated" && x.ChangeSet.Count > 0)
             );
         await ResourceEventService
             .Received()

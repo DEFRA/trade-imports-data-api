@@ -4,12 +4,11 @@
   "subResourceType": null,
   "operation": "Created",
   "resource": {
-    "Id": "{Scrubbed}",
-    "CustomsDeclarationIdentifier": "{Scrubbed}",
-    "ETag": "{Scrubbed}",
-    "Created": "DateTimeOffset_1",
-    "Updated": "DateTimeOffset_1",
-    "ImportPreNotification": {
+    "id": "{Scrubbed}",
+    "etag": "{Scrubbed}",
+    "created": "DateTimeOffset_1",
+    "updated": "DateTimeOffset_1",
+    "importPreNotification": {
       "ipaffsId": null,
       "etag": "{Scrubbed}",
       "externalReferences": null,
