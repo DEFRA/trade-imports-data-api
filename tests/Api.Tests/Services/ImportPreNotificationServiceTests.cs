@@ -46,10 +46,10 @@ public class ImportPreNotificationServiceTests
         ImportPreNotificationRepository.Insert(entity).Returns(entity);
         var resourceEventEntityId = Guid.NewGuid().ToString();
         ResourceEventRepository
-            .Insert(Arg.Any<ResourceEvent<ImportPreNotificationEntity>>())
+            .Insert(Arg.Any<ResourceEvent<ImportPreNotificationEvent>>())
             .Returns(call =>
             {
-                var resourceEvent = call.Arg<ResourceEvent<ImportPreNotificationEntity>>();
+                var resourceEvent = call.Arg<ResourceEvent<ImportPreNotificationEvent>>();
 
                 return new ResourceEventEntity
                 {
@@ -72,7 +72,7 @@ public class ImportPreNotificationServiceTests
         ResourceEventRepository
             .Received()
             .Insert(
-                Arg.Is<ResourceEvent<ImportPreNotificationEntity>>(x =>
+                Arg.Is<ResourceEvent<ImportPreNotificationEvent>>(x =>
                     x.Operation == "Created" && x.ChangeSet.Count == 0
                 )
             );
@@ -99,10 +99,10 @@ public class ImportPreNotificationServiceTests
         ImportPreNotificationRepository.Update(entity, "etag", CancellationToken.None).Returns((existing, entity));
         var resourceEventEntityId = Guid.NewGuid().ToString();
         ResourceEventRepository
-            .Insert(Arg.Any<ResourceEvent<ImportPreNotificationEntity>>())
+            .Insert(Arg.Any<ResourceEvent<ImportPreNotificationEvent>>())
             .Returns(call =>
             {
-                var resourceEvent = call.Arg<ResourceEvent<ImportPreNotificationEntity>>();
+                var resourceEvent = call.Arg<ResourceEvent<ImportPreNotificationEvent>>();
 
                 return new ResourceEventEntity
                 {
@@ -125,7 +125,7 @@ public class ImportPreNotificationServiceTests
         ResourceEventRepository
             .Received()
             .Insert(
-                Arg.Is<ResourceEvent<ImportPreNotificationEntity>>(x =>
+                Arg.Is<ResourceEvent<ImportPreNotificationEvent>>(x =>
                     x.Operation == "Updated" && x.ChangeSet.Count > 0
                 )
             );

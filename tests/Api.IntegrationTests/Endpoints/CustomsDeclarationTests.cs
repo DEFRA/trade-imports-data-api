@@ -155,14 +155,13 @@ public class CustomsDeclarationTests(ITestOutputHelper testOutputHelper) : SqsTe
 
                     await VerifyJson(message.Body)
                         .ScrubMember("resourceId")
-                        .ScrubMember("ETag")
                         .ScrubMember("etag")
-                        .ScrubMember("Id")
+                        .ScrubMember("id")
                         .UseStrictJson()
                         .DontIgnoreEmptyCollections()
                         .UseMethodName($"{nameof(WhenCreating_ThenUpdating_ShouldEmitResourceEvents)}_Created");
 
-                    var resourceEvent = JsonSerializer.Deserialize<ResourceEvent<CustomsDeclarationEntity>>(
+                    var resourceEvent = JsonSerializer.Deserialize<ResourceEvent<CustomsDeclarationEvent>>(
                         message.Body
                     );
 
@@ -227,14 +226,13 @@ public class CustomsDeclarationTests(ITestOutputHelper testOutputHelper) : SqsTe
 
                     await VerifyJson(message.Body)
                         .ScrubMember("resourceId")
-                        .ScrubMember("ETag")
                         .ScrubMember("etag")
-                        .ScrubMember("Id")
+                        .ScrubMember("id")
                         .UseStrictJson()
                         .DontIgnoreEmptyCollections()
                         .UseMethodName($"{nameof(WhenCreating_ThenUpdating_ShouldEmitResourceEvents)}_Updated");
 
-                    var resourceEvent = JsonSerializer.Deserialize<ResourceEvent<CustomsDeclarationEntity>>(
+                    var resourceEvent = JsonSerializer.Deserialize<ResourceEvent<CustomsDeclarationEvent>>(
                         message.Body
                     );
 

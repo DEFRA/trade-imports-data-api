@@ -4,12 +4,11 @@
   "subResourceType": "ClearanceDecision",
   "operation": "Updated",
   "resource": {
-    "Id": "{Scrubbed}",
-    "ImportPreNotificationIdentifiers": [],
-    "ETag": "{Scrubbed}",
-    "Created": "DateTimeOffset_1",
-    "Updated": "DateTimeOffset_2",
-    "ClearanceRequest": {
+    "id": "{Scrubbed}",
+    "etag": "{Scrubbed}",
+    "created": "DateTimeOffset_1",
+    "updated": "DateTimeOffset_2",
+    "clearanceRequest": {
       "externalCorrelationId": null,
       "messageSentAt": "Date_MinValue",
       "externalVersion": null,
@@ -26,7 +25,7 @@
       "masterUcr": null,
       "commodities": null
     },
-    "ClearanceDecision": {
+    "clearanceDecision": {
       "correlationId": null,
       "created": "Date_MinValue",
       "externalVersionNumber": null,
@@ -35,8 +34,8 @@
       "items": [],
       "results": []
     },
-    "Finalisation": null,
-    "ExternalErrors": null
+    "finalisation": null,
+    "externalErrors": null
   },
   "etag": "{Scrubbed}",
   "timestamp": "DateTimeOffset_3",

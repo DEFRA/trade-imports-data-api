@@ -4,12 +4,11 @@
   "subResourceType": "ClearanceRequest",
   "operation": "Created",
   "resource": {
-    "Id": "{Scrubbed}",
-    "ImportPreNotificationIdentifiers": [],
-    "ETag": "{Scrubbed}",
-    "Created": "DateTimeOffset_1",
-    "Updated": "DateTimeOffset_1",
-    "ClearanceRequest": {
+    "id": "{Scrubbed}",
+    "etag": "{Scrubbed}",
+    "created": "DateTimeOffset_1",
+    "updated": "DateTimeOffset_1",
+    "clearanceRequest": {
       "externalCorrelationId": null,
       "messageSentAt": "Date_MinValue",
       "externalVersion": null,
@@ -26,9 +25,9 @@
       "masterUcr": null,
       "commodities": null
     },
-    "ClearanceDecision": null,
-    "Finalisation": null,
-    "ExternalErrors": null
+    "clearanceDecision": null,
+    "finalisation": null,
+    "externalErrors": null
   },
   "etag": "{Scrubbed}",
   "timestamp": "DateTimeOffset_2",

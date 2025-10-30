@@ -278,16 +278,14 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
                     await VerifyJson(message.Body)
                         .ScrubMember("resourceId")
                         .ScrubMember("referenceNumber")
-                        .ScrubMember("CustomsDeclarationIdentifier")
-                        .ScrubMember("ETag")
                         .ScrubMember("etag")
-                        .ScrubMember("Id")
+                        .ScrubMember("id")
                         .ScrubMember("value")
                         .UseStrictJson()
                         .DontIgnoreEmptyCollections()
                         .UseMethodName($"{nameof(WhenCreating_ThenUpdating_ShouldEmitResourceEvents)}_Created");
 
-                    var resourceEvent = JsonSerializer.Deserialize<ResourceEvent<ImportPreNotificationEntity>>(
+                    var resourceEvent = JsonSerializer.Deserialize<ResourceEvent<ImportPreNotificationEvent>>(
                         message.Body
                     );
 
@@ -403,15 +401,13 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
                     await VerifyJson(message.Body)
                         .ScrubMember("resourceId")
                         .ScrubMember("referenceNumber")
-                        .ScrubMember("CustomsDeclarationIdentifier")
-                        .ScrubMember("ETag")
                         .ScrubMember("etag")
-                        .ScrubMember("Id")
+                        .ScrubMember("id")
                         .UseStrictJson()
                         .DontIgnoreEmptyCollections()
                         .UseMethodName($"{nameof(WhenCreating_ThenUpdating_ShouldEmitResourceEvents)}_Updated");
 
-                    var resourceEvent = JsonSerializer.Deserialize<ResourceEvent<ImportPreNotificationEntity>>(
+                    var resourceEvent = JsonSerializer.Deserialize<ResourceEvent<ImportPreNotificationEvent>>(
                         message.Body
                     );
 
