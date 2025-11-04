@@ -51,7 +51,7 @@ jobs:
       - name: Generate OpenAPI specification
         run: make generate-openapi-spec
       - name: Save OpenApi specification
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: openapi.json
           path: openapi.json
