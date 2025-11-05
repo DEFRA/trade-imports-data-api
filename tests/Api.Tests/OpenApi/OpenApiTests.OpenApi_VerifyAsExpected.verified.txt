@@ -4693,7 +4693,7 @@
           },
           "requestAmendmentAdditionalDetails": {
             "type": "string",
-            "description": "Date of autoclearance",
+            "description": "The reason why a notification is put into a modify state.",
             "nullable": true
           }
         },
