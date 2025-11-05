@@ -4690,6 +4690,11 @@
             "description": "Date of autoclearance",
             "format": "date-time",
             "nullable": true
+          },
+          "requestAmendmentAdditionalDetails": {
+            "type": "string",
+            "description": "Date of autoclearance",
+            "nullable": true
           }
         },
         "additionalProperties": false,
