@@ -1,5 +1,6 @@
 using Argon;
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
+using Defra.TradeImportsDataApi.Domain.Gvms;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using Defra.TradeImportsDataApi.Testing;
 using FluentAssertions;
@@ -35,7 +36,7 @@ public class GetTests : WireMockTestBase<WireMockContext>
             .RespondWith(
                 Response
                     .Create()
-                    .WithBody(JsonSerializer.Serialize(new RelatedImportDeclarationsResponse([], [])))
+                    .WithBody(JsonSerializer.Serialize(new RelatedImportDeclarationsResponse([], [], [])))
                     .WithStatusCode(StatusCodes.Status200OK)
             );
 
@@ -75,7 +76,8 @@ public class GetTests : WireMockTestBase<WireMockContext>
                                         updated
                                     ),
                                 ],
-                                [new ImportPreNotificationResponse(new ImportPreNotification(), created, updated)]
+                                [new ImportPreNotificationResponse(new ImportPreNotification(), created, updated)],
+                                [new GmrResponse(new Gmr(), created, updated)]
                             )
                         )
                     )
