@@ -13,6 +13,11 @@
   ReasonPhrase: OK,
   Headers: [
     {
+      x-redoc-version: [
+        2.5.1
+      ]
+    },
+    {
       Cache-Control: [
         max-age=604800, private
       ]
