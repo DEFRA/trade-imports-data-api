@@ -4,6 +4,7 @@ using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Api.Tests.Utils.InMemoryData;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
+using Defra.TradeImportsDataApi.Domain.Gvms;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using FluentAssertions;
 
@@ -391,6 +392,46 @@ public class RelatedImportDeclarationsServiceTests
         response.ImportPreNotifications.Length.Should().Be(2);
     }
 
+    [Theory]
+    [InlineData("gmr1", 2)]
+    [InlineData("gmr2", 2)]
+    [InlineData("gmr3", 1)]
+    public async Task GivenSearchByGmrId_WhenExists_ThenShouldReturn(string gmrId, int customsDeclarationsCount)
+    {
+        var memoryDbContext = new MemoryDbContext();
+        InsertTestData(memoryDbContext);
+
+        var subject = CreateSubject(memoryDbContext);
+
+        var response = await subject.Search(
+            new RelatedImportDeclarationsRequest { GmrId = gmrId },
+            CancellationToken.None
+        );
+
+        response.Should().NotBeNull();
+        response.CustomsDeclarations.Length.Should().Be(customsDeclarationsCount);
+        response.ImportPreNotifications.Length.Should().Be(0);
+        response.Gmrs.Length.Should().Be(1);
+    }
+
+    [Fact]
+    public async Task GivenSearchByGmrId_WhenNotExists_ThenShouldReturnEmpty()
+    {
+        var memoryDbContext = new MemoryDbContext();
+        InsertTestData(memoryDbContext);
+
+        var subject = CreateSubject(memoryDbContext);
+
+        var response = await subject.Search(
+            new RelatedImportDeclarationsRequest { GmrId = "not-exists" },
+            CancellationToken.None
+        );
+
+        response.Should().NotBeNull();
+        response.CustomsDeclarations.Length.Should().Be(0);
+        response.ImportPreNotifications.Length.Should().Be(0);
+    }
+
     private static void InsertTestData(MemoryDbContext memoryDbContext)
     {
         memoryDbContext.ImportPreNotifications.AddTestData(CreateImportPreNotification("CHEDA.GB.2025.1234567"));
@@ -401,6 +442,10 @@ public class RelatedImportDeclarationsServiceTests
         memoryDbContext.CustomsDeclarations.AddTestData(CreateCustomsDeclaration("mrn1", ["1234569", "1234510"]));
         memoryDbContext.CustomsDeclarations.AddTestData(CreateCustomsDeclaration("mrn2", ["1234568", "1234569"]));
         memoryDbContext.CustomsDeclarations.AddTestData(CreateCustomsDeclaration("mrn3", ["1234567", "1234568"]));
+
+        memoryDbContext.Gmrs.AddTestData(CreateGmr("gmr1", ["mrn1", "mrn2"]));
+        memoryDbContext.Gmrs.AddTestData(CreateGmr("gmr2", ["mrn2", "mrn3"]));
+        memoryDbContext.Gmrs.AddTestData(CreateGmr("gmr3", ["mrn1"]));
     }
 
     private static ImportPreNotificationEntity CreateImportPreNotification(string chedId)
@@ -437,11 +482,25 @@ public class RelatedImportDeclarationsServiceTests
         };
     }
 
+    private static GmrEntity CreateGmr(string gmrId, List<string> mrns)
+    {
+        return new GmrEntity
+        {
+            Id = gmrId,
+            CustomsDeclarationIdentifiers = mrns,
+            Gmr = new Gmr(),
+            Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+            Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+            ETag = "etag",
+        };
+    }
+
     private static RelatedImportDeclarationsService CreateSubject(MemoryDbContext memoryDbContext)
     {
         return new RelatedImportDeclarationsService(
             new CustomsDeclarationRepository(memoryDbContext),
-            new ImportPreNotificationRepository(memoryDbContext)
+            new ImportPreNotificationRepository(memoryDbContext),
+            new GmrRepository(memoryDbContext)
         );
     }
 }

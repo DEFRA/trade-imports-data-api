@@ -8,5 +8,7 @@ public class RelatedImportDeclarationsRequest
 
     public string? ChedId { get; set; }
 
+    public string? GmrId { get; set; }
+
     public int? MaxLinkDepth { get; set; }
 }

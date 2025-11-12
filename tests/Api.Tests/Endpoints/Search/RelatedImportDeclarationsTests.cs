@@ -3,6 +3,7 @@ using Defra.TradeImportsDataApi.Api.Endpoints.RelatedImportDeclarations;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
+using Defra.TradeImportsDataApi.Domain.Gvms;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using Defra.TradeImportsDataApi.Testing;
 using FluentAssertions;
@@ -51,7 +52,7 @@ public class RelatedImportDeclarationsTests : EndpointTestBase, IClassFixture<Wi
         MockSearchService
             .Search(Arg.Any<RelatedImportDeclarationsRequest>(), Arg.Any<CancellationToken>())
             .Returns(
-                new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[]>(
+                new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>(
                     [
                         new CustomsDeclarationEntity
                         {
@@ -68,6 +69,16 @@ public class RelatedImportDeclarationsTests : EndpointTestBase, IClassFixture<Wi
                             Id = "ChedId",
                             CustomsDeclarationIdentifier = "ChedId",
                             ImportPreNotification = new ImportPreNotification(),
+                            Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                            Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+                            ETag = "etag",
+                        },
+                    ],
+                    [
+                        new GmrEntity
+                        {
+                            Id = "GmrId",
+                            Gmr = new Gmr(),
                             Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
                             Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
                             ETag = "etag",

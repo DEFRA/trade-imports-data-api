@@ -17,6 +17,10 @@ public class RelatedImportDeclarationsRequest
     [Description("Search by CHED ID")]
     public string? ChedId { get; init; }
 
+    [FromQuery(Name = "gmrId")]
+    [Description("Search by GMR ID")]
+    public string? GmrId { get; init; }
+
     [FromQuery(Name = "maxLinkDepth")]
     [Description("Max link depth to follow. Default is 3.")]
     public int? MaxLinkDepth { get; init; } = 3;

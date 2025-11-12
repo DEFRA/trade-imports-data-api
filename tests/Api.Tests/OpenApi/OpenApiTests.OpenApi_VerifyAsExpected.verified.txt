@@ -942,6 +942,15 @@
             }
           },
           {
+            "name": "gmrId",
+            "in": "query",
+            "description": "Search by GMR ID",
+            "schema": {
+              "type": "string",
+              "description": "Search by GMR ID"
+            }
+          },
+          {
             "name": "maxLinkDepth",
             "in": "query",
             "description": "Max link depth to follow. Default is 3.",
@@ -5079,6 +5088,12 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Defra.TradeImportsDataApi.ImportPreNotificationResponse"
+            }
+          },
+          "goodsVehicleMovements": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.GmrResponse"
             }
           }
         },
