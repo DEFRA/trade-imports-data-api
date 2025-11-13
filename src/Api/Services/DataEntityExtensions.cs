@@ -3,7 +3,10 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using Defra.TradeImportsDataApi.Data.Entities;
+using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
+using Defra.TradeImportsDataApi.Domain.Errors;
 using Defra.TradeImportsDataApi.Domain.Events;
+using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using Json.Patch;
 
 namespace Defra.TradeImportsDataApi.Api.Services;
@@ -15,15 +18,13 @@ public static class DataEntityExtensions
         Converters = { new JsonStringEnumConverter() },
     };
 
-    public static ResourceEvent<TDataEntity> ToResourceEvent<TDataEntity, TDomain>(
-        this TDataEntity entity,
+    public static ResourceEvent<CustomsDeclarationEvent> ToResourceEvent(
+        this CustomsDeclarationEntity entity,
         string operation,
-        TDomain current,
-        TDomain previous,
+        CustomsDeclaration current,
+        CustomsDeclaration previous,
         bool includeEntityAsResource = true
     )
-        where TDataEntity : IDataEntity
-        where TDomain : class
     {
         if (operation is not ResourceEventOperations.Updated and not ResourceEventOperations.Created)
             throw new ArgumentException("Operation must be either Updated or Created", nameof(operation));
@@ -50,15 +51,107 @@ public static class DataEntityExtensions
                 $"Change set contains multiple known sub resource types \"{string.Join(", ", knownSubResourceTypes)}\", only one changing at a time is currently expected"
             );
 
-        return new ResourceEvent<TDataEntity>
+        var entityEvent = new CustomsDeclarationEvent()
+        {
+            Id = entity.Id,
+            ClearanceDecision = entity.ClearanceDecision,
+            ClearanceRequest = entity.ClearanceRequest,
+            Created = entity.Created,
+            ETag = entity.ETag,
+            ExternalErrors = entity.ExternalErrors,
+            Finalisation = entity.Finalisation,
+            Updated = entity.Updated,
+        };
+
+        return new ResourceEvent<CustomsDeclarationEvent>
         {
             ResourceId = entity.Id,
-            ResourceType = ResourceTypeName<TDataEntity>(),
+            ResourceType = ResourceTypeName<CustomsDeclarationEntity>(),
             Operation = operation,
             ETag = entity.ETag,
-            Resource = includeEntityAsResource ? entity : default,
+            Resource = includeEntityAsResource ? entityEvent : null,
             ChangeSet = operation is ResourceEventOperations.Updated ? changeSet : [],
             SubResourceType = knownSubResourceTypes.FirstOrDefault(),
+        };
+    }
+
+    public static ResourceEvent<ProcessingErrorEvent> ToResourceEvent(
+        this ProcessingErrorEntity entity,
+        string operation,
+        ProcessingError[] current,
+        ProcessingError[] previous,
+        bool includeEntityAsResource = true
+    )
+    {
+        if (operation is not ResourceEventOperations.Updated and not ResourceEventOperations.Created)
+            throw new ArgumentException("Operation must be either Updated or Created", nameof(operation));
+
+        var changeSet = CreateChangeSet(current, previous);
+        var knownSubResourceTypes = changeSet
+            .Select(x => x.Path.Split('/', StringSplitOptions.RemoveEmptyEntries).FirstOrDefault())
+            .Distinct()
+            .Select(x =>
+                x switch
+                {
+                    "ExternalErrors" => ResourceEventSubResourceTypes.ExternalError,
+                    _ => null,
+                }
+            )
+            .OfType<string>()
+            .ToList();
+
+        var entityEvent = new ProcessingErrorEvent()
+        {
+            Id = entity.Id,
+            Created = entity.Created,
+            ETag = entity.ETag,
+            Updated = entity.Updated,
+            ProcessingErrors = entity.ProcessingErrors,
+        };
+
+        return new ResourceEvent<ProcessingErrorEvent>
+        {
+            ResourceId = entity.Id,
+            ResourceType = ResourceTypeName<ProcessingErrorEntity>(),
+            Operation = operation,
+            ETag = entity.ETag,
+            Resource = includeEntityAsResource ? entityEvent : null,
+            ChangeSet = operation is ResourceEventOperations.Updated ? changeSet : [],
+            SubResourceType = knownSubResourceTypes.FirstOrDefault(),
+        };
+    }
+
+    public static ResourceEvent<ImportPreNotificationEvent> ToResourceEvent(
+        this ImportPreNotificationEntity entity,
+        string operation,
+        ImportPreNotification current,
+        ImportPreNotification previous,
+        bool includeEntityAsResource = true
+    )
+    {
+        if (operation is not ResourceEventOperations.Updated and not ResourceEventOperations.Created)
+            throw new ArgumentException("Operation must be either Updated or Created", nameof(operation));
+
+        var changeSet = CreateChangeSet(current, previous);
+
+        var entityEvent = new ImportPreNotificationEvent()
+        {
+            Id = entity.Id,
+            ImportPreNotification = entity.ImportPreNotification,
+            Created = entity.Created,
+            ETag = entity.ETag,
+            Updated = entity.Updated,
+        };
+
+        return new ResourceEvent<ImportPreNotificationEvent>
+        {
+            ResourceId = entity.Id,
+            ResourceType = ResourceTypeName<ImportPreNotificationEntity>(),
+            Operation = operation,
+            ETag = entity.ETag,
+            Resource = includeEntityAsResource ? entityEvent : null,
+            ChangeSet = operation is ResourceEventOperations.Updated ? changeSet : [],
+            SubResourceType = null,
         };
     }
 
