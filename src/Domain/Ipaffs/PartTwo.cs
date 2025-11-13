@@ -162,4 +162,11 @@ public class PartTwo
     [JsonPropertyName("autoClearedOn")]
     [System.ComponentModel.Description("Date of autoclearance")]
     public DateTime? AutoClearedOn { get; set; }
+
+    /// <summary>
+    /// The reason why a notification is put into a modify state.
+    /// </summary>
+    [JsonPropertyName("requestAmendmentAdditionalDetails")]
+    [System.ComponentModel.Description("The reason why a notification is put into a modify state.")]
+    public string? RequestAmendmentAdditionalDetails { get; set; }
 }

@@ -4699,6 +4699,11 @@
             "description": "Date of autoclearance",
             "format": "date-time",
             "nullable": true
+          },
+          "requestAmendmentAdditionalDetails": {
+            "type": "string",
+            "description": "The reason why a notification is put into a modify state.",
+            "nullable": true
           }
         },
         "additionalProperties": false,

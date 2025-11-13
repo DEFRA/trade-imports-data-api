@@ -1746,7 +1746,8 @@
           "isControlUser": true
         }
       },
-      "autoClearedOn": "2023-06-01T22:21:19.5463932"
+      "autoClearedOn": "2023-06-01T22:21:19.5463932",
+      "requestAmendmentAdditionalDetails": null
     },
     "partThree": {
       "controlStatus": "Required",
