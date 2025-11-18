@@ -4,11 +4,11 @@
   "subResourceType": null,
   "operation": "Created",
   "resource": {
-    "Id": "{Scrubbed}",
-    "ETag": "{Scrubbed}",
-    "Created": "DateTimeOffset_1",
-    "Updated": "DateTimeOffset_1",
-    "ProcessingErrors": [
+    "id": "{Scrubbed}",
+    "etag": "{Scrubbed}",
+    "created": "DateTimeOffset_1",
+    "updated": "DateTimeOffset_1",
+    "processingErrors": [
       {
         "correlationId": null,
         "sourceExternalCorrelationId": null,

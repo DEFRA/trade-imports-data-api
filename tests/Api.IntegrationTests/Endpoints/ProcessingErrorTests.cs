@@ -88,14 +88,13 @@ public class ProcessingErrorTests(ITestOutputHelper testOutputHelper) : SqsTestB
 
                     await VerifyJson(message.Body)
                         .ScrubMember("resourceId")
-                        .ScrubMember("ETag")
                         .ScrubMember("etag")
-                        .ScrubMember("Id")
+                        .ScrubMember("id")
                         .UseStrictJson()
                         .DontIgnoreEmptyCollections()
                         .UseMethodName($"{nameof(WhenCreating_ThenUpdating_ShouldEmitResourceEvents)}_Created");
 
-                    var resourceEvent = JsonSerializer.Deserialize<ResourceEvent<ProcessingErrorEntity>>(message.Body);
+                    var resourceEvent = JsonSerializer.Deserialize<ResourceEvent<ProcessingErrorEvent>>(message.Body);
 
                     resourceEvent.Should().NotBeNull();
                     resourceEvent.ResourceId.Should().Be(mrn);
@@ -159,7 +158,7 @@ public class ProcessingErrorTests(ITestOutputHelper testOutputHelper) : SqsTestB
                         .DontIgnoreEmptyCollections()
                         .UseMethodName($"{nameof(WhenCreating_ThenUpdating_ShouldEmitResourceEvents)}_Updated");
 
-                    var resourceEvent = JsonSerializer.Deserialize<ResourceEvent<ProcessingErrorEntity>>(message.Body);
+                    var resourceEvent = JsonSerializer.Deserialize<ResourceEvent<ProcessingErrorEvent>>(message.Body);
 
                     resourceEvent.Should().NotBeNull();
                     resourceEvent.ResourceId.Should().Be(mrn);

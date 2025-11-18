@@ -72,10 +72,10 @@ public class CustomsDeclarationServiceTests
             });
         var resourceEventEntityId = Guid.NewGuid().ToString();
         ResourceEventRepository
-            .Insert(Arg.Any<ResourceEvent<CustomsDeclarationEntity>>())
+            .Insert(Arg.Any<ResourceEvent<CustomsDeclarationEvent>>())
             .Returns(call =>
             {
-                var resourceEvent = call.Arg<ResourceEvent<CustomsDeclarationEntity>>();
+                var resourceEvent = call.Arg<ResourceEvent<CustomsDeclarationEvent>>();
 
                 return new ResourceEventEntity
                 {
@@ -105,7 +105,7 @@ public class CustomsDeclarationServiceTests
         ResourceEventRepository
             .Received()
             .Insert(
-                Arg.Is<ResourceEvent<CustomsDeclarationEntity>>(x =>
+                Arg.Is<ResourceEvent<CustomsDeclarationEvent>>(x =>
                     x.Operation == "Created" && x.ChangeSet.Count == 0 && x.SubResourceType != null
                 )
             );
@@ -132,10 +132,10 @@ public class CustomsDeclarationServiceTests
         CustomsDeclarationRepository.Update(entity, "etag", CancellationToken.None).Returns((existing, entity));
         var resourceEventEntityId = Guid.NewGuid().ToString();
         ResourceEventRepository
-            .Insert(Arg.Any<ResourceEvent<CustomsDeclarationEntity>>())
+            .Insert(Arg.Any<ResourceEvent<CustomsDeclarationEvent>>())
             .Returns(call =>
             {
-                var resourceEvent = call.Arg<ResourceEvent<CustomsDeclarationEntity>>();
+                var resourceEvent = call.Arg<ResourceEvent<CustomsDeclarationEvent>>();
 
                 return new ResourceEventEntity
                 {
@@ -158,7 +158,7 @@ public class CustomsDeclarationServiceTests
         ResourceEventRepository
             .Received()
             .Insert(
-                Arg.Is<ResourceEvent<CustomsDeclarationEntity>>(x =>
+                Arg.Is<ResourceEvent<CustomsDeclarationEvent>>(x =>
                     x.Operation == "Updated" && x.ChangeSet.Count > 0 && x.SubResourceType != null
                 )
             );
