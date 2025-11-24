@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Defra.TradeImportsDataApi.Api.Configuration;
+using Defra.TradeImportsDataApi.Api.Utils;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Data.Extensions;
@@ -21,7 +22,7 @@ public class ResourceEventRepository(IDbContext dbContext, IOptions<ResourceEven
             ResourceType = @event.ResourceType,
             SubResourceType = @event.SubResourceType,
             Operation = @event.Operation,
-            Message = JsonSerializer.Serialize(@event),
+            Message = JsonSerializer.Serialize(@event, JsonSettings.Instance),
             ExpiresAt = DateTime.UtcNow.Add(TimeSpan.FromDays(options.Value.TtlDays)), // See index for where TTL if enforced
         };
 
