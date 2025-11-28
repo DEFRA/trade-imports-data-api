@@ -2,8 +2,9 @@ dependencies:
 	dotnet tool restore
 
 generate-openapi-spec: dependencies
-	dotnet build src/Api/Api.csproj -c Release -o publish
+	dotnet build src/Api/Api.csproj -c Release
 	cp ./src/Api/bin/Release/net9.0/appsettings.json .
+	dotnet build src/Api/Api.csproj -c Release -o publish
 	dotnet swagger tofile --output openapi.json ./src/Api/bin/Release/net9.0/Defra.TradeImportsDataApi.Api.dll v1
 	rm appsettings.json
 
