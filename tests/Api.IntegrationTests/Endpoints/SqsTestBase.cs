@@ -48,8 +48,9 @@ public class SqsTestBase(ITestOutputHelper testOutputHelper) : IntegrationTestBa
             await AsyncWaiter.WaitForAsync(async () =>
             {
                 var response = await ReceiveMessage();
+                var messages = response.Messages ?? [];
 
-                foreach (var message in response.Messages)
+                foreach (var message in messages)
                 {
                     testOutputHelper?.WriteLine("Drain message: {0} {1}", message.MessageId, message.Body);
 
