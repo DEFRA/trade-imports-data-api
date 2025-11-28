@@ -67,18 +67,16 @@ public class GetImportPreNotificationsByMrnTests : EndpointTestBase, IClassFixtu
         var client = CreateClient();
         MockImportPreNotificationService
             .GetImportPreNotificationsByMrn(Mrn, Arg.Any<CancellationToken>())
-            .Returns(
-                [
-                    new ImportPreNotificationEntity
-                    {
-                        Id = "123",
-                        ImportPreNotification = new ImportPreNotification(),
-                        Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
-                        Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
-                        ETag = "etag",
-                    },
-                ]
-            );
+            .Returns([
+                new ImportPreNotificationEntity
+                {
+                    Id = "123",
+                    ImportPreNotification = new ImportPreNotification(),
+                    Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                    Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+                    ETag = "etag",
+                },
+            ]);
 
         var response = await client.GetAsync(
             TradeImportsDataApi.Testing.Endpoints.CustomsDeclarations.GetImportPreNotifications(Mrn)

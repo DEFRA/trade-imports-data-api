@@ -39,18 +39,16 @@ public class PutTests : EndpointTestBase, IClassFixture<WireMockContext>
         var client = CreateClient();
         MockResourceEventRepository
             .GetAll(ResourceId, Arg.Any<CancellationToken>())
-            .Returns(
-                [
-                    new ResourceEventEntity
-                    {
-                        Id = "id1",
-                        ResourceId = "resourceId",
-                        ResourceType = "resourceType",
-                        Operation = "operation",
-                        Message = "message",
-                    },
-                ]
-            );
+            .Returns([
+                new ResourceEventEntity
+                {
+                    Id = "id1",
+                    ResourceId = "resourceId",
+                    ResourceType = "resourceType",
+                    Operation = "operation",
+                    Message = "message",
+                },
+            ]);
 
         var response = await client.PutAsync(
             TradeImportsDataApi.Testing.Endpoints.ResourceEvents.Publish(ResourceId, "unknown-id"),
@@ -65,19 +63,17 @@ public class PutTests : EndpointTestBase, IClassFixture<WireMockContext>
         var client = CreateClient();
         MockResourceEventRepository
             .GetAll(ResourceId, Arg.Any<CancellationToken>())
-            .Returns(
-                [
-                    new ResourceEventEntity
-                    {
-                        Id = "id1",
-                        ResourceId = "resourceId",
-                        ResourceType = "resourceType",
-                        Operation = "operation",
-                        Message = "message",
-                        Published = DateTime.UtcNow,
-                    },
-                ]
-            );
+            .Returns([
+                new ResourceEventEntity
+                {
+                    Id = "id1",
+                    ResourceId = "resourceId",
+                    ResourceType = "resourceType",
+                    Operation = "operation",
+                    Message = "message",
+                    Published = DateTime.UtcNow,
+                },
+            ]);
 
         var response = await client.PutAsync(
             TradeImportsDataApi.Testing.Endpoints.ResourceEvents.Publish(ResourceId, "id1"),
