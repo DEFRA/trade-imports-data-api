@@ -158,9 +158,9 @@ public class ImportPreNotificationServiceTests
             .Returns(identifiers);
         ImportPreNotificationRepository
             .GetAll(Arg.Is<string[]>(x => x.SequenceEqual(identifiers)), CancellationToken.None)
-            .Returns(
-                [new ImportPreNotificationEntity { Id = id, ImportPreNotification = new ImportPreNotification() }]
-            );
+            .Returns([
+                new ImportPreNotificationEntity { Id = id, ImportPreNotification = new ImportPreNotification() },
+            ]);
 
         var result = await Subject.GetImportPreNotificationsByMrn(mrn, CancellationToken.None);
 

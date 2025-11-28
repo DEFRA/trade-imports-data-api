@@ -55,26 +55,24 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
         var client = CreateClient();
         MockResourceEventRepository
             .GetAll(ResourceId, Arg.Any<CancellationToken>())
-            .Returns(
-                [
-                    new ResourceEventEntity
-                    {
-                        Id = "id1",
-                        ResourceId = "resourceId",
-                        ResourceType = "resourceType",
-                        Operation = "operation",
-                        Message = "message",
-                    },
-                    new ResourceEventEntity
-                    {
-                        Id = "id2",
-                        ResourceId = "resourceId2",
-                        ResourceType = "resourceType2",
-                        Operation = "operation2",
-                        Message = "message2",
-                    },
-                ]
-            );
+            .Returns([
+                new ResourceEventEntity
+                {
+                    Id = "id1",
+                    ResourceId = "resourceId",
+                    ResourceType = "resourceType",
+                    Operation = "operation",
+                    Message = "message",
+                },
+                new ResourceEventEntity
+                {
+                    Id = "id2",
+                    ResourceId = "resourceId2",
+                    ResourceType = "resourceType2",
+                    Operation = "operation2",
+                    Message = "message2",
+                },
+            ]);
 
         var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.ResourceEvents.GetAll(ResourceId));
         response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -88,27 +86,25 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
         var client = CreateClient();
         MockResourceEventRepository
             .GetAll(ResourceId, Arg.Any<CancellationToken>())
-            .Returns(
-                [
-                    new ResourceEventEntity
-                    {
-                        Id = "id1",
-                        ResourceId = "resourceId",
-                        ResourceType = "resourceType",
-                        Operation = "operation",
-                        Message = "message",
-                        Published = DateTime.UtcNow, // Should not be in response as already published
-                    },
-                    new ResourceEventEntity
-                    {
-                        Id = "id2",
-                        ResourceId = "resourceId2",
-                        ResourceType = "resourceType2",
-                        Operation = "operation2",
-                        Message = "message2",
-                    },
-                ]
-            );
+            .Returns([
+                new ResourceEventEntity
+                {
+                    Id = "id1",
+                    ResourceId = "resourceId",
+                    ResourceType = "resourceType",
+                    Operation = "operation",
+                    Message = "message",
+                    Published = DateTime.UtcNow, // Should not be in response as already published
+                },
+                new ResourceEventEntity
+                {
+                    Id = "id2",
+                    ResourceId = "resourceId2",
+                    ResourceType = "resourceType2",
+                    Operation = "operation2",
+                    Message = "message2",
+                },
+            ]);
 
         var response = await client.GetAsync(
             TradeImportsDataApi.Testing.Endpoints.ResourceEvents.Unpublished(ResourceId)

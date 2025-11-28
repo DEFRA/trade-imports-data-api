@@ -67,18 +67,16 @@ public class GetCustomsDeclarationsByChedIdTests : EndpointTestBase, IClassFixtu
         var client = CreateClient();
         MockCustomsDeclarationService
             .GetCustomsDeclarationsByChedId(ChedId, Arg.Any<CancellationToken>())
-            .Returns(
-                [
-                    new CustomsDeclarationEntity
-                    {
-                        Id = "123",
-                        ClearanceRequest = new ClearanceRequest(),
-                        Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
-                        Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
-                        ETag = "etag",
-                    },
-                ]
-            );
+            .Returns([
+                new CustomsDeclarationEntity
+                {
+                    Id = "123",
+                    ClearanceRequest = new ClearanceRequest(),
+                    Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                    Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+                    ETag = "etag",
+                },
+            ]);
 
         var response = await client.GetAsync(
             TradeImportsDataApi.Testing.Endpoints.ImportPreNotifications.GetCustomsDeclarations(ChedId)
