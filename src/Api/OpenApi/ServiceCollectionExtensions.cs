@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
 namespace Defra.TradeImportsDataApi.Api.OpenApi;
 
@@ -26,18 +26,10 @@ public static class ServiceCollectionExtensions
                     Type = SecuritySchemeType.Http,
                 }
             );
-            c.AddSecurityRequirement(
-                new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Basic" },
-                        },
-                        []
-                    },
-                }
-            );
+            c.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+            {
+                [new OpenApiSecuritySchemeReference("Basic", document)] = [],
+            });
             c.IncludeXmlComments(Assembly.GetExecutingAssembly());
             c.IncludeXmlComments(typeof(ImportPreNotification).Assembly);
             c.SchemaFilter<PossibleValueSchemaFilter>();

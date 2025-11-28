@@ -1,18 +1,23 @@
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Defra.TradeImportsDataApi.Api.OpenApi;
 
 public class JsonConverterSchemaFilter : ISchemaFilter
 {
-    public void Apply(OpenApiSchema schema, SchemaFilterContext context)
+    public void Apply(IOpenApiSchema schema, SchemaFilterContext context)
     {
-        foreach (var property in schema.Properties)
+        var properties = schema.Properties ?? new Dictionary<string, IOpenApiSchema>();
+        foreach (var property in properties)
         {
-            if (context.Type == typeof(Domain.CustomsDeclaration.ImportDocument) && property.Key == "documentReference")
+            if (
+                property.Value is OpenApiSchema openApiSchema
+                && context.Type == typeof(Domain.CustomsDeclaration.ImportDocument)
+                && property.Key == "documentReference"
+            )
             {
-                property.Value.Type = "string";
-                property.Value.AllOf.Clear();
+                openApiSchema.Type = JsonSchemaType.String;
+                openApiSchema.AllOf?.Clear();
             }
         }
     }

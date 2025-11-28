@@ -1,6 +1,5 @@
 using Defra.TradeImportsDataApi.Domain.Attributes;
-using Microsoft.OpenApi.Any;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Defra.TradeImportsDataApi.Api.OpenApi;
@@ -15,7 +14,7 @@ public class PossibleValueSchemaFilter : ISchemaFilter
         { "GVMS", "v1.0 (private beta)" },
     };
 
-    public void Apply(OpenApiSchema schema, SchemaFilterContext context)
+    public void Apply(IOpenApiSchema schema, SchemaFilterContext context)
     {
         var possibleValues =
             context.MemberInfo?.CustomAttributes.Where(x => x.AttributeType == typeof(PossibleValueAttribute)).ToList()
@@ -38,14 +37,5 @@ public class PossibleValueSchemaFilter : ISchemaFilter
             schema.Description += " ";
 
         schema.Description += $"Possible values taken from {system} schema version {s_systemVersionMap[system]}.";
-
-        foreach (
-            var description in possibleValues
-                .Select(possibleValue => possibleValue.ConstructorArguments.FirstOrDefault().Value?.ToString())
-                .Where(description => !string.IsNullOrWhiteSpace(description))
-        )
-        {
-            schema.Enum.Add(new OpenApiString(description));
-        }
     }
 }

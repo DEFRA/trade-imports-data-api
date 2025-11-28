@@ -1,7 +1,7 @@
 using System.Reflection;
 using Defra.TradeImportsDataApi.Domain.Attributes;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Defra.TradeImportsDataApi.Api.OpenApi;
@@ -46,7 +46,7 @@ public class PossibleValueOperationFilter : IOperationFilter
         AppendPossibleValues(typeof(ImportPreNotification).GetMember(nameof(ImportPreNotification.Status)), parameter);
     }
 
-    private static void AppendPossibleValues(MemberInfo[] member, OpenApiParameter parameter)
+    private static void AppendPossibleValues(MemberInfo[] member, IOpenApiParameter parameter)
     {
         var possibleValues =
             member
