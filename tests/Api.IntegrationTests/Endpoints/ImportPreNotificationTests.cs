@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Defra.TradeImportsDataApi.Api.Utils;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 using Defra.TradeImportsDataApi.Domain.Events;
@@ -286,15 +287,16 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
                         .UseMethodName($"{nameof(WhenCreating_ThenUpdating_ShouldEmitResourceEvents)}_Created");
 
                     var resourceEvent = JsonSerializer.Deserialize<ResourceEvent<ImportPreNotificationEvent>>(
-                        message.Body
+                        message.Body,
+                        JsonSettings.Instance
                     );
 
                     resourceEvent.Should().NotBeNull();
                     resourceEvent.ResourceId.Should().Be(chedRef);
                     resourceEvent.Resource.Should().NotBeNull();
                     resourceEvent.Resource.Id.Should().Be(chedRef);
-                    resourceEvent.Resource.ETag.Should().Be(etag);
-                    resourceEvent.ETag.Should().Be(etag);
+                    resourceEvent.Resource.Etag.Should().Be(etag);
+                    resourceEvent.Etag.Should().Be(etag);
 
                     var response = await httpClient.GetAsync(Testing.Endpoints.ResourceEvents.GetAll(chedRef));
                     var content = await response.Content.ReadAsStringAsync();
@@ -408,15 +410,16 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
                         .UseMethodName($"{nameof(WhenCreating_ThenUpdating_ShouldEmitResourceEvents)}_Updated");
 
                     var resourceEvent = JsonSerializer.Deserialize<ResourceEvent<ImportPreNotificationEvent>>(
-                        message.Body
+                        message.Body,
+                        JsonSettings.Instance
                     );
 
                     resourceEvent.Should().NotBeNull();
                     resourceEvent.ResourceId.Should().Be(chedRef);
                     resourceEvent.Resource.Should().NotBeNull();
                     resourceEvent.Resource.Id.Should().Be(chedRef);
-                    resourceEvent.Resource.ETag.Should().Be(etag);
-                    resourceEvent.ETag.Should().Be(etag);
+                    resourceEvent.Resource.Etag.Should().Be(etag);
+                    resourceEvent.Etag.Should().Be(etag);
 
                     var response = await httpClient.GetAsync(Testing.Endpoints.ResourceEvents.GetAll(chedRef));
                     var content = await response.Content.ReadAsStringAsync();

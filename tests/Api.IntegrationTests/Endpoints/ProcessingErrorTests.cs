@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Defra.TradeImportsDataApi.Api.Utils;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.Errors;
 using Defra.TradeImportsDataApi.Domain.Events;
@@ -94,14 +95,17 @@ public class ProcessingErrorTests(ITestOutputHelper testOutputHelper) : SqsTestB
                         .DontIgnoreEmptyCollections()
                         .UseMethodName($"{nameof(WhenCreating_ThenUpdating_ShouldEmitResourceEvents)}_Created");
 
-                    var resourceEvent = JsonSerializer.Deserialize<ResourceEvent<ProcessingErrorEvent>>(message.Body);
+                    var resourceEvent = JsonSerializer.Deserialize<ResourceEvent<ProcessingErrorEvent>>(
+                        message.Body,
+                        JsonSettings.Instance
+                    );
 
                     resourceEvent.Should().NotBeNull();
                     resourceEvent.ResourceId.Should().Be(mrn);
                     resourceEvent.Resource.Should().NotBeNull();
                     resourceEvent.Resource.Id.Should().Be(mrn);
-                    resourceEvent.Resource.ETag.Should().Be(etag);
-                    resourceEvent.ETag.Should().Be(etag);
+                    resourceEvent.Resource.Etag.Should().Be(etag);
+                    resourceEvent.Etag.Should().Be(etag);
 
                     var response = await httpClient.GetAsync(Testing.Endpoints.ResourceEvents.GetAll(mrn));
                     var content = await response.Content.ReadAsStringAsync();
@@ -158,14 +162,17 @@ public class ProcessingErrorTests(ITestOutputHelper testOutputHelper) : SqsTestB
                         .DontIgnoreEmptyCollections()
                         .UseMethodName($"{nameof(WhenCreating_ThenUpdating_ShouldEmitResourceEvents)}_Updated");
 
-                    var resourceEvent = JsonSerializer.Deserialize<ResourceEvent<ProcessingErrorEvent>>(message.Body);
+                    var resourceEvent = JsonSerializer.Deserialize<ResourceEvent<ProcessingErrorEvent>>(
+                        message.Body,
+                        JsonSettings.Instance
+                    );
 
                     resourceEvent.Should().NotBeNull();
                     resourceEvent.ResourceId.Should().Be(mrn);
                     resourceEvent.Resource.Should().NotBeNull();
                     resourceEvent.Resource.Id.Should().Be(mrn);
-                    resourceEvent.Resource.ETag.Should().Be(etag);
-                    resourceEvent.ETag.Should().Be(etag);
+                    resourceEvent.Resource.Etag.Should().Be(etag);
+                    resourceEvent.Etag.Should().Be(etag);
 
                     var response = await httpClient.GetAsync(Testing.Endpoints.ResourceEvents.GetAll(mrn));
                     var content = await response.Content.ReadAsStringAsync();

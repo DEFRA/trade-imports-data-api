@@ -57,7 +57,7 @@ public static class DataEntityExtensions
             ClearanceDecision = entity.ClearanceDecision,
             ClearanceRequest = entity.ClearanceRequest,
             Created = entity.Created,
-            ETag = entity.ETag,
+            Etag = entity.ETag,
             ExternalErrors = entity.ExternalErrors,
             Finalisation = entity.Finalisation,
             Updated = entity.Updated,
@@ -68,7 +68,7 @@ public static class DataEntityExtensions
             ResourceId = entity.Id,
             ResourceType = ResourceTypeName<CustomsDeclarationEntity>(),
             Operation = operation,
-            ETag = entity.ETag,
+            Etag = entity.ETag,
             Resource = includeEntityAsResource ? entityEvent : null,
             ChangeSet = operation is ResourceEventOperations.Updated ? changeSet : [],
             SubResourceType = knownSubResourceTypes.FirstOrDefault(),
@@ -104,7 +104,7 @@ public static class DataEntityExtensions
         {
             Id = entity.Id,
             Created = entity.Created,
-            ETag = entity.ETag,
+            Etag = entity.ETag,
             Updated = entity.Updated,
             ProcessingErrors = entity.ProcessingErrors,
         };
@@ -114,7 +114,7 @@ public static class DataEntityExtensions
             ResourceId = entity.Id,
             ResourceType = ResourceTypeName<ProcessingErrorEntity>(),
             Operation = operation,
-            ETag = entity.ETag,
+            Etag = entity.ETag,
             Resource = includeEntityAsResource ? entityEvent : null,
             ChangeSet = operation is ResourceEventOperations.Updated ? changeSet : [],
             SubResourceType = knownSubResourceTypes.FirstOrDefault(),
@@ -139,7 +139,7 @@ public static class DataEntityExtensions
             Id = entity.Id,
             ImportPreNotification = entity.ImportPreNotification,
             Created = entity.Created,
-            ETag = entity.ETag,
+            Etag = entity.ETag,
             Updated = entity.Updated,
         };
 
@@ -148,7 +148,7 @@ public static class DataEntityExtensions
             ResourceId = entity.Id,
             ResourceType = ResourceTypeName<ImportPreNotificationEntity>(),
             Operation = operation,
-            ETag = entity.ETag,
+            Etag = entity.ETag,
             Resource = includeEntityAsResource ? entityEvent : null,
             ChangeSet = operation is ResourceEventOperations.Updated ? changeSet : [],
             SubResourceType = null,
