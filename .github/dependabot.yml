@@ -1,28 +1,44 @@
 version: 2
 
+registries:
+  defra:
+    type: nuget-feed
+    url: https://nuget.pkg.github.com/DEFRA/index.json
+    token: ${{ secrets.DEPENDABOT_PAT }}
+
 updates:
   - package-ecosystem: nuget
     directory: /
     open-pull-requests-limit: 10
     schedule:
       interval: daily
-      time: "12:00"
+      time: "00:00"
       timezone: "Europe/London"
     # Single PR for patch and minor
     # Major will be one update per PR
+    # Security Updates will be their own PR
     groups:
-      patch:
-        update-types:
-          - "patch"
-      minor:
+      minor-and-patch:
+        patterns:
+          - "*"             # all NuGet deps
         update-types:
           - "minor"
+          - "patch"
+      security:
+        applies-to: "security-updates"
+        patterns:
+          - "*"
     allow:
       - dependency-type: direct
+    registries: "*"    
+    reviewers:
+      - DEFRA/trade-data-matching
 
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: daily
-      time: "12:00"
+      time: "00:00"
       timezone: "Europe/London"
+    reviewers:
+      - DEFRA/trade-data-matching
