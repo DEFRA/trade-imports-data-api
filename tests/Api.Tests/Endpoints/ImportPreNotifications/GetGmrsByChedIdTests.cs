@@ -66,18 +66,16 @@ public class GetGmrsByChedIdTests : EndpointTestBase, IClassFixture<WireMockCont
         var client = CreateClient();
         MockGmrService
             .GetGmrByChedId(ChedId, Arg.Any<CancellationToken>())
-            .Returns(
-                [
-                    new GmrEntity
-                    {
-                        Id = "123",
-                        ETag = "456",
-                        Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
-                        Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
-                        Gmr = new Gmr(),
-                    },
-                ]
-            );
+            .Returns([
+                new GmrEntity
+                {
+                    Id = "123",
+                    ETag = "456",
+                    Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                    Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+                    Gmr = new Gmr(),
+                },
+            ]);
 
         var response = await client.GetAsync(
             TradeImportsDataApi.Testing.Endpoints.ImportPreNotifications.GetGmrs(ChedId)
