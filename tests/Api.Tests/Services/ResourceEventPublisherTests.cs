@@ -140,7 +140,7 @@ public class ResourceEventPublisherTests
             {
                 Id = "id",
                 ResourceId = "resourceId",
-                ResourceType = ResourceEventResourceTypes.CustomsDeclaration,
+                ResourceType = ResourceEventResourceTypes.ProcessingError,
                 Operation = "operation",
                 Message = "message",
             },
@@ -177,7 +177,7 @@ public class ResourceEventPublisherTests
             {
                 Id = "id",
                 ResourceId = "resourceId",
-                ResourceType = ResourceEventResourceTypes.CustomsDeclaration,
+                ResourceType = ResourceEventResourceTypes.ImportPreNotification,
                 SubResourceType = "subResourceType",
                 Operation = "operation",
                 Message = "message",
