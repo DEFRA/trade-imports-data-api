@@ -60,6 +60,36 @@ public class ResourceEventPublisherTests
     }
 
     [Fact]
+    public async Task Publish_WhenNoResourceType_ShouldFail()
+    {
+        var mockSimpleNotificationService = Substitute.For<IAmazonSimpleNotificationService>();
+        var subject = new ResourceEventPublisher(
+            mockSimpleNotificationService,
+            new OptionsWrapper<TraceHeader>(new TraceHeader { Name = "trace-id" }),
+            new HeaderPropagationValues(),
+            new OptionsWrapper<ResourceEventOptions>(
+                new ResourceEventOptions { ArnPrefix = "arn", TopicName = "topic-name" }
+            ),
+            NullLogger<ResourceEventPublisher>.Instance
+        );
+
+        var act = async () =>
+            await subject.Publish(
+                new ResourceEventEntity
+                {
+                    Id = "id",
+                    ResourceId = "resourceId",
+                    ResourceType = "resourcetype",
+                    Operation = "operation",
+                    Message = "message",
+                },
+                CancellationToken.None
+            );
+
+        await act.Should().ThrowAsync<InvalidOperationException>();
+    }
+
+    [Fact]
     public async Task Publish_WhenEventIsLargerThanCompressionThreshold_ShouldCompressMessage()
     {
         var mockSimpleNotificationService = Substitute.For<IAmazonSimpleNotificationService>();
