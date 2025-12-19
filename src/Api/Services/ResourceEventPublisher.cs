@@ -1,10 +1,13 @@
+using System.Collections.Concurrent;
 using System.IO.Compression;
 using System.Text;
+using System.Text.RegularExpressions;
 using Amazon.SimpleNotificationService;
 using Amazon.SimpleNotificationService.Model;
 using Defra.TradeImportsDataApi.Api.Configuration;
 using Defra.TradeImportsDataApi.Api.Utils.Logging;
 using Defra.TradeImportsDataApi.Data.Entities;
+using Defra.TradeImportsDataApi.Domain.Events;
 using Microsoft.AspNetCore.HeaderPropagation;
 using Microsoft.Extensions.Options;
 
@@ -19,6 +22,7 @@ public class ResourceEventPublisher(
 ) : IResourceEventPublisher
 {
     private const string CompressedHeader = "Content-Encoding";
+    private const string MessageTypeHeader = "MessageType";
     private const int CompressionThreshold = 256 * 1000;
     private const string DataTypeString = "String";
 
@@ -28,6 +32,14 @@ public class ResourceEventPublisher(
 
         var messageAttributes = new Dictionary<string, MessageAttributeValue>
         {
+            {
+                MessageTypeHeader,
+                new MessageAttributeValue
+                {
+                    DataType = "String",
+                    StringValue = new AssemblyQualifiedNameMessageTypeResolver().ToName(entity.ResourceType),
+                }
+            },
             {
                 nameof(entity.ResourceType),
                 new MessageAttributeValue { StringValue = entity.ResourceType, DataType = DataTypeString }
@@ -99,6 +111,44 @@ public class ResourceEventPublisher(
             messageAttributes.Add(
                 traceHeaderOptions.Value.Name,
                 new MessageAttributeValue { StringValue = traceId, DataType = DataTypeString }
+            );
+        }
+    }
+
+    public sealed class AssemblyQualifiedNameMessageTypeResolver
+    {
+        private static readonly Regex RedundantAssemblyTokens = new(
+            @"\, (Version|Culture|PublicKeyToken)\=([\w\d.]+)",
+            RegexOptions.Compiled,
+            TimeSpan.FromSeconds(2)
+        );
+        private readonly ConcurrentDictionary<string, string> _toNameCache = new();
+
+        public string ToName(string resourceType)
+        {
+            if (resourceType is null)
+                throw new ArgumentNullException(nameof(resourceType));
+
+            return _toNameCache.GetOrAdd(
+                resourceType,
+                static (resourceType, resolver) =>
+                {
+                    var name = resourceType switch
+                    {
+                        ResourceEventResourceTypes.CustomsDeclaration =>
+                            typeof(ResourceEvent<CustomsDeclarationEvent>).AssemblyQualifiedName,
+                        ResourceEventResourceTypes.ImportPreNotification =>
+                            typeof(ResourceEvent<ImportPreNotificationEvent>).AssemblyQualifiedName,
+                        ResourceEventResourceTypes.ProcessingError =>
+                            typeof(ResourceEvent<ProcessingErrorEvent>).AssemblyQualifiedName,
+                        _ => throw new InvalidOperationException(
+                            $"AssemblyQualifiedName is null for type {resourceType}"
+                        ),
+                    };
+
+                    return RedundantAssemblyTokens.Replace(name!, string.Empty)!;
+                },
+                this
             );
         }
     }

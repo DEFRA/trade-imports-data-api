@@ -52,7 +52,8 @@ public class PossibleValueOperationFilter : IOperationFilter
             member
                 .FirstOrDefault()
                 ?.CustomAttributes.Where(x => x.AttributeType == typeof(PossibleValueAttribute))
-                .ToList() ?? [];
+                .ToList()
+            ?? [];
         var descriptions = possibleValues
             .Select(possibleValue => possibleValue.ConstructorArguments.FirstOrDefault().Value?.ToString())
             .Where(description => !string.IsNullOrWhiteSpace(description));

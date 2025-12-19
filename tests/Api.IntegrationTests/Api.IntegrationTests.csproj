@@ -12,8 +12,8 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AWSSDK.SQS" Version="3.7.400.147" />
-    <PackageReference Include="FluentValidation" Version="12.1.0" />
+    <PackageReference Include="AWSSDK.SQS" Version="3.7.502.18" />
+    <PackageReference Include="FluentValidation" Version="12.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.11" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />

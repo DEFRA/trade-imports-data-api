@@ -6,6 +6,7 @@ using Defra.TradeImportsDataApi.Api.Configuration;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Api.Utils.Logging;
 using Defra.TradeImportsDataApi.Data.Entities;
+using Defra.TradeImportsDataApi.Domain.Events;
 using FluentAssertions;
 using Microsoft.AspNetCore.HeaderPropagation;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -36,7 +37,7 @@ public class ResourceEventPublisherTests
             {
                 Id = "id",
                 ResourceId = "resourceId",
-                ResourceType = "resourceType",
+                ResourceType = ResourceEventResourceTypes.CustomsDeclaration,
                 Operation = "operation",
                 Message = "message",
             },
@@ -49,13 +50,43 @@ public class ResourceEventPublisherTests
                 Arg.Is<PublishRequest>(x =>
                     x.TopicArn == "arn:topic-name"
                     && x.MessageAttributes.ContainsKey("ResourceType")
-                    && x.MessageAttributes["ResourceType"].StringValue == "resourceType"
+                    && x.MessageAttributes["ResourceType"].StringValue == ResourceEventResourceTypes.CustomsDeclaration
                     && x.MessageAttributes.ContainsKey("ResourceId")
                     && x.MessageAttributes["ResourceId"].StringValue == "resourceId"
                     && x.Message == "message"
                 ),
                 CancellationToken.None
             );
+    }
+
+    [Fact]
+    public async Task Publish_WhenNoResourceType_ShouldFail()
+    {
+        var mockSimpleNotificationService = Substitute.For<IAmazonSimpleNotificationService>();
+        var subject = new ResourceEventPublisher(
+            mockSimpleNotificationService,
+            new OptionsWrapper<TraceHeader>(new TraceHeader { Name = "trace-id" }),
+            new HeaderPropagationValues(),
+            new OptionsWrapper<ResourceEventOptions>(
+                new ResourceEventOptions { ArnPrefix = "arn", TopicName = "topic-name" }
+            ),
+            NullLogger<ResourceEventPublisher>.Instance
+        );
+
+        var act = async () =>
+            await subject.Publish(
+                new ResourceEventEntity
+                {
+                    Id = "id",
+                    ResourceId = "resourceId",
+                    ResourceType = "resourcetype",
+                    Operation = "operation",
+                    Message = "message",
+                },
+                CancellationToken.None
+            );
+
+        await act.Should().ThrowAsync<InvalidOperationException>();
     }
 
     [Fact]
@@ -86,7 +117,7 @@ public class ResourceEventPublisherTests
         {
             Id = "id",
             ResourceId = "resourceId",
-            ResourceType = "resourceType",
+            ResourceType = ResourceEventResourceTypes.CustomsDeclaration,
             Operation = "operation",
             Message = largeMessage,
         };
@@ -139,7 +170,7 @@ public class ResourceEventPublisherTests
             {
                 Id = "id",
                 ResourceId = "resourceId",
-                ResourceType = "resourceType",
+                ResourceType = ResourceEventResourceTypes.ProcessingError,
                 Operation = "operation",
                 Message = "message",
             },
@@ -176,7 +207,7 @@ public class ResourceEventPublisherTests
             {
                 Id = "id",
                 ResourceId = "resourceId",
-                ResourceType = "resourceType",
+                ResourceType = ResourceEventResourceTypes.ImportPreNotification,
                 SubResourceType = "subResourceType",
                 Operation = "operation",
                 Message = "message",
