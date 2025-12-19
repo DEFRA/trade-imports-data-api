@@ -6,6 +6,7 @@ using Defra.TradeImportsDataApi.Api.Configuration;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Api.Utils.Logging;
 using Defra.TradeImportsDataApi.Data.Entities;
+using Defra.TradeImportsDataApi.Domain.Events;
 using FluentAssertions;
 using Microsoft.AspNetCore.HeaderPropagation;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -36,7 +37,7 @@ public class ResourceEventPublisherTests
             {
                 Id = "id",
                 ResourceId = "resourceId",
-                ResourceType = "resourceType",
+                ResourceType = ResourceEventResourceTypes.CustomsDeclaration,
                 Operation = "operation",
                 Message = "message",
             },
@@ -49,7 +50,7 @@ public class ResourceEventPublisherTests
                 Arg.Is<PublishRequest>(x =>
                     x.TopicArn == "arn:topic-name"
                     && x.MessageAttributes.ContainsKey("ResourceType")
-                    && x.MessageAttributes["ResourceType"].StringValue == "resourceType"
+                    && x.MessageAttributes["ResourceType"].StringValue == ResourceEventResourceTypes.CustomsDeclaration
                     && x.MessageAttributes.ContainsKey("ResourceId")
                     && x.MessageAttributes["ResourceId"].StringValue == "resourceId"
                     && x.Message == "message"
@@ -86,7 +87,7 @@ public class ResourceEventPublisherTests
         {
             Id = "id",
             ResourceId = "resourceId",
-            ResourceType = "resourceType",
+            ResourceType = ResourceEventResourceTypes.CustomsDeclaration,
             Operation = "operation",
             Message = largeMessage,
         };
@@ -139,7 +140,7 @@ public class ResourceEventPublisherTests
             {
                 Id = "id",
                 ResourceId = "resourceId",
-                ResourceType = "resourceType",
+                ResourceType = ResourceEventResourceTypes.CustomsDeclaration,
                 Operation = "operation",
                 Message = "message",
             },
@@ -176,7 +177,7 @@ public class ResourceEventPublisherTests
             {
                 Id = "id",
                 ResourceId = "resourceId",
-                ResourceType = "resourceType",
+                ResourceType = ResourceEventResourceTypes.CustomsDeclaration,
                 SubResourceType = "subResourceType",
                 Operation = "operation",
                 Message = "message",
