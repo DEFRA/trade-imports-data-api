@@ -23,9 +23,40 @@ public class ImportDocumentReference(string value)
 
     public string GetIdentifier(string documentCode)
     {
-        if (!IsValid(documentCode))
+        return !IsValid(documentCode) ? string.Empty : GetLast7Digits();
+    }
+
+    private string GetLast7Digits()
+    {
+        var input = Value;
+        if (string.IsNullOrEmpty(input))
             return string.Empty;
-        var identifier = ChedReferenceRegexes.DocumentReferenceIdentifier().Match(Value);
-        return identifier.Value;
+
+        ReadOnlySpan<char> span = input.AsSpan();
+        int i = span.Length - 1;
+
+        // Optional suffix
+        char suffix = '\0';
+        bool hasSuffix = false;
+
+        if ((uint)i < (uint)span.Length && char.IsLetter(span[i]))
+        {
+            suffix = span[i];
+            hasSuffix = suffix is 'R' or 'V';
+            i--;
+        }
+
+        // Count trailing digits
+        int digitEnd = i;
+        while (i >= 0 && char.IsDigit(span[i]))
+            i--;
+
+        int digitCount = digitEnd - i;
+        if (digitCount < 7)
+            return string.Empty;
+
+        ReadOnlySpan<char> last7 = span.Slice(digitEnd - 6, 7);
+
+        return hasSuffix ? last7.ToString() + suffix : last7.ToString();
     }
 }

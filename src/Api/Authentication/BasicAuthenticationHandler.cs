@@ -1,11 +1,13 @@
 using System.Net.Http.Headers;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Encodings.Web;
 using Defra.TradeImportsDataApi.Api.Configuration;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
+using Microsoft.Net.Http.Headers;
 
 namespace Defra.TradeImportsDataApi.Api.Authentication;
 
@@ -20,38 +22,63 @@ public class BasicAuthenticationHandler(
 
     protected override Task<AuthenticateResult> HandleAuthenticateAsync()
     {
+        // Fast-path: allow anonymous
         var endpoint = Context.GetEndpoint();
         if (endpoint?.Metadata.GetMetadata<IAllowAnonymous>() != null)
             return NoResult();
 
-        var authorizationHeader = Request.Headers.Authorization.ToString();
-        if (string.IsNullOrEmpty(authorizationHeader))
+        // Avoid ToString() allocation if header is missing
+        if (!Request.Headers.TryGetValue(HeaderNames.Authorization, out var authHeader))
             return Fail();
 
-        var authenticationHeaderValue = AuthenticationHeaderValue.Parse(Request.Headers.Authorization.ToString());
-        if (authenticationHeaderValue.Scheme != SchemeName)
+        // Parse header once
+        if (
+            !AuthenticationHeaderValue.TryParse(authHeader, out var header)
+            || !SchemeName.Equals(header.Scheme, StringComparison.OrdinalIgnoreCase)
+        )
+        {
+            return Fail();
+        }
+
+        // Decode Base64 without intermediate strings
+        var parameter = header.Parameter.AsSpan();
+        Span<byte> credentialBytes = stackalloc byte[parameter.Length];
+        if (!Convert.TryFromBase64Chars(parameter, credentialBytes, out int bytesWritten))
             return Fail();
 
-        var credentialBytes = Convert.FromBase64String(authenticationHeaderValue.Parameter ?? string.Empty);
-        var credentials = Encoding.UTF8.GetString(credentialBytes).Split(':', 2);
-        var clientId = credentials[0];
-        var secret = credentials.Length > 1 ? credentials[1] : string.Empty;
+        ReadOnlySpan<byte> decoded = credentialBytes[..bytesWritten];
 
-        if (string.IsNullOrEmpty(clientId) || string.IsNullOrEmpty(secret))
+        // Find ':' separator
+        var separatorIndex = decoded.IndexOf((byte)':');
+        if (separatorIndex <= 0 || separatorIndex == decoded.Length - 1)
             return Fail();
 
-        aclOptions.Value.Clients.TryGetValue(clientId, out var client);
-        if (client == null || client.Secret != secret)
-            return Fail();
+        // Decode UTF-8 slices separately (no Split, no allocations beyond strings)
+        var clientId = Encoding.UTF8.GetString(decoded[..separatorIndex]);
+        var secret = Encoding.UTF8.GetString(decoded[(separatorIndex + 1)..]);
 
-        var claims = new List<Claim> { new(ClaimTypes.Name, clientId) };
-        claims.AddRange(client.Scopes.Select(scope => new Claim(Claims.Scope, scope)));
+        // Lookup client
+        if (
+            !aclOptions.Value.Clients.TryGetValue(clientId, out var client)
+            || !CryptographicOperations.FixedTimeEquals(
+                Encoding.UTF8.GetBytes(client.Secret),
+                Encoding.UTF8.GetBytes(secret)
+            )
+        )
+        {
+            return Fail();
+        }
+
+        // Pre-size claim list
+        var claims = new List<Claim>(1 + client.Scopes.Length) { new(ClaimTypes.Name, clientId) };
+
+        foreach (var scope in client.Scopes)
+            claims.Add(new Claim(Claims.Scope, scope));
 
         var identity = new ClaimsIdentity(claims, Scheme.Name);
         var principal = new ClaimsPrincipal(identity);
-        var ticket = new AuthenticationTicket(principal, Scheme.Name);
 
-        return Success(ticket);
+        return Success(new AuthenticationTicket(principal, Scheme.Name));
     }
 
     private static Task<AuthenticateResult> NoResult() => Task.FromResult(AuthenticateResult.NoResult());
