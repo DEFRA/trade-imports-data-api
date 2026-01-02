@@ -29,6 +29,7 @@ public class SqsTestBase(ITestOutputHelper testOutputHelper) : IntegrationTestBa
                 QueueUrl = QueueUrl,
                 MaxNumberOfMessages = 10,
                 WaitTimeSeconds = 0,
+                MessageAttributeNames = ["*"],
             },
             CancellationToken.None
         );
