@@ -1,9 +1,12 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Defra.TradeImportsDataApi.Domain.Events;
 
 /// <summary>
 /// This event is raised to record an activity against a resource.
 /// </summary>
 /// <typeparam name="T"></typeparam>
+[ExcludeFromCodeCoverage]
 public record BtmsActivityEvent<T>
 {
     public required string ServiceName { get; init; }
