@@ -21,12 +21,14 @@ public class BtmsActivityEventTests
             ServiceName = "svc",
             ResourceId = "r1",
             ResourceType = "type",
+            SubResourceType = "sub-json",
             Activity = activity,
         };
 
         evt.ServiceName.Should().Be("svc");
         evt.ResourceId.Should().Be("r1");
         evt.ResourceType.Should().Be("type");
+        evt.SubResourceType.Should().Be("sub-json");
         evt.Activity.Should().BeSameAs(activity);
 
         // Timestamp should be set to something very close to now (Utc)
