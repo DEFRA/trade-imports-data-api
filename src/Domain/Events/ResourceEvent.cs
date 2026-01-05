@@ -2,6 +2,10 @@ using System.Text.Json.Serialization;
 
 namespace Defra.TradeImportsDataApi.Domain.Events;
 
+/// <summary>
+/// This event is raised when a resource is created, updated or deleted.
+/// </summary>
+/// <typeparam name="T"></typeparam>
 public record ResourceEvent<T>
 {
     public required string ResourceId { get; init; }
