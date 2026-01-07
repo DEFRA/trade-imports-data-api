@@ -13,7 +13,7 @@ public class BtmsActivityEventTests
         {
             CorrelationId = "123",
             StatusCode = 200,
-            Timestamp = before,
+            ResponseTimestamp = before,
         };
 
         var evt = new BtmsActivityEvent<BtmsToCdsActivity>
@@ -31,7 +31,7 @@ public class BtmsActivityEventTests
         evt.SubResourceType.Should().Be("sub-json");
         evt.Activity.CorrelationId.Should().Be(activity.CorrelationId);
         evt.Activity.StatusCode.Should().Be(activity.StatusCode);
-        evt.Activity.Timestamp.Should().Be(activity.Timestamp);
+        evt.Activity.ResponseTimestamp.Should().Be(activity.ResponseTimestamp);
 
         // Timestamp should be set to something very close to now (Utc)
         evt.Timestamp.Should().BeOnOrAfter(before);
