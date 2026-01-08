@@ -12,25 +12,25 @@ public class BtmsActivityEventTests
         var activity = new BtmsToCdsActivity
         {
             CorrelationId = "123",
-            StatusCode = 200,
+            ResponseStatusCode = 200,
             ResponseTimestamp = before,
         };
 
         var evt = new BtmsActivityEvent<BtmsToCdsActivity>
         {
-            ServiceName = "svc",
+            OriginatingServiceName = "svc",
             ResourceId = "r1",
             ResourceType = "type",
             SubResourceType = "sub-json",
             Activity = activity,
         };
 
-        evt.ServiceName.Should().Be("svc");
+        evt.OriginatingServiceName.Should().Be("svc");
         evt.ResourceId.Should().Be("r1");
         evt.ResourceType.Should().Be("type");
         evt.SubResourceType.Should().Be("sub-json");
         evt.Activity.CorrelationId.Should().Be(activity.CorrelationId);
-        evt.Activity.StatusCode.Should().Be(activity.StatusCode);
+        evt.Activity.ResponseStatusCode.Should().Be(activity.ResponseStatusCode);
         evt.Activity.ResponseTimestamp.Should().Be(activity.ResponseTimestamp);
 
         // Timestamp should be set to something very close to now (Utc)

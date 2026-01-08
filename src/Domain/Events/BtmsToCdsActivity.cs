@@ -7,7 +7,7 @@ public record BtmsToCdsActivity
 {
     public required string CorrelationId { get; init; }
 
-    public required int StatusCode { get; init; }
+    public required int ResponseStatusCode { get; init; }
 
     public required DateTime ResponseTimestamp { get; init; }
 }

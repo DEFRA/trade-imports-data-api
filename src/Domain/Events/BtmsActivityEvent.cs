@@ -9,7 +9,7 @@ namespace Defra.TradeImportsDataApi.Domain.Events;
 [ExcludeFromCodeCoverage]
 public record BtmsActivityEvent<T>
 {
-    public required string ServiceName { get; init; }
+    public required string OriginatingServiceName { get; init; }
 
     public required string ResourceId { get; init; }
 
