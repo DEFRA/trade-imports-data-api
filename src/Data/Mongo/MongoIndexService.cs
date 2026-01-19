@@ -9,6 +9,8 @@ namespace Defra.TradeImportsDataApi.Data.Mongo;
 [ExcludeFromCodeCoverage]
 public class MongoIndexService(IMongoDatabase database, ILogger<MongoIndexService> logger) : IHostedService
 {
+    private static Collation s_caseInsenstiveCollation = new Collation("en", strength: CollationStrength.Secondary);
+
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         await CreateImportPreNotificationIndexes(cancellationToken);
@@ -27,6 +29,13 @@ public class MongoIndexService(IMongoDatabase database, ILogger<MongoIndexServic
         await CreateIndex(
             "UpdatedIdx",
             Builders<GmrEntity>.IndexKeys.Ascending(x => x.Updated),
+            cancellationToken: cancellationToken
+        );
+
+        await CreateIndex(
+            "_id_ci_idx",
+            Builders<GmrEntity>.IndexKeys.Ascending(x => x.Id),
+            collation: s_caseInsenstiveCollation,
             cancellationToken: cancellationToken
         );
     }
@@ -51,6 +60,20 @@ public class MongoIndexService(IMongoDatabase database, ILogger<MongoIndexServic
         await CreateIndex(
             "FinalisationMessageSentAtIdx",
             Builders<CustomsDeclarationEntity>.IndexKeys.Ascending(x => x.Finalisation!.MessageSentAt),
+            cancellationToken: cancellationToken
+        );
+
+        await CreateIndex(
+            "DeclarationUcr_ci_idx",
+            Builders<CustomsDeclarationEntity>.IndexKeys.Ascending(x => x.ClearanceRequest!.DeclarationUcr),
+            collation: s_caseInsenstiveCollation,
+            cancellationToken: cancellationToken
+        );
+
+        await CreateIndex(
+            "_id_ci_idx",
+            Builders<CustomsDeclarationEntity>.IndexKeys.Ascending(x => x.Id),
+            collation: s_caseInsenstiveCollation,
             cancellationToken: cancellationToken
         );
     }
@@ -104,6 +127,7 @@ public class MongoIndexService(IMongoDatabase database, ILogger<MongoIndexServic
         string name,
         IndexKeysDefinition<T> keys,
         bool unique = false,
+        Collation? collation = null,
         CancellationToken cancellationToken = default
     )
     {
@@ -116,6 +140,7 @@ public class MongoIndexService(IMongoDatabase database, ILogger<MongoIndexServic
                     Name = name,
                     Background = true,
                     Unique = unique,
+                    Collation = collation,
                 }
             );
             await database
