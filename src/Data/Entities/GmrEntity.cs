@@ -19,6 +19,8 @@ public class GmrEntity : IDataEntity
 
     public required Gmr Gmr { get; set; }
 
+    public List<string> Tags { get; set; } = [];
+
     public void OnSave()
     {
         CustomsDeclarationIdentifiers.Clear();
@@ -28,5 +30,12 @@ public class GmrEntity : IDataEntity
         var unique = customs.Concat(transits).Where(x => !string.IsNullOrWhiteSpace(x)).NotNull().Distinct();
 
         CustomsDeclarationIdentifiers.AddRange(unique);
+
+        var lowerId = Id.ToLower();
+
+        if (!Tags.Contains(lowerId))
+        {
+            Tags.Add(lowerId);
+        }
     }
 }

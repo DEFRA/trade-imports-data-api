@@ -23,16 +23,6 @@ public class GmrRepository(IDbContext dbContext) : IGmrRepository
         CancellationToken cancellationToken
     )
     {
-        if (dbContext is MongoDbContext)
-        {
-            return await dbContext
-                .Gmrs.Collection.Aggregate(
-                    new AggregateOptions() { Collation = new Collation("en", strength: CollationStrength.Secondary) }
-                )
-                .Match(predicate)
-                .FirstOrDefaultAsync(cancellationToken);
-        }
-
         return await dbContext.Gmrs.Where(predicate).FirstOrDefaultWithFallbackAsync(cancellationToken);
     }
 

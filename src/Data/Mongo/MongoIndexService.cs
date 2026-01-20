@@ -9,8 +9,6 @@ namespace Defra.TradeImportsDataApi.Data.Mongo;
 [ExcludeFromCodeCoverage]
 public class MongoIndexService(IMongoDatabase database, ILogger<MongoIndexService> logger) : IHostedService
 {
-    private static Collation s_caseInsenstiveCollation = new Collation("en", strength: CollationStrength.Secondary);
-
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         await CreateImportPreNotificationIndexes(cancellationToken);
@@ -33,9 +31,8 @@ public class MongoIndexService(IMongoDatabase database, ILogger<MongoIndexServic
         );
 
         await CreateIndex(
-            "_id_ci_idx",
-            Builders<GmrEntity>.IndexKeys.Ascending(x => x.Id),
-            collation: s_caseInsenstiveCollation,
+            "TagsIdx",
+            Builders<GmrEntity>.IndexKeys.Ascending(x => x.Tags),
             cancellationToken: cancellationToken
         );
     }
@@ -64,16 +61,8 @@ public class MongoIndexService(IMongoDatabase database, ILogger<MongoIndexServic
         );
 
         await CreateIndex(
-            "DeclarationUcr_ci_idx",
-            Builders<CustomsDeclarationEntity>.IndexKeys.Ascending(x => x.ClearanceRequest!.DeclarationUcr),
-            collation: s_caseInsenstiveCollation,
-            cancellationToken: cancellationToken
-        );
-
-        await CreateIndex(
-            "_id_ci_idx",
-            Builders<CustomsDeclarationEntity>.IndexKeys.Ascending(x => x.Id),
-            collation: s_caseInsenstiveCollation,
+            "TagsIdx",
+            Builders<CustomsDeclarationEntity>.IndexKeys.Ascending(x => x.Tags),
             cancellationToken: cancellationToken
         );
     }
@@ -127,7 +116,6 @@ public class MongoIndexService(IMongoDatabase database, ILogger<MongoIndexServic
         string name,
         IndexKeysDefinition<T> keys,
         bool unique = false,
-        Collation? collation = null,
         CancellationToken cancellationToken = default
     )
     {
@@ -140,7 +128,6 @@ public class MongoIndexService(IMongoDatabase database, ILogger<MongoIndexServic
                     Name = name,
                     Background = true,
                     Unique = unique,
-                    Collation = collation,
                 }
             );
             await database

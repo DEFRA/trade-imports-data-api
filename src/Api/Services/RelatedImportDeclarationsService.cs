@@ -29,7 +29,7 @@ public class RelatedImportDeclarationsService(
             return await StartFromCustomsDeclaration(
 #pragma warning disable CA1862
                 // MongoDB driver does not support string.Equals()
-                x => x.ClearanceRequest!.DeclarationUcr == request.Ducr,
+                x => x.Tags.Contains(request.Ducr.ToLower()),
 #pragma warning restore CA1862
                 maxDepth,
                 cancellationToken
@@ -41,9 +41,11 @@ public class RelatedImportDeclarationsService(
             return await StartFromCustomsDeclaration(
 #pragma warning disable CA1862
                 // MongoDB driver does not support string.Equals()
-                x => x.Id == request.Mrn,
+                x => x.Tags.Contains(request.Mrn.ToLower()),
 #pragma warning restore CA1862
-                maxDepth, cancellationToken);
+                maxDepth,
+                cancellationToken
+            );
         }
 
         if (!string.IsNullOrEmpty(request.ChedId))
@@ -56,7 +58,7 @@ public class RelatedImportDeclarationsService(
             return await StartFromGmrId(
 #pragma warning disable CA1862
                 // MongoDB driver does not support string.Equals()
-                x => x.Id == request.GmrId,
+                x => x.Tags.Contains(request.GmrId.ToLower()),
 #pragma warning restore CA1862
                 cancellationToken);
         }

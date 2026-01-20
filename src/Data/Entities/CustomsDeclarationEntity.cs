@@ -24,8 +24,26 @@ public class CustomsDeclarationEntity : IDataEntity
 
     public ExternalError[]? ExternalErrors { get; set; }
 
+    public List<string> Tags { get; set; } = [];
+
     public void OnSave()
     {
+        var lowerId = Id.ToLower();
+
+        if (!Tags.Contains(lowerId))
+        {
+            Tags.Add(lowerId);
+        }
+
+        if (ClearanceRequest?.DeclarationUcr != null)
+        {
+            var lowerDucr = ClearanceRequest.DeclarationUcr.ToLower();
+
+            if (!Tags.Contains(lowerDucr))
+            {
+                Tags.Add(lowerDucr);
+            }
+        }
         ImportPreNotificationIdentifiers.Clear();
 
         if (ClearanceRequest?.Commodities == null)
