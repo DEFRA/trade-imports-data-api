@@ -76,10 +76,7 @@ public class RelatedImportDeclarationsService(
         CancellationToken cancellationToken
     )
     {
-        var customsDeclarations = await customsDeclarationRepository.GetAllCaseInsensitive(
-            predicate,
-            cancellationToken
-        );
+        var customsDeclarations = await customsDeclarationRepository.GetAll(predicate, cancellationToken);
         var identifiers = customsDeclarations.SelectMany(x => x.ImportPreNotificationIdentifiers);
         var notifications = await importPreNotificationRepository.GetAll(identifiers.ToArray(), cancellationToken);
 
@@ -145,7 +142,7 @@ public class RelatedImportDeclarationsService(
         GmrEntity[] Gmrs
     )> StartFromGmrId(Expression<Func<GmrEntity, bool>> predicate, CancellationToken cancellationToken)
     {
-        var gmr = await gmrRepository.GetCaseInsensitive(predicate, cancellationToken);
+        var gmr = await gmrRepository.Get(predicate, cancellationToken);
         if (gmr == null)
         {
             return new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>([], [], []);
