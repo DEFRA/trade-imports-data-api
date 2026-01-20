@@ -90,7 +90,7 @@ public class RelatedImportDeclarationsService(
             maxDepth,
             cancellationToken
         );
-        
+
         var allRelatedCustomsDeclarationIdentifiers = result.CustomsDeclarations.Select(x => x.Id);
         var gmrs = await gmrRepository.GetAll(allRelatedCustomsDeclarationIdentifiers.ToArray(), cancellationToken);
 
@@ -132,7 +132,7 @@ public class RelatedImportDeclarationsService(
             maxDepth,
             cancellationToken
         );
-        
+
         var allRelatedCustomsDeclarationIdentifiers = result.CustomsDeclarations.Select(x => x.Id);
         var gmrs = await gmrRepository.GetAll(allRelatedCustomsDeclarationIdentifiers.ToArray(), cancellationToken);
 

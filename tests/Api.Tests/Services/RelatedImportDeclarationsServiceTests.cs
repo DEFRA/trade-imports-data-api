@@ -152,7 +152,7 @@ public class RelatedImportDeclarationsServiceTests
         response.ImportPreNotifications.Length.Should().Be(1);
         response.Gmrs.Length.Should().Be(0);
     }
-    
+
     [Fact]
     public async Task GivenSearchByMrn_WhenMrnExists_And_GmrExists_ThenShouldReturn()
     {
@@ -170,7 +170,7 @@ public class RelatedImportDeclarationsServiceTests
                 ETag = "etag",
             }
         );
-        memoryDbContext.Gmrs.AddTestData( CreateGmr("gmr1", ["mrn1"]));
+        memoryDbContext.Gmrs.AddTestData(CreateGmr("gmr1", ["mrn1"]));
 
         var subject = CreateSubject(memoryDbContext);
 
@@ -184,7 +184,7 @@ public class RelatedImportDeclarationsServiceTests
         response.ImportPreNotifications.Length.Should().Be(0);
         response.Gmrs.Length.Should().Be(1);
     }
-    
+
     [Fact]
     public async Task GivenSearchByMrn_WhenMrnExists_And_RelatedMrnExists_And_GmrExistsOnRelatedMrn_ThenShouldReturn()
     {
@@ -220,7 +220,7 @@ public class RelatedImportDeclarationsServiceTests
                 ETag = "etag",
             }
         );
-        
+
         memoryDbContext.CustomsDeclarations.AddTestData(
             new CustomsDeclarationEntity
             {
@@ -261,12 +261,15 @@ public class RelatedImportDeclarationsServiceTests
                 ETag = "etag",
             }
         );
-        
-        memoryDbContext.Gmrs.AddTestData( CreateGmr("gmr1", ["mrn2"]));
+
+        memoryDbContext.Gmrs.AddTestData(CreateGmr("gmr1", ["mrn2"]));
 
         var subject = CreateSubject(memoryDbContext);
 
-        var response = await subject.Search(new RelatedImportDeclarationsRequest { Mrn = mrn1 }, CancellationToken.None);
+        var response = await subject.Search(
+            new RelatedImportDeclarationsRequest { Mrn = mrn1 },
+            CancellationToken.None
+        );
 
         response.Should().NotBeNull();
         response.CustomsDeclarations.Length.Should().Be(2);
@@ -362,7 +365,7 @@ public class RelatedImportDeclarationsServiceTests
         response.ImportPreNotifications.Length.Should().Be(1);
         response.Gmrs.Length.Should().Be(0);
     }
-    
+
     [Fact]
     public async Task GivenSearchByDucr_WhenDucrExists_And_GmrExists_ThenShouldReturn()
     {
@@ -379,8 +382,8 @@ public class RelatedImportDeclarationsServiceTests
                 ETag = "etag",
             }
         );
-        
-        memoryDbContext.Gmrs.AddTestData( CreateGmr("gmr1", ["mrn"]));
+
+        memoryDbContext.Gmrs.AddTestData(CreateGmr("gmr1", ["mrn"]));
 
         var subject = CreateSubject(memoryDbContext);
 
@@ -394,7 +397,7 @@ public class RelatedImportDeclarationsServiceTests
         response.ImportPreNotifications.Length.Should().Be(0);
         response.Gmrs.Length.Should().Be(1);
     }
-    
+
     [Fact]
     public async Task GivenSearchByDucr_WhenDucrExists_And_RelatedMrnExists_And_GmrExistsOnRelatedMrn_ThenShouldReturn()
     {
@@ -428,7 +431,7 @@ public class RelatedImportDeclarationsServiceTests
                 ETag = "etag",
             }
         );
-        
+
         memoryDbContext.CustomsDeclarations.AddTestData(
             new CustomsDeclarationEntity
             {
@@ -469,8 +472,8 @@ public class RelatedImportDeclarationsServiceTests
                 ETag = "etag",
             }
         );
-        
-        memoryDbContext.Gmrs.AddTestData( CreateGmr("gmr1", ["mrn2"]));
+
+        memoryDbContext.Gmrs.AddTestData(CreateGmr("gmr1", ["mrn2"]));
 
         var subject = CreateSubject(memoryDbContext);
 
