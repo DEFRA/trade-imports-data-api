@@ -18,11 +18,6 @@ public class GmrRepository(IDbContext dbContext) : IGmrRepository
         return await dbContext.Gmrs.Find(id, cancellationToken);
     }
 
-    public Task<GmrEntity?> Get(Expression<Func<GmrEntity, bool>> predicate, CancellationToken cancellationToken)
-    {
-        return dbContext.Gmrs.Where(predicate).FirstOrDefaultWithFallbackAsync(cancellationToken);
-    }
-
     public async Task<GmrEntity?> GetCaseInsensitive(
         Expression<Func<GmrEntity, bool>> predicate,
         CancellationToken cancellationToken
