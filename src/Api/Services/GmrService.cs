@@ -14,11 +14,6 @@ public class GmrService(
     public Task<GmrEntity?> GetGmr(string id, CancellationToken cancellationToken) =>
         gmrRepository.Get(id, cancellationToken);
 
-    public Task<GmrEntity?> GetGmr(
-        System.Linq.Expressions.Expression<Func<GmrEntity, bool>> predicate,
-        CancellationToken cancellationToken
-    ) => gmrRepository.Get(predicate, cancellationToken);
-
     public async Task<List<GmrEntity>> GetGmrByChedId(string chedId, CancellationToken cancellationToken)
     {
         var customsDeclarationIdentifier = await importPreNotificationRepository.GetCustomsDeclarationIdentifier(

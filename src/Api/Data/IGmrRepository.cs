@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Defra.TradeImportsDataApi.Data.Entities;
 
 namespace Defra.TradeImportsDataApi.Api.Data;
@@ -6,8 +7,8 @@ public interface IGmrRepository
 {
     Task<GmrEntity?> Get(string id, CancellationToken cancellationToken);
 
-    Task<GmrEntity?> Get(
-        System.Linq.Expressions.Expression<Func<GmrEntity, bool>> predicate,
+    Task<GmrEntity?> GetCaseInsensitive(
+        Expression<Func<GmrEntity, bool>> predicate,
         CancellationToken cancellationToken
     );
 
