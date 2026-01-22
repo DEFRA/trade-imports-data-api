@@ -14,25 +14,29 @@ public class PopulateGmrTags() : BtmsMigration("Populate GMR tags field", new Ve
         {
             new BsonDocument(
                 "$set",
-                new BsonDocument(
-                    "tags",
-                    new BsonDocument(
-                        "$cond",
-                        new BsonArray
+                new BsonDocument
+                {
+                    {
+                        "tags",
+                        new BsonDocument
                         {
-                            new BsonDocument("$in", new BsonArray { new BsonDocument("$toLower", "$_id"), "$tags" }),
-                            "$tags",
-                            new BsonDocument(
-                                "$concatArrays",
+                            {
+                                "$setUnion",
                                 new BsonArray
                                 {
-                                    "$tags",
-                                    new BsonArray { new BsonDocument("$toLower", "$_id") },
+                                    new BsonDocument
+                                    {
+                                        {
+                                            "$ifNull",
+                                            new BsonArray { "$tags", new BsonArray() }
+                                        },
+                                    },
+                                    new BsonArray { new BsonDocument { { "$toLower", "$_id" } } },
                                 }
-                            ),
+                            },
                         }
-                    )
-                )
+                    },
+                }
             ),
         };
 
