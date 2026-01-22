@@ -29,7 +29,7 @@ public static class ServiceCollectionExtensions
         if (integrationTest)
             return services;
 
-        services.AddHostedService<MongoIndexService>();
+        services.AddHostedService<MongoMigrationHostedService>();
         services.AddScoped<IDbContext, MongoDbContext>();
         services.AddSingleton<MongoCommandTracker>();
         services.AddSingleton(sp =>
