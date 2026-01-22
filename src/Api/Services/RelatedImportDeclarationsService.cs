@@ -29,7 +29,7 @@ public class RelatedImportDeclarationsService(
             return await StartFromCustomsDeclaration(
 #pragma warning disable CA1862
                 // MongoDB driver does not support string.Equals()
-                x => x.ClearanceRequest!.DeclarationUcr == request.Ducr,
+                x => x.Tags.Contains(request.Ducr.ToLower()),
 #pragma warning restore CA1862
                 maxDepth,
                 cancellationToken
@@ -41,9 +41,11 @@ public class RelatedImportDeclarationsService(
             return await StartFromCustomsDeclaration(
 #pragma warning disable CA1862
                 // MongoDB driver does not support string.Equals()
-                x => x.Id == request.Mrn,
+                x => x.Tags.Contains(request.Mrn.ToLower()),
 #pragma warning restore CA1862
-                maxDepth, cancellationToken);
+                maxDepth,
+                cancellationToken
+            );
         }
 
         if (!string.IsNullOrEmpty(request.ChedId))
@@ -56,7 +58,7 @@ public class RelatedImportDeclarationsService(
             return await StartFromGmrId(
 #pragma warning disable CA1862
                 // MongoDB driver does not support string.Equals()
-                x => x.Id == request.GmrId,
+                x => x.Tags.Contains(request.GmrId.ToLower()),
 #pragma warning restore CA1862
                 cancellationToken);
         }
@@ -74,10 +76,7 @@ public class RelatedImportDeclarationsService(
         CancellationToken cancellationToken
     )
     {
-        var customsDeclarations = await customsDeclarationRepository.GetAllCaseInsensitive(
-            predicate,
-            cancellationToken
-        );
+        var customsDeclarations = await customsDeclarationRepository.GetAll(predicate, cancellationToken);
         var identifiers = customsDeclarations.SelectMany(x => x.ImportPreNotificationIdentifiers);
         var notifications = await importPreNotificationRepository.GetAll(identifiers.ToArray(), cancellationToken);
 
@@ -149,7 +148,7 @@ public class RelatedImportDeclarationsService(
         GmrEntity[] Gmrs
     )> StartFromGmrId(Expression<Func<GmrEntity, bool>> predicate, CancellationToken cancellationToken)
     {
-        var gmr = await gmrRepository.GetCaseInsensitive(predicate, cancellationToken);
+        var gmr = await gmrRepository.Get(predicate, cancellationToken);
         if (gmr == null)
         {
             return new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>([], [], []);
