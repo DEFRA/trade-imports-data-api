@@ -29,7 +29,7 @@ public static class ServiceCollectionExtensions
         if (integrationTest)
             return services;
 
-        services.AddHostedService<MongoMigrationHostedService>();
+        services.AddHostedService<MongoIndexService>();
         services.AddScoped<IDbContext, MongoDbContext>();
         services.AddSingleton<MongoCommandTracker>();
         services.AddSingleton(sp =>
@@ -58,6 +58,7 @@ public static class ServiceCollectionExtensions
             {
                 new CamelCaseElementNameConvention(),
                 new EnumRepresentationConvention(BsonType.String),
+                new IgnoreExtraElementsConvention(true),
             };
 
             ConventionRegistry.Register(nameof(conventionPack), conventionPack, _ => true);

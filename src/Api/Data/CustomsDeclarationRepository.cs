@@ -3,6 +3,8 @@ using Defra.TradeImportsDataApi.Api.Exceptions;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Data.Extensions;
+using Defra.TradeImportsDataApi.Data.Mongo;
+using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 
 namespace Defra.TradeImportsDataApi.Api.Data;
@@ -36,6 +38,24 @@ public class CustomsDeclarationRepository(IDbContext dbContext) : ICustomsDeclar
         Expression<Func<CustomsDeclarationEntity, bool>> predicate,
         CancellationToken cancellationToken
     ) => dbContext.CustomsDeclarations.Where(predicate).ToListWithFallbackAsync(cancellationToken);
+
+    public Task<List<CustomsDeclarationEntity>> GetAllCaseInsensitive(
+        Expression<Func<CustomsDeclarationEntity, bool>> predicate,
+        CancellationToken cancellationToken
+    )
+    {
+        if (dbContext is MongoDbContext)
+        {
+            return dbContext
+                .CustomsDeclarations.Collection.Aggregate(
+                    new AggregateOptions() { Collation = new Collation("en", strength: CollationStrength.Secondary) }
+                )
+                .Match(predicate)
+                .ToListAsync(cancellationToken);
+        }
+
+        return GetAll(predicate, cancellationToken);
+    }
 
     public async Task<List<string>> GetAllIds(
         string importPreNotificationIdentifier,
