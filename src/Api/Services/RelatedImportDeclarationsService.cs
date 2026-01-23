@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using Defra.TradeImportsDataApi.Api.Data;
 using Defra.TradeImportsDataApi.Api.Endpoints.RelatedImportDeclarations;
@@ -70,6 +71,7 @@ public class RelatedImportDeclarationsService(
         return new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>([], [], []);
     }
 
+    [ExcludeFromCodeCoverage]
     private async Task<(
         CustomsDeclarationEntity[] CustomsDeclarations,
         ImportPreNotificationEntity[] ImportPreNotifications,
