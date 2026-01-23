@@ -58,7 +58,7 @@ public static class ServiceCollectionExtensions
             {
                 new CamelCaseElementNameConvention(),
                 new EnumRepresentationConvention(BsonType.String),
-                new IgnoreExtraElementsConvention(true)
+                new IgnoreExtraElementsConvention(true),
             };
 
             ConventionRegistry.Register(nameof(conventionPack), conventionPack, _ => true);
