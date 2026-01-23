@@ -17,11 +17,6 @@ public interface ICustomsDeclarationRepository
         CancellationToken cancellationToken
     );
 
-    Task<List<CustomsDeclarationEntity>> GetAllCaseInsensitive(
-        Expression<Func<CustomsDeclarationEntity, bool>> predicate,
-        CancellationToken cancellationToken
-    );
-
     Task<List<string>> GetAllIds(string importPreNotificationIdentifier, CancellationToken cancellationToken);
 
     Task<List<string>> GetAllImportPreNotificationIdentifiers(string id, CancellationToken cancellationToken);
