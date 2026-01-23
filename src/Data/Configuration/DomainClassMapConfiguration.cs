@@ -1,4 +1,3 @@
-using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.Gvms;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using MongoDB.Bson.Serialization;
@@ -12,7 +11,6 @@ public static class DomainClassMapConfiguration
     {
         RegisterGvms();
         RegisterIpaffs();
-        RegisterCustomsDeclarations();
     }
 
     private static void RegisterIpaffs()
@@ -66,12 +64,6 @@ public static class DomainClassMapConfiguration
 
     private static void RegisterGvms()
     {
-        BsonClassMap.RegisterClassMap<GmrEntity>(cm =>
-        {
-            cm.AutoMap();
-            cm.SetIgnoreExtraElements(true);
-        });
-
         BsonClassMap.RegisterClassMap<PlannedCrossing>(cm =>
         {
             cm.AutoMap();
@@ -91,15 +83,6 @@ public static class DomainClassMapConfiguration
             cm.AutoMap();
             cm.GetMemberMap(c => c.ArrivesAt)
                 .SetSerializer(new NullableSerializer<DateTime>(new DateTimeSerializer(DateTimeKind.Unspecified)));
-        });
-    }
-
-    private static void RegisterCustomsDeclarations()
-    {
-        BsonClassMap.RegisterClassMap<CustomsDeclarationEntity>(cm =>
-        {
-            cm.AutoMap();
-            cm.SetIgnoreExtraElements(true);
         });
     }
 }
