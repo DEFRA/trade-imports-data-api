@@ -283,7 +283,7 @@ public class RelatedImportDeclarationsServiceTests
         memoryDbContext.ImportPreNotifications.AddTestData(
             new ImportPreNotificationEntity
             {
-                Id = "CHEDA.GB.2025.1234567",
+                Id = searchChedId,
                 CustomsDeclarationIdentifier = "1234567R",
                 ImportPreNotification = new ImportPreNotification(),
                 Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
@@ -318,7 +318,7 @@ public class RelatedImportDeclarationsServiceTests
         memoryDbContext.ImportPreNotifications.AddTestData(
             new ImportPreNotificationEntity
             {
-                Id = "CHEDA.GB.2025.1234567",
+                Id = searchChedId,
                 CustomsDeclarationIdentifier = "1234567V",
                 ImportPreNotification = new ImportPreNotification(),
                 Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
@@ -487,8 +487,10 @@ public class RelatedImportDeclarationsServiceTests
         return new GmrEntity
         {
             Id = gmrId,
-            CustomsDeclarationIdentifiers = mrns,
-            Gmr = new Gmr(),
+            Gmr = new Gmr()
+            {
+                Declarations = new Declarations() { Customs = mrns.Select(x => new Customs() { Id = x }).ToArray() },
+            },
             Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
             Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
             ETag = "etag",
