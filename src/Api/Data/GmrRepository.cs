@@ -27,7 +27,7 @@ public class GmrRepository(IDbContext dbContext) : IGmrRepository
             return [];
 
         return await dbContext.Gmrs.FindMany(
-            x => x.CustomsDeclarationIdentifiers.Any(id => customsDeclarationIds.Any(cId => cId == id)),
+            x => customsDeclarationIds.Any(t => x.CustomsDeclarationIdentifiers.Contains(t)),
             cancellationToken
         );
     }
