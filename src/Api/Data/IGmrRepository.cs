@@ -7,10 +7,7 @@ public interface IGmrRepository
 {
     Task<GmrEntity?> Get(string id, CancellationToken cancellationToken);
 
-    Task<GmrEntity?> GetCaseInsensitive(
-        Expression<Func<GmrEntity, bool>> predicate,
-        CancellationToken cancellationToken
-    );
+    Task<GmrEntity?> Get(Expression<Func<GmrEntity, bool>> predicate, CancellationToken cancellationToken);
 
     Task<List<GmrEntity>> GetAll(string[] customsDeclarationIds, CancellationToken cancellationToken);
 

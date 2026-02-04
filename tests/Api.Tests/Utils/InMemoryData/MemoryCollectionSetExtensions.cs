@@ -10,6 +10,7 @@ public static class MemoryCollectionSetExtensions
     {
         if (set is MemoryCollectionSet<T> memoryCollectionSet)
         {
+            item.OnSave();
             memoryCollectionSet.AddTestData(item);
         }
     }

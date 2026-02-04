@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using Defra.TradeImportsDataApi.Api.Data;
 using Defra.TradeImportsDataApi.Api.Endpoints.RelatedImportDeclarations;
@@ -26,24 +27,14 @@ public class RelatedImportDeclarationsService(
 
         if (!string.IsNullOrEmpty(request.Ducr))
         {
-            return await StartFromCustomsDeclaration(
-#pragma warning disable CA1862
-                // MongoDB driver does not support string.Equals()
-                x => x.ClearanceRequest!.DeclarationUcr == request.Ducr,
-#pragma warning restore CA1862
-                maxDepth,
-                cancellationToken
-            );
+            var search = request.Ducr.ToLower();
+            return await StartFromCustomsDeclaration(x => x.Tags.Contains(search), maxDepth, cancellationToken);
         }
 
         if (!string.IsNullOrEmpty(request.Mrn))
         {
-            return await StartFromCustomsDeclaration(
-#pragma warning disable CA1862
-                // MongoDB driver does not support string.Equals()
-                x => x.Id == request.Mrn,
-#pragma warning restore CA1862
-                maxDepth, cancellationToken);
+            var search = request.Mrn.ToLower();
+            return await StartFromCustomsDeclaration(x => x.Tags.Contains(search), maxDepth, cancellationToken);
         }
 
         if (!string.IsNullOrEmpty(request.ChedId))
@@ -53,17 +44,14 @@ public class RelatedImportDeclarationsService(
 
         if (!string.IsNullOrEmpty(request.GmrId))
         {
-            return await StartFromGmrId(
-#pragma warning disable CA1862
-                // MongoDB driver does not support string.Equals()
-                x => x.Id == request.GmrId,
-#pragma warning restore CA1862
-                cancellationToken);
+            var search = request.GmrId.ToLower();
+            return await StartFromGmrId(x => x.Tags.Contains(search), cancellationToken);
         }
 
         return new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>([], [], []);
     }
 
+    [ExcludeFromCodeCoverage]
     private async Task<(
         CustomsDeclarationEntity[] CustomsDeclarations,
         ImportPreNotificationEntity[] ImportPreNotifications,
@@ -74,10 +62,13 @@ public class RelatedImportDeclarationsService(
         CancellationToken cancellationToken
     )
     {
-        var customsDeclarations = await customsDeclarationRepository.GetAllCaseInsensitive(
-            predicate,
-            cancellationToken
-        );
+        var customsDeclarations = await customsDeclarationRepository.GetAll(predicate, cancellationToken);
+
+        if (customsDeclarations is null || !customsDeclarations.Any())
+        {
+            return new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>([], [], []);
+        }
+
         var identifiers = customsDeclarations.SelectMany(x => x.ImportPreNotificationIdentifiers);
         var notifications = await importPreNotificationRepository.GetAll(identifiers.ToArray(), cancellationToken);
 
@@ -149,7 +140,7 @@ public class RelatedImportDeclarationsService(
         GmrEntity[] Gmrs
     )> StartFromGmrId(Expression<Func<GmrEntity, bool>> predicate, CancellationToken cancellationToken)
     {
-        var gmr = await gmrRepository.GetCaseInsensitive(predicate, cancellationToken);
+        var gmr = await gmrRepository.Get(predicate, cancellationToken);
         if (gmr == null)
         {
             return new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>([], [], []);
