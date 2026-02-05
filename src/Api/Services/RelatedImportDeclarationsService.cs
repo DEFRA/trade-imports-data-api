@@ -48,6 +48,12 @@ public class RelatedImportDeclarationsService(
             return await StartFromGmrId(x => x.Tags.Contains(search), cancellationToken);
         }
 
+        if (!string.IsNullOrEmpty(request.VrnOrTrn))
+        {
+            var search = request.VrnOrTrn.ToLower();
+            return await StartFromGmrId(x => x.Tags.Contains(search), cancellationToken);
+        }
+
         return new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>([], [], []);
     }
 

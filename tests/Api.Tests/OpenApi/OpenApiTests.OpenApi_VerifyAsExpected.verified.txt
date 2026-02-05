@@ -951,6 +951,15 @@
             }
           },
           {
+            "name": "vrnOrTrn",
+            "in": "query",
+            "description": "Search by GMR Vehicle or Trailer Registration",
+            "schema": {
+              "type": "string",
+              "description": "Search by GMR Vehicle or Trailer Registration"
+            }
+          },
+          {
             "name": "maxLinkDepth",
             "in": "query",
             "description": "Max link depth to follow. Default is 3.",
