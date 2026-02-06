@@ -433,8 +433,8 @@ public class RelatedImportDeclarationsServiceTests
     }
 
     [Theory]
-    [InlineData("TEST 123", 2)]
-    [InlineData("321 TEST", 2)]
+    [InlineData("TEST 123", 3)]
+    [InlineData("321 TEST", 3)]
     public async Task GivenSearchByVrn_WhenExists_ThenShouldReturn(string gmrId, int customsDeclarationsCount)
     {
         var memoryDbContext = new MemoryDbContext();
@@ -450,7 +450,7 @@ public class RelatedImportDeclarationsServiceTests
         response.Should().NotBeNull();
         response.CustomsDeclarations.Length.Should().Be(customsDeclarationsCount);
         response.ImportPreNotifications.Length.Should().Be(0);
-        response.Gmrs.Length.Should().Be(1);
+        response.Gmrs.Length.Should().Be(3);
     }
 
     [Fact]

@@ -51,7 +51,7 @@ public class RelatedImportDeclarationsService(
         if (!string.IsNullOrEmpty(request.VrnOrTrn))
         {
             var search = request.VrnOrTrn.ToLower();
-            return await StartFromGmrId(x => x.Tags.Contains(search), cancellationToken);
+            return await StartFromGmrVrnOrTrn(x => x.Tags.Contains(search), cancellationToken);
         }
 
         return new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>([], [], []);
@@ -155,6 +155,32 @@ public class RelatedImportDeclarationsService(
             [.. customsDeclarations],
             [],
             [gmr]
+        );
+    }
+
+    private async Task<(
+        CustomsDeclarationEntity[] CustomsDeclarations,
+        ImportPreNotificationEntity[] ImportPreNotifications,
+        GmrEntity[] Gmrs
+    )> StartFromGmrVrnOrTrn(Expression<Func<GmrEntity, bool>> predicate, CancellationToken cancellationToken)
+    {
+        var gmrs = await gmrRepository.GetAll(predicate, cancellationToken);
+        if (!gmrs.Any())
+        {
+            return new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>([], [], []);
+        }
+
+        var customsDeclarationIdentifiers = gmrs.SelectMany(x => x.CustomsDeclarationIdentifiers).ToList();
+
+        var customsDeclarations = await customsDeclarationRepository.GetAll(
+            x => customsDeclarationIdentifiers.Contains(x.Id),
+            cancellationToken
+        );
+
+        return new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>(
+            [.. customsDeclarations],
+            [],
+            [.. gmrs]
         );
     }
 
