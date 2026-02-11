@@ -22,6 +22,7 @@ public class RelatedImportDeclarationsServiceTests
 
         response.ImportPreNotifications.Length.Should().Be(0);
         response.CustomsDeclarations.Length.Should().Be(0);
+        response.Gmrs.Length.Should().Be(0);
     }
 
     [Fact]
@@ -49,6 +50,7 @@ public class RelatedImportDeclarationsServiceTests
         response.Should().NotBeNull();
         response.CustomsDeclarations.Length.Should().Be(1);
         response.ImportPreNotifications.Length.Should().Be(0);
+        response.Gmrs.Length.Should().Be(0);
     }
 
     [Fact]
@@ -91,6 +93,7 @@ public class RelatedImportDeclarationsServiceTests
         response.Should().NotBeNull();
         response.CustomsDeclarations.Length.Should().Be(1);
         response.ImportPreNotifications.Length.Should().Be(0);
+        response.Gmrs.Length.Should().Be(0);
     }
 
     [Fact]
@@ -147,6 +150,131 @@ public class RelatedImportDeclarationsServiceTests
         response.Should().NotBeNull();
         response.CustomsDeclarations.Length.Should().Be(1);
         response.ImportPreNotifications.Length.Should().Be(1);
+        response.Gmrs.Length.Should().Be(0);
+    }
+
+    [Fact]
+    public async Task GivenSearchByMrn_WhenMrnExists_And_GmrExists_ThenShouldReturn()
+    {
+        const string mrn1 = "mrn1";
+        var memoryDbContext = new MemoryDbContext();
+
+        memoryDbContext.CustomsDeclarations.AddTestData(
+            new CustomsDeclarationEntity
+            {
+                Id = mrn1,
+                ImportPreNotificationIdentifiers = [""],
+                ClearanceRequest = new ClearanceRequest(),
+                Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+                ETag = "etag",
+            }
+        );
+        memoryDbContext.Gmrs.AddTestData(CreateGmr("gmr1", ["mrn1"]));
+
+        var subject = CreateSubject(memoryDbContext);
+
+        var response = await subject.Search(
+            new RelatedImportDeclarationsRequest { Mrn = mrn1 },
+            CancellationToken.None
+        );
+
+        response.Should().NotBeNull();
+        response.CustomsDeclarations.Length.Should().Be(1);
+        response.ImportPreNotifications.Length.Should().Be(0);
+        response.Gmrs.Length.Should().Be(1);
+    }
+
+    [Fact]
+    public async Task GivenSearchByMrn_WhenMrnExists_And_RelatedMrnExists_And_GmrExistsOnRelatedMrn_ThenShouldReturn()
+    {
+        const string mrn1 = "mrn1";
+        const string mrn2 = "mrn2";
+        var memoryDbContext = new MemoryDbContext();
+
+        memoryDbContext.CustomsDeclarations.AddTestData(
+            new CustomsDeclarationEntity
+            {
+                Id = mrn1,
+                ImportPreNotificationIdentifiers = ["1234567"],
+                ClearanceRequest = new ClearanceRequest
+                {
+                    DeclarationUcr = "ducr123",
+                    Commodities =
+                    [
+                        new Commodity
+                        {
+                            Documents =
+                            [
+                                new ImportDocument
+                                {
+                                    DocumentCode = "C640",
+                                    DocumentReference = new ImportDocumentReference("CHEDA.GB.2025.1234567"),
+                                },
+                            ],
+                        },
+                    ],
+                },
+                Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+                ETag = "etag",
+            }
+        );
+
+        memoryDbContext.CustomsDeclarations.AddTestData(
+            new CustomsDeclarationEntity
+            {
+                Id = mrn2,
+                ImportPreNotificationIdentifiers = ["1234567"],
+                ClearanceRequest = new ClearanceRequest
+                {
+                    DeclarationUcr = "ducr123",
+                    Commodities =
+                    [
+                        new Commodity
+                        {
+                            Documents =
+                            [
+                                new ImportDocument
+                                {
+                                    DocumentCode = "C640",
+                                    DocumentReference = new ImportDocumentReference("CHEDA.GB.2025.1234567"),
+                                },
+                            ],
+                        },
+                    ],
+                },
+                Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+                ETag = "etag",
+            }
+        );
+
+        memoryDbContext.ImportPreNotifications.AddTestData(
+            new ImportPreNotificationEntity
+            {
+                Id = "CHEDA.GB.2025.1234567",
+                CustomsDeclarationIdentifier = "1234567",
+                ImportPreNotification = new ImportPreNotification(),
+                Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+                ETag = "etag",
+            }
+        );
+
+        memoryDbContext.Gmrs.AddTestData(CreateGmr("gmr1", ["mrn2"]));
+
+        var subject = CreateSubject(memoryDbContext);
+
+        var response = await subject.Search(
+            new RelatedImportDeclarationsRequest { Mrn = mrn1 },
+            CancellationToken.None
+        );
+
+        response.Should().NotBeNull();
+        response.CustomsDeclarations.Length.Should().Be(2);
+        response.ImportPreNotifications.Length.Should().Be(1);
+        response.Gmrs.Length.Should().Be(1);
     }
 
     [Fact]
@@ -176,6 +304,7 @@ public class RelatedImportDeclarationsServiceTests
         response.Should().NotBeNull();
         response.CustomsDeclarations.Length.Should().Be(1);
         response.ImportPreNotifications.Length.Should().Be(0);
+        response.Gmrs.Length.Should().Be(0);
     }
 
     [Fact]
@@ -234,6 +363,129 @@ public class RelatedImportDeclarationsServiceTests
         response.Should().NotBeNull();
         response.CustomsDeclarations.Length.Should().Be(1);
         response.ImportPreNotifications.Length.Should().Be(1);
+        response.Gmrs.Length.Should().Be(0);
+    }
+
+    [Fact]
+    public async Task GivenSearchByDucr_WhenDucrExists_And_GmrExists_ThenShouldReturn()
+    {
+        var memoryDbContext = new MemoryDbContext();
+
+        memoryDbContext.CustomsDeclarations.AddTestData(
+            new CustomsDeclarationEntity
+            {
+                Id = "mrn",
+                ImportPreNotificationIdentifiers = ["123"],
+                ClearanceRequest = new ClearanceRequest { DeclarationUcr = "ducr123" },
+                Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+                ETag = "etag",
+            }
+        );
+
+        memoryDbContext.Gmrs.AddTestData(CreateGmr("gmr1", ["mrn"]));
+
+        var subject = CreateSubject(memoryDbContext);
+
+        var response = await subject.Search(
+            new RelatedImportDeclarationsRequest { Ducr = "ducr123" },
+            CancellationToken.None
+        );
+
+        response.Should().NotBeNull();
+        response.CustomsDeclarations.Length.Should().Be(1);
+        response.ImportPreNotifications.Length.Should().Be(0);
+        response.Gmrs.Length.Should().Be(1);
+    }
+
+    [Fact]
+    public async Task GivenSearchByDucr_WhenDucrExists_And_RelatedMrnExists_And_GmrExistsOnRelatedMrn_ThenShouldReturn()
+    {
+        var memoryDbContext = new MemoryDbContext();
+
+        memoryDbContext.CustomsDeclarations.AddTestData(
+            new CustomsDeclarationEntity
+            {
+                Id = "mrn",
+                ImportPreNotificationIdentifiers = ["1234567"],
+                ClearanceRequest = new ClearanceRequest
+                {
+                    DeclarationUcr = "ducr123",
+                    Commodities =
+                    [
+                        new Commodity
+                        {
+                            Documents =
+                            [
+                                new ImportDocument
+                                {
+                                    DocumentCode = "C640",
+                                    DocumentReference = new ImportDocumentReference("CHEDA.GB.2025.1234567"),
+                                },
+                            ],
+                        },
+                    ],
+                },
+                Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+                ETag = "etag",
+            }
+        );
+
+        memoryDbContext.CustomsDeclarations.AddTestData(
+            new CustomsDeclarationEntity
+            {
+                Id = "mrn2",
+                ImportPreNotificationIdentifiers = ["1234567"],
+                ClearanceRequest = new ClearanceRequest
+                {
+                    DeclarationUcr = "ducr456",
+                    Commodities =
+                    [
+                        new Commodity
+                        {
+                            Documents =
+                            [
+                                new ImportDocument
+                                {
+                                    DocumentCode = "C640",
+                                    DocumentReference = new ImportDocumentReference("CHEDA.GB.2025.1234567"),
+                                },
+                            ],
+                        },
+                    ],
+                },
+                Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+                ETag = "etag",
+            }
+        );
+
+        memoryDbContext.ImportPreNotifications.AddTestData(
+            new ImportPreNotificationEntity
+            {
+                Id = "CHEDA.GB.2025.1234567",
+                CustomsDeclarationIdentifier = "1234567",
+                ImportPreNotification = new ImportPreNotification(),
+                Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+                ETag = "etag",
+            }
+        );
+
+        memoryDbContext.Gmrs.AddTestData(CreateGmr("gmr1", ["mrn2"]));
+
+        var subject = CreateSubject(memoryDbContext);
+
+        var response = await subject.Search(
+            new RelatedImportDeclarationsRequest { Ducr = "ducr123" },
+            CancellationToken.None
+        );
+
+        response.Should().NotBeNull();
+        response.CustomsDeclarations.Length.Should().Be(2);
+        response.ImportPreNotifications.Length.Should().Be(1);
+        response.Gmrs.Length.Should().Be(1);
     }
 
     [Theory]
@@ -267,6 +519,7 @@ public class RelatedImportDeclarationsServiceTests
         response.Should().NotBeNull();
         response.CustomsDeclarations.Length.Should().Be(0);
         response.ImportPreNotifications.Length.Should().Be(1);
+        response.Gmrs.Length.Should().Be(0);
     }
 
     [Theory]
@@ -302,6 +555,7 @@ public class RelatedImportDeclarationsServiceTests
         response.Should().NotBeNull();
         response.CustomsDeclarations.Length.Should().Be(0);
         response.ImportPreNotifications.Length.Should().Be(1);
+        response.Gmrs.Length.Should().Be(0);
     }
 
     [Theory]
@@ -337,6 +591,7 @@ public class RelatedImportDeclarationsServiceTests
         response.Should().NotBeNull();
         response.CustomsDeclarations.Length.Should().Be(0);
         response.ImportPreNotifications.Length.Should().Be(1);
+        response.Gmrs.Length.Should().Be(0);
     }
 
     [Fact]
@@ -354,6 +609,7 @@ public class RelatedImportDeclarationsServiceTests
         response.Should().NotBeNull();
         response.CustomsDeclarations.Length.Should().Be(0);
         response.ImportPreNotifications.Length.Should().Be(0);
+        response.Gmrs.Length.Should().Be(0);
     }
 
     [Fact]
@@ -372,6 +628,7 @@ public class RelatedImportDeclarationsServiceTests
         response.Should().NotBeNull();
         response.CustomsDeclarations.Length.Should().Be(3);
         response.ImportPreNotifications.Length.Should().Be(4);
+        response.Gmrs.Length.Should().Be(3);
     }
 
     [Fact]
@@ -390,6 +647,7 @@ public class RelatedImportDeclarationsServiceTests
         response.Should().NotBeNull();
         response.CustomsDeclarations.Length.Should().Be(2);
         response.ImportPreNotifications.Length.Should().Be(2);
+        response.Gmrs.Length.Should().Be(3);
     }
 
     [Theory]
@@ -430,6 +688,7 @@ public class RelatedImportDeclarationsServiceTests
         response.Should().NotBeNull();
         response.CustomsDeclarations.Length.Should().Be(0);
         response.ImportPreNotifications.Length.Should().Be(0);
+        response.Gmrs.Length.Should().Be(0);
     }
 
     private static void InsertTestData(MemoryDbContext memoryDbContext)
