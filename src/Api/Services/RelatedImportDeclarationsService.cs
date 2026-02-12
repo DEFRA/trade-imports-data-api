@@ -88,10 +88,13 @@ public class RelatedImportDeclarationsService(
             cancellationToken
         );
 
+        var allRelatedCustomsDeclarationIdentifiers = result.CustomsDeclarations.Select(x => x.Id);
+        var gmrs = await gmrRepository.GetAll(allRelatedCustomsDeclarationIdentifiers.ToArray(), cancellationToken);
+
         return new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>(
             result.CustomsDeclarations,
             result.ImportPreNotifications,
-            []
+            gmrs.ToArray()
         );
     }
 
@@ -127,10 +130,13 @@ public class RelatedImportDeclarationsService(
             cancellationToken
         );
 
+        var allRelatedCustomsDeclarationIdentifiers = result.CustomsDeclarations.Select(x => x.Id);
+        var gmrs = await gmrRepository.GetAll(allRelatedCustomsDeclarationIdentifiers.ToArray(), cancellationToken);
+
         return new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>(
             result.CustomsDeclarations,
             result.ImportPreNotifications,
-            []
+            gmrs.ToArray()
         );
     }
 
