@@ -21,6 +21,14 @@ public class GmrRepository(IDbContext dbContext) : IGmrRepository
         return await dbContext.Gmrs.Where(predicate).FirstOrDefaultWithFallbackAsync(cancellationToken);
     }
 
+    public Task<List<GmrEntity>> GetAll(
+        Expression<Func<GmrEntity, bool>> predicate,
+        CancellationToken cancellationToken
+    )
+    {
+        return dbContext.Gmrs.Where(predicate).ToListWithFallbackAsync(cancellationToken);
+    }
+
     public async Task<List<GmrEntity>> GetAll(string[] customsDeclarationIds, CancellationToken cancellationToken)
     {
         if (customsDeclarationIds.Length == 0)

@@ -9,6 +9,8 @@ public interface IGmrRepository
 
     Task<GmrEntity?> Get(Expression<Func<GmrEntity, bool>> predicate, CancellationToken cancellationToken);
 
+    Task<List<GmrEntity>> GetAll(Expression<Func<GmrEntity, bool>> predicate, CancellationToken cancellationToken);
+
     Task<List<GmrEntity>> GetAll(string[] customsDeclarationIds, CancellationToken cancellationToken);
 
     GmrEntity Insert(GmrEntity entity);
