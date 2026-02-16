@@ -15,7 +15,7 @@ public class MongoMigrationHostedService(ILogger<MongoMigrationHostedService> lo
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        logger.LogInformation("Mongo Migrations running.");
+        logger.LogInformation("Mongo Migrations starting.");
 
         await using (await _lock.AcquireAsync(cancellationToken: cancellationToken))
         {
@@ -32,6 +32,8 @@ public class MongoMigrationHostedService(ILogger<MongoMigrationHostedService> lo
             if (!result.Success)
                 throw new InvalidOperationException("Mongo Migrations Failed");
         }
+
+        logger.LogInformation("Mongo Migrations completed.");
     }
 
     public Task StopAsync(CancellationToken cancellationToken)

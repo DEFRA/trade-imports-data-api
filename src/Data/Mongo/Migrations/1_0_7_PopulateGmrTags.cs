@@ -22,6 +22,19 @@ public class PopulateGmrTagsWithTrnAndVrn() : BtmsMigration("Populate GMR tags f
                         {
                             // existing tags or []
                             new BsonDocument("$ifNull", new BsonArray { "$tags", new BsonArray() }),
+                            // _id → string → lowercase
+                            new BsonDocument(
+                                "$cond",
+                                new BsonArray
+                                {
+                                    new BsonDocument("$ne", new BsonArray { "$_id", BsonNull.Value }),
+                                    new BsonArray
+                                    {
+                                        new BsonDocument("$toLower", new BsonDocument("$toString", "$_id")),
+                                    },
+                                    new BsonArray(),
+                                }
+                            ),
                             // vehicleRegistrationNumber → lowercase
                             new BsonDocument(
                                 "$cond",
