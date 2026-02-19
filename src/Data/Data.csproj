@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <AssemblyName>Defra.TradeImportsDataApi.Data</AssemblyName>
     <RootNamespace>Defra.TradeImportsDataApi.Data</RootNamespace>
@@ -9,12 +9,12 @@
   <ItemGroup>
     <PackageReference Include="AdaskoTheBeAsT.MongoDbMigrations" Version="3.0.0" />
     <PackageReference Include="DistributedLock.MongoDB" Version="1.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="9.0.12" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Options.DataAnnotations" Version="9.0.12" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="10.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Options.DataAnnotations" Version="10.0.3" />
     <PackageReference Include="MongoDB.Driver.Authentication.AWS" Version="3.6.0" />
     <PackageReference Include="MongoDB.Driver" Version="3.6.0" />
   </ItemGroup>
