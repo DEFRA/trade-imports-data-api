@@ -57,7 +57,7 @@ RUN dotnet csharpier check .
 RUN dotnet build src/Api/Api.csproj --no-restore -c Release
 
 COPY src/Api/appsettings.json .
-RUN dotnet swagger tofile --output openapi.json ./src/Api/bin/Release/net9.0/Defra.TradeImportsDataApi.Api.dll v1
+RUN dotnet swagger tofile --output openapi.json ./src/Api/bin/Release/net10.0/Defra.TradeImportsDataApi.Api.dll v1
 RUN vacuum lint -e -r .vacuum.yml openapi.json
 
 RUN dotnet test --no-restore --filter "Category!=IntegrationTest"
