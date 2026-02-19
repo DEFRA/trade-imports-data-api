@@ -34,7 +34,6 @@
     <PackageReference Include="Swashbuckle.AspNetCore.ReDoc" Version="9.0.6" />
     <PackageReference Include="JsonPath.Net" Version="2.2.0" />
     <PackageReference Include="JsonPatch.Net" Version="3.3.0" />
-
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Data\Data.csproj" />
