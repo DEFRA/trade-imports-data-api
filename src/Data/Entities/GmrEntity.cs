@@ -31,11 +31,27 @@ public class GmrEntity : IDataEntity
 
         CustomsDeclarationIdentifiers.AddRange(unique);
 
-        var lowerId = Id.ToLower();
-
-        if (!Tags.Contains(lowerId))
+        if (Gmr.TrailerRegistrationNums is not null)
         {
-            Tags.Add(lowerId);
+            foreach (var value in Gmr.TrailerRegistrationNums)
+            {
+                AddTag(value);
+            }
+        }
+        AddTag(Gmr.VehicleRegistrationNumber);
+        AddTag(Id);
+    }
+
+    private void AddTag(string? value)
+    {
+        if (string.IsNullOrEmpty(value))
+            return;
+
+        var lower = value.ToLower();
+
+        if (!Tags.Contains(lower))
+        {
+            Tags.Add(lower);
         }
     }
 }

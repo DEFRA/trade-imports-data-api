@@ -21,6 +21,10 @@ public class RelatedImportDeclarationsRequest
     [Description("Search by GMR ID")]
     public string? GmrId { get; init; }
 
+    [FromQuery(Name = "vrnOrTrn")]
+    [Description("Search by GMR Vehicle or Trailer Registration")]
+    public string? VrnOrTrn { get; init; }
+
     [FromQuery(Name = "maxLinkDepth")]
     [Description("Max link depth to follow. Default is 3.")]
     public int? MaxLinkDepth { get; init; } = 3;

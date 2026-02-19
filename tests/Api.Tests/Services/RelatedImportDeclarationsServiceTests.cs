@@ -691,6 +691,45 @@ public class RelatedImportDeclarationsServiceTests
         response.Gmrs.Length.Should().Be(0);
     }
 
+    [Theory]
+    [InlineData("TEST 123", 3)]
+    [InlineData("321 TEST", 3)]
+    public async Task GivenSearchByVrn_WhenExists_ThenShouldReturn(string gmrId, int customsDeclarationsCount)
+    {
+        var memoryDbContext = new MemoryDbContext();
+        InsertTestData(memoryDbContext);
+
+        var subject = CreateSubject(memoryDbContext);
+
+        var response = await subject.Search(
+            new RelatedImportDeclarationsRequest { VrnOrTrn = gmrId },
+            CancellationToken.None
+        );
+
+        response.Should().NotBeNull();
+        response.CustomsDeclarations.Length.Should().Be(customsDeclarationsCount);
+        response.ImportPreNotifications.Length.Should().Be(0);
+        response.Gmrs.Length.Should().Be(3);
+    }
+
+    [Fact]
+    public async Task GivenSearchByVrn_WhenNotExists_ThenShouldReturnEmpty()
+    {
+        var memoryDbContext = new MemoryDbContext();
+        InsertTestData(memoryDbContext);
+
+        var subject = CreateSubject(memoryDbContext);
+
+        var response = await subject.Search(
+            new RelatedImportDeclarationsRequest { VrnOrTrn = "TEST321" },
+            CancellationToken.None
+        );
+
+        response.Should().NotBeNull();
+        response.CustomsDeclarations.Length.Should().Be(0);
+        response.ImportPreNotifications.Length.Should().Be(0);
+    }
+
     private static void InsertTestData(MemoryDbContext memoryDbContext)
     {
         memoryDbContext.ImportPreNotifications.AddTestData(CreateImportPreNotification("CHEDA.GB.2025.1234567"));
@@ -749,6 +788,8 @@ public class RelatedImportDeclarationsServiceTests
             Gmr = new Gmr()
             {
                 Declarations = new Declarations() { Customs = mrns.Select(x => new Customs() { Id = x }).ToArray() },
+                VehicleRegistrationNumber = "TEST 123",
+                TrailerRegistrationNums = ["321 TEST"],
             },
             Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
             Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
