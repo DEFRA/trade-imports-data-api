@@ -32,7 +32,7 @@
     <PackageReference Include="Serilog.Sinks.Async" Version="2.1.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
     <PackageReference Include="Swashbuckle.AspNetCore.ReDoc" Version="9.0.6" />
-    <PackageReference Include="JsonPath.Net" Version="2.2.0" />
+    <PackageReference Include="JsonPath.Net" Version="3.0.2" />
     <PackageReference Include="JsonPatch.Net" Version="3.3.0" />
   </ItemGroup>
   <ItemGroup>
