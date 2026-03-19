@@ -17,7 +17,7 @@
   <ItemGroup>
     <PackageReference Include="Amazon.CloudWatch.EMF" Version="2.2.0" />
     <PackageReference Include="AspNetCore.HealthChecks.MongoDb" Version="9.0.0" />
-    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.400.1" />
+    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.3.26" />
     <PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.7.502.55" />
     <PackageReference Include="Elastic.CommonSchema.Serilog" Version="9.0.0" />
     <PackageReference Include="Elastic.Serilog.Enrichers.Web" Version="9.0.0" />
