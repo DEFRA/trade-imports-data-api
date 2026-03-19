@@ -15,8 +15,8 @@
     <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.5" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.5" />
     <PackageReference Include="Microsoft.Extensions.Options.DataAnnotations" Version="10.0.5" />
-    <PackageReference Include="MongoDB.Driver.Authentication.AWS" Version="3.7.0" />
-    <PackageReference Include="MongoDB.Driver" Version="3.7.0" />
+    <PackageReference Include="MongoDB.Driver.Authentication.AWS" Version="3.7.1" />
+    <PackageReference Include="MongoDB.Driver" Version="3.7.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />

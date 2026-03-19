@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
@@ -17,8 +17,10 @@
   <ItemGroup>
     <PackageReference Include="Amazon.CloudWatch.EMF" Version="2.2.0" />
     <PackageReference Include="AspNetCore.HealthChecks.MongoDb" Version="9.0.0" />
-    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.400.1" />
-    <PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.7.502.55" />
+    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.3.26" />
+    <PackageReference Include="AWSSDK.SimpleNotificationService" Version="4.0.2.20" />
+    <!-- Ensure SecurityToken aligns with AWSSDK.Core 4.x to avoid NU1608 -->
+    <PackageReference Include="AWSSDK.SecurityToken" Version="4.0.5.13" />
     <PackageReference Include="Elastic.CommonSchema.Serilog" Version="9.0.0" />
     <PackageReference Include="Elastic.Serilog.Enrichers.Web" Version="9.0.0" />
     <PackageReference Include="FluentValidation" Version="12.1.1" />
@@ -33,7 +35,7 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
     <PackageReference Include="Swashbuckle.AspNetCore.ReDoc" Version="9.0.6" />
     <PackageReference Include="JsonPath.Net" Version="3.0.2" />
-    <PackageReference Include="JsonPatch.Net" Version="3.3.0" />
+    <PackageReference Include="JsonPatch.Net" Version="5.0.2" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Data\Data.csproj" />
