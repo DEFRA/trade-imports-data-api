@@ -27,4 +27,13 @@ public class ClearanceDecisionResult
 
     [JsonPropertyName("internalDecisionCode")]
     public string? InternalDecisionCode { get; set; }
+
+    [JsonPropertyName("mode")]
+    public string? Mode { get; set; }
+
+    [JsonPropertyName("level")]
+    public int? Level { get; set; }
+
+    [JsonPropertyName("ruleName")]
+    public string? RuleName { get; set; }
 }
