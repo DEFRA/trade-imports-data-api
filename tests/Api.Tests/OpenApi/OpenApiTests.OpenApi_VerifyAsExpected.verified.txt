@@ -1620,6 +1620,19 @@
           "internalDecisionCode": {
             "type": "string",
             "nullable": true
+          },
+          "mode": {
+            "type": "string",
+            "nullable": true
+          },
+          "level": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "ruleName": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
