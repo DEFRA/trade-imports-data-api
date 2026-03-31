@@ -27,7 +27,7 @@ public class ImportPreNotificationEntity : IDataEntity
         {
             foreach (
                 var externalReference in ImportPreNotification.ExternalReferences.Where(x =>
-                    !string.IsNullOrEmpty(x.Reference)
+                    x.System == "NCTS" && !string.IsNullOrEmpty(x.Reference)
                 )
             )
             {

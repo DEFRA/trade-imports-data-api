@@ -49,8 +49,18 @@ public class PopulateImportPreNotificationTagsWithExternalReference()
                                                     {
                                                         "cond",
                                                         new BsonDocument(
-                                                            "$ne",
-                                                            new BsonArray { "$$ref.reference", BsonNull.Value }
+                                                            "$and",
+                                                            new BsonArray
+                                                            {
+                                                                new BsonDocument(
+                                                                    "$ne",
+                                                                    new BsonArray { "$$ref.reference", BsonNull.Value }
+                                                                ),
+                                                                new BsonDocument(
+                                                                    "$eq",
+                                                                    new BsonArray { "$$ref.system", "NCTS" }
+                                                                ),
+                                                            }
                                                         )
                                                     },
                                                 }
