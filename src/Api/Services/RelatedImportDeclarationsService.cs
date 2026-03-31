@@ -78,6 +78,13 @@ public class RelatedImportDeclarationsService(
         var identifiers = customsDeclarations.SelectMany(x => x.ImportPreNotificationIdentifiers);
         var notifications = await importPreNotificationRepository.GetAll(identifiers.ToArray(), cancellationToken);
 
+        notifications.AddRange(
+            await importPreNotificationRepository.GetAllByTags(
+                customsDeclarations.Select(x => x.Id.ToLower()).ToArray(),
+                cancellationToken
+            )
+        );
+
         var result = await IncludeIndirectLinks(
             new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[]>(
                 customsDeclarations.ToArray(),

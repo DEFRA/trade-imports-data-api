@@ -52,6 +52,19 @@ public class ImportPreNotificationRepository(IDbContext dbContext) : IImportPreN
         CancellationToken cancellationToken
     ) => await dbContext.ImportPreNotifications.Where(predicate).ToListWithFallbackAsync(cancellationToken);
 
+    public async Task<List<ImportPreNotificationEntity>> GetAllByTags(
+        string[] tags,
+        CancellationToken cancellationToken
+    )
+    {
+        if (tags.Length == 0)
+            return [];
+
+        return await dbContext
+            .ImportPreNotifications.Where(x => x.Tags.Any(tag => tags.Contains(tag)))
+            .ToListWithFallbackAsync(cancellationToken);
+    }
+
     public async Task<string?> GetCustomsDeclarationIdentifier(string id, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(id))

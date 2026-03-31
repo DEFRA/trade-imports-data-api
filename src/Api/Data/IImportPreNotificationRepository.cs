@@ -22,6 +22,8 @@ public interface IImportPreNotificationRepository
         CancellationToken cancellationToken
     );
 
+    Task<List<ImportPreNotificationEntity>> GetAllByTags(string[] tags, CancellationToken cancellationToken);
+
     Task<string?> GetCustomsDeclarationIdentifier(string id, CancellationToken cancellationToken);
 
     Task<ImportPreNotificationUpdates> GetUpdates(
