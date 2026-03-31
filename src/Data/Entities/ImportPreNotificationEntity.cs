@@ -1,4 +1,5 @@
 using Defra.TradeImportsDataApi.Data.Configuration;
+using Defra.TradeImportsDataApi.Data.Extensions;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
 
 namespace Defra.TradeImportsDataApi.Data.Entities;
@@ -23,11 +24,12 @@ public class ImportPreNotificationEntity : IDataEntity
     public void OnSave()
     {
         CustomsDeclarationIdentifier = new ChedIdReference(Id).GetIdentifier();
+        var validator = new MrnValidator();
         if (ImportPreNotification.ExternalReferences != null)
         {
             foreach (
                 var externalReference in ImportPreNotification.ExternalReferences.Where(x =>
-                    x.System == "NCTS" && !string.IsNullOrEmpty(x.Reference)
+                    x is { System: "NCTS", Reference: not null } && validator.IsValid(x.Reference)
                 )
             )
             {

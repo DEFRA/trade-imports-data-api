@@ -16,16 +16,19 @@ public class ImportPreNotificationEntityTests
             {
                 ExternalReferences =
                 [
-                    new ExternalReference() { Reference = "ABC123" },
-                    new ExternalReference() { Reference = "abc123" },
-                    new ExternalReference() { Reference = "CBA123" },
+                    new ExternalReference() { System = "NCTS", Reference = "ABC123" },
+                    new ExternalReference() { System = "NCTS", Reference = "abc123" },
+                    new ExternalReference() { System = "NCTS", Reference = "CBA123" },
+                    new ExternalReference() { System = "NCTS", Reference = "25GBEINIDEZXWQ2SA4" },
+                    new ExternalReference() { System = "NCTS", Reference = "25gbeinidezxwq2sa4" },
+                    new ExternalReference() { System = "OTHER", Reference = "25gbeinidezxwq2sa5" },
                 ],
             },
         };
 
         subject.OnSave();
 
-        subject.Tags.Should().BeEquivalentTo("abc123", "cba123");
+        subject.Tags.Should().BeEquivalentTo("25gbeinidezxwq2sa4");
     }
 
     [Fact]

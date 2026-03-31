@@ -52,13 +52,24 @@ public class PopulateImportPreNotificationTagsWithExternalReference()
                                                             "$and",
                                                             new BsonArray
                                                             {
+                                                                // reference != null
                                                                 new BsonDocument(
                                                                     "$ne",
                                                                     new BsonArray { "$$ref.reference", BsonNull.Value }
                                                                 ),
+                                                                // system == "NCTS"
                                                                 new BsonDocument(
                                                                     "$eq",
                                                                     new BsonArray { "$$ref.system", "NCTS" }
+                                                                ),
+                                                                // regex validation
+                                                                new BsonDocument(
+                                                                    "$regexMatch",
+                                                                    new BsonDocument
+                                                                    {
+                                                                        { "input", "$$ref.reference" },
+                                                                        { "regex", "^\\d{2}[A-Z]{2}[A-Z0-9]{14}$" },
+                                                                    }
                                                                 ),
                                                             }
                                                         )
