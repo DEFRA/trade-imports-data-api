@@ -42,7 +42,7 @@ jobs:
           push: false
           tags: trade-imports-data-api:latest
       - name: Check with Trivy
-        run: docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image trade-imports-data-api:latest --ignore-unfixed
+        run: docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy:0.69.3 image trade-imports-data-api:latest --ignore-unfixed
       - name: Pack NuGets
         if: github.actor != 'dependabot[bot]'
         env:
