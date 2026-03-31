@@ -76,11 +76,21 @@ public class PopulateImportPreNotificationTagsWithExternalReference()
             Builders<ImportPreNotificationEntity>.Filter.Empty,
             Builders<ImportPreNotificationEntity>.Update.Pipeline(updatePipeline)
         );
+
+        await CreateIndex(
+            collection,
+            "TagsIdx",
+            Builders<ImportPreNotificationEntity>.IndexKeys.Ascending(x => x.Tags),
+            cancellationToken: context.CancellationToken
+        );
     }
 
     public override Task DownAsync(MigrationContext context)
     {
         // No down migration needed as this is a data population task
-        return Task.CompletedTask;
+        var collection = context.Database.GetCollection<ImportPreNotificationEntity>(
+            typeof(ImportPreNotificationEntity).DataEntityName()
+        );
+        return collection.Indexes.DropOneAsync("TagsIdx", context.CancellationToken);
     }
 }
