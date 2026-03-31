@@ -18,8 +18,34 @@ public class ImportPreNotificationEntity : IDataEntity
 
     public required ImportPreNotification ImportPreNotification { get; set; }
 
+    public List<string> Tags { get; set; } = [];
+
     public void OnSave()
     {
         CustomsDeclarationIdentifier = new ChedIdReference(Id).GetIdentifier();
+        if (ImportPreNotification.ExternalReferences != null)
+        {
+            foreach (
+                var externalReference in ImportPreNotification.ExternalReferences.Where(x =>
+                    !string.IsNullOrEmpty(x.Reference)
+                )
+            )
+            {
+                AddTag(externalReference.Reference);
+            }
+        }
+    }
+
+    private void AddTag(string? value)
+    {
+        if (string.IsNullOrEmpty(value))
+            return;
+
+        var lower = value.ToLower();
+
+        if (!Tags.Contains(lower))
+        {
+            Tags.Add(lower);
+        }
     }
 }
