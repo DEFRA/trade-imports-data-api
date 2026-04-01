@@ -69,6 +69,7 @@ public class PopulateImportPreNotificationTagsWithExternalReference()
                                                                     {
                                                                         { "input", "$$ref.reference" },
                                                                         { "regex", "^\\d{2}[A-Z]{2}[A-Z0-9]{14}$" },
+                                                                        { "options", "i" },
                                                                     }
                                                                 ),
                                                             }

@@ -78,7 +78,7 @@ public class RelatedImportDeclarationsService(
         var identifiers = customsDeclarations.SelectMany(x => x.ImportPreNotificationIdentifiers);
         var notifications = await importPreNotificationRepository.GetAll(identifiers.ToArray(), cancellationToken);
 
-        //TODO: put this line behind a feature flag that needs to be opt-in to
+        //put this line behind a feature flag that needs to be opt-in to
         notifications.AddRange(
             await importPreNotificationRepository.GetAllByTags(
                 customsDeclarations.Select(x => x.Id.ToLower()).ToArray(),
