@@ -24,6 +24,8 @@ public class ImportPreNotificationEntity : IDataEntity
     public void OnSave()
     {
         CustomsDeclarationIdentifier = new ChedIdReference(Id).GetIdentifier();
+        // This will handle any deletes, and it clears the list and rebuilds it from the current state of the ImportPreNotification. This is because we want to be able to remove tags if the external references are removed.
+        Tags.Clear();
         var validator = new MrnValidator();
         if (ImportPreNotification.ExternalReferences != null)
         {
