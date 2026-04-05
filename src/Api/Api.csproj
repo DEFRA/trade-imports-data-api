@@ -17,7 +17,7 @@
   <ItemGroup>
     <PackageReference Include="Amazon.CloudWatch.EMF" Version="2.2.0" />
     <PackageReference Include="AspNetCore.HealthChecks.MongoDb" Version="9.0.0" />
-    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.3.28" />
+    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.3.31" />
     <PackageReference Include="AWSSDK.SimpleNotificationService" Version="4.0.2.22" />
     <!-- Ensure SecurityToken aligns with AWSSDK.Core 4.x to avoid NU1608 -->
     <PackageReference Include="AWSSDK.SecurityToken" Version="4.0.5.13" />
