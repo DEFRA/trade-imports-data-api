@@ -16,7 +16,7 @@
     <PackageReference Include="Humanizer" Version="3.0.10" />
     <!-- Ensure SecurityToken aligns with AWSSDK.Core 4.x to avoid NU1608 -->
     <PackageReference Include="AWSSDK.SecurityToken" Version="4.0.5.13" />
-    <PackageReference Include="AWSSDK.SQS" Version="4.0.2.20" />
+    <PackageReference Include="AWSSDK.SQS" Version="4.0.2.23" />
     <PackageReference Include="FluentValidation" Version="12.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.5" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
