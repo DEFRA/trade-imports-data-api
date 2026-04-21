@@ -79,12 +79,19 @@ public class RelatedImportDeclarationsService(
         var notifications = await importPreNotificationRepository.GetAll(identifiers.ToArray(), cancellationToken);
 
         //put this line behind a feature flag that needs to be opt-in to
-        notifications.AddRange(
-            await importPreNotificationRepository.GetAllByTags(
-                customsDeclarations.Select(x => x.Id.ToLower()).ToArray(),
-                cancellationToken
-            )
+        var notificationsWithTags = await importPreNotificationRepository.GetAllByTags(
+            customsDeclarations.Select(x => x.Id.ToLower()).ToArray(),
+            cancellationToken
         );
+
+        foreach (
+            var notification in notificationsWithTags.Where(notification =>
+                notifications.All(x => x.Id != notification.Id)
+            )
+        )
+        {
+            notifications.Add(notification);
+        }
 
         var result = await IncludeIndirectLinks(
             new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[]>(
