@@ -99,7 +99,7 @@ public class RelatedImportDeclarationsServiceTests
     [Fact]
     public async Task GivenSearchByMrn_WhenMrnExists_AndNotificationsExist_ThenShouldReturn()
     {
-        const string mrn = "mrn";
+        const string mrn = "24GBBGBKCDMS354001";
         var memoryDbContext = new MemoryDbContext();
 
         memoryDbContext.CustomsDeclarations.AddTestData(
@@ -136,7 +136,10 @@ public class RelatedImportDeclarationsServiceTests
             {
                 Id = "CHEDA.GB.2025.1234567",
                 CustomsDeclarationIdentifier = "1234567",
-                ImportPreNotification = new ImportPreNotification(),
+                ImportPreNotification = new ImportPreNotification()
+                {
+                    ExternalReferences = [new ExternalReference() { System = "NCTS", Reference = mrn }],
+                },
                 Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
                 Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
                 ETag = "etag",
