@@ -35,14 +35,19 @@ jobs:
         run: |
           docker compose logs
       - name: Check Dockerfile Builds
-        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83
+        uses: docker/build-push-action@bcafcacb16a39f128d818304e6c9c0c18556b85f
         with:
           context: .
           file: ./Dockerfile
           push: false
           tags: trade-imports-data-api:latest
       - name: Check with Trivy
-        run: docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image trade-imports-data-api:latest --ignore-unfixed
+        run: |
+          docker run -v /var/run/docker.sock:/var/run/docker.sock \
+            aquasec/trivy:0.69.3 image \
+            --ignore-unfixed \
+            --exit-code 1 \
+            trade-imports-data-api:latest
       - name: Pack NuGets
         if: github.actor != 'dependabot[bot]'
         env:
@@ -62,7 +67,7 @@ jobs:
       - name: Generate OpenAPI specification
         run: make generate-openapi-spec
       - name: Save OpenApi specification
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: openapi.json
           path: openapi.json
