@@ -8,6 +8,7 @@ public interface IRelatedImportDeclarationsService
     Task<(
         CustomsDeclarationEntity[] CustomsDeclarations,
         ImportPreNotificationEntity[] ImportPreNotifications,
-        GmrEntity[] Gmrs
+        GmrEntity[] Gmrs,
+        ImportPreNotificationEntity[] TransientNotifications
     )> Search(RelatedImportDeclarationsRequest request, CancellationToken cancellationToken);
 }
