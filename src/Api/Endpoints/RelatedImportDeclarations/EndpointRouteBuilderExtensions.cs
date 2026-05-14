@@ -55,7 +55,14 @@ public static class EndpointRouteBuilderExtensions
                     x.Updated
                 ))
                 .ToArray(),
-            searchResults.Gmrs.Select(x => new GmrResponse(x.Gmr, x.Created, x.Updated)).ToArray()
+            searchResults.Gmrs.Select(x => new GmrResponse(x.Gmr, x.Created, x.Updated)).ToArray(),
+            searchResults
+                .TransientNotifications.Select(x => new ImportPreNotificationResponse(
+                    x.ImportPreNotification,
+                    x.Created,
+                    x.Updated
+                ))
+                .ToArray()
         );
 
         return Results.Ok(response);

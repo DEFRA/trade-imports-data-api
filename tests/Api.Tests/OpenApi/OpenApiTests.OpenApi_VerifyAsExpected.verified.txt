@@ -5117,6 +5117,12 @@
             "items": {
               "$ref": "#/components/schemas/Defra.TradeImportsDataApi.GmrResponse"
             }
+          },
+          "transitImportPreNotifications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.ImportPreNotificationResponse"
+            }
           }
         },
         "additionalProperties": false
