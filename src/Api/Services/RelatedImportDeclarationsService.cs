@@ -16,7 +16,8 @@ public class RelatedImportDeclarationsService(
     public async Task<(
         CustomsDeclarationEntity[] CustomsDeclarations,
         ImportPreNotificationEntity[] ImportPreNotifications,
-        GmrEntity[] Gmrs
+        GmrEntity[] Gmrs,
+        ImportPreNotificationEntity[] TransientNotifications
     )> Search(RelatedImportDeclarationsRequest request, CancellationToken cancellationToken)
     {
         var maxDepth = 3;
@@ -54,14 +55,20 @@ public class RelatedImportDeclarationsService(
             return await StartFromGmrVrnOrTrn(x => x.Tags.Contains(search), cancellationToken);
         }
 
-        return new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>([], [], []);
+        return new ValueTuple<
+            CustomsDeclarationEntity[],
+            ImportPreNotificationEntity[],
+            GmrEntity[],
+            ImportPreNotificationEntity[]
+        >([], [], [], []);
     }
 
     [ExcludeFromCodeCoverage]
     private async Task<(
         CustomsDeclarationEntity[] CustomsDeclarations,
         ImportPreNotificationEntity[] ImportPreNotifications,
-        GmrEntity[] Gmrs
+        GmrEntity[] Gmrs,
+        ImportPreNotificationEntity[] TransientNotifications
     )> StartFromCustomsDeclaration(
         Expression<Func<CustomsDeclarationEntity, bool>> predicate,
         int maxDepth,
@@ -72,26 +79,26 @@ public class RelatedImportDeclarationsService(
 
         if (customsDeclarations is null || !customsDeclarations.Any())
         {
-            return new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>([], [], []);
+            return new ValueTuple<
+                CustomsDeclarationEntity[],
+                ImportPreNotificationEntity[],
+                GmrEntity[],
+                ImportPreNotificationEntity[]
+            >([], [], [], []);
         }
 
         var identifiers = customsDeclarations.SelectMany(x => x.ImportPreNotificationIdentifiers);
         var notifications = await importPreNotificationRepository.GetAll(identifiers.ToArray(), cancellationToken);
 
         //put this line behind a feature flag that needs to be opt-in to
-        var notificationsWithTags = await importPreNotificationRepository.GetAllByTags(
+        var transientNotifications = await importPreNotificationRepository.GetAllByTags(
             customsDeclarations.Select(x => x.Id.ToLower()).ToArray(),
             cancellationToken
         );
 
-        foreach (
-            var notification in notificationsWithTags.Where(notification =>
-                notifications.All(x => x.Id != notification.Id)
-            )
-        )
-        {
-            notifications.Add(notification);
-        }
+        transientNotifications = transientNotifications
+            .Where(notification => notifications.All(x => x.Id != notification.Id))
+            .ToList();
 
         var result = await IncludeIndirectLinks(
             new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[]>(
@@ -106,17 +113,19 @@ public class RelatedImportDeclarationsService(
         var allRelatedCustomsDeclarationIdentifiers = result.CustomsDeclarations.Select(x => x.Id);
         var gmrs = await gmrRepository.GetAll(allRelatedCustomsDeclarationIdentifiers.ToArray(), cancellationToken);
 
-        return new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>(
-            result.CustomsDeclarations,
-            result.ImportPreNotifications,
-            gmrs.ToArray()
-        );
+        return new ValueTuple<
+            CustomsDeclarationEntity[],
+            ImportPreNotificationEntity[],
+            GmrEntity[],
+            ImportPreNotificationEntity[]
+        >(result.CustomsDeclarations, result.ImportPreNotifications, gmrs.ToArray(), transientNotifications.ToArray());
     }
 
     private async Task<(
         CustomsDeclarationEntity[] CustomsDeclarations,
         ImportPreNotificationEntity[] ImportPreNotifications,
-        GmrEntity[] Gmrs
+        GmrEntity[] Gmrs,
+        ImportPreNotificationEntity[] TransientNotifications
     )> StartFromImportPreNotification(string chedId, int maxDepth, CancellationToken cancellationToken)
     {
         var identifier = ChedReferenceRegexes.DocumentReferenceIdentifier().Match(chedId).Value;
@@ -127,7 +136,12 @@ public class RelatedImportDeclarationsService(
         );
         if (notification == null)
         {
-            return new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>([], [], []);
+            return new ValueTuple<
+                CustomsDeclarationEntity[],
+                ImportPreNotificationEntity[],
+                GmrEntity[],
+                ImportPreNotificationEntity[]
+            >([], [], [], []);
         }
 
         var customsDeclarations = await customsDeclarationRepository.GetAll(
@@ -148,23 +162,30 @@ public class RelatedImportDeclarationsService(
         var allRelatedCustomsDeclarationIdentifiers = result.CustomsDeclarations.Select(x => x.Id);
         var gmrs = await gmrRepository.GetAll(allRelatedCustomsDeclarationIdentifiers.ToArray(), cancellationToken);
 
-        return new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>(
-            result.CustomsDeclarations,
-            result.ImportPreNotifications,
-            gmrs.ToArray()
-        );
+        return new ValueTuple<
+            CustomsDeclarationEntity[],
+            ImportPreNotificationEntity[],
+            GmrEntity[],
+            ImportPreNotificationEntity[]
+        >(result.CustomsDeclarations, result.ImportPreNotifications, gmrs.ToArray(), []);
     }
 
     private async Task<(
         CustomsDeclarationEntity[] CustomsDeclarations,
         ImportPreNotificationEntity[] ImportPreNotifications,
-        GmrEntity[] Gmrs
+        GmrEntity[] Gmrs,
+        ImportPreNotificationEntity[] TransientNotifications
     )> StartFromGmrId(Expression<Func<GmrEntity, bool>> predicate, CancellationToken cancellationToken)
     {
         var gmr = await gmrRepository.Get(predicate, cancellationToken);
         if (gmr == null)
         {
-            return new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>([], [], []);
+            return new ValueTuple<
+                CustomsDeclarationEntity[],
+                ImportPreNotificationEntity[],
+                GmrEntity[],
+                ImportPreNotificationEntity[]
+            >([], [], [], []);
         }
 
         var customsDeclarations = await customsDeclarationRepository.GetAll(
@@ -172,23 +193,30 @@ public class RelatedImportDeclarationsService(
             cancellationToken
         );
 
-        return new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>(
-            [.. customsDeclarations],
-            [],
-            [gmr]
-        );
+        return new ValueTuple<
+            CustomsDeclarationEntity[],
+            ImportPreNotificationEntity[],
+            GmrEntity[],
+            ImportPreNotificationEntity[]
+        >([.. customsDeclarations], [], [gmr], []);
     }
 
     private async Task<(
         CustomsDeclarationEntity[] CustomsDeclarations,
         ImportPreNotificationEntity[] ImportPreNotifications,
-        GmrEntity[] Gmrs
+        GmrEntity[] Gmrs,
+        ImportPreNotificationEntity[] TransientNotifications
     )> StartFromGmrVrnOrTrn(Expression<Func<GmrEntity, bool>> predicate, CancellationToken cancellationToken)
     {
         var gmrs = await gmrRepository.GetAll(predicate, cancellationToken);
         if (!gmrs.Any())
         {
-            return new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>([], [], []);
+            return new ValueTuple<
+                CustomsDeclarationEntity[],
+                ImportPreNotificationEntity[],
+                GmrEntity[],
+                ImportPreNotificationEntity[]
+            >([], [], [], []);
         }
 
         var customsDeclarationIdentifiers = gmrs.SelectMany(x => x.CustomsDeclarationIdentifiers).ToList();
@@ -198,11 +226,12 @@ public class RelatedImportDeclarationsService(
             cancellationToken
         );
 
-        return new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>(
-            [.. customsDeclarations],
-            [],
-            [.. gmrs]
-        );
+        return new ValueTuple<
+            CustomsDeclarationEntity[],
+            ImportPreNotificationEntity[],
+            GmrEntity[],
+            ImportPreNotificationEntity[]
+        >([.. customsDeclarations], [], [.. gmrs], []);
     }
 
     private async Task<(

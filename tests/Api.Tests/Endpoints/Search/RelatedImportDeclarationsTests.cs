@@ -52,7 +52,12 @@ public class RelatedImportDeclarationsTests : EndpointTestBase, IClassFixture<Wi
         MockSearchService
             .Search(Arg.Any<RelatedImportDeclarationsRequest>(), Arg.Any<CancellationToken>())
             .Returns(
-                new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], GmrEntity[]>(
+                new ValueTuple<
+                    CustomsDeclarationEntity[],
+                    ImportPreNotificationEntity[],
+                    GmrEntity[],
+                    ImportPreNotificationEntity[]
+                >(
                     [
                         new CustomsDeclarationEntity
                         {
@@ -83,7 +88,8 @@ public class RelatedImportDeclarationsTests : EndpointTestBase, IClassFixture<Wi
                             Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
                             ETag = "etag",
                         },
-                    ]
+                    ],
+                    []
                 )
             );
 
