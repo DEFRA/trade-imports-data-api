@@ -35,7 +35,7 @@ jobs:
           docker compose up -d
           dotnet test --filter "Category=IntegrationTest"
       - name: Build and Publish
-        uses: DEFRA/cdp-build-action/build@5f3ba75f66a3ef96855322c137727ff996cc2995
+        uses: DEFRA/cdp-build-action/build@e80c1390009f7f551f0cd62b4e4c64592208b40c
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Pack NuGets
