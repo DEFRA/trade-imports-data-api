@@ -4,7 +4,11 @@ namespace Defra.TradeImportsDataApi.Domain;
 
 internal static class ChedAndClearanceRequestHelper
 {
-    private static readonly Regex IdentifierRegex = new(@"(\d+)([RV])?$", RegexOptions.Compiled);
+    private static readonly Regex IdentifierRegex = new(
+        @"(\d+)([RV])?$",
+        RegexOptions.Compiled,
+        TimeSpan.FromSeconds(5)
+    );
 
     public static string GetIdentifier(string value)
     {
