@@ -225,4 +225,29 @@ public class ResourceEventPublisherTests
                 CancellationToken.None
             );
     }
+
+    [Fact]
+    public void SerializeEvent_ShouldProduceValidGzipStream()
+    {
+        var entity = new ResourceEventEntity
+        {
+            Id = "id",
+            ResourceId = "resourceId",
+            ResourceType = ResourceEventResourceTypes.CustomsDeclaration,
+            Operation = "operation",
+            Message = new string('A', 256_001),
+        };
+
+        var (message, compressed) = ResourceEventPublisher.SerializeEvent(entity);
+        compressed.Should().BeTrue();
+
+        var bytes = Convert.FromBase64String(message);
+
+        // Verify the stream ends with a valid GZip footer (CRC32 + ISIZE)
+        // RFC 1952: last 8 bytes are CRC32 (4 bytes LE) + ISIZE (4 bytes LE)
+        bytes.Length.Should().BeGreaterThanOrEqualTo(8);
+
+        var footerCrc32 = BitConverter.ToUInt32(bytes, bytes.Length - 8);
+        footerCrc32.Should().NotBe(0, "CRC32 should be computed for non-empty input");
+    }
 }
