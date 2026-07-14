@@ -58,7 +58,6 @@ public class GetTests : WireMockTestBase<WireMockContext>
                                 created,
                                 updated
                             )
-                           
                         )
                     )
                     .WithStatusCode(StatusCodes.Status200OK)
