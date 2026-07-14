@@ -11,9 +11,6 @@ on:
       - synchronize
       - ready_for_review
 
-permissions:
-  contents: read
-
 jobs:
   pr-validator:
     name: Run Pull Request Checks
@@ -22,6 +19,7 @@ jobs:
       pull-requests: write
       id-token: write      
       packages: write
+      contents: read
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
@@ -90,6 +88,7 @@ jobs:
       pull-requests: write
       id-token: write      
       packages: read
+      contents: read
     uses: ./.github/workflows/sonarcloud.yml
     needs: pr-validator
     secrets: inherit
