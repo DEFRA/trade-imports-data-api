@@ -40,11 +40,6 @@ COPY tests/Data.Tests/Data.Tests.csproj tests/Data.Tests/Data.Tests.csproj
 COPY Defra.TradeImportsDataApi.sln Defra.TradeImportsDataApi.sln
 COPY Directory.Build.props Directory.Build.props
 
-COPY NuGet.config NuGet.config
-ARG DEFRA_NUGET_PAT
-
-RUN dotnet restore
-
 COPY src/Api src/Api
 COPY src/Api.Client src/Api.Client
 COPY src/Domain src/Domain
@@ -56,6 +51,11 @@ COPY tests/Api.IntegrationTests tests/Api.IntegrationTests
 COPY tests/Data.Tests tests/Data.Tests
 
 RUN dotnet csharpier check .
+
+COPY NuGet.config NuGet.config
+ARG DEFRA_NUGET_PAT
+
+RUN dotnet restore
 
 RUN dotnet build src/Api/Api.csproj --no-restore -c Release
 
