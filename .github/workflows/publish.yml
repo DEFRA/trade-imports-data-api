@@ -27,6 +27,10 @@ jobs:
         with:
           dotnet-version: |
             10.0
+      - name: Update NuGet.config
+        run: |
+          dotnet nuget remove source defra
+          dotnet nuget add source --username USERNAME --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name defra "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --configfile NuGet.config
       - name: Run unit tests
         run: |
           dotnet test --filter "Category!=IntegrationTest"
