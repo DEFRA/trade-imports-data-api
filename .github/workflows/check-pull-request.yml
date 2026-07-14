@@ -86,6 +86,10 @@ jobs:
           path: openapi.json
   sonarcloud-scan:
     name: CDP SonarCloud Scan
+    permissions:
+      pull-requests: write
+      id-token: write      
+      packages: read
     uses: ./.github/workflows/sonarcloud.yml
     needs: pr-validator
     secrets: inherit
