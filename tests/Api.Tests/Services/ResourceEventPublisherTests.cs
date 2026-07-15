@@ -48,7 +48,7 @@ public class ResourceEventPublisherTests
             .Received()
             .PublishAsync(
                 Arg.Is<PublishRequest>(x =>
-                    x.TopicArn == "arn:topic-name"
+                    x!.TopicArn == "arn:topic-name"
                     && x.MessageAttributes.ContainsKey("ResourceType")
                     && x.MessageAttributes["ResourceType"].StringValue == ResourceEventResourceTypes.CustomsDeclaration
                     && x.MessageAttributes.ContainsKey("ResourceId")
@@ -128,7 +128,7 @@ public class ResourceEventPublisherTests
             .Received()
             .PublishAsync(
                 Arg.Is<PublishRequest>(x =>
-                    x.MessageAttributes["Content-Encoding"].StringValue == "gzip, base64"
+                    x!.MessageAttributes["Content-Encoding"].StringValue == "gzip, base64"
                     && DecompressTo(x.Message) == largeMessage
                 ),
                 CancellationToken.None
@@ -181,7 +181,7 @@ public class ResourceEventPublisherTests
             .Received()
             .PublishAsync(
                 Arg.Is<PublishRequest>(x =>
-                    x.MessageAttributes.ContainsKey("trace-id")
+                    x!.MessageAttributes.ContainsKey("trace-id")
                     && x.MessageAttributes["trace-id"].StringValue == "trace-id-value"
                 ),
                 CancellationToken.None
@@ -219,7 +219,7 @@ public class ResourceEventPublisherTests
             .Received()
             .PublishAsync(
                 Arg.Is<PublishRequest>(x =>
-                    x.MessageAttributes.ContainsKey("SubResourceType")
+                    x!.MessageAttributes.ContainsKey("SubResourceType")
                     && x.MessageAttributes["SubResourceType"].StringValue == "subResourceType"
                 ),
                 CancellationToken.None

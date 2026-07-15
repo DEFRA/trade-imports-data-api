@@ -135,7 +135,7 @@ public class GmrServiceTests
             .Received()
             .TrackImportPreNotificationUpdate(
                 entity,
-                Arg.Is<string[]>(x => x.SequenceEqual(importPreNotificationIdentifiers)),
+                Arg.Is<string[]>(x => x!.SequenceEqual(importPreNotificationIdentifiers)),
                 CancellationToken.None
             );
         await DbContext.Received().SaveChanges(CancellationToken.None);
