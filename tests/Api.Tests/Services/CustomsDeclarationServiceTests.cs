@@ -80,7 +80,7 @@ public class CustomsDeclarationServiceTests
                 return new ResourceEventEntity
                 {
                     Id = resourceEventEntityId,
-                    ResourceId = resourceEvent.ResourceId,
+                    ResourceId = resourceEvent!.ResourceId,
                     ResourceType = resourceEvent.ResourceType,
                     SubResourceType = resourceEvent.SubResourceType,
                     Operation = resourceEvent.Operation,
@@ -99,19 +99,19 @@ public class CustomsDeclarationServiceTests
             .Received()
             .TrackImportPreNotificationUpdate(
                 entity,
-                Arg.Is<string[]>(x => x.SequenceEqual(entity.ImportPreNotificationIdentifiers)),
+                Arg.Is<string[]>(x => x!.SequenceEqual(entity.ImportPreNotificationIdentifiers)),
                 CancellationToken.None
             );
         ResourceEventRepository
             .Received()
             .Insert(
                 Arg.Is<ResourceEvent<CustomsDeclarationEvent>>(x =>
-                    x.Operation == "Created" && x.ChangeSet.Count == 0 && x.SubResourceType != null
+                    x!.Operation == "Created" && x.ChangeSet.Count == 0 && x.SubResourceType != null
                 )
             );
         await ResourceEventService
             .Received()
-            .Publish(Arg.Is<ResourceEventEntity>(x => x.Id == resourceEventEntityId), CancellationToken.None);
+            .Publish(Arg.Is<ResourceEventEntity>(x => x!.Id == resourceEventEntityId), CancellationToken.None);
     }
 
     [Fact]
@@ -140,7 +140,7 @@ public class CustomsDeclarationServiceTests
                 return new ResourceEventEntity
                 {
                     Id = resourceEventEntityId,
-                    ResourceId = resourceEvent.ResourceId,
+                    ResourceId = resourceEvent!.ResourceId,
                     ResourceType = resourceEvent.ResourceType,
                     SubResourceType = resourceEvent.SubResourceType,
                     Operation = resourceEvent.Operation,
@@ -159,12 +159,12 @@ public class CustomsDeclarationServiceTests
             .Received()
             .Insert(
                 Arg.Is<ResourceEvent<CustomsDeclarationEvent>>(x =>
-                    x.Operation == "Updated" && x.ChangeSet.Count > 0 && x.SubResourceType != null
+                    x!.Operation == "Updated" && x.ChangeSet.Count > 0 && x.SubResourceType != null
                 )
             );
         await ResourceEventService
             .Received()
-            .Publish(Arg.Is<ResourceEventEntity>(x => x.Id == resourceEventEntityId), CancellationToken.None);
+            .Publish(Arg.Is<ResourceEventEntity>(x => x!.Id == resourceEventEntityId), CancellationToken.None);
     }
 
     [Fact]
