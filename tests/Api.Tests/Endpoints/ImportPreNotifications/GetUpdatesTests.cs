@@ -137,7 +137,7 @@ public class GetUpdatesTests : EndpointTestBase, IClassFixture<WireMockContext>
         MockImportPreNotificationService
             .GetImportPreNotificationUpdates(
                 Arg.Is<ImportPreNotificationUpdateQuery>(query =>
-                    query.PointOfEntry == null
+                    query!.PointOfEntry == null
                     && query.Type == null
                     && query.Status == null
                     && query.ExcludeStatus == null
@@ -172,7 +172,7 @@ public class GetUpdatesTests : EndpointTestBase, IClassFixture<WireMockContext>
             .Received(1)
             .GetImportPreNotificationUpdates(
                 Arg.Is<ImportPreNotificationUpdateQuery>(query =>
-                    query.PointOfEntry == null
+                    query!.PointOfEntry == null
                     && query.Type == null
                     && query.Status == null
                     && query.ExcludeStatus == null
@@ -196,7 +196,7 @@ public class GetUpdatesTests : EndpointTestBase, IClassFixture<WireMockContext>
         MockImportPreNotificationService
             .GetImportPreNotificationUpdates(
                 Arg.Is<ImportPreNotificationUpdateQuery>(query =>
-                    query.From == from
+                    query!.From == from
                     && query.To == to
                     && query.PointOfEntry != null
                     && query.PointOfEntry.SequenceEqual(pointOfEntry)
