@@ -5,9 +5,12 @@ using Defra.TradeImportsDataApi.Domain.Events;
 
 namespace Defra.TradeImportsDataApi.Api.Services;
 
-public class TracesChedService(IDbContext dbContext, ITracesChedRepository tracesChedRepository,
-IResourceEventRepository resourceEventRepository,
-    IResourceEventService resourceEventService) : ITracesChedService
+public class TracesChedService(
+    IDbContext dbContext,
+    ITracesChedRepository tracesChedRepository,
+    IResourceEventRepository resourceEventRepository,
+    IResourceEventService resourceEventService
+) : ITracesChedService
 {
     public async Task<TracesChedEntity?> Get(string chedId, CancellationToken cancellationToken) =>
         await tracesChedRepository.Get(chedId, cancellationToken);

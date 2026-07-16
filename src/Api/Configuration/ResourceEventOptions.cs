@@ -1,5 +1,5 @@
-using Defra.TradeImportsDataApi.Domain.Events;
 using System.ComponentModel.DataAnnotations;
+using Defra.TradeImportsDataApi.Domain.Events;
 
 namespace Defra.TradeImportsDataApi.Api.Configuration;
 

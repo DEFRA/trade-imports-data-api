@@ -155,10 +155,7 @@ public static class DataEntityExtensions
         };
     }
 
-    public static ResourceEvent<TracesChedEvent> ToResourceEvent(
-        this TracesChedEntity entity,
-        string operation
-    )
+    public static ResourceEvent<TracesChedEvent> ToResourceEvent(this TracesChedEntity entity, string operation)
     {
         if (operation is not ResourceEventOperations.Updated and not ResourceEventOperations.Created)
             throw new ArgumentException("Operation must be either Updated or Created", nameof(operation));
