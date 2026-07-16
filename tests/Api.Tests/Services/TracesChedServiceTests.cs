@@ -13,14 +13,19 @@ public class TracesChedServiceTests
 {
     private IDbContext DbContext { get; }
     private ITracesChedRepository TracesChedRepository { get; }
+    private IResourceEventRepository ResourceEventRepository { get; }
+    private IResourceEventService ResourceEventService { get; }
     private TracesChedService Subject { get; }
 
     public TracesChedServiceTests()
     {
         DbContext = Substitute.For<IDbContext>();
         TracesChedRepository = Substitute.For<ITracesChedRepository>();
+        ResourceEventRepository = Substitute.For<IResourceEventRepository>();
+        ResourceEventService = Substitute.For<IResourceEventService>();
 
-        Subject = new TracesChedService(DbContext, TracesChedRepository);
+        Subject = new TracesChedService(DbContext, TracesChedRepository, ResourceEventRepository,
+            ResourceEventService);
     }
 
     [Fact]

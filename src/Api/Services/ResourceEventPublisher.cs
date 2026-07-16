@@ -70,7 +70,7 @@ public class ResourceEventPublisher(
 
         var request = new PublishRequest
         {
-            TopicArn = resourceEventOptions.Value.TopicArn,
+            TopicArn = resourceEventOptions.Value.GetTopicArn(entity.ResourceType),
             MessageAttributes = messageAttributes,
             Message = message,
         };

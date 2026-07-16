@@ -155,6 +155,35 @@ public static class DataEntityExtensions
         };
     }
 
+    public static ResourceEvent<TracesChedEvent> ToResourceEvent(
+        this TracesChedEntity entity,
+        string operation
+    )
+    {
+        if (operation is not ResourceEventOperations.Updated and not ResourceEventOperations.Created)
+            throw new ArgumentException("Operation must be either Updated or Created", nameof(operation));
+
+        var entityEvent = new TracesChedEvent()
+        {
+            Id = entity.Id,
+            Ched = entity.Ched,
+            Created = entity.Created,
+            Etag = entity.ETag,
+            Updated = entity.Updated,
+        };
+
+        return new ResourceEvent<TracesChedEvent>
+        {
+            ResourceId = entity.Id,
+            ResourceType = ResourceTypeName<TracesChedEntity>(),
+            Operation = operation,
+            Etag = entity.ETag,
+            Resource = entityEvent,
+            ChangeSet = [],
+            SubResourceType = null,
+        };
+    }
+
     private static string ResourceTypeName<TDataEntity>()
         where TDataEntity : IDataEntity
     {
@@ -165,6 +194,7 @@ public static class DataEntityExtensions
             ResourceEventResourceTypes.ImportPreNotification => ResourceEventResourceTypes.ImportPreNotification,
             ResourceEventResourceTypes.CustomsDeclaration => ResourceEventResourceTypes.CustomsDeclaration,
             ResourceEventResourceTypes.ProcessingError => ResourceEventResourceTypes.ProcessingError,
+            ResourceEventResourceTypes.TracesChed => ResourceEventResourceTypes.TracesChed,
             _ => name,
         };
     }

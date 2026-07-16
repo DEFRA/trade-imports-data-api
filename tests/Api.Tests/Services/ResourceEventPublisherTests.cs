@@ -27,7 +27,7 @@ public class ResourceEventPublisherTests
             new OptionsWrapper<TraceHeader>(new TraceHeader { Name = "trace-id" }),
             new HeaderPropagationValues(),
             new OptionsWrapper<ResourceEventOptions>(
-                new ResourceEventOptions { ArnPrefix = "arn", TopicName = "topic-name" }
+                new ResourceEventOptions { ArnPrefix = "arn", TopicName = "topic-name", TracesChedTopicName = "traces-topic-name" }
             ),
             NullLogger<ResourceEventPublisher>.Instance
         );
@@ -68,7 +68,7 @@ public class ResourceEventPublisherTests
             new OptionsWrapper<TraceHeader>(new TraceHeader { Name = "trace-id" }),
             new HeaderPropagationValues(),
             new OptionsWrapper<ResourceEventOptions>(
-                new ResourceEventOptions { ArnPrefix = "arn", TopicName = "topic-name" }
+                new ResourceEventOptions { ArnPrefix = "arn", TopicName = "topic-name", TracesChedTopicName = "traces-topic-name" }
             ),
             NullLogger<ResourceEventPublisher>.Instance
         );
@@ -98,7 +98,7 @@ public class ResourceEventPublisherTests
             new OptionsWrapper<TraceHeader>(new TraceHeader { Name = "trace-id" }),
             new HeaderPropagationValues(),
             new OptionsWrapper<ResourceEventOptions>(
-                new ResourceEventOptions { ArnPrefix = "arn", TopicName = "topic-name" }
+                new ResourceEventOptions { ArnPrefix = "arn", TopicName = "topic-name", TracesChedTopicName = "traces-topic-name" }
             ),
             NullLogger<ResourceEventPublisher>.Instance
         );
@@ -158,7 +158,7 @@ public class ResourceEventPublisherTests
             new OptionsWrapper<TraceHeader>(new TraceHeader { Name = "trace-id" }),
             headerPropagationValues,
             new OptionsWrapper<ResourceEventOptions>(
-                new ResourceEventOptions { ArnPrefix = "arn", TopicName = "topic-name" }
+                new ResourceEventOptions { ArnPrefix = "arn", TopicName = "topic-name", TracesChedTopicName = "traces-topic-name" }
             ),
             NullLogger<ResourceEventPublisher>.Instance
         );
@@ -197,7 +197,7 @@ public class ResourceEventPublisherTests
             new OptionsWrapper<TraceHeader>(new TraceHeader { Name = "trace-id" }),
             new HeaderPropagationValues(),
             new OptionsWrapper<ResourceEventOptions>(
-                new ResourceEventOptions { ArnPrefix = "arn", TopicName = "topic-name" }
+                new ResourceEventOptions { ArnPrefix = "arn", TopicName = "topic-name", TracesChedTopicName = "traces-topic-name" }
             ),
             NullLogger<ResourceEventPublisher>.Instance
         );
