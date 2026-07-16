@@ -13,7 +13,7 @@
     <!-- Ensure SecurityToken aligns with AWSSDK.Core 4.x to avoid NU1608 -->
     <PackageReference Include="AWSSDK.SecurityToken" Version="4.0.100.2" />
     <PackageReference Include="Snappier" Version="1.3.1" />
-    <PackageReference Include="SharpCompress" Version="0.49.1" />
+    <PackageReference Include="SharpCompress" Version="0.50.0" />
     <PackageReference Include="FluentValidation" Version="12.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.10" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.8.1" />
