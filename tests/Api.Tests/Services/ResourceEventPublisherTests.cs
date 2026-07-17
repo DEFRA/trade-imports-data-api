@@ -190,7 +190,7 @@ public class ResourceEventPublisherTests
             {
                 Id = "id",
                 ResourceId = "resourceId",
-                ResourceType = ResourceEventResourceTypes.ProcessingError,
+                ResourceType = ResourceEventResourceTypes.TracesChed,
                 Operation = "operation",
                 Message = "message",
             },
