@@ -30,7 +30,7 @@ public class TracesChedRepository(IDbContext dbContext) : ITracesChedRepository
         var existing = await dbContext.TracesCheds.Find(entity.Id, cancellationToken);
         if (existing == null)
         {
-            throw new EntityNotFoundException(nameof(ImportPreNotificationEntity), entity.Id);
+            throw new EntityNotFoundException(nameof(TracesChedEntity), entity.Id);
         }
 
         entity.Created = existing.Created;
