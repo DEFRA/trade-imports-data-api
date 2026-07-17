@@ -33,6 +33,15 @@ public static class Endpoints
         public static string GetUpdates(EndpointQuery? query = null) => $"/import-pre-notification-updates{query}";
     }
 
+    public static class TracesCheds
+    {
+        private const string Root = "/traces-cheds";
+
+        public static string Get(string chedId) => $"{Root}/{chedId}";
+
+        public static string Put(string chedId) => $"{Root}/{chedId}";
+    }
+
     public static class CustomsDeclarations
     {
         private const string Root = "/customs-declarations";

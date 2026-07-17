@@ -15,6 +15,13 @@ jobs:
   pr-validator:
     name: Run Pull Request Checks
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      id-token: write      
+      packages: write
+      contents: read
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Check out code
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 #v7.0.0
@@ -23,6 +30,10 @@ jobs:
         with:
           dotnet-version: |
             10.0
+      - name: Update NuGet.config
+        run: |
+          dotnet nuget remove source defra
+          dotnet nuget add source --username USERNAME --password ${{ env.GITHUB_TOKEN }} --store-password-in-clear-text --name defra "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --configfile NuGet.config
       - name: Run unit tests
         run: |
           dotnet test --filter "Category!=IntegrationTest"
@@ -62,7 +73,7 @@ jobs:
         run: |
           dotnet nuget push ./nupkg/*.nupkg \
             --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
-            --api-key ${{ secrets.GITHUB_TOKEN }} \
+            --api-key ${{ env.GITHUB_TOKEN }} \
             --skip-duplicate
       - name: Generate OpenAPI specification
         run: make generate-openapi-spec
@@ -73,6 +84,11 @@ jobs:
           path: openapi.json
   sonarcloud-scan:
     name: CDP SonarCloud Scan
+    permissions:
+      pull-requests: write
+      id-token: write      
+      packages: read
+      contents: read
     uses: ./.github/workflows/sonarcloud.yml
     needs: pr-validator
     secrets: inherit

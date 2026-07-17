@@ -6,6 +6,7 @@ using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 using Defra.TradeImportsDataApi.Domain.Errors;
 using Defra.TradeImportsDataApi.Domain.Gvms;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
+using Trade.Gateway.Api.Contract.Certificate;
 
 namespace Defra.TradeImportsDataApi.Api.Client;
 
@@ -53,6 +54,22 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
         return await Deserialize<GmrsResponse>(response, cancellationToken);
     }
 
+    public async Task<TracesChedResponse?> GetTracesChed(string chedId, CancellationToken cancellationToken)
+    {
+        var response = await Get(Endpoints.TracesCheds(chedId), cancellationToken);
+        if (response.StatusCode == HttpStatusCode.NotFound)
+            return null;
+
+        response.EnsureSuccessStatusCode();
+
+        var result = await Deserialize<TracesChedResponse>(response, cancellationToken);
+
+        return result with
+        {
+            ETag = response.Headers.ETag?.Tag,
+        };
+    }
+
     public async Task PutImportPreNotification(
         string chedId,
         ImportPreNotification data,
@@ -85,6 +102,19 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
     public async Task PutGmr(string gmrId, Gmr data, string? etag, CancellationToken cancellationToken)
     {
         var requestUri = Endpoints.Gmrs(gmrId);
+        var response = await Put(data, etag, requestUri, cancellationToken);
+
+        response.EnsureSuccessStatusCode();
+    }
+
+    public async Task PutTracesChed(
+        string chedId,
+        DefraUNVTDCHEDProfile data,
+        string? etag,
+        CancellationToken cancellationToken
+    )
+    {
+        var requestUri = Endpoints.TracesCheds(chedId);
         var response = await Put(data, etag, requestUri, cancellationToken);
 
         response.EnsureSuccessStatusCode();

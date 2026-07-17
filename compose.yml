@@ -27,6 +27,8 @@ services:
 
   data-api:
     build:
+      args:
+        DEFRA_NUGET_PAT: ${DEFRA_NUGET_PAT}
       dockerfile: Dockerfile
     depends_on:
       mongodb:
