@@ -18,7 +18,7 @@ public class TracesChedsTests(ITestOutputHelper testOutputHelper) : SqsTestBase(
         };
         var chedRef = ImportPreNotificationIdGenerator.Generate();
         var client = CreateDataApiClient();
-        ////var httpClient = CreateHttpClient();
+        var httpClient = CreateHttpClient();
 
         var result = await client.GetTracesChed(chedRef, CancellationToken.None);
         result.Should().BeNull();
@@ -28,14 +28,14 @@ public class TracesChedsTests(ITestOutputHelper testOutputHelper) : SqsTestBase(
         result = await client.GetTracesChed(chedRef, CancellationToken.None);
         result.Should().NotBeNull();
 
-        ////var allResourceEvents = await httpClient.GetFromJsonAsyncSafe<object[]>(
-        ////    Testing.Endpoints.ResourceEvents.GetAll(chedRef)
-        ////);
-        ////allResourceEvents.Length.Should().Be(1);
-        ////var unpublishedResourceEvents = await httpClient.GetFromJsonAsyncSafe<object[]>(
-        ////    Testing.Endpoints.ResourceEvents.Unpublished(chedRef)
-        ////);
-        ////unpublishedResourceEvents.Length.Should().Be(0);
+        var allResourceEvents = await httpClient.GetFromJsonAsyncSafe<object[]>(
+            Testing.Endpoints.ResourceEvents.GetAll(chedRef)
+        );
+        allResourceEvents.Length.Should().Be(1);
+        var unpublishedResourceEvents = await httpClient.GetFromJsonAsyncSafe<object[]>(
+            Testing.Endpoints.ResourceEvents.Unpublished(chedRef)
+        );
+        unpublishedResourceEvents.Length.Should().Be(0);
     }
 
     [Fact]
