@@ -166,7 +166,7 @@ public class TracesChedsTests(ITestOutputHelper testOutputHelper) : SqsTestBase(
             );
         }
 
-        var actualResult = await client.GetCustomsDeclarationsByChedId(chedRef, CancellationToken.None);
+        var actualResult = await client.GetCustomsDeclarationsByTracesChedId(chedRef, CancellationToken.None);
         actualResult.Should().NotBeNull();
         actualResult.CustomsDeclarations.Count.Should().Be(1);
     }
