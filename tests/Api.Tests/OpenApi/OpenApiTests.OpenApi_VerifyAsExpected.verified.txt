@@ -1148,6 +1148,60 @@
           }
         }
       }
+    },
+    "/traces-cheds/{chedId}/customs-declarations": {
+      "get": {
+        "tags": [
+          "TracesCheds"
+        ],
+        "summary": "Get CustomsDeclarations by CHED ID",
+        "description": "Get associated customs declarations by CHED ID",
+        "operationId": "GetCustomsDeclarationsByTracesChedId",
+        "parameters": [
+          {
+            "name": "chedId",
+            "in": "path",
+            "description": "CHED ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "CHEDA.GB.2024.1020304"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Defra.TradeImportsDataApi.CustomsDeclarationsResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {

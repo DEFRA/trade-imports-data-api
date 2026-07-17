@@ -1,5 +1,7 @@
 using Defra.TradeImportsDataApi.Data.Configuration;
+using Defra.TradeImportsDataApi.Data.Extensions;
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
+using Defra.TradeImportsDataApi.Domain.Ipaffs;
 
 namespace Defra.TradeImportsDataApi.Data.Entities;
 
@@ -57,5 +59,14 @@ public class CustomsDeclarationEntity : IDataEntity
             .Distinct();
 
         ImportPreNotificationIdentifiers.AddRange(references);
+
+        var fullChedIds = documents
+            .Where(x => x.HasValidDocumentReference())
+            .Where(x => x.DocumentReference?.Value != null && new ChedIdReference(x.DocumentReference.Value).IsValid())
+            .Select(x => x.DocumentReference?.Value)
+            .Where(x => !string.IsNullOrEmpty(x))
+            .Distinct();
+
+        ImportPreNotificationIdentifiers.AddRange(fullChedIds!);
     }
 }

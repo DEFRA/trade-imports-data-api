@@ -11,6 +11,11 @@ public interface ICustomsDeclarationService
         CancellationToken cancellationToken
     );
 
+    Task<List<CustomsDeclarationEntity>> GetCustomsDeclarationsByFullChedId(
+        string chedId,
+        CancellationToken cancellationToken
+    );
+
     Task<CustomsDeclarationEntity> Insert(CustomsDeclarationEntity entity, CancellationToken cancellationToken);
 
     Task<CustomsDeclarationEntity> Update(
