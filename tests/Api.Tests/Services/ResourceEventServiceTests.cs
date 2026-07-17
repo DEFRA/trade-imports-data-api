@@ -46,7 +46,7 @@ public class ResourceEventServiceTests
         await Subject.Publish(entity, CancellationToken.None);
 
         await ResourceEventPublisher.Received(1).Publish(entity, CancellationToken.None);
-        ResourceEventRepository.Received(1).UpdateProcessed(Arg.Is<ResourceEventEntity>(x => x.Id == "id"));
+        ResourceEventRepository.Received(1).UpdateProcessed(Arg.Is<ResourceEventEntity>(x => x!.Id == "id"));
         await DbContext.Received(1).SaveChanges(CancellationToken.None);
     }
 
@@ -66,7 +66,7 @@ public class ResourceEventServiceTests
         await Subject.PublishAllowException(entity, CancellationToken.None);
 
         await ResourceEventPublisher.Received(1).Publish(entity, CancellationToken.None);
-        ResourceEventRepository.Received(1).UpdateProcessed(Arg.Is<ResourceEventEntity>(x => x.Id == "id"));
+        ResourceEventRepository.Received(1).UpdateProcessed(Arg.Is<ResourceEventEntity>(x => x!.Id == "id"));
         await DbContext.Received(1).SaveChanges(CancellationToken.None);
     }
 

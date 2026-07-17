@@ -27,7 +27,12 @@ public class ResourceEventPublisherTests
             new OptionsWrapper<TraceHeader>(new TraceHeader { Name = "trace-id" }),
             new HeaderPropagationValues(),
             new OptionsWrapper<ResourceEventOptions>(
-                new ResourceEventOptions { ArnPrefix = "arn", TopicName = "topic-name" }
+                new ResourceEventOptions
+                {
+                    ArnPrefix = "arn",
+                    TopicName = "topic-name",
+                    TracesChedTopicName = "traces-topic-name",
+                }
             ),
             NullLogger<ResourceEventPublisher>.Instance
         );
@@ -48,7 +53,7 @@ public class ResourceEventPublisherTests
             .Received()
             .PublishAsync(
                 Arg.Is<PublishRequest>(x =>
-                    x.TopicArn == "arn:topic-name"
+                    x!.TopicArn == "arn:topic-name"
                     && x.MessageAttributes.ContainsKey("ResourceType")
                     && x.MessageAttributes["ResourceType"].StringValue == ResourceEventResourceTypes.CustomsDeclaration
                     && x.MessageAttributes.ContainsKey("ResourceId")
@@ -68,7 +73,12 @@ public class ResourceEventPublisherTests
             new OptionsWrapper<TraceHeader>(new TraceHeader { Name = "trace-id" }),
             new HeaderPropagationValues(),
             new OptionsWrapper<ResourceEventOptions>(
-                new ResourceEventOptions { ArnPrefix = "arn", TopicName = "topic-name" }
+                new ResourceEventOptions
+                {
+                    ArnPrefix = "arn",
+                    TopicName = "topic-name",
+                    TracesChedTopicName = "traces-topic-name",
+                }
             ),
             NullLogger<ResourceEventPublisher>.Instance
         );
@@ -98,7 +108,12 @@ public class ResourceEventPublisherTests
             new OptionsWrapper<TraceHeader>(new TraceHeader { Name = "trace-id" }),
             new HeaderPropagationValues(),
             new OptionsWrapper<ResourceEventOptions>(
-                new ResourceEventOptions { ArnPrefix = "arn", TopicName = "topic-name" }
+                new ResourceEventOptions
+                {
+                    ArnPrefix = "arn",
+                    TopicName = "topic-name",
+                    TracesChedTopicName = "traces-topic-name",
+                }
             ),
             NullLogger<ResourceEventPublisher>.Instance
         );
@@ -128,7 +143,7 @@ public class ResourceEventPublisherTests
             .Received()
             .PublishAsync(
                 Arg.Is<PublishRequest>(x =>
-                    x.MessageAttributes["Content-Encoding"].StringValue == "gzip, base64"
+                    x!.MessageAttributes["Content-Encoding"].StringValue == "gzip, base64"
                     && DecompressTo(x.Message) == largeMessage
                 ),
                 CancellationToken.None
@@ -158,7 +173,12 @@ public class ResourceEventPublisherTests
             new OptionsWrapper<TraceHeader>(new TraceHeader { Name = "trace-id" }),
             headerPropagationValues,
             new OptionsWrapper<ResourceEventOptions>(
-                new ResourceEventOptions { ArnPrefix = "arn", TopicName = "topic-name" }
+                new ResourceEventOptions
+                {
+                    ArnPrefix = "arn",
+                    TopicName = "topic-name",
+                    TracesChedTopicName = "traces-topic-name",
+                }
             ),
             NullLogger<ResourceEventPublisher>.Instance
         );
@@ -170,7 +190,7 @@ public class ResourceEventPublisherTests
             {
                 Id = "id",
                 ResourceId = "resourceId",
-                ResourceType = ResourceEventResourceTypes.ProcessingError,
+                ResourceType = ResourceEventResourceTypes.TracesChed,
                 Operation = "operation",
                 Message = "message",
             },
@@ -181,7 +201,7 @@ public class ResourceEventPublisherTests
             .Received()
             .PublishAsync(
                 Arg.Is<PublishRequest>(x =>
-                    x.MessageAttributes.ContainsKey("trace-id")
+                    x!.MessageAttributes.ContainsKey("trace-id")
                     && x.MessageAttributes["trace-id"].StringValue == "trace-id-value"
                 ),
                 CancellationToken.None
@@ -197,7 +217,12 @@ public class ResourceEventPublisherTests
             new OptionsWrapper<TraceHeader>(new TraceHeader { Name = "trace-id" }),
             new HeaderPropagationValues(),
             new OptionsWrapper<ResourceEventOptions>(
-                new ResourceEventOptions { ArnPrefix = "arn", TopicName = "topic-name" }
+                new ResourceEventOptions
+                {
+                    ArnPrefix = "arn",
+                    TopicName = "topic-name",
+                    TracesChedTopicName = "traces-topic-name",
+                }
             ),
             NullLogger<ResourceEventPublisher>.Instance
         );
@@ -219,7 +244,7 @@ public class ResourceEventPublisherTests
             .Received()
             .PublishAsync(
                 Arg.Is<PublishRequest>(x =>
-                    x.MessageAttributes.ContainsKey("SubResourceType")
+                    x!.MessageAttributes.ContainsKey("SubResourceType")
                     && x.MessageAttributes["SubResourceType"].StringValue == "subResourceType"
                 ),
                 CancellationToken.None

@@ -11,6 +11,7 @@ using Defra.TradeImportsDataApi.Api.Endpoints.ProcessingErrors;
 using Defra.TradeImportsDataApi.Api.Endpoints.RelatedImportDeclarations;
 using Defra.TradeImportsDataApi.Api.Endpoints.Reporting;
 using Defra.TradeImportsDataApi.Api.Endpoints.ResourceEvents;
+using Defra.TradeImportsDataApi.Api.Endpoints.TracesChed;
 using Defra.TradeImportsDataApi.Api.Health;
 using Defra.TradeImportsDataApi.Api.Metrics;
 using Defra.TradeImportsDataApi.Api.OpenApi;
@@ -104,6 +105,7 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
     builder.Services.AddOptions<ResourceEventOptions>().BindConfiguration("ResourceEvents").ValidateOptions();
     builder.Services.AddSingleton<IResourceEventPublisher, ResourceEventPublisher>();
     builder.Services.AddTransient<IResourceEventService, ResourceEventService>();
+    builder.Services.AddTransient<ITracesChedService, TracesChedService>();
     builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
     builder.Services.AddAWSService<IAmazonSimpleNotificationService>();
 
@@ -113,6 +115,7 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
     builder.Services.AddTransient<IGmrRepository, GmrRepository>();
     builder.Services.AddTransient<IProcessingErrorRepository, ProcessingErrorRepository>();
     builder.Services.AddTransient<IResourceEventRepository, ResourceEventRepository>();
+    builder.Services.AddTransient<ITracesChedRepository, TracesChedRepository>();
 
     builder.Services.AddAuthenticationAuthorization();
 
@@ -140,6 +143,7 @@ static WebApplication BuildWebApplication(WebApplicationBuilder builder, bool ge
     app.MapAdminEndpoints();
     app.MapReportingEndpoints();
     app.MapResourceEventEndpoints();
+    app.MapTracesChedsEndpoints();
     app.UseOpenApi();
     app.UseStatusCodePages();
     app.UseExceptionHandler(

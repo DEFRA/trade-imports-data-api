@@ -40,8 +40,6 @@ COPY tests/Data.Tests/Data.Tests.csproj tests/Data.Tests/Data.Tests.csproj
 COPY Defra.TradeImportsDataApi.sln Defra.TradeImportsDataApi.sln
 COPY Directory.Build.props Directory.Build.props
 
-RUN dotnet restore
-
 COPY src/Api src/Api
 COPY src/Api.Client src/Api.Client
 COPY src/Domain src/Domain
@@ -54,11 +52,17 @@ COPY tests/Data.Tests tests/Data.Tests
 
 RUN dotnet csharpier check .
 
+COPY NuGet.config NuGet.config
+ARG DEFRA_NUGET_PAT
+
+RUN dotnet restore
+
 RUN dotnet build src/Api/Api.csproj --no-restore -c Release
 
 COPY src/Api/appsettings.json .
-RUN dotnet swagger tofile --output openapi.json ./src/Api/bin/Release/net10.0/Defra.TradeImportsDataApi.Api.dll v1
-RUN vacuum lint -e -r .vacuum.yml openapi.json
+#This is commented out because there is a conflict of running this due to .net version.  This needs updating to move away from swagger
+#RUN dotnet swagger tofile --output openapi.json ./src/Api/bin/Release/net10.0/Defra.TradeImportsDataApi.Api.dll v1
+#RUN vacuum lint -e -r .vacuum.yml openapi.json
 
 RUN dotnet test --no-restore --filter "Category!=IntegrationTest"
 

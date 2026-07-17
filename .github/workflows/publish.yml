@@ -19,14 +19,20 @@ jobs:
   build:
     name: CDP-build-workflow
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Check out code
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 #v7.0.0
       - name: Setup dotnet
-        uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 #v5
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 #v6.0.0
         with:
           dotnet-version: |
             10.0
+      - name: Update NuGet.config
+        run: |
+          dotnet nuget remove source defra
+          dotnet nuget add source --username USERNAME --password ${{ env.GITHUB_TOKEN }} --store-password-in-clear-text --name defra "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --configfile NuGet.config
       - name: Run unit tests
         run: |
           dotnet test --filter "Category!=IntegrationTest"
@@ -46,7 +52,7 @@ jobs:
         run: |
           dotnet nuget push ./nupkg/*.nupkg \
             --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
-            --api-key ${{ secrets.GITHUB_TOKEN }} \
+            --api-key ${{ env.GITHUB_TOKEN }} \
             --skip-duplicate
       - name: Generate OpenAPI specification
         run: make generate-openapi-spec
