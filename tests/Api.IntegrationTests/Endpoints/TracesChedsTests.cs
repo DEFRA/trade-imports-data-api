@@ -1,3 +1,5 @@
+using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
+using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using Defra.TradeImportsDataApi.Testing;
 using FluentAssertions;
 using Trade.Gateway.Api.Contract.Certificate;
@@ -82,5 +84,90 @@ public class TracesChedsTests(ITestOutputHelper testOutputHelper) : SqsTestBase(
         result2.Ched.Model.Should().Be("Test1");
         result2.Created.Should().Be(result.Created);
         result2.Updated.Should().BeAfter(result.Updated);
+    }
+
+    [Fact]
+    public async Task WhenRelatedCustomsDeclarationsDoNotExist_ShouldReturnAnEmptyList()
+    {
+        var client = CreateDataApiClient();
+        var chedRef = ImportPreNotificationIdGenerator.Generate();
+
+        var result = await client.GetTracesChed(chedRef, CancellationToken.None);
+        result.Should().BeNull();
+
+        await client.PutTracesChed(
+            chedRef,
+            new DefraUNVTDCHEDProfile()
+            {
+                ExchangedDocument = new ExchangedDocument() { Identifier = chedRef },
+                SpecifiedConsignment = new Consignment(),
+            },
+            null,
+            CancellationToken.None
+        );
+
+        var cdResult = await client.GetCustomsDeclarationsByTracesChedId(chedRef, CancellationToken.None);
+        cdResult.Should().NotBeNull();
+        cdResult.CustomsDeclarations.Count.Should().Be(0);
+    }
+
+    [Fact]
+    public async Task WhenRelatedCustomsDeclarationsExists_ShouldRead()
+    {
+        var client = CreateDataApiClient();
+        var chedRef = "CHEDA.GB.2025.1234567";
+        var mrn = "testmrn123";
+
+        var result = await client.GetTracesChed(chedRef, CancellationToken.None);
+
+        if (result is null)
+        {
+            await client.PutTracesChed(
+                chedRef,
+                new DefraUNVTDCHEDProfile()
+                {
+                    ExchangedDocument = new ExchangedDocument() { Identifier = chedRef },
+                    SpecifiedConsignment = new Consignment(),
+                },
+                null,
+                CancellationToken.None
+            );
+        }
+
+        var cdResult = await client.GetCustomsDeclaration(mrn, CancellationToken.None);
+
+        if (cdResult is null)
+        {
+            await client.PutCustomsDeclaration(
+                mrn,
+                new CustomsDeclaration
+                {
+                    ClearanceRequest = new ClearanceRequest
+                    {
+                        ExternalVersion = 1,
+                        Commodities =
+                        [
+                            new Commodity
+                            {
+                                Documents =
+                                [
+                                    new ImportDocument
+                                    {
+                                        DocumentReference = new ImportDocumentReference(chedRef),
+                                        DocumentCode = "C640",
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                },
+                null,
+                CancellationToken.None
+            );
+        }
+
+        var actualResult = await client.GetCustomsDeclarationsByTracesChedId(chedRef, CancellationToken.None);
+        actualResult.Should().NotBeNull();
+        actualResult.CustomsDeclarations.Count.Should().Be(1);
     }
 }

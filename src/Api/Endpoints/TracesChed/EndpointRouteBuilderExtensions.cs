@@ -1,4 +1,5 @@
 using Defra.TradeImportsDataApi.Api.Authentication;
+using Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations;
 using Defra.TradeImportsDataApi.Api.Exceptions;
 using Defra.TradeImportsDataApi.Api.Extensions;
 using Defra.TradeImportsDataApi.Api.Services;
@@ -23,6 +24,16 @@ public static class EndpointRouteBuilderExtensions
             .WithDescription("Get a TRACES Ched by Id")
             .Produces<TracesChedResponse>()
             .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesProblem(StatusCodes.Status404NotFound)
+            .ProducesProblem(StatusCodes.Status500InternalServerError)
+            .RequireAuthorization(PolicyNames.Read);
+
+        app.MapGet("traces-cheds/{chedId}/customs-declarations", GetCustomsDeclarations)
+            .WithName("GetCustomsDeclarationsByTracesChedId")
+            .WithTags(groupName)
+            .WithSummary("Get CustomsDeclarations by CHED ID")
+            .WithDescription("Get associated customs declarations by CHED ID")
+            .Produces<CustomsDeclarationsResponse>()
             .ProducesProblem(StatusCodes.Status404NotFound)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .RequireAuthorization(PolicyNames.Read);
@@ -107,5 +118,49 @@ public static class EndpointRouteBuilderExtensions
         {
             return Results.NotFound();
         }
+    }
+
+    /// <param name="chedId" example="CHEDA.GB.2024.1020304">CHED ID</param>
+    /// <param name="context"></param>
+    /// <param name="tracesChedService"></param>
+    /// <param name="customsDeclarationService"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpGet]
+    private static async Task<IResult> GetCustomsDeclarations(
+        [FromRoute] string chedId,
+        HttpContext context,
+        [FromServices] ITracesChedService tracesChedService,
+        [FromServices] ICustomsDeclarationService customsDeclarationService,
+        CancellationToken cancellationToken
+    )
+    {
+        var existing = await tracesChedService.Get(chedId, cancellationToken);
+
+        if (existing is null)
+        {
+            return Results.NotFound();
+        }
+
+        var customsDeclarations = await customsDeclarationService.GetCustomsDeclarationsByFullChedId(
+            chedId,
+            cancellationToken
+        );
+
+        return Results.Ok(
+            new CustomsDeclarationsResponse(
+                customsDeclarations
+                    .Select(customsDeclarationEntity => new CustomsDeclarationResponse(
+                        customsDeclarationEntity.Id,
+                        customsDeclarationEntity.ClearanceRequest,
+                        customsDeclarationEntity.ClearanceDecision,
+                        customsDeclarationEntity.Finalisation,
+                        customsDeclarationEntity.ExternalErrors,
+                        customsDeclarationEntity.Created,
+                        customsDeclarationEntity.Updated
+                    ))
+                    .ToList()
+            )
+        );
     }
 }
