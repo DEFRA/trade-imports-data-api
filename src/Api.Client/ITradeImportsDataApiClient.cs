@@ -1,3 +1,5 @@
+using Trade.Gateway.Api.Contract.Certificate;
+
 namespace Defra.TradeImportsDataApi.Api.Client;
 
 public interface ITradeImportsDataApiClient
@@ -47,6 +49,15 @@ public interface ITradeImportsDataApiClient
 
     Task<RelatedImportDeclarationsResponse> RelatedImportDeclarations(
         RelatedImportDeclarationsRequest request,
+        CancellationToken cancellationToken
+    );
+
+    Task<TracesChedResponse?> GetTracesChed(string chedId, CancellationToken cancellationToken);
+
+    Task PutTracesChed(string chedId, DefraUNVTDCHEDProfile data, string? etag, CancellationToken cancellationToken);
+
+    Task<CustomsDeclarationsResponse> GetCustomsDeclarationsByTracesChedId(
+        string chedId,
         CancellationToken cancellationToken
     );
 }

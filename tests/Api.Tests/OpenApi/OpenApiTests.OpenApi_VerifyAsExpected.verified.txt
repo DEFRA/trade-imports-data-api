@@ -993,6 +993,215 @@
           }
         }
       }
+    },
+    "/traces-cheds/{chedId}": {
+      "get": {
+        "tags": [
+          "TracesCheds"
+        ],
+        "summary": "Get Traces Ched",
+        "description": "Get a TRACES Ched by Id",
+        "operationId": "GetTracesChedByChedId",
+        "parameters": [
+          {
+            "name": "chedId",
+            "in": "path",
+            "description": "CHED ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "CHEDA.GB.2024.1020304"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Defra.TradeImportsDataApi.TracesChedResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "TracesCheds"
+        ],
+        "summary": "Put Traces Ched",
+        "description": "Put a Traces Ched",
+        "operationId": "PutTracesChed",
+        "parameters": [
+          {
+            "name": "chedId",
+            "in": "path",
+            "description": "CHED ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "CHEDA.GB.2024.1020304"
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "description": "",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.DefraUNVTDCHEDProfile"
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/traces-cheds/{chedId}/customs-declarations": {
+      "get": {
+        "tags": [
+          "TracesCheds"
+        ],
+        "summary": "Get CustomsDeclarations by CHED ID",
+        "description": "Get associated customs declarations by CHED ID",
+        "operationId": "GetCustomsDeclarationsByTracesChedId",
+        "parameters": [
+          {
+            "name": "chedId",
+            "in": "path",
+            "description": "CHED ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "CHEDA.GB.2024.1020304"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Defra.TradeImportsDataApi.CustomsDeclarationsResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -5301,6 +5510,27 @@
         "additionalProperties": false,
         "description": "Present if the consignment has been split"
       },
+      "Defra.TradeImportsDataApi.TracesChedResponse": {
+        "type": "object",
+        "properties": {
+          "ched": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.DefraUNVTDCHEDProfile"
+              }
+            ]
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
       "Defra.TradeImportsDataApi.Transits": {
         "type": "object",
         "properties": {
@@ -5443,6 +5673,1096 @@
           }
         },
         "additionalProperties": { }
+      },
+      "Trade.Gateway.Api.Contract.Certificate.ApplicableClassification": {
+        "type": "object",
+        "properties": {
+          "systemId": {
+            "type": "string",
+            "nullable": true
+          },
+          "systemName": {
+            "type": "string",
+            "nullable": true
+          },
+          "classCode": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.CodedValue"
+              }
+            ],
+            "nullable": true
+          },
+          "className": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Trade.Gateway.Api.Contract.Certificate.AttachmentBinaryObject": {
+        "type": "object",
+        "properties": {
+          "format": {
+            "type": "string",
+            "nullable": true
+          },
+          "mimeCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "uri": {
+            "type": "string",
+            "nullable": true
+          },
+          "filename": {
+            "type": "string",
+            "description": "Original filename for the attachment, where the by-reference pattern carries metadata alongside the URI.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Trade.Gateway.Api.Contract.Certificate.Authentication": {
+        "type": "object",
+        "properties": {
+          "typeCode": {
+            "type": "string",
+            "description": "unece:typeCode is xsd:string in unece-context-D23B.jsonld.",
+            "nullable": true
+          },
+          "actualDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "governmentActionTypeCode": {
+            "type": "string",
+            "description": "unece:governmentActionTypeCode is @vocab in unece-context-D23B.jsonld; use a string code or vocabulary token.",
+            "nullable": true
+          },
+          "provider": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.TradeParty"
+              }
+            ],
+            "description": "The party authenticating this signatory entry (the issuing veterinarian, the certifying authority, the inspecting body). Maps to UN/CEFACT documentAuthentication.provider. Renamed from providerParty per TIG §4.4 naming alignment.",
+            "nullable": true
+          },
+          "includedClause": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.Clause"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Trade.Gateway.Api.Contract.Certificate.CargoNature": {
+        "type": "object",
+        "properties": {
+          "typeCode": {
+            "type": "string",
+            "description": "unece:typeCode is xsd:string in unece-context-D23B.jsonld.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Trade.Gateway.Api.Contract.Certificate.Clause": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "type": "string",
+            "nullable": true
+          },
+          "content": {
+            "type": "string",
+            "nullable": true
+          },
+          "urlId": {
+            "type": "string",
+            "description": "URL to the codelist this clause's identifier and content are drawn from. BSP D23B documentClauseType.urlId (UN01013211).",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Trade.Gateway.Api.Contract.Certificate.CodedValue": {
+        "required": [
+          "value"
+        ],
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "urlId": {
+            "type": "string",
+            "description": "Codelist URI. EU TRACES: https://traces-codelists.ec.europa.eu/{listId}. Defra: https://codelists.tbc.defra.gov.uk/...",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "description": "Human-readable label for the coded value.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Trade.Gateway.Api.Contract.Certificate.Consignment": {
+        "type": "object",
+        "properties": {
+          "availabilityDueDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "exportExitDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "consignorParty": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.TradeParty"
+              }
+            ],
+            "nullable": true
+          },
+          "consigneeParty": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.TradeParty"
+              }
+            ],
+            "nullable": true
+          },
+          "despatchParty": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.TradeParty"
+              }
+            ],
+            "nullable": true
+          },
+          "deliveryParty": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.TradeParty"
+              }
+            ],
+            "description": "The immediate delivery party — the party to whom the consignment is delivered. Distinct from final destination (Defra pre-notification adds finalDestinationLocation for the permanent post-movements destination at profile level).",
+            "nullable": true
+          },
+          "carrier": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.TradeParty"
+              }
+            ],
+            "description": "The carrier party (the transporter). Operational TRACES populates both an activity-type discriminator (operator_activity_type) and a section-code discriminator (classification_section_code) on partyTypeCode.",
+            "nullable": true
+          },
+          "customsTransitAgentParty": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.TradeParty"
+              }
+            ],
+            "nullable": true
+          },
+          "originCountry": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.TradeCountry"
+              }
+            ],
+            "description": "The country the consignment originated from - where the goods were produced. For consignments where the country of production differs from the country of export, this slot carries the country of production and `exportCountry` carries the country of export; for the common case where they coincide, only `originCountry` need be populated.",
+            "nullable": true
+          },
+          "exportCountry": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.TradeCountry"
+              }
+            ],
+            "description": "The country the consignment was exported from (TRACES `ExportSPSCountry`). For consignments where the country of production differs from the country of export, this slot carries the country of export and `originCountry` carries the country of production.",
+            "nullable": true
+          },
+          "importCountry": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.TradeCountry"
+              }
+            ],
+            "description": "Consignment route destination/import country (TRACES ImportSPSCountry).",
+            "nullable": true
+          },
+          "reExportCountry": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.TradeCountry"
+            },
+            "description": "Re-export countries on the consignment route (TRACES ReExportSPSCountry[]).",
+            "nullable": true
+          },
+          "transitCountry": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.TradeCountry"
+            },
+            "description": "Transit countries on the consignment route (TRACES TransitSPSCountry[]).",
+            "nullable": true
+          },
+          "unloadingBaseportLocation": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.LogisticsLocation"
+              }
+            ],
+            "description": "Port of entry / unloading baseport. For Defra import pre-notifications the identifier carries un_locode.",
+            "nullable": true
+          },
+          "mainCarriageLogisticsTransportMovement": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.LogisticsTransportMovement"
+            },
+            "description": "Transport movement(s) for the main carriage leg(s). An array of one entry per carriage leg, with entries distinguished by id.schemeId. The SPS profile collapses BSP's three-way pre/main/on carriage split into this slot.",
+            "nullable": true
+          },
+          "transitTradeCountry": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.TradeCountry"
+            },
+            "description": "Transit countries between the consignment's origin and destination.",
+            "nullable": true
+          },
+          "packageQuantity": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.ConsignmentPackageQuantity"
+              }
+            ],
+            "description": "Optional consignment-level package count. BSP/D23B canonical slot (unece:packageQuantity) for the number of packages in the consignment. content carries the count; unitCode is conventionally omitted for raw piece counts.",
+            "nullable": true
+          },
+          "includedConsignmentItem": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.ConsignmentItem"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Trade.Gateway.Api.Contract.Certificate.ConsignmentItem": {
+        "type": "object",
+        "properties": {
+          "natureIdCargo": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.CargoNature"
+            },
+            "nullable": true
+          },
+          "includedTradeLineItem": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.TradeLineItem"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Trade.Gateway.Api.Contract.Certificate.ConsignmentPackageQuantity": {
+        "required": [
+          "content"
+        ],
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "number",
+            "format": "double"
+          },
+          "unitCode": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Trade.Gateway.Api.Contract.Certificate.DefraUNVTDCHEDProfile": {
+        "required": [
+          "exchangedDocument",
+          "specifiedConsignment"
+        ],
+        "type": "object",
+        "properties": {
+          "$model": {
+            "type": "string"
+          },
+          "$type": {
+            "type": "string"
+          },
+          "exchangedDocument": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.ExchangedDocument"
+              }
+            ]
+          },
+          "specifiedConsignment": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.Consignment"
+              }
+            ]
+          },
+          "laboratoryObservationResult": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.LaboratoryObservationResult"
+            },
+            "description": "UN vocabulary-aligned laboratory observations/results collection.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Trade.Gateway.Api.Contract.Certificate.ExchangedDocument": {
+        "required": [
+          "identifier"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "unece:name is xsd:string in unece-context-D23B.jsonld.",
+            "nullable": true
+          },
+          "identifier": {
+            "type": "string"
+          },
+          "traderAssignedId": {
+            "type": "string",
+            "description": "Optional trader-entered reference. BSP/D23B canonical slot (unece:traderAssignedId, xsd:string) for an importer's own internal reference number against the consignment / pre-notification.",
+            "nullable": true
+          },
+          "documentTypeCode": {
+            "type": "string",
+            "description": "Document type per UNTDID 1001 (e.g. 636 CHED, 666/856 INTRA). Optional at core level; profile schemas constrain by const/enum.",
+            "nullable": true
+          },
+          "documentStatusCode": {
+            "type": "string",
+            "description": "Status code as string per UN vocabulary typing for coded strings.",
+            "nullable": true
+          },
+          "notificationStatusCode": {
+            "type": "string",
+            "description": "Defra-internal workflow status of this notification. Codelist binding declared in the Defra profile vocabulary.",
+            "nullable": true
+          },
+          "versionId": {
+            "type": "integer",
+            "description": "Document revision number. V1 on first submission, increments on each subsequent re-submission. Distinct from the envelope's aggregateVersion (event sequence) and the schema's structural version.",
+            "format": "int32",
+            "nullable": true
+          },
+          "functionCode": {
+            "type": "string",
+            "description": "UNTDID 1225 message function: 9 (Original), 5 (Replace), 4 (Change), 1 (Cancellation), 3 (Deletion). Tells the consumer what the message does to its view of the document.",
+            "nullable": true
+          },
+          "issueDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "issuer": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.TradeParty"
+              }
+            ],
+            "description": "The party responsible for issuing this document. For TRACES CHED and Defra import pre-notifications, this carries the responsible-person organisation with a named contact.",
+            "nullable": true
+          },
+          "includedNote": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.IncludedNote"
+            },
+            "nullable": true
+          },
+          "referenceDocument": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.ReferencedDocument"
+            },
+            "nullable": true
+          },
+          "firstSignatoryAuthentication": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.Authentication"
+              }
+            ],
+            "nullable": true
+          },
+          "secondSignatoryAuthentication": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.Authentication"
+              }
+            ],
+            "nullable": true
+          },
+          "thirdSignatoryAuthentication": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.Authentication"
+              }
+            ],
+            "nullable": true
+          },
+          "fourthSignatoryAuthentication": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.Authentication"
+              }
+            ],
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Trade.Gateway.Api.Contract.Certificate.IncludedNote": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "JSON-LD @type for unece:Note when using unece-context-D23B.jsonld (type aliases to @type)."
+          },
+          "identifier": {
+            "type": "string",
+            "description": "unece:identifier — xsd:string in unece-context-D23B.jsonld.",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "description": "unece:name — xsd:string in unece-context-D23B.jsonld.",
+            "nullable": true
+          },
+          "subject": {
+            "type": "string",
+            "description": "unece:subject — xsd:string in unece-context-D23B.jsonld.",
+            "nullable": true
+          },
+          "creationDateTime": {
+            "type": "string",
+            "description": "unece:creationDateTime — xsd:string in unece-context-D23B.jsonld.",
+            "nullable": true
+          },
+          "noteSubjectCode": {
+            "type": "string",
+            "description": "Legacy subject-code slot - flat string only. Retained for the existing INTRA/CHED samples; new code should use subjectCode below.",
+            "nullable": true
+          },
+          "subjectCode": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.CodedValue"
+              }
+            ],
+            "description": "Subject of the note as a coded value. urlId on the CodedValue names the codelist the code is drawn from.",
+            "nullable": true
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "unece:content profile extension for deterministic typed contracts and lossless TRACES XML round-tripping: always an array of strings.",
+            "nullable": true
+          },
+          "contentCode": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.CodedValue"
+            },
+            "description": "unece:contentCode profile extension for deterministic typed contracts and lossless TRACES XML round-tripping: always an array of CodedValue objects (value + optional urlId and name).",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Trade.Gateway.Api.Contract.Certificate.LaboratoryObservationResult": {
+        "type": "object",
+        "properties": {
+          "natureIdCargo": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.CargoNature"
+              }
+            ],
+            "nullable": true
+          },
+          "productLaboratoryTest": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.ProductLaboratoryTest"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Trade.Gateway.Api.Contract.Certificate.LineTradeDelivery": {
+        "type": "object",
+        "properties": {
+          "productUnitQuantity": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.LineTradeDeliveryProductUnitQuantity"
+              }
+            ],
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Trade.Gateway.Api.Contract.Certificate.LineTradeDeliveryProductUnitQuantity": {
+        "required": [
+          "content"
+        ],
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "number",
+            "format": "double"
+          },
+          "unitCode": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Trade.Gateway.Api.Contract.Certificate.LogisticsLocation": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "type": "string",
+            "description": "Location identifier as a bare string (e.g. CPH19876, GBDVR1, GBDVR). Matches the BSP D23B canonical shape where idType metadata is disabled. The sibling urlId names the register or codelist the identifier is drawn from (cph_number, bcp_reference, un_locode).",
+            "nullable": true
+          },
+          "urlId": {
+            "type": "string",
+            "description": "URL identifier for the codelist / register this location's identifier is drawn from.",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "typeCode": {
+            "type": "string",
+            "description": "unece:typeCode is xsd:string in unece-context-D23B.jsonld.",
+            "nullable": true
+          },
+          "postalAddress": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.TradeAddress"
+              }
+            ],
+            "description": "Optional postal address for the location. Additive — needed for port-of-entry and inspection-point records that carry both a codelist-tagged identifier and a human-readable address.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Trade.Gateway.Api.Contract.Certificate.LogisticsPackage": {
+        "type": "object",
+        "properties": {
+          "levelCode": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "typeCode": {
+            "type": "string",
+            "description": "unece:typeCode is xsd:string in unece-context-D23B.jsonld.",
+            "nullable": true
+          },
+          "itemQuantity": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Trade.Gateway.Api.Contract.Certificate.LogisticsTransportMovement": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "type": "string",
+            "description": "Transport identifier as a bare string or integer (legacy INTRA shape where it was sometimes numeric). Matches the BSP D23B canonical shape where idType metadata is disabled. The sibling urlId names the register the identifier is drawn from (e.g. vessel_name, road_vehicle_registration, airplane_flight_number).",
+            "nullable": true
+          },
+          "urlId": {
+            "type": "string",
+            "description": "URL identifier for the codelist / register this movement's identifier is drawn from.",
+            "nullable": true
+          },
+          "modeCode": {
+            "type": "string",
+            "description": "Mode-of-transport code per UN/EDIFACT Recommendation 19. Accepts integer (current INTRA/CHED shape) or string (hybrid shape where GBN-AG and TRACES-textual consumers prefer it as a code value).",
+            "nullable": true
+          },
+          "usedLogisticsTransportMeans": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.LogisticsTransportMovementUsedLogisticsTransportMeans"
+              }
+            ],
+            "description": "The conveyance used on this leg. `name` carries the means' identifying name (vessel name, vehicle registration, flight callsign). Distinct from `identifier` on the parent movement, which carries the movement's reference (journey number, waybill, booking). Both slots can be populated and may carry different values: identifier identifies the movement, usedLogisticsTransportMeans.name identifies the vehicle / vessel / aircraft.",
+            "nullable": true
+          },
+          "transportContractRelatedReferencedDocument": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.ReferencedDocument"
+            },
+            "nullable": true
+          },
+          "arrivalEvent": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.TransportEvent"
+            },
+            "nullable": true
+          },
+          "departureEvent": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.TransportEvent"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Trade.Gateway.Api.Contract.Certificate.LogisticsTransportMovementUsedLogisticsTransportMeans": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Trade.Gateway.Api.Contract.Certificate.ProductLaboratoryTest": {
+        "type": "object",
+        "properties": {
+          "applicableProductClassification": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.ApplicableClassification"
+              }
+            ],
+            "nullable": true
+          },
+          "laboratoryTest": {
+            "type": "array",
+            "items": { },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Trade.Gateway.Api.Contract.Certificate.ReferencedDocument": {
+        "type": "object",
+        "properties": {
+          "typeCode": {
+            "type": "string",
+            "description": "Document type per UNTDID 1001 (e.g. 853 Veterinary certificate, 636 CHED, 916 Journey log, 705 Bill of lading).",
+            "nullable": true
+          },
+          "relationshipTypeCode": {
+            "type": "string",
+            "description": "Role this referenced document plays per UNTDID 1153.",
+            "nullable": true
+          },
+          "identifier": {
+            "type": "string",
+            "description": "Reference number assigned by the issuing authority.",
+            "nullable": true
+          },
+          "issueDateTime": {
+            "type": "string",
+            "description": "Issue date of the referenced document (ISO 8601 YYYY-MM-DD).",
+            "format": "date",
+            "nullable": true
+          },
+          "attachmentBinaryObject": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.AttachmentBinaryObject"
+              }
+            ],
+            "description": "Attachment(s) for the referenced document. Single object (legacy INTRA/CHED shape) or array (when one referenced document carries multiple files).",
+            "nullable": true
+          },
+          "information": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Trade.Gateway.Api.Contract.Certificate.TradeAddress": {
+        "type": "object",
+        "properties": {
+          "postcodeCode": {
+            "type": "string",
+            "description": "unece:postcodeCode is xsd:string in unece-context-D23B.jsonld.",
+            "nullable": true
+          },
+          "lineOne": {
+            "type": "string",
+            "nullable": true
+          },
+          "lineTwo": {
+            "type": "string",
+            "nullable": true
+          },
+          "cityName": {
+            "type": "string",
+            "nullable": true
+          },
+          "countryId": {
+            "type": "string",
+            "description": "unece:countryId is @vocab in unece-context-D23B.jsonld (e.g. ISO 3166-1 alpha-2 as a vocabulary-relative token).",
+            "nullable": true
+          },
+          "countryName": {
+            "type": "string",
+            "nullable": true
+          },
+          "countrySubDivisionName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Trade.Gateway.Api.Contract.Certificate.TradeCountry": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.CodedValue"
+              }
+            ],
+            "description": "Country code; ISO 3166-1 alpha-2 expected. ISO 3166-1 is well-known so urlId is usually omitted, but a sibling urlId can be added when a non-ISO scheme is in use.",
+            "nullable": true
+          },
+          "subordinateTradeCountrySubDivision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.TradeCountrySubDivision"
+              }
+            ],
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Trade.Gateway.Api.Contract.Certificate.TradeCountrySubDivision": {
+        "required": [
+          "functionTypeCode",
+          "identifier"
+        ],
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "type": "string"
+          },
+          "urlId": {
+            "type": "string",
+            "description": "URL to the codelist this region identifier is drawn from.",
+            "nullable": true
+          },
+          "functionTypeCode": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.TradeCountrySubDivisionFunctionTypeCode"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "Trade.Gateway.Api.Contract.Certificate.TradeCountrySubDivisionFunctionTypeCode": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Trade.Gateway.Api.Contract.Certificate.TradeLineItem": {
+        "type": "object",
+        "properties": {
+          "sequenceNumeric": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "description": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "scientificName": {
+            "type": "string",
+            "description": "The species name for the commodity in Latin",
+            "nullable": true
+          },
+          "netWeight": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.UneceWeightMeasure"
+              }
+            ],
+            "nullable": true
+          },
+          "grossWeight": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.UneceWeightMeasure"
+              }
+            ],
+            "nullable": true
+          },
+          "applicableClassification": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.ApplicableClassification"
+            },
+            "nullable": true
+          },
+          "physicalReferencedLogisticsPackage": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.LogisticsPackage"
+            },
+            "nullable": true
+          },
+          "specifiedTradeProduct": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.TradeProduct"
+            },
+            "description": "The trade product on this line. BSP-canonical structural slot; profile schemas may narrow shape and cardinality.",
+            "nullable": true
+          },
+          "specifiedLineTradeDelivery": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.LineTradeDelivery"
+            },
+            "description": "Delivery aspect of this line (line-level quantities).",
+            "nullable": true
+          },
+          "additionalInformationNote": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.IncludedNote"
+            },
+            "description": "Per-line annotation notes. Each entry carries a coded subject and one or more content values; consumers narrow the permitted subject codes in their profile.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Trade.Gateway.Api.Contract.Certificate.TradeParty": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "type": "string",
+            "description": "Party identifier (bare string). The sibling urlId names the codelist/register the value is drawn from (e.g. operator_internal_activity_id, veterinary_office_identifier, authority_activity_id, or Defra-side schemes such as uk_transporter_authorisation).",
+            "nullable": true
+          },
+          "urlId": {
+            "type": "string",
+            "description": "URL to the codelist/register the party identifier is drawn from. The gateway translates urlId to/from TRACES schemeId / schemeAgencyId.",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "description": "unece:name is xsd:string in unece-context-D23B.jsonld.",
+            "nullable": true
+          },
+          "partyRoleCode": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.CodedValue"
+              }
+            ],
+            "description": "unece:partyRoleCode as a coded value. value carries the role code; the optional sibling urlId names the codelist it is drawn from.",
+            "nullable": true
+          },
+          "partyTypeCode": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.CodedValue"
+            },
+            "description": "Party-type code(s) as coded values. A party can carry codes from more than one TRACES list (e.g. COMMERCIAL_TRANSPORTER under operator_activity_type plus TRANSPORTER under classification_section_code); each entry's urlId names the codelist its value is drawn from.",
+            "nullable": true
+          },
+          "postalAddress": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.TradeAddress"
+              }
+            ],
+            "nullable": true
+          },
+          "definedContact": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.TradePartyDefinedContactItem"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Trade.Gateway.Api.Contract.Certificate.TradePartyDefinedContactItem": {
+        "type": "object",
+        "properties": {
+          "personName": {
+            "type": "string",
+            "nullable": true
+          },
+          "emailURIUniversalCommunication": {
+            "type": "string",
+            "description": "Contact email. Additive to the legacy personName-only shape — TRACES SOAP does not carry contact email/phone, but Defra import pre-notifications source these from IPAFFS and need to carry them on consignor / consignee / delivery / carrier / issuer parties.",
+            "nullable": true
+          },
+          "telephoneUniversalCommunication": {
+            "type": "string",
+            "description": "Contact telephone. Same rationale as emailURIUniversalCommunication.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Trade.Gateway.Api.Contract.Certificate.TradeProduct": {
+        "type": "object",
+        "properties": {
+          "scientificName": {
+            "type": "string",
+            "nullable": true
+          },
+          "typeCode": {
+            "type": "string",
+            "description": "BSP/D23B canonical slot (`unece:typeCode`, `xsd:string`) for the trade product's type/form code. Drawn from the codelist named by the sibling `urlId`.",
+            "nullable": true
+          },
+          "urlId": {
+            "type": "string",
+            "description": "URL to the codelist this trade product's typeCode is drawn from.",
+            "nullable": true
+          },
+          "designatedProductClassification": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.ApplicableClassification"
+            },
+            "nullable": true
+          },
+          "originCountry": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.TradeCountry"
+              }
+            ],
+            "description": "Per-product country of origin. Optional at core level; populated by profiles whose journeys carry origin per trade line rather than per consignment (TRACES CHED-PP's `OriginSPSCountry` is the round-trip target). Region of origin sits on `subordinateTradeCountrySubDivision` inside the `TradeCountry` shape and is carried with the country wherever it appears.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Trade.Gateway.Api.Contract.Certificate.TransportEvent": {
+        "type": "object",
+        "properties": {
+          "scheduledOccurrenceDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "actualOccurrenceDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "occurrenceLogisticsLocation": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.LogisticsLocation"
+              }
+            ],
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Trade.Gateway.Api.Contract.Certificate.UneceWeightMeasure": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "nullable": true
+          },
+          "value": {
+            "type": "string",
+            "nullable": true
+          },
+          "unitCode": {
+            "type": "string",
+            "description": "Weight unit code (subset of UN/CEFACT Rec 20/21 used by this profile).",
+            "nullable": true
+          },
+          "unitCodeListVersionId": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
       }
     },
     "securitySchemes": {

@@ -70,7 +70,7 @@ public class ResourceEventPublisher(
 
         var request = new PublishRequest
         {
-            TopicArn = resourceEventOptions.Value.TopicArn,
+            TopicArn = resourceEventOptions.Value.GetTopicArn(entity.ResourceType),
             MessageAttributes = messageAttributes,
             Message = message,
         };
@@ -141,6 +141,8 @@ public class ResourceEventPublisher(
                             typeof(ResourceEvent<ImportPreNotificationEvent>).AssemblyQualifiedName,
                         ResourceEventResourceTypes.ProcessingError =>
                             typeof(ResourceEvent<ProcessingErrorEvent>).AssemblyQualifiedName,
+                        ResourceEventResourceTypes.TracesChed =>
+                            typeof(ResourceEvent<TracesChedEvent>).AssemblyQualifiedName,
                         _ => throw new InvalidOperationException(
                             $"AssemblyQualifiedName is null for type {resourceType}"
                         ),
