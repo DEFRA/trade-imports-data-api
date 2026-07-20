@@ -191,4 +191,18 @@ public class CustomsDeclarationServiceTests
 
         result.Should().NotBeEmpty();
     }
+
+    [Fact]
+    public async Task GetCustomsDeclarationsByFullChedId_ShouldReturn()
+    {
+        const string id = "id";
+        var (chedRef, _) = ImportPreNotificationIdGenerator.GenerateReturnId();
+        CustomsDeclarationRepository
+            .GetAll(chedRef, CancellationToken.None)
+            .Returns([new CustomsDeclarationEntity { Id = id }]);
+
+        var result = await Subject.GetCustomsDeclarationsByFullChedId(chedRef, CancellationToken.None);
+
+        result.Should().NotBeEmpty();
+    }
 }
