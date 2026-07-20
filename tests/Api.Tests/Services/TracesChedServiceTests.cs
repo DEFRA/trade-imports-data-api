@@ -2,7 +2,7 @@ using Defra.TradeImportsDataApi.Api.Data;
 using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
-using Defra.TradeImportsDataApi.Domain.Ipaffs;
+using Defra.TradeImportsDataApi.Domain.Events;
 using FluentAssertions;
 using NSubstitute;
 using Trade.Gateway.Api.Contract.Certificate;
@@ -13,14 +13,18 @@ public class TracesChedServiceTests
 {
     private IDbContext DbContext { get; }
     private ITracesChedRepository TracesChedRepository { get; }
+    private IResourceEventRepository ResourceEventRepository { get; }
+    private IResourceEventService ResourceEventService { get; }
     private TracesChedService Subject { get; }
 
     public TracesChedServiceTests()
     {
         DbContext = Substitute.For<IDbContext>();
         TracesChedRepository = Substitute.For<ITracesChedRepository>();
+        ResourceEventRepository = Substitute.For<IResourceEventRepository>();
+        ResourceEventService = Substitute.For<IResourceEventService>();
 
-        Subject = new TracesChedService(DbContext, TracesChedRepository);
+        Subject = new TracesChedService(DbContext, TracesChedRepository, ResourceEventRepository, ResourceEventService);
     }
 
     [Fact]
@@ -37,6 +41,24 @@ public class TracesChedServiceTests
         };
         TracesChedRepository.Insert(entity).Returns(entity);
 
+        var resourceEventEntityId = Guid.NewGuid().ToString();
+        ResourceEventRepository
+            .Insert(Arg.Any<ResourceEvent<TracesChedEvent>>())
+            .Returns(call =>
+            {
+                var resourceEvent = call.Arg<ResourceEvent<TracesChedEvent>>();
+
+                return new ResourceEventEntity
+                {
+                    Id = resourceEventEntityId,
+                    ResourceId = resourceEvent!.ResourceId,
+                    ResourceType = resourceEvent.ResourceType,
+                    SubResourceType = resourceEvent.SubResourceType,
+                    Operation = resourceEvent.Operation,
+                    Message = "message body",
+                };
+            });
+
         await Subject.Insert(entity, CancellationToken.None);
 
         await DbContext.Received(1).StartTransaction(CancellationToken.None);
@@ -44,6 +66,12 @@ public class TracesChedServiceTests
         await DbContext.Received(1).CommitTransaction(CancellationToken.None);
 
         TracesChedRepository.Received().Insert(entity);
+        ResourceEventRepository
+            .Received()
+            .Insert(Arg.Is<ResourceEvent<TracesChedEvent>>(x => x!.Operation == "Created" && x.ChangeSet.Count == 0));
+        await ResourceEventService
+            .Received()
+            .Publish(Arg.Is<ResourceEventEntity>(x => x!.Id == resourceEventEntityId), CancellationToken.None);
     }
 
     [Fact]
@@ -72,7 +100,23 @@ public class TracesChedServiceTests
             },
         };
         TracesChedRepository.Update(entity, "etag", CancellationToken.None).Returns((existing, entity));
+        var resourceEventEntityId = Guid.NewGuid().ToString();
+        ResourceEventRepository
+            .Insert(Arg.Any<ResourceEvent<TracesChedEvent>>())
+            .Returns(call =>
+            {
+                var resourceEvent = call.Arg<ResourceEvent<TracesChedEvent>>();
 
+                return new ResourceEventEntity
+                {
+                    Id = resourceEventEntityId,
+                    ResourceId = resourceEvent!.ResourceId,
+                    ResourceType = resourceEvent.ResourceType,
+                    SubResourceType = resourceEvent.SubResourceType,
+                    Operation = resourceEvent.Operation,
+                    Message = "message body",
+                };
+            });
         await Subject.Update(entity, "etag", CancellationToken.None);
 
         await DbContext.Received(1).StartTransaction(CancellationToken.None);
@@ -80,6 +124,13 @@ public class TracesChedServiceTests
         await DbContext.Received(1).CommitTransaction(CancellationToken.None);
 
         await TracesChedRepository.Received().Update(entity, "etag", CancellationToken.None);
+
+        ResourceEventRepository
+            .Received()
+            .Insert(Arg.Is<ResourceEvent<TracesChedEvent>>(x => x!.Operation == "Updated"));
+        await ResourceEventService
+            .Received()
+            .Publish(Arg.Is<ResourceEventEntity>(x => x!.Id == resourceEventEntityId), CancellationToken.None);
     }
 
     [Fact]
