@@ -55,4 +55,9 @@ public interface ITradeImportsDataApiClient
     Task<TracesChedResponse?> GetTracesChed(string chedId, CancellationToken cancellationToken);
 
     Task PutTracesChed(string chedId, DefraUNVTDCHEDProfile data, string? etag, CancellationToken cancellationToken);
+
+    Task<CustomsDeclarationsResponse> GetCustomsDeclarationsByTracesChedId(
+        string chedId,
+        CancellationToken cancellationToken
+    );
 }

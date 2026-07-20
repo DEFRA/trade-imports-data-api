@@ -8,6 +8,9 @@ internal static class Endpoints
 
     public static string TracesCheds(string chedId) => $"/traces-cheds/{chedId}";
 
+    public static string CustomsDeclarationsByTracesChed(string chedId) =>
+        $"/traces-cheds/{chedId}/customs-declarations";
+
     public static string CustomsDeclarationsByChed(string chedId) =>
         $"/import-pre-notifications/{chedId}/customs-declarations";
 

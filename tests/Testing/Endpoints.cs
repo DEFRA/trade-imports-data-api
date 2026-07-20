@@ -40,6 +40,8 @@ public static class Endpoints
         public static string Get(string chedId) => $"{Root}/{chedId}";
 
         public static string Put(string chedId) => $"{Root}/{chedId}";
+
+        public static string GetCustomsDeclarations(string chedId) => $"{Root}/{chedId}/customs-declarations";
     }
 
     public static class CustomsDeclarations
