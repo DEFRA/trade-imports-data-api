@@ -244,7 +244,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Defra.TradeImportsDataApi.ImportPreNotificationsResponse"
+                  "$ref": "#/components/schemas/Defra.TradeImportsDataApi.TracesChedsResponse"
                 }
               }
             }
@@ -5586,6 +5586,18 @@
           "updated": {
             "type": "string",
             "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Defra.TradeImportsDataApi.TracesChedsResponse": {
+        "type": "object",
+        "properties": {
+          "cheds": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.TracesChedResponse"
+            }
           }
         },
         "additionalProperties": false
