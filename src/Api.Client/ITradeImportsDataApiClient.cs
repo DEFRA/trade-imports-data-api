@@ -60,4 +60,6 @@ public interface ITradeImportsDataApiClient
         string chedId,
         CancellationToken cancellationToken
     );
+
+    Task<TracesChedResponse> GetTracesChedsByMrn(string mrn, CancellationToken cancellationToken);
 }
