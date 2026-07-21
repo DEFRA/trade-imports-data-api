@@ -61,5 +61,5 @@ public interface ITradeImportsDataApiClient
         CancellationToken cancellationToken
     );
 
-    Task<TracesChedResponse> GetTracesChedsByMrn(string mrn, CancellationToken cancellationToken);
+    Task<TracesChedsResponse> GetTracesChedsByMrn(string mrn, CancellationToken cancellationToken);
 }

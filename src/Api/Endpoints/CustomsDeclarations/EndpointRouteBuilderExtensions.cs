@@ -38,12 +38,12 @@ public static class EndpointRouteBuilderExtensions
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .RequireAuthorization(PolicyNames.Read);
 
-        app.MapGet("customs-declarations/{mrn}/traces-cheds", GetImportPreNotifications)
+        app.MapGet("customs-declarations/{mrn}/traces-cheds", GetTracesCheds)
             .WithName("TracesChedsByMrn")
             .WithTags(groupName)
             .WithSummary("Get TracesCheds by MRN")
             .WithDescription("Get associated traces ched by MRN")
-            .Produces<ImportPreNotificationsResponse>()
+            .Produces<TracesChedsResponse>()
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .RequireAuthorization(PolicyNames.Read);
