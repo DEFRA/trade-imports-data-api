@@ -1,6 +1,7 @@
 using Defra.TradeImportsDataApi.Api.Exceptions;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
+using Defra.TradeImportsDataApi.Data.Extensions;
 
 namespace Defra.TradeImportsDataApi.Api.Data;
 
@@ -12,6 +13,14 @@ public class TracesChedRepository(IDbContext dbContext) : ITracesChedRepository
             return null;
 
         return await dbContext.TracesCheds.Find(id, cancellationToken);
+    }
+
+    public async Task<List<TracesChedEntity>> GetAll(string[] ids, CancellationToken cancellationToken)
+    {
+        if (ids.Length == 0)
+            return [];
+
+        return await dbContext.TracesCheds.Where(x => ids.Contains(x.Id)).ToListWithFallbackAsync(cancellationToken);
     }
 
     public TracesChedEntity Insert(TracesChedEntity entity)

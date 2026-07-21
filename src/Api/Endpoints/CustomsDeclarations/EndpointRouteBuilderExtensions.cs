@@ -1,5 +1,6 @@
 using Defra.TradeImportsDataApi.Api.Authentication;
 using Defra.TradeImportsDataApi.Api.Endpoints.ImportPreNotifications;
+using Defra.TradeImportsDataApi.Api.Endpoints.TracesChed;
 using Defra.TradeImportsDataApi.Api.Exceptions;
 using Defra.TradeImportsDataApi.Api.Extensions;
 using Defra.TradeImportsDataApi.Api.Services;
@@ -32,6 +33,16 @@ public static class EndpointRouteBuilderExtensions
             .WithTags(groupName)
             .WithSummary("Get ImportPreNotifications by MRN")
             .WithDescription("Get associated import pre-notifications by MRN")
+            .Produces<ImportPreNotificationsResponse>()
+            .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesProblem(StatusCodes.Status500InternalServerError)
+            .RequireAuthorization(PolicyNames.Read);
+
+        app.MapGet("customs-declarations/{mrn}/traces-cheds", GetImportPreNotifications)
+            .WithName("TracesChedsByMrn")
+            .WithTags(groupName)
+            .WithSummary("Get TracesCheds by MRN")
+            .WithDescription("Get associated traces ched by MRN")
             .Produces<ImportPreNotificationsResponse>()
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
@@ -88,7 +99,6 @@ public static class EndpointRouteBuilderExtensions
     /// <param name="mrn">MRN</param>
     /// <param name="context"></param>
     /// <param name="importPreNotificationService"></param>
-    /// <param name="customsDeclarationService"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpGet]
@@ -96,7 +106,6 @@ public static class EndpointRouteBuilderExtensions
         [FromRoute] string mrn,
         HttpContext context,
         [FromServices] IImportPreNotificationService importPreNotificationService,
-        [FromServices] ICustomsDeclarationService customsDeclarationService,
         CancellationToken cancellationToken
     )
     {
@@ -111,6 +120,26 @@ public static class EndpointRouteBuilderExtensions
                     .Select(x => new ImportPreNotificationResponse(x.ImportPreNotification, x.Created, x.Updated))
                     .ToList()
             )
+        );
+    }
+
+    /// <param name="mrn">MRN</param>
+    /// <param name="context"></param>
+    /// <param name="tracesChedService"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpGet]
+    private static async Task<IResult> GetTracesCheds(
+        [FromRoute] string mrn,
+        HttpContext context,
+        [FromServices] ITracesChedService tracesChedService,
+        CancellationToken cancellationToken
+    )
+    {
+        var entities = await tracesChedService.GetByMrn(mrn, cancellationToken);
+
+        return Results.Ok(
+            new TracesChedsResponse(entities.Select(x => new TracesChedResponse(x.Ched, x.Created, x.Updated)).ToList())
         );
     }
 

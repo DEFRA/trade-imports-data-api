@@ -219,6 +219,59 @@
         }
       }
     },
+    "/customs-declarations/{mrn}/traces-cheds": {
+      "get": {
+        "tags": [
+          "CustomsDeclarations"
+        ],
+        "summary": "Get TracesCheds by MRN",
+        "description": "Get associated traces ched by MRN",
+        "operationId": "TracesChedsByMrn",
+        "parameters": [
+          {
+            "name": "mrn",
+            "in": "path",
+            "description": "MRN",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Defra.TradeImportsDataApi.ImportPreNotificationsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/gmrs/{gmrId}": {
       "get": {
         "tags": [
@@ -5331,6 +5384,12 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Defra.TradeImportsDataApi.ImportPreNotificationResponse"
+            }
+          },
+          "cheds": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.TracesChedResponse"
             }
           }
         },

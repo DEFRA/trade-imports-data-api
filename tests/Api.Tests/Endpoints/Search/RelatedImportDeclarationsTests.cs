@@ -56,7 +56,8 @@ public class RelatedImportDeclarationsTests : EndpointTestBase, IClassFixture<Wi
                     CustomsDeclarationEntity[],
                     ImportPreNotificationEntity[],
                     GmrEntity[],
-                    ImportPreNotificationEntity[]
+                    ImportPreNotificationEntity[],
+                    TracesChedEntity[]
                 >(
                     [
                         new CustomsDeclarationEntity
@@ -89,6 +90,7 @@ public class RelatedImportDeclarationsTests : EndpointTestBase, IClassFixture<Wi
                             ETag = "etag",
                         },
                     ],
+                    [],
                     []
                 )
             );

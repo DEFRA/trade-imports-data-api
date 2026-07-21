@@ -805,7 +805,8 @@ public class RelatedImportDeclarationsServiceTests
         return new RelatedImportDeclarationsService(
             new CustomsDeclarationRepository(memoryDbContext),
             new ImportPreNotificationRepository(memoryDbContext),
-            new GmrRepository(memoryDbContext)
+            new GmrRepository(memoryDbContext),
+            new TracesChedRepository(memoryDbContext)
         );
     }
 }
