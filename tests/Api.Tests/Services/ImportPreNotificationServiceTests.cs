@@ -54,7 +54,7 @@ public class ImportPreNotificationServiceTests
                 return new ResourceEventEntity
                 {
                     Id = resourceEventEntityId,
-                    ResourceId = resourceEvent.ResourceId,
+                    ResourceId = resourceEvent!.ResourceId,
                     ResourceType = resourceEvent.ResourceType,
                     SubResourceType = resourceEvent.SubResourceType,
                     Operation = resourceEvent.Operation,
@@ -73,12 +73,12 @@ public class ImportPreNotificationServiceTests
             .Received()
             .Insert(
                 Arg.Is<ResourceEvent<ImportPreNotificationEvent>>(x =>
-                    x.Operation == "Created" && x.ChangeSet.Count == 0
+                    x!.Operation == "Created" && x.ChangeSet.Count == 0
                 )
             );
         await ResourceEventService
             .Received()
-            .Publish(Arg.Is<ResourceEventEntity>(x => x.Id == resourceEventEntityId), CancellationToken.None);
+            .Publish(Arg.Is<ResourceEventEntity>(x => x!.Id == resourceEventEntityId), CancellationToken.None);
     }
 
     [Fact]
@@ -107,7 +107,7 @@ public class ImportPreNotificationServiceTests
                 return new ResourceEventEntity
                 {
                     Id = resourceEventEntityId,
-                    ResourceId = resourceEvent.ResourceId,
+                    ResourceId = resourceEvent!.ResourceId,
                     ResourceType = resourceEvent.ResourceType,
                     SubResourceType = resourceEvent.SubResourceType,
                     Operation = resourceEvent.Operation,
@@ -126,12 +126,12 @@ public class ImportPreNotificationServiceTests
             .Received()
             .Insert(
                 Arg.Is<ResourceEvent<ImportPreNotificationEvent>>(x =>
-                    x.Operation == "Updated" && x.ChangeSet.Count > 0
+                    x!.Operation == "Updated" && x.ChangeSet.Count > 0
                 )
             );
         await ResourceEventService
             .Received()
-            .Publish(Arg.Is<ResourceEventEntity>(x => x.Id == resourceEventEntityId), CancellationToken.None);
+            .Publish(Arg.Is<ResourceEventEntity>(x => x!.Id == resourceEventEntityId), CancellationToken.None);
     }
 
     [Fact]
@@ -157,7 +157,7 @@ public class ImportPreNotificationServiceTests
             .GetAllImportPreNotificationIdentifiers(mrn, CancellationToken.None)
             .Returns(identifiers);
         ImportPreNotificationRepository
-            .GetAll(Arg.Is<string[]>(x => x.SequenceEqual(identifiers)), CancellationToken.None)
+            .GetAll(Arg.Is<string[]>(x => x!.SequenceEqual(identifiers)), CancellationToken.None)
             .Returns([
                 new ImportPreNotificationEntity { Id = id, ImportPreNotification = new ImportPreNotification() },
             ]);

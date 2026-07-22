@@ -19,11 +19,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 #v6
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 #v7.0.1
         with:
           fetch-depth: 0 # Depth 0 required for branch-based versioning
       - name: Publish Hot Fix
-        uses: DEFRA/cdp-build-action/build-hotfix@9d9b624a3f6c2f14763700d38561f9a32fd9ff3f
+        uses: DEFRA/cdp-build-action/build-hotfix@f13fc42004f99a1df2e21ce1ff488cc72c897e40
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
     ## SonarCloud

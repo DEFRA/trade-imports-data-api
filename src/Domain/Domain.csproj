@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -7,7 +7,7 @@
     <Nullable>enable</Nullable>
     <IsPackable>true</IsPackable>
     <PackageId>Defra.TradeImportsDataApi.Domain</PackageId>
-    <VersionPrefix>0.35.0</VersionPrefix>
+    <VersionPrefix>0.38.0</VersionPrefix>
     <PackageDescription>Defra Trade Imports Data Api Domain</PackageDescription>
     <Company>DEFRA</Company>
     <RepositoryUrl>https://github.com/DEFRA/trade-imports-data-api</RepositoryUrl>
@@ -17,5 +17,8 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Defra.Trade.Gateway.Api.Contract" Version="0.1.0" />
   </ItemGroup>
 </Project>

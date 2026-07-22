@@ -14,6 +14,7 @@ public interface IDbContext
 
     IMongoCollectionSet<ProcessingErrorEntity> ProcessingErrors { get; }
     IMongoCollectionSet<ResourceEventEntity> ResourceEvents { get; }
+    IMongoCollectionSet<TracesChedEntity> TracesCheds { get; }
 
     Task SaveChanges(CancellationToken cancellationToken);
 

@@ -51,7 +51,7 @@ public class ProcessingErrorServiceTests
                 return new ResourceEventEntity
                 {
                     Id = resourceEventEntityId,
-                    ResourceId = resourceEvent.ResourceId,
+                    ResourceId = resourceEvent!.ResourceId,
                     ResourceType = resourceEvent.ResourceType,
                     SubResourceType = resourceEvent.SubResourceType,
                     Operation = resourceEvent.Operation,
@@ -69,11 +69,11 @@ public class ProcessingErrorServiceTests
         ResourceEventRepository
             .Received()
             .Insert(
-                Arg.Is<ResourceEvent<ProcessingErrorEvent>>(x => x.Operation == "Created" && x.ChangeSet.Count == 0)
+                Arg.Is<ResourceEvent<ProcessingErrorEvent>>(x => x!.Operation == "Created" && x.ChangeSet.Count == 0)
             );
         await ResourceEventService
             .Received()
-            .Publish(Arg.Is<ResourceEventEntity>(x => x.Id == resourceEventEntityId), CancellationToken.None);
+            .Publish(Arg.Is<ResourceEventEntity>(x => x!.Id == resourceEventEntityId), CancellationToken.None);
     }
 
     [Fact]
@@ -106,7 +106,7 @@ public class ProcessingErrorServiceTests
                 return new ResourceEventEntity
                 {
                     Id = resourceEventEntityId,
-                    ResourceId = resourceEvent.ResourceId,
+                    ResourceId = resourceEvent!.ResourceId,
                     ResourceType = resourceEvent.ResourceType,
                     SubResourceType = resourceEvent.SubResourceType,
                     Operation = resourceEvent.Operation,
@@ -124,11 +124,11 @@ public class ProcessingErrorServiceTests
         ResourceEventRepository
             .Received()
             .Insert(
-                Arg.Is<ResourceEvent<ProcessingErrorEvent>>(x => x.Operation == "Updated" && x.ChangeSet.Count > 0)
+                Arg.Is<ResourceEvent<ProcessingErrorEvent>>(x => x!.Operation == "Updated" && x.ChangeSet.Count > 0)
             );
         await ResourceEventService
             .Received()
-            .Publish(Arg.Is<ResourceEventEntity>(x => x.Id == resourceEventEntityId), CancellationToken.None);
+            .Publish(Arg.Is<ResourceEventEntity>(x => x!.Id == resourceEventEntityId), CancellationToken.None);
     }
 
     [Fact]
