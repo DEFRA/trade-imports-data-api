@@ -9,6 +9,7 @@ using Defra.TradeImportsDataApi.Testing;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
+using Trade.Gateway.Api.Contract.Certificate;
 using WireMock.Server;
 using Xunit.Abstractions;
 
@@ -91,7 +92,20 @@ public class RelatedImportDeclarationsTests : EndpointTestBase, IClassFixture<Wi
                         },
                     ],
                     [],
-                    []
+                    [
+                        new TracesChedEntity
+                        {
+                            Id = "ChedId",
+                            Ched = new DefraUNVTDCHEDProfile()
+                            {
+                                ExchangedDocument = new ExchangedDocument() { Identifier = "ChedId" },
+                                SpecifiedConsignment = new Consignment(),
+                            },
+                            Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                            Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+                            ETag = "etag",
+                        },
+                    ]
                 )
             );
 
