@@ -345,6 +345,10 @@ public class RelatedImportDeclarationsService(
                 )
             );
 
+            importPreNotifications.RemoveAll(x =>
+                cheds.Exists(ched => ched.Id == x.ImportPreNotification.ReferenceNumber)
+            );
+
             customsDeclarations.AddRange(
                 await customsDeclarationRepository.GetAll(
                     x =>
@@ -373,9 +377,9 @@ public class RelatedImportDeclarationsService(
 
         return await IncludeIndirectLinks(
             new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], TracesChedEntity[]>(
-                customsDeclarations.ToArray(),
-                importPreNotifications.ToArray(),
-                cheds.ToArray()
+                customsDeclarations.DistinctBy(x => x.Id).ToArray(),
+                importPreNotifications.DistinctBy(x => x.Id).ToArray(),
+                cheds.DistinctBy(x => x.Id).ToArray()
             ),
             currentDepth + 1,
             maxDepth,

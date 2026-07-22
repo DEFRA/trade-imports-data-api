@@ -4,6 +4,7 @@ using Defra.TradeImportsDataApi.Domain.Gvms;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using Defra.TradeImportsDataApi.Testing;
 using FluentAssertions;
+using Trade.Gateway.Api.Contract.Certificate;
 
 namespace Defra.TradeImportsDataApi.Api.IntegrationTests.Endpoints;
 
@@ -21,8 +22,9 @@ public class RelatedImportDeclarationsTests : IntegrationTestBase
         );
 
         response.Should().NotBeNull();
-        response.CustomsDeclarations.Length.Should().Be(2);
-        response.ImportPreNotifications.Length.Should().Be(2);
+        response.CustomsDeclarations.Length.Should().Be(4);
+        response.ImportPreNotifications.Length.Should().Be(1);
+        response.Cheds.Length.Should().Be(1);
     }
 
     [Fact]
@@ -37,8 +39,9 @@ public class RelatedImportDeclarationsTests : IntegrationTestBase
         );
 
         response.Should().NotBeNull();
-        response.CustomsDeclarations.Length.Should().Be(3);
-        response.ImportPreNotifications.Length.Should().Be(4);
+        response.CustomsDeclarations.Length.Should().Be(5);
+        response.ImportPreNotifications.Length.Should().Be(3);
+        response.Cheds.Length.Should().Be(2);
     }
 
     [Fact]
@@ -53,8 +56,9 @@ public class RelatedImportDeclarationsTests : IntegrationTestBase
         );
 
         response.Should().NotBeNull();
-        response.CustomsDeclarations.Length.Should().Be(3);
-        response.ImportPreNotifications.Length.Should().Be(4);
+        response.CustomsDeclarations.Length.Should().Be(5);
+        response.ImportPreNotifications.Length.Should().Be(3);
+        response.Cheds.Length.Should().Be(0);
     }
 
     [Fact]
@@ -69,8 +73,9 @@ public class RelatedImportDeclarationsTests : IntegrationTestBase
         );
 
         response.Should().NotBeNull();
-        response.CustomsDeclarations.Length.Should().Be(3);
-        response.ImportPreNotifications.Length.Should().Be(4);
+        response.CustomsDeclarations.Length.Should().Be(5);
+        response.ImportPreNotifications.Length.Should().Be(3);
+        response.Cheds.Length.Should().Be(0);
     }
 
     [Fact]
@@ -96,16 +101,30 @@ public class RelatedImportDeclarationsTests : IntegrationTestBase
         var chedRef2 = ImportPreNotificationIdGenerator.Generate();
         var chedRef3 = ImportPreNotificationIdGenerator.Generate();
         var chedRef4 = ImportPreNotificationIdGenerator.Generate();
+
+        var chedRef5 = ImportPreNotificationIdGenerator.Generate();
+        var chedRef6 = ImportPreNotificationIdGenerator.Generate();
+        var chedRef7 = ImportPreNotificationIdGenerator.Generate();
         var random = Guid.NewGuid().ToString("N");
 
         await CreateImportPreNotification(client, chedRef1);
         await CreateImportPreNotification(client, chedRef2);
         await CreateImportPreNotification(client, chedRef3);
         await CreateImportPreNotification(client, chedRef4);
+
+        await CreateTracesChed(client, chedRef5);
+        await CreateTracesChed(client, chedRef6);
+        await CreateTracesChed(client, chedRef3);
+        await CreateTracesChed(client, chedRef7);
+
         await CreateCustomsDeclaration(client, $"{random}-mrn1", $"{random}-ducr1", [chedRef3, chedRef4]);
         await CreateCustomsDeclaration(client, $"{random}-mrn2", $"{random}-ducr2", [chedRef2, chedRef3]);
         await CreateCustomsDeclaration(client, $"{random}-mrn3", $"{random}-ducr3", [chedRef1, chedRef2]);
         await CreateGmr(client, $"{random}-gmr1", [$"{random}-mrn1", $"{random}-mrn2"]);
+
+        await CreateCustomsDeclaration(client, $"{random}-mrn4", $"{random}-ducr4", [chedRef3, chedRef4]);
+        await CreateCustomsDeclaration(client, $"{random}-mrn5", $"{random}-ducr5", [chedRef7, chedRef3]);
+        await CreateCustomsDeclaration(client, $"{random}-mrn6", $"{random}-ducr6", [chedRef5, chedRef6]);
 
         return (chedRef4, random);
     }
@@ -142,6 +161,21 @@ public class RelatedImportDeclarationsTests : IntegrationTestBase
         await client.PutImportPreNotification(
             chedId,
             new ImportPreNotification { ReferenceNumber = chedId, Version = 1 },
+            null,
+            CancellationToken.None
+        );
+    }
+
+    private static async Task CreateTracesChed(TradeImportsDataApiClient client, string chedId)
+    {
+        await client.PutTracesChed(
+            chedId,
+            new DefraUNVTDCHEDProfile()
+            {
+                ExchangedDocument = new ExchangedDocument() { Identifier = chedId },
+                SpecifiedConsignment = new Consignment(),
+                Model = "Test",
+            },
             null,
             CancellationToken.None
         );
