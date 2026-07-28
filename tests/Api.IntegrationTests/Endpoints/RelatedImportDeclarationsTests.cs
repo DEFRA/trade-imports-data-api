@@ -58,7 +58,7 @@ public class RelatedImportDeclarationsTests : IntegrationTestBase
         response.Should().NotBeNull();
         response.CustomsDeclarations.Length.Should().Be(5);
         response.ImportPreNotifications.Length.Should().Be(3);
-        response.Cheds.Length.Should().Be(0);
+        response.Cheds.Length.Should().Be(2);
     }
 
     [Fact]
@@ -75,7 +75,7 @@ public class RelatedImportDeclarationsTests : IntegrationTestBase
         response.Should().NotBeNull();
         response.CustomsDeclarations.Length.Should().Be(5);
         response.ImportPreNotifications.Length.Should().Be(3);
-        response.Cheds.Length.Should().Be(0);
+        response.Cheds.Length.Should().Be(2);
     }
 
     [Fact]
