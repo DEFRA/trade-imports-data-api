@@ -7,6 +7,7 @@ using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 using Defra.TradeImportsDataApi.Domain.Gvms;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using FluentAssertions;
+using Trade.Gateway.Api.Contract.Certificate;
 
 namespace Defra.TradeImportsDataApi.Api.Tests.Services;
 
@@ -526,6 +527,43 @@ public class RelatedImportDeclarationsServiceTests
     }
 
     [Theory]
+    [InlineData("CHEDP.GB.2025.1234567")]
+    public async Task GivenSearchByTracesChedId_WhenExists_AndNoCustomDeclarationsExist_ThenShouldReturn(
+        string searchChedId
+    )
+    {
+        var memoryDbContext = new MemoryDbContext();
+
+        memoryDbContext.TracesCheds.AddTestData(
+            new TracesChedEntity
+            {
+                Id = searchChedId,
+                Ched = new DefraUNVTDCHEDProfile()
+                {
+                    ExchangedDocument = new ExchangedDocument() { Identifier = searchChedId },
+                    SpecifiedConsignment = new Consignment(),
+                },
+                Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+                ETag = "etag",
+            }
+        );
+
+        var subject = CreateSubject(memoryDbContext);
+
+        var response = await subject.Search(
+            new RelatedImportDeclarationsRequest { ChedId = searchChedId },
+            CancellationToken.None
+        );
+
+        response.Should().NotBeNull();
+        response.CustomsDeclarations.Length.Should().Be(0);
+        response.ImportPreNotifications.Length.Should().Be(0);
+        response.Cheds.Length.Should().Be(1);
+        response.Gmrs.Length.Should().Be(0);
+    }
+
+    [Theory]
     [InlineData("CHEDA.GB.2025.1234567R")]
     [InlineData("2025.1234567R")]
     [InlineData("20251234567R")]
@@ -747,6 +785,8 @@ public class RelatedImportDeclarationsServiceTests
         memoryDbContext.Gmrs.AddTestData(CreateGmr("gmr1", ["mrn1", "mrn2"]));
         memoryDbContext.Gmrs.AddTestData(CreateGmr("gmr2", ["mrn2", "mrn3"]));
         memoryDbContext.Gmrs.AddTestData(CreateGmr("gmr3", ["mrn1"]));
+
+        memoryDbContext.TracesCheds.AddTestData(CreateTracesChed("CHEDP.GB.2025.1234567"));
     }
 
     private static ImportPreNotificationEntity CreateImportPreNotification(string chedId)
@@ -756,6 +796,22 @@ public class RelatedImportDeclarationsServiceTests
             Id = chedId,
             CustomsDeclarationIdentifier = chedId.Split('.')[3],
             ImportPreNotification = new ImportPreNotification(),
+            Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+            Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+            ETag = "etag",
+        };
+    }
+
+    private static TracesChedEntity CreateTracesChed(string chedId)
+    {
+        return new TracesChedEntity
+        {
+            Id = chedId,
+            Ched = new DefraUNVTDCHEDProfile()
+            {
+                ExchangedDocument = new ExchangedDocument() { Identifier = chedId },
+                SpecifiedConsignment = new Consignment(),
+            },
             Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
             Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
             ETag = "etag",
