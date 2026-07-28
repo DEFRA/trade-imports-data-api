@@ -43,4 +43,7 @@
     <ProjectReference Include="..\Data\Data.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Defra.TradeImportsDataApi.Api.Tests" />
+  </ItemGroup>
 </Project>
