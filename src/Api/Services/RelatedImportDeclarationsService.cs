@@ -15,6 +15,20 @@ public class RelatedImportDeclarationsService(
     ITracesChedRepository tracesChedRepository
 ) : IRelatedImportDeclarationsService
 {
+    private readonly ValueTuple<
+        CustomsDeclarationEntity[],
+        ImportPreNotificationEntity[],
+        GmrEntity[],
+        ImportPreNotificationEntity[],
+        TracesChedEntity[]
+    > _empty = new ValueTuple<
+        CustomsDeclarationEntity[],
+        ImportPreNotificationEntity[],
+        GmrEntity[],
+        ImportPreNotificationEntity[],
+        TracesChedEntity[]
+    >([], [], [], [], []);
+
     public async Task<(
         CustomsDeclarationEntity[] CustomsDeclarations,
         ImportPreNotificationEntity[] ImportPreNotifications,
@@ -58,13 +72,7 @@ public class RelatedImportDeclarationsService(
             return await StartFromGmrVrnOrTrn(x => x.Tags.Contains(search), cancellationToken);
         }
 
-        return new ValueTuple<
-            CustomsDeclarationEntity[],
-            ImportPreNotificationEntity[],
-            GmrEntity[],
-            ImportPreNotificationEntity[],
-            TracesChedEntity[]
-        >([], [], [], [], []);
+        return _empty;
     }
 
     [ExcludeFromCodeCoverage]
@@ -84,13 +92,7 @@ public class RelatedImportDeclarationsService(
 
         if (customsDeclarations is null || !customsDeclarations.Any())
         {
-            return new ValueTuple<
-                CustomsDeclarationEntity[],
-                ImportPreNotificationEntity[],
-                GmrEntity[],
-                ImportPreNotificationEntity[],
-                TracesChedEntity[]
-            >([], [], [], [], []);
+            return _empty;
         }
 
         var identifiers = customsDeclarations.SelectMany(x => x.ImportPreNotificationIdentifiers).ToArray();
@@ -111,9 +113,9 @@ public class RelatedImportDeclarationsService(
 
         var result = await IncludeIndirectLinks(
             new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], TracesChedEntity[]>(
-                customsDeclarations.ToArray(),
-                notifications.ToArray(),
-                cheds.ToArray()
+                customsDeclarations.DistinctBy(x => x.Id).ToArray(),
+                notifications.DistinctBy(x => x.Id).ToArray(),
+                cheds.DistinctBy(x => x.Id).ToArray()
             ),
             0,
             maxDepth,
@@ -171,13 +173,7 @@ public class RelatedImportDeclarationsService(
 
             if (notification == null)
             {
-                return new ValueTuple<
-                    CustomsDeclarationEntity[],
-                    ImportPreNotificationEntity[],
-                    GmrEntity[],
-                    ImportPreNotificationEntity[],
-                    TracesChedEntity[]
-                >([], [], [], [], []);
+                return _empty;
             }
 
             preNotifications = [notification];
@@ -187,9 +183,9 @@ public class RelatedImportDeclarationsService(
 
         var result = await IncludeIndirectLinks(
             new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], TracesChedEntity[]>(
-                customsDeclarations.ToArray(),
-                preNotifications,
-                cheds
+                customsDeclarations.DistinctBy(x => x.Id).ToArray(),
+                preNotifications.DistinctBy(x => x.Id).ToArray(),
+                cheds.DistinctBy(x => x.Id).ToArray()
             ),
             0,
             maxDepth,
@@ -219,13 +215,7 @@ public class RelatedImportDeclarationsService(
         var gmr = await gmrRepository.Get(predicate, cancellationToken);
         if (gmr == null)
         {
-            return new ValueTuple<
-                CustomsDeclarationEntity[],
-                ImportPreNotificationEntity[],
-                GmrEntity[],
-                ImportPreNotificationEntity[],
-                TracesChedEntity[]
-            >([], [], [], [], []);
+            return _empty;
         }
 
         var customsDeclarations = await customsDeclarationRepository.GetAll(
@@ -253,13 +243,7 @@ public class RelatedImportDeclarationsService(
         var gmrs = await gmrRepository.GetAll(predicate, cancellationToken);
         if (!gmrs.Any())
         {
-            return new ValueTuple<
-                CustomsDeclarationEntity[],
-                ImportPreNotificationEntity[],
-                GmrEntity[],
-                ImportPreNotificationEntity[],
-                TracesChedEntity[]
-            >([], [], [], [], []);
+            return _empty;
         }
 
         var customsDeclarationIdentifiers = gmrs.SelectMany(x => x.CustomsDeclarationIdentifiers).ToList();
@@ -360,9 +344,9 @@ public class RelatedImportDeclarationsService(
         }
 
         var response = new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], TracesChedEntity[]>(
-            customsDeclarations.ToArray(),
-            importPreNotifications.ToArray(),
-            cheds.ToArray()
+            customsDeclarations.DistinctBy(x => x.Id).ToArray(),
+            importPreNotifications.DistinctBy(x => x.Id).ToArray(),
+            cheds.DistinctBy(x => x.Id).ToArray()
         );
 
         // bail out of the recursive loop if there are no records loaded
