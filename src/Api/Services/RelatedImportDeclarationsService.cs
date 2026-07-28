@@ -136,7 +136,7 @@ public class RelatedImportDeclarationsService(
             result.ImportPreNotifications,
             gmrs.ToArray(),
             transientNotifications.ToArray(),
-            []
+            result.Cheds
         );
     }
 
