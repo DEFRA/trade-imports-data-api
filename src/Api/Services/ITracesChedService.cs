@@ -6,6 +6,8 @@ public interface ITracesChedService
 {
     Task<TracesChedEntity?> Get(string chedId, CancellationToken cancellationToken);
 
+    Task<List<TracesChedEntity>> GetByMrn(string mrn, CancellationToken cancellationToken);
+
     Task<TracesChedEntity> Insert(TracesChedEntity entity, CancellationToken cancellationToken);
 
     Task<TracesChedEntity> Update(TracesChedEntity entity, string etag, CancellationToken cancellationToken);

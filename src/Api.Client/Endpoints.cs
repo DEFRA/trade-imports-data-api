@@ -23,6 +23,8 @@ internal static class Endpoints
     public static string ImportPreNotificationsByMrn(string mrn) =>
         $"/customs-declarations/{mrn}/import-pre-notifications";
 
+    public static string TracesChedsByMrn(string mrn) => $"/customs-declarations/{mrn}/traces-cheds";
+
     public static string ProcessingErrors(string mrn) => $"/processing-errors/{mrn}";
 
     public static string RelatedImportDeclarations(RelatedImportDeclarationsRequest request) =>

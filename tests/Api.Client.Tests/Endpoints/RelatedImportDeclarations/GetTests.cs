@@ -36,7 +36,7 @@ public class GetTests : WireMockTestBase<WireMockContext>
             .RespondWith(
                 Response
                     .Create()
-                    .WithBody(JsonSerializer.Serialize(new RelatedImportDeclarationsResponse([], [], [])))
+                    .WithBody(JsonSerializer.Serialize(new RelatedImportDeclarationsResponse([], [], [], [], [])))
                     .WithStatusCode(StatusCodes.Status200OK)
             );
 
@@ -77,7 +77,9 @@ public class GetTests : WireMockTestBase<WireMockContext>
                                     ),
                                 ],
                                 [new ImportPreNotificationResponse(new ImportPreNotification(), created, updated)],
-                                [new GmrResponse(new Gmr(), created, updated)]
+                                [new GmrResponse(new Gmr(), created, updated)],
+                                [],
+                                []
                             )
                         )
                     )

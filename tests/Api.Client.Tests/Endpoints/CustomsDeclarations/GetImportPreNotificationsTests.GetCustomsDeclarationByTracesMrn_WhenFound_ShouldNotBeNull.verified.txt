@@ -1,0 +1,52 @@
+﻿{
+  Cheds: [
+    {
+      Ched: {
+        Model: Test,
+        Type: ched,
+        ExchangedDocument: {
+          Name: null,
+          Identifier: CHEDP.GB.2026.1234567,
+          TraderAssignedId: null,
+          DocumentTypeCode: null,
+          DocumentStatusCode: null,
+          NotificationStatusCode: null,
+          VersionId: null,
+          FunctionCode: null,
+          IssueDateTime: null,
+          Issuer: null,
+          IncludedNote: null,
+          ReferenceDocument: null,
+          FirstSignatoryAuthentication: null,
+          SecondSignatoryAuthentication: null,
+          ThirdSignatoryAuthentication: null,
+          FourthSignatoryAuthentication: null
+        },
+        SpecifiedConsignment: {
+          AvailabilityDueDateTime: null,
+          ExportExitDateTime: null,
+          ConsignorParty: null,
+          ConsigneeParty: null,
+          DespatchParty: null,
+          DeliveryParty: null,
+          Carrier: null,
+          CustomsTransitAgentParty: null,
+          OriginCountry: null,
+          ExportCountry: null,
+          ImportCountry: null,
+          ReExportCountry: null,
+          TransitCountry: null,
+          UnloadingBaseportLocation: null,
+          MainCarriageLogisticsTransportMovement: null,
+          TransitTradeCountry: null,
+          PackageQuantity: null,
+          IncludedConsignmentItem: null
+        },
+        LaboratoryObservationResult: null
+      },
+      Created: 2025-04-07 11:00 Utc,
+      Updated: 2025-04-07 11:15 Utc,
+      ETag: null
+    }
+  ]
+}

@@ -3,6 +3,7 @@ using Defra.TradeImportsDataApi.Api.Services;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.Events;
+using Defra.TradeImportsDataApi.Domain.Ipaffs;
 using FluentAssertions;
 using NSubstitute;
 using Trade.Gateway.Api.Contract.Certificate;
@@ -13,6 +14,7 @@ public class TracesChedServiceTests
 {
     private IDbContext DbContext { get; }
     private ITracesChedRepository TracesChedRepository { get; }
+    private ICustomsDeclarationRepository CustomsDeclarationRepository { get; }
     private IResourceEventRepository ResourceEventRepository { get; }
     private IResourceEventService ResourceEventService { get; }
     private TracesChedService Subject { get; }
@@ -21,10 +23,17 @@ public class TracesChedServiceTests
     {
         DbContext = Substitute.For<IDbContext>();
         TracesChedRepository = Substitute.For<ITracesChedRepository>();
+        CustomsDeclarationRepository = Substitute.For<ICustomsDeclarationRepository>();
         ResourceEventRepository = Substitute.For<IResourceEventRepository>();
         ResourceEventService = Substitute.For<IResourceEventService>();
 
-        Subject = new TracesChedService(DbContext, TracesChedRepository, ResourceEventRepository, ResourceEventService);
+        Subject = new TracesChedService(
+            DbContext,
+            TracesChedRepository,
+            CustomsDeclarationRepository,
+            ResourceEventRepository,
+            ResourceEventService
+        );
     }
 
     [Fact]
@@ -134,7 +143,7 @@ public class TracesChedServiceTests
     }
 
     [Fact]
-    public async Task GetImportPreNotification_ShouldReturn()
+    public async Task GetChed_ShouldReturn()
     {
         const string id = "id";
         TracesChedRepository
@@ -155,5 +164,34 @@ public class TracesChedServiceTests
         var result = await Subject.Get(id, CancellationToken.None);
 
         result.Should().NotBeNull();
+    }
+
+    [Fact]
+    public async Task GetChedByMrn_ShouldReturn()
+    {
+        const string id = "id";
+        const string mrn = "mrn";
+        var identifiers = new List<string> { "CHEDA.GB.2026.1234567" };
+        CustomsDeclarationRepository
+            .GetAllImportPreNotificationIdentifiers(mrn, CancellationToken.None)
+            .Returns(identifiers);
+        TracesChedRepository
+            .GetAll(Arg.Is<string[]>(x => x!.SequenceEqual(identifiers)), CancellationToken.None)
+            .Returns([
+                new TracesChedEntity()
+                {
+                    Id = id,
+                    Ched = new DefraUNVTDCHEDProfile
+                    {
+                        Model = "Model1",
+                        ExchangedDocument = new ExchangedDocument() { Identifier = "CHEDA.GB.2026.1234567" },
+                        SpecifiedConsignment = new Consignment(),
+                    },
+                },
+            ]);
+
+        var result = await Subject.GetByMrn(mrn, CancellationToken.None);
+
+        result.Should().NotBeEmpty();
     }
 }
