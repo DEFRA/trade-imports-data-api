@@ -86,7 +86,7 @@ public class ResourceEventPublisher(
         );
     }
 
-    private static (string message, bool compressed) SerializeEvent(ResourceEventEntity entity)
+    internal static (string message, bool compressed) SerializeEvent(ResourceEventEntity entity)
     {
         var message = entity.Message;
         if (message.Length <= CompressionThreshold)
@@ -94,9 +94,10 @@ public class ResourceEventPublisher(
 
         var buffer = Encoding.UTF8.GetBytes(message);
         var memoryStream = new MemoryStream();
-        using var gzipStream = new GZipStream(memoryStream, CompressionLevel.Optimal);
-        gzipStream.Write(buffer, 0, buffer.Length);
-        gzipStream.Flush();
+        using (var gzipStream = new GZipStream(memoryStream, CompressionLevel.Optimal))
+        {
+            gzipStream.Write(buffer, 0, buffer.Length);
+        }
 
         return (Convert.ToBase64String(memoryStream.ToArray()), true);
     }

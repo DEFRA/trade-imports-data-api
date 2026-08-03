@@ -90,5 +90,54 @@
       updated: 2025-04-03T10:15:00Z
     }
   ],
-  transitImportPreNotifications: []
+  transitImportPreNotifications: [],
+  cheds: [
+    {
+      ched: {
+        $model: defra/certificate-internal/1,
+        $type: ched,
+        exchangedDocument: {
+          name: null,
+          identifier: ChedId,
+          traderAssignedId: null,
+          documentTypeCode: null,
+          documentStatusCode: null,
+          notificationStatusCode: null,
+          versionId: null,
+          functionCode: null,
+          issueDateTime: null,
+          issuer: null,
+          includedNote: null,
+          referenceDocument: null,
+          firstSignatoryAuthentication: null,
+          secondSignatoryAuthentication: null,
+          thirdSignatoryAuthentication: null,
+          fourthSignatoryAuthentication: null
+        },
+        specifiedConsignment: {
+          availabilityDueDateTime: null,
+          exportExitDateTime: null,
+          consignorParty: null,
+          consigneeParty: null,
+          despatchParty: null,
+          deliveryParty: null,
+          carrier: null,
+          customsTransitAgentParty: null,
+          originCountry: null,
+          exportCountry: null,
+          importCountry: null,
+          reExportCountry: null,
+          transitCountry: null,
+          unloadingBaseportLocation: null,
+          mainCarriageLogisticsTransportMovement: null,
+          transitTradeCountry: null,
+          packageQuantity: null,
+          includedConsignmentItem: null
+        },
+        laboratoryObservationResult: null
+      },
+      created: 2025-04-03T10:00:00Z,
+      updated: 2025-04-03T10:15:00Z
+    }
+  ]
 }

@@ -2,6 +2,7 @@ using Defra.TradeImportsDataApi.Api.Authentication;
 using Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations;
 using Defra.TradeImportsDataApi.Api.Endpoints.Gmrs;
 using Defra.TradeImportsDataApi.Api.Endpoints.ImportPreNotifications;
+using Defra.TradeImportsDataApi.Api.Endpoints.TracesChed;
 using Defra.TradeImportsDataApi.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -62,7 +63,8 @@ public static class EndpointRouteBuilderExtensions
                     x.Created,
                     x.Updated
                 ))
-                .ToArray()
+                .ToArray(),
+            searchResults.Cheds.Select(x => new TracesChedResponse(x.Ched, x.Created, x.Updated)).ToArray()
         );
 
         return Results.Ok(response);

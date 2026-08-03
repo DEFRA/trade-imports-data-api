@@ -2,12 +2,14 @@ using Defra.TradeImportsDataApi.Api.Data;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.Events;
+using Defra.TradeImportsDataApi.Domain.Ipaffs;
 
 namespace Defra.TradeImportsDataApi.Api.Services;
 
 public class TracesChedService(
     IDbContext dbContext,
     ITracesChedRepository tracesChedRepository,
+    ICustomsDeclarationRepository customsDeclarationRepository,
     IResourceEventRepository resourceEventRepository,
     IResourceEventService resourceEventService
 ) : ITracesChedService
@@ -29,6 +31,18 @@ public class TracesChedService(
 
         await resourceEventService.Publish(resourceEventEntity, cancellationToken);
         return inserted;
+    }
+
+    public async Task<List<TracesChedEntity>> GetByMrn(string mrn, CancellationToken cancellationToken)
+    {
+        var identifiers = await customsDeclarationRepository.GetAllImportPreNotificationIdentifiers(
+            mrn,
+            cancellationToken
+        );
+
+        identifiers = identifiers.Where(x => new ChedIdReference(x).IsValid()).ToList();
+
+        return await tracesChedRepository.GetAll(identifiers.ToArray(), cancellationToken);
     }
 
     public async Task<TracesChedEntity> Update(

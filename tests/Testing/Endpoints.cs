@@ -52,6 +52,8 @@ public static class Endpoints
 
         public static string GetImportPreNotifications(string mrn) => $"{Root}/{mrn}/import-pre-notifications";
 
+        public static string GetTracesCheds(string mrn) => $"{Root}/{mrn}/traces-cheds";
+
         public static string Put(string mrn) => $"{Root}/{mrn}";
     }
 
