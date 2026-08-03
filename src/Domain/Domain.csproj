@@ -7,7 +7,7 @@
     <Nullable>enable</Nullable>
     <IsPackable>true</IsPackable>
     <PackageId>Defra.TradeImportsDataApi.Domain</PackageId>
-    <VersionPrefix>0.39.0</VersionPrefix>
+    <VersionPrefix>0.40.0</VersionPrefix>
     <PackageDescription>Defra Trade Imports Data Api Domain</PackageDescription>
     <Company>DEFRA</Company>
     <RepositoryUrl>https://github.com/DEFRA/trade-imports-data-api</RepositoryUrl>
@@ -19,6 +19,6 @@
     <None Include="README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Defra.Trade.Gateway.Api.Contract" Version="0.1.0" />
+    <PackageReference Include="Defra.Trade.Gateway.Api.Contract" Version="0.1.1" />
   </ItemGroup>
 </Project>
