@@ -23,7 +23,7 @@ jobs:
         with:
           fetch-depth: 0 # Depth 0 required for branch-based versioning
       - name: Publish Hot Fix
-        uses: DEFRA/cdp-build-action/build-hotfix@f3e9fa44516a8cd226c5b5eeab9c0a17126c3e1a
+        uses: DEFRA/cdp-build-action/build-hotfix@04287714fb7589ae4e418c529d60f28794351890
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
     ## SonarCloud
