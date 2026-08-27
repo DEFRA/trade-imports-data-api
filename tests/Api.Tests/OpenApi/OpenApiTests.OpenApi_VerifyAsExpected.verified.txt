@@ -6080,6 +6080,11 @@
         ],
         "type": "object",
         "properties": {
+          "lastUpdated": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
           "$model": {
             "type": "string"
           },
