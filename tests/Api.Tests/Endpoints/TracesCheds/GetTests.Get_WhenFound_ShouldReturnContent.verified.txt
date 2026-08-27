@@ -1,5 +1,6 @@
 ﻿{
   ched: {
+    lastUpdated: null,
     $model: defra/certificate-internal/1,
     $type: ched,
     exchangedDocument: {

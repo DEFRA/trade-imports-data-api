@@ -1,5 +1,6 @@
 ﻿{
   Ched: {
+    LastUpdated: null,
     Model: Test,
     Type: ched,
     ExchangedDocument: {

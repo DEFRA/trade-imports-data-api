@@ -10,4 +10,9 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <!-- Override transitive SSH.NET package to a non-vulnerable version -->
+    <!-- Add explicit reference so projects resolve the safe SSH.NET version instead of a vulnerable transitive version -->
+    <PackageReference Include="SSH.NET" Version="2026.0.0" />
+  </ItemGroup>
 </Project>
