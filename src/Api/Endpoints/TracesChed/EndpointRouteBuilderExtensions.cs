@@ -1,4 +1,5 @@
 using Defra.TradeImportsDataApi.Api.Authentication;
+using Defra.TradeImportsDataApi.Api.Data;
 using Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations;
 using Defra.TradeImportsDataApi.Api.Exceptions;
 using Defra.TradeImportsDataApi.Api.Extensions;
@@ -50,6 +51,17 @@ public static class EndpointRouteBuilderExtensions
             .ProducesProblem(StatusCodes.Status409Conflict)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .RequireAuthorization(PolicyNames.Write);
+
+        app.MapGet("traces-ched-updates/", GetUpdates)
+            .WithName("GetTracesChedUpdates")
+            .WithTags(groupName)
+            .WithSummary("Get TracesChedUpdates")
+            .WithDescription("Get TRACES CHEDs updated between a period of time")
+            .Produces<TracesChedUpdatesResponse>()
+            .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesProblem(StatusCodes.Status500InternalServerError)
+            .RequireAuthorization(PolicyNames.Read)
+            .AddEndpointFilter<TracesChedUpdatesRequest.TracesChedUpdatesRequestValidator>();
     }
 
     /// <param name="chedId" example="CHEDA.GB.2024.1020304">CHED ID</param>
@@ -160,6 +172,34 @@ public static class EndpointRouteBuilderExtensions
                         customsDeclarationEntity.Updated
                     ))
                     .ToList()
+            )
+        );
+    }
+
+    /// <param name="request"></param>
+    /// <param name="tracesChedService"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpGet]
+    private static async Task<IResult> GetUpdates(
+        [AsParameters] TracesChedUpdatesRequest request,
+        [FromServices] ITracesChedService tracesChedService,
+        CancellationToken cancellationToken
+    )
+    {
+        var page = request.Page.GetValueOrDefault();
+        var pageSize = request.PageSize.GetValueOrDefault();
+        var result = await tracesChedService.GetUpdates(
+            new TracesChedUpdateQuery(request.From, request.To, page, pageSize),
+            cancellationToken
+        );
+
+        return Results.Ok(
+            new TracesChedUpdatesResponse(
+                result.Updates.Select(x => new TracesChedUpdateResponse(x.ReferenceNumber, x.Updated)).ToList(),
+                result.Total,
+                page,
+                pageSize
             )
         );
     }
