@@ -77,6 +77,22 @@ public class GetUpdatesTests : EndpointTestBase, IClassFixture<WireMockContext>
     }
 
     [Fact]
+    public async Task Get_WhenInvalidRequest_ToBeforeFrom_ShouldBeBadRequest()
+    {
+        var client = CreateClient();
+
+        var response = await client.GetAsync(
+            TradeImportsDataApi.Testing.Endpoints.TracesCheds.GetUpdates(
+                EndpointQuery
+                    .New.Where(EndpointFilter.From(new DateTime(2025, 5, 28, 14, 55, 0, DateTimeKind.Utc)))
+                    .Where(EndpointFilter.To(new DateTime(2025, 5, 28, 13, 55, 0, DateTimeKind.Utc)))
+            )
+        );
+
+        await VerifyJson(await response.Content.ReadAsStringAsync(), _settings);
+    }
+
+    [Fact]
     public async Task Get_WhenInvalidRequest_PageLessThan1_ShouldBeBadRequest()
     {
         var client = CreateClient();

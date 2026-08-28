@@ -54,6 +54,7 @@ public class TracesChedUpdatesRequest
                 .WithMessage(
                     $"Must not be more than {TimeSpan.FromHours(1).Duration().TotalHours} hour(s) of {nameof(From)}"
                 );
+            RuleFor(x => x.To).GreaterThan(x => x.From).WithMessage($"Must be after {nameof(From)}");
             RuleFor(x => x.Page).GreaterThanOrEqualTo(1);
             RuleFor(x => x.PageSize).GreaterThanOrEqualTo(1);
             RuleFor(x => x.PageSize).LessThanOrEqualTo(1000);
