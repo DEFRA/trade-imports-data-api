@@ -19,7 +19,9 @@ base=$(git rev-parse FETCH_HEAD)
 # base tip is exactly what the PR changes. No merge base needed, which means a
 # shallow clone is enough.
 changed() {
-  ! git diff --quiet "$base" HEAD -- "$1"
+  local dir=$1
+
+  ! git diff --quiet "$base" HEAD -- "$dir"
 }
 
 extract_version() {
@@ -36,7 +38,7 @@ check() {
   new=$(extract_version <"$csproj")
 
   if [[ -z $new ]]; then
-    echo "::error file=$csproj::$name has no <VersionPrefix>"
+    echo "::error file=$csproj::$name has no <VersionPrefix>" >&2
     failed=1
     return
   fi
@@ -52,7 +54,7 @@ check() {
     line=$(grep -n '<VersionPrefix>' "$csproj" | head -1 | cut -d: -f1)
     IFS=. read -r major minor _ <<<"$old"
     suggested="$major.$((minor + 1)).0"
-    echo "::error file=$csproj,line=$line::$name changed but its VersionPrefix ($new) is not ahead of $BASE_REF ($old) — bump it (e.g. $suggested)"
+    echo "::error file=$csproj,line=$line::$name changed but its VersionPrefix ($new) is not ahead of $BASE_REF ($old) — bump it (e.g. $suggested)" >&2
     failed=1
     return
   fi
