@@ -79,7 +79,7 @@ public class ImportPreNotificationUpdatesRequestTests
         var subject = new ImportPreNotificationUpdatesRequest
         {
             From = new DateTime(2025, 5, 28, 13, 55, 0, DateTimeKind.Unspecified),
-            To = new DateTime(2025, 5, 28, 13, 55, 0, DateTimeKind.Unspecified),
+            To = new DateTime(2025, 5, 28, 14, 55, 0, DateTimeKind.Unspecified),
         };
 
         var result =
@@ -91,5 +91,38 @@ public class ImportPreNotificationUpdatesRequestTests
         result.Errors.Count.Should().Be(2);
         result.Errors.Should().Contain(x => x.PropertyName == "From" && x.ErrorMessage == "Must be UTC");
         result.Errors.Should().Contain(x => x.PropertyName == "To" && x.ErrorMessage == "Must be UTC");
+    }
+
+    [Fact]
+    public async Task WhenToIsBeforeFrom_ShouldBeInvalid()
+    {
+        var subject = new ImportPreNotificationUpdatesRequest
+        {
+            From = new DateTime(2025, 5, 28, 14, 55, 0, DateTimeKind.Utc),
+            To = new DateTime(2025, 5, 28, 13, 55, 0, DateTimeKind.Utc),
+        };
+
+        var result =
+            await new ImportPreNotificationUpdatesRequest.ImportPreNotificationUpdatesRequestValidator().ValidateAsync(
+                subject
+            );
+
+        result.IsValid.Should().BeFalse();
+        result.Errors.Should().Contain(x => x.PropertyName == "To" && x.ErrorMessage == "Must be after From");
+    }
+
+    [Fact]
+    public async Task WhenToEqualsFrom_ShouldBeInvalid()
+    {
+        var at = new DateTime(2025, 5, 28, 13, 55, 0, DateTimeKind.Utc);
+        var subject = new ImportPreNotificationUpdatesRequest { From = at, To = at };
+
+        var result =
+            await new ImportPreNotificationUpdatesRequest.ImportPreNotificationUpdatesRequestValidator().ValidateAsync(
+                subject
+            );
+
+        result.IsValid.Should().BeFalse();
+        result.Errors.Should().Contain(x => x.PropertyName == "To" && x.ErrorMessage == "Must be after From");
     }
 }

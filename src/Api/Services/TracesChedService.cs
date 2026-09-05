@@ -33,6 +33,9 @@ public class TracesChedService(
         return inserted;
     }
 
+    public async Task<TracesChedUpdates> GetUpdates(TracesChedUpdateQuery query, CancellationToken cancellationToken) =>
+        await tracesChedRepository.GetUpdates(query, cancellationToken);
+
     public async Task<List<TracesChedEntity>> GetByMrn(string mrn, CancellationToken cancellationToken)
     {
         var identifiers = await customsDeclarationRepository.GetAllImportPreNotificationIdentifiers(

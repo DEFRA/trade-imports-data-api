@@ -1,3 +1,13 @@
+# Both services run the same image. Defining the build once means it is built once,
+# with the NuGet PAT, instead of the invalid-topic service kicking off a second,
+# arg-less build that fails.
+x-data-api: &data-api
+  image: trade-imports-data-api:local
+  build:
+    args:
+      DEFRA_NUGET_PAT: ${DEFRA_NUGET_PAT}
+    dockerfile: Dockerfile
+
 services:
   mongodb:
     # Initialise a Mongo cluster with a replicaset of 1 node.
@@ -26,10 +36,7 @@ services:
     restart: always
 
   data-api:
-    build:
-      args:
-        DEFRA_NUGET_PAT: ${DEFRA_NUGET_PAT}
-      dockerfile: Dockerfile
+    <<: *data-api
     depends_on:
       mongodb:
         condition: service_healthy
@@ -58,8 +65,7 @@ services:
       start_period: 5s
   
   data-api-invalid-upserts-topic:
-    build:
-      dockerfile: Dockerfile
+    <<: *data-api
     depends_on:
       mongodb:
         condition: service_healthy

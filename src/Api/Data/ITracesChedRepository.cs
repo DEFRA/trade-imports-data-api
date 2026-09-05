@@ -6,6 +6,8 @@ public interface ITracesChedRepository
 {
     Task<TracesChedEntity?> Get(string id, CancellationToken cancellationToken);
 
+    Task<TracesChedUpdates> GetUpdates(TracesChedUpdateQuery query, CancellationToken cancellationToken = default);
+
     Task<List<TracesChedEntity>> GetAll(string[] ids, CancellationToken cancellationToken);
 
     TracesChedEntity Insert(TracesChedEntity entity);

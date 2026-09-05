@@ -42,6 +42,8 @@ public static class Endpoints
         public static string Put(string chedId) => $"{Root}/{chedId}";
 
         public static string GetCustomsDeclarations(string chedId) => $"{Root}/{chedId}/customs-declarations";
+
+        public static string GetUpdates(EndpointQuery? query = null) => $"/traces-ched-updates{query}";
     }
 
     public static class CustomsDeclarations
