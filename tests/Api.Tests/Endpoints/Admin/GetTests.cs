@@ -17,6 +17,8 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
     private IImportPreNotificationRepository MockImportPreNotificationRepository { get; } =
         Substitute.For<IImportPreNotificationRepository>();
 
+    private ITracesChedRepository MockTracesChedRepository { get; } = Substitute.For<ITracesChedRepository>();
+
     public GetTests(ApiWebApplicationFactory factory, ITestOutputHelper outputHelper, WireMockContext context)
         : base(factory, outputHelper)
     {
@@ -35,6 +37,7 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
         base.ConfigureTestServices(services);
 
         services.AddTransient<IImportPreNotificationRepository>(_ => MockImportPreNotificationRepository);
+        services.AddTransient<ITracesChedRepository>(_ => MockTracesChedRepository);
     }
 
     [Fact]
@@ -62,6 +65,65 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
     {
         var client = CreateClient();
         MockImportPreNotificationRepository.GetMaxId(Arg.Any<CancellationToken>()).Returns("CHEDA.GB.2024.1234567");
+        MockTracesChedRepository.GetMaxId(Arg.Any<CancellationToken>()).Returns("CHEDD.GB.2024.7654321");
+
+        var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.Admin.MaxId);
+
+        await VerifyJson(await response.Content.ReadAsStringAsync(), _settings);
+    }
+
+    [Fact]
+    public async Task Get_WhenBothImportPreNotificationAndTracesChedAreNull_ShouldReturnNull()
+    {
+        var client = CreateClient();
+
+        var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.Admin.MaxId);
+
+        await VerifyJson(await response.Content.ReadAsStringAsync(), _settings);
+    }
+
+    [Fact]
+    public async Task Get_WhenTracesChedHasHigherId_ShouldReturnTracesChed()
+    {
+        var client = CreateClient();
+        MockImportPreNotificationRepository.GetMaxId(Arg.Any<CancellationToken>()).Returns("CHEDA.GB.2024.7654321");
+        MockTracesChedRepository.GetMaxId(Arg.Any<CancellationToken>()).Returns("CHEDD.GB.2024.9999999");
+
+        var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.Admin.MaxId);
+
+        await VerifyJson(await response.Content.ReadAsStringAsync(), _settings);
+    }
+
+    [Fact]
+    public async Task Get_WhenTracesChedHasLowerId_ShouldReturnImportPreNotification()
+    {
+        var client = CreateClient();
+        MockImportPreNotificationRepository.GetMaxId(Arg.Any<CancellationToken>()).Returns("CHEDA.GB.2024.9999999");
+        MockTracesChedRepository.GetMaxId(Arg.Any<CancellationToken>()).Returns("CHEDD.GB.2024.7654321");
+
+        var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.Admin.MaxId);
+
+        await VerifyJson(await response.Content.ReadAsStringAsync(), _settings);
+    }
+
+    [Fact]
+    public async Task Get_WhenTracesChedHasHigherIdOnSevenToEightDigitBoundary_ShouldReturnTracesChed()
+    {
+        var client = CreateClient();
+        MockImportPreNotificationRepository.GetMaxId(Arg.Any<CancellationToken>()).Returns("CHEDA.GB.2024.9999999");
+        MockTracesChedRepository.GetMaxId(Arg.Any<CancellationToken>()).Returns("CHEDD.GB.2024.10000000");
+
+        var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.Admin.MaxId);
+
+        await VerifyJson(await response.Content.ReadAsStringAsync(), _settings);
+    }
+
+    [Fact]
+    public async Task Get_WhenTracesChedMissing_ShouldReturnImportPreNotification()
+    {
+        var client = CreateClient();
+        MockImportPreNotificationRepository.GetMaxId(Arg.Any<CancellationToken>()).Returns("CHEDA.GB.2024.1234567");
+        MockTracesChedRepository.GetMaxId(Arg.Any<CancellationToken>()).Returns((string?)null);
 
         var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.Admin.MaxId);
 
