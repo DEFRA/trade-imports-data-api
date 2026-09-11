@@ -6643,6 +6643,14 @@
             ],
             "nullable": true
           },
+          "netVolume": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.UneceMeasure"
+              }
+            ],
+            "nullable": true
+          },
           "applicableClassification": {
             "type": "array",
             "items": {
@@ -6812,6 +6820,29 @@
                 "$ref": "#/components/schemas/Trade.Gateway.Api.Contract.Certificate.LogisticsLocation"
               }
             ],
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Trade.Gateway.Api.Contract.Certificate.UneceMeasure": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "nullable": true
+          },
+          "value": {
+            "type": "string",
+            "nullable": true
+          },
+          "unitCode": {
+            "type": "string",
+            "description": "Measurement unit code token.",
+            "nullable": true
+          },
+          "unitCodeListVersionId": {
+            "type": "string",
             "nullable": true
           }
         },
