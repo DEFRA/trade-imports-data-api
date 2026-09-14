@@ -4,6 +4,7 @@ using Defra.TradeImportsDataApi.Api.Authentication;
 using Defra.TradeImportsDataApi.Api.Configuration;
 using Defra.TradeImportsDataApi.Api.Data;
 using Defra.TradeImportsDataApi.Api.Endpoints.Admin;
+using Defra.TradeImportsDataApi.Api.Endpoints.ChedReservation;
 using Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations;
 using Defra.TradeImportsDataApi.Api.Endpoints.Gmrs;
 using Defra.TradeImportsDataApi.Api.Endpoints.ImportPreNotifications;
@@ -116,6 +117,7 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
     builder.Services.AddTransient<IProcessingErrorRepository, ProcessingErrorRepository>();
     builder.Services.AddTransient<IResourceEventRepository, ResourceEventRepository>();
     builder.Services.AddTransient<ITracesChedRepository, TracesChedRepository>();
+    builder.Services.AddTransient<IChedReservationRepository, ChedReservationRepository>();
 
     builder.Services.AddAuthenticationAuthorization();
 
@@ -144,6 +146,7 @@ static WebApplication BuildWebApplication(WebApplicationBuilder builder, bool ge
     app.MapReportingEndpoints();
     app.MapResourceEventEndpoints();
     app.MapTracesChedsEndpoints();
+    app.MapChedReservationsEndpoints();
     app.UseOpenApi();
     app.UseStatusCodePages();
     app.UseExceptionHandler(

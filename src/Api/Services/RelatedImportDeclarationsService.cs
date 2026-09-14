@@ -3,7 +3,6 @@ using System.Linq.Expressions;
 using Defra.TradeImportsDataApi.Api.Data;
 using Defra.TradeImportsDataApi.Api.Endpoints.RelatedImportDeclarations;
 using Defra.TradeImportsDataApi.Data.Entities;
-using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
 
 namespace Defra.TradeImportsDataApi.Api.Services;
@@ -12,7 +11,8 @@ public class RelatedImportDeclarationsService(
     ICustomsDeclarationRepository customsDeclarationRepository,
     IImportPreNotificationRepository importPreNotificationRepository,
     IGmrRepository gmrRepository,
-    ITracesChedRepository tracesChedRepository
+    ITracesChedRepository tracesChedRepository,
+    IChedReservationRepository chedReservationRepository
 ) : IRelatedImportDeclarationsService
 {
     private readonly ValueTuple<
@@ -20,21 +20,24 @@ public class RelatedImportDeclarationsService(
         ImportPreNotificationEntity[],
         GmrEntity[],
         ImportPreNotificationEntity[],
-        TracesChedEntity[]
+        TracesChedEntity[],
+        ChedReservationEntity[]
     > _empty = new ValueTuple<
         CustomsDeclarationEntity[],
         ImportPreNotificationEntity[],
         GmrEntity[],
         ImportPreNotificationEntity[],
-        TracesChedEntity[]
-    >([], [], [], [], []);
+        TracesChedEntity[],
+        ChedReservationEntity[]
+    >([], [], [], [], [], []);
 
     public async Task<(
         CustomsDeclarationEntity[] CustomsDeclarations,
         ImportPreNotificationEntity[] ImportPreNotifications,
         GmrEntity[] Gmrs,
         ImportPreNotificationEntity[] TransientNotifications,
-        TracesChedEntity[] Cheds
+        TracesChedEntity[] Cheds,
+        ChedReservationEntity[] Reservations
     )> Search(RelatedImportDeclarationsRequest request, CancellationToken cancellationToken)
     {
         var maxDepth = 3;
@@ -81,7 +84,8 @@ public class RelatedImportDeclarationsService(
         ImportPreNotificationEntity[] ImportPreNotifications,
         GmrEntity[] Gmrs,
         ImportPreNotificationEntity[] TransientNotifications,
-        TracesChedEntity[] Cheds
+        TracesChedEntity[] Cheds,
+        ChedReservationEntity[] Reservations
     )> StartFromCustomsDeclaration(
         Expression<Func<CustomsDeclarationEntity, bool>> predicate,
         int maxDepth,
@@ -101,6 +105,11 @@ public class RelatedImportDeclarationsService(
         var notifications = await importPreNotificationRepository.GetAll(shortCheds, cancellationToken);
         var cheds = await tracesChedRepository.GetAll(fullCheds, cancellationToken);
 
+        var reservations = await chedReservationRepository.GetByChedIds(
+            cheds.Select(x => x.Id).ToArray(),
+            cancellationToken
+        );
+
         //put this line behind a feature flag that needs to be opt-in to
         var transientNotifications = await importPreNotificationRepository.GetAllByTags(
             customsDeclarations.Select(x => x.Id.ToLower()).ToArray(),
@@ -112,10 +121,16 @@ public class RelatedImportDeclarationsService(
             .ToList();
 
         var result = await IncludeIndirectLinks(
-            new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], TracesChedEntity[]>(
+            new ValueTuple<
+                CustomsDeclarationEntity[],
+                ImportPreNotificationEntity[],
+                TracesChedEntity[],
+                ChedReservationEntity[]
+            >(
                 customsDeclarations.DistinctBy(x => x.Id).ToArray(),
                 notifications.DistinctBy(x => x.Id).ToArray(),
-                cheds.DistinctBy(x => x.Id).ToArray()
+                cheds.DistinctBy(x => x.Id).ToArray(),
+                reservations.DistinctBy(x => x.Id).ToArray()
             ),
             0,
             maxDepth,
@@ -130,13 +145,15 @@ public class RelatedImportDeclarationsService(
             ImportPreNotificationEntity[],
             GmrEntity[],
             ImportPreNotificationEntity[],
-            TracesChedEntity[]
+            TracesChedEntity[],
+            ChedReservationEntity[]
         >(
             result.CustomsDeclarations,
             result.ImportPreNotifications,
             gmrs.ToArray(),
             transientNotifications.ToArray(),
-            result.Cheds
+            result.Cheds,
+            result.Reservations
         );
     }
 
@@ -145,7 +162,8 @@ public class RelatedImportDeclarationsService(
         ImportPreNotificationEntity[] ImportPreNotifications,
         GmrEntity[] Gmrs,
         ImportPreNotificationEntity[] TransientNotifications,
-        TracesChedEntity[] Cheds
+        TracesChedEntity[] Cheds,
+        ChedReservationEntity[] Reservations
     )> StartFromImportPreNotification(string chedId, int maxDepth, CancellationToken cancellationToken)
     {
         var chedRef = new ChedIdReference(chedId);
@@ -181,11 +199,22 @@ public class RelatedImportDeclarationsService(
 
         var customsDeclarations = await customsDeclarationRepository.GetAll(cdLookup, cancellationToken);
 
+        var reservations = await chedReservationRepository.GetByChedIds(
+            cheds.Select(x => x.Id).ToArray(),
+            cancellationToken
+        );
+
         var result = await IncludeIndirectLinks(
-            new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], TracesChedEntity[]>(
+            new ValueTuple<
+                CustomsDeclarationEntity[],
+                ImportPreNotificationEntity[],
+                TracesChedEntity[],
+                ChedReservationEntity[]
+            >(
                 customsDeclarations.DistinctBy(x => x.Id).ToArray(),
                 preNotifications.DistinctBy(x => x.Id).ToArray(),
-                cheds.DistinctBy(x => x.Id).ToArray()
+                cheds.DistinctBy(x => x.Id).ToArray(),
+                reservations.DistinctBy(x => x.Id).ToArray()
             ),
             0,
             maxDepth,
@@ -200,8 +229,16 @@ public class RelatedImportDeclarationsService(
             ImportPreNotificationEntity[],
             GmrEntity[],
             ImportPreNotificationEntity[],
-            TracesChedEntity[]
-        >(result.CustomsDeclarations, result.ImportPreNotifications, gmrs.ToArray(), [], result.Cheds);
+            TracesChedEntity[],
+            ChedReservationEntity[]
+        >(
+            result.CustomsDeclarations,
+            result.ImportPreNotifications,
+            gmrs.ToArray(),
+            [],
+            result.Cheds,
+            result.Reservations
+        );
     }
 
     private async Task<(
@@ -209,7 +246,8 @@ public class RelatedImportDeclarationsService(
         ImportPreNotificationEntity[] ImportPreNotifications,
         GmrEntity[] Gmrs,
         ImportPreNotificationEntity[] TransientNotifications,
-        TracesChedEntity[] Cheds
+        TracesChedEntity[] Cheds,
+        ChedReservationEntity[] Reservations
     )> StartFromGmrId(Expression<Func<GmrEntity, bool>> predicate, CancellationToken cancellationToken)
     {
         var gmr = await gmrRepository.Get(predicate, cancellationToken);
@@ -228,8 +266,9 @@ public class RelatedImportDeclarationsService(
             ImportPreNotificationEntity[],
             GmrEntity[],
             ImportPreNotificationEntity[],
-            TracesChedEntity[]
-        >([.. customsDeclarations], [], [gmr], [], []);
+            TracesChedEntity[],
+            ChedReservationEntity[]
+        >([.. customsDeclarations], [], [gmr], [], [], []);
     }
 
     private async Task<(
@@ -237,7 +276,8 @@ public class RelatedImportDeclarationsService(
         ImportPreNotificationEntity[] ImportPreNotifications,
         GmrEntity[] Gmrs,
         ImportPreNotificationEntity[] TransientNotifications,
-        TracesChedEntity[] Cheds
+        TracesChedEntity[] Cheds,
+        ChedReservationEntity[] Reservations
     )> StartFromGmrVrnOrTrn(Expression<Func<GmrEntity, bool>> predicate, CancellationToken cancellationToken)
     {
         var gmrs = await gmrRepository.GetAll(predicate, cancellationToken);
@@ -258,19 +298,22 @@ public class RelatedImportDeclarationsService(
             ImportPreNotificationEntity[],
             GmrEntity[],
             ImportPreNotificationEntity[],
-            TracesChedEntity[]
-        >([.. customsDeclarations], [], [.. gmrs], [], []);
+            TracesChedEntity[],
+            ChedReservationEntity[]
+        >([.. customsDeclarations], [], [.. gmrs], [], [], []);
     }
 
     private async Task<(
         CustomsDeclarationEntity[] CustomsDeclarations,
         ImportPreNotificationEntity[] ImportPreNotifications,
-        TracesChedEntity[] Cheds
+        TracesChedEntity[] Cheds,
+        ChedReservationEntity[] Reservations
     )> IncludeIndirectLinks(
         (
             CustomsDeclarationEntity[] CustomsDeclarations,
             ImportPreNotificationEntity[] ImportPreNotifications,
-            TracesChedEntity[] Cheds
+            TracesChedEntity[] Cheds,
+            ChedReservationEntity[] Reservations
         ) data,
         int currentDepth,
         int maxDepth,
@@ -287,6 +330,7 @@ public class RelatedImportDeclarationsService(
         var importPreNotifications = data.ImportPreNotifications.ToList();
         var importPreNotificationIds = importPreNotifications.Select(x => x.Id);
         var cheds = data.Cheds.ToList();
+        var reservations = data.Reservations.ToList();
 
         var identifiers = data
             .CustomsDeclarations.SelectMany(x => x.ImportPreNotificationIdentifiers)
@@ -316,6 +360,8 @@ public class RelatedImportDeclarationsService(
                     cancellationToken
                 )
             );
+
+            reservations.AddRange(await chedReservationRepository.GetByChedIds(fullCheds.ToArray(), cancellationToken));
         }
 
         if (shortCheds.Count != 0)
@@ -343,10 +389,16 @@ public class RelatedImportDeclarationsService(
             );
         }
 
-        var response = new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], TracesChedEntity[]>(
+        var response = new ValueTuple<
+            CustomsDeclarationEntity[],
+            ImportPreNotificationEntity[],
+            TracesChedEntity[],
+            ChedReservationEntity[]
+        >(
             customsDeclarations.DistinctBy(x => x.Id).ToArray(),
             importPreNotifications.DistinctBy(x => x.Id).ToArray(),
-            cheds.DistinctBy(x => x.Id).ToArray()
+            cheds.DistinctBy(x => x.Id).ToArray(),
+            reservations.DistinctBy(x => x.Id).ToArray()
         );
 
         // bail out of the recursive loop if there are no records loaded
@@ -360,10 +412,16 @@ public class RelatedImportDeclarationsService(
         }
 
         return await IncludeIndirectLinks(
-            new ValueTuple<CustomsDeclarationEntity[], ImportPreNotificationEntity[], TracesChedEntity[]>(
+            new ValueTuple<
+                CustomsDeclarationEntity[],
+                ImportPreNotificationEntity[],
+                TracesChedEntity[],
+                ChedReservationEntity[]
+            >(
                 customsDeclarations.DistinctBy(x => x.Id).ToArray(),
                 importPreNotifications.DistinctBy(x => x.Id).ToArray(),
-                cheds.DistinctBy(x => x.Id).ToArray()
+                cheds.DistinctBy(x => x.Id).ToArray(),
+                reservations.DistinctBy(x => x.Id).ToArray()
             ),
             currentDepth + 1,
             maxDepth,

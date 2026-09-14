@@ -1,0 +1,20 @@
+﻿{
+  Reservation: {
+    ChedId: CHED,
+    Mrn: MRN,
+    Status: Reserved,
+    Timestamp: 2025-04-07 11:00 Utc,
+    Commodities: [
+      {
+        GoodsItemNumber: 1,
+        CommodityCode: 123,
+        CertificateLineNumber: 1,
+        UnitOfMeasure: KGM,
+        Quantity: 100.0
+      }
+    ]
+  },
+  Created: 2025-04-07 11:00 Utc,
+  Updated: 2025-04-07 11:15 Utc,
+  ETag: "etag"
+}

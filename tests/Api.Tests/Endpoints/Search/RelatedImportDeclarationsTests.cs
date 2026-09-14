@@ -5,6 +5,7 @@ using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 using Defra.TradeImportsDataApi.Domain.Gvms;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
+using Defra.TradeImportsDataApi.Domain.Traces;
 using Defra.TradeImportsDataApi.Testing;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
@@ -58,7 +59,8 @@ public class RelatedImportDeclarationsTests : EndpointTestBase, IClassFixture<Wi
                     ImportPreNotificationEntity[],
                     GmrEntity[],
                     ImportPreNotificationEntity[],
-                    TracesChedEntity[]
+                    TracesChedEntity[],
+                    ChedReservationEntity[]
                 >(
                     [
                         new CustomsDeclarationEntity
@@ -100,6 +102,33 @@ public class RelatedImportDeclarationsTests : EndpointTestBase, IClassFixture<Wi
                             {
                                 ExchangedDocument = new ExchangedDocument() { Identifier = "ChedId" },
                                 SpecifiedConsignment = new Consignment(),
+                            },
+                            Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                            Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+                            ETag = "etag",
+                        },
+                    ],
+                    [
+                        new ChedReservationEntity
+                        {
+                            Id = "ChedId_Mrn1",
+                            Reservation = new Reservation
+                            {
+                                ChedId = "ChedId",
+                                Mrn = "Mrn1",
+                                Status = "Reserved",
+                                Timestamp = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                                Commodities =
+                                [
+                                    new ReservationCommodity
+                                    {
+                                        CertificateLineNumber = 1,
+                                        GoodsItemNumber = 1,
+                                        CommodityCode = "123",
+                                        UnitOfMeasure = "KGM",
+                                        Quantity = 100,
+                                    },
+                                ],
                             },
                             Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
                             Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),

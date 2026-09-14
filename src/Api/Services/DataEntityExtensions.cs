@@ -181,6 +181,35 @@ public static class DataEntityExtensions
         };
     }
 
+    public static ResourceEvent<ChedReservationEvent> ToResourceEvent(
+        this ChedReservationEntity entity,
+        string operation
+    )
+    {
+        if (operation is not ResourceEventOperations.Updated and not ResourceEventOperations.Created)
+            throw new ArgumentException("Operation must be either Updated or Created", nameof(operation));
+
+        var entityEvent = new ChedReservationEvent()
+        {
+            Id = entity.Id,
+            Reservation = entity.Reservation,
+            Created = entity.Created,
+            Etag = entity.ETag,
+            Updated = entity.Updated,
+        };
+
+        return new ResourceEvent<ChedReservationEvent>
+        {
+            ResourceId = entity.Id,
+            ResourceType = ResourceTypeName<ChedReservationEntity>(),
+            Operation = operation,
+            Etag = entity.ETag,
+            Resource = entityEvent,
+            ChangeSet = [],
+            SubResourceType = null,
+        };
+    }
+
     private static string ResourceTypeName<TDataEntity>()
         where TDataEntity : IDataEntity
     {
@@ -192,6 +221,7 @@ public static class DataEntityExtensions
             ResourceEventResourceTypes.CustomsDeclaration => ResourceEventResourceTypes.CustomsDeclaration,
             ResourceEventResourceTypes.ProcessingError => ResourceEventResourceTypes.ProcessingError,
             ResourceEventResourceTypes.TracesChed => ResourceEventResourceTypes.TracesChed,
+            ResourceEventResourceTypes.ChedReservation => ResourceEventResourceTypes.ChedReservation,
             _ => name,
         };
     }

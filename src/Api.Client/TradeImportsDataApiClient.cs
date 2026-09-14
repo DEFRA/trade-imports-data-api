@@ -6,6 +6,7 @@ using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 using Defra.TradeImportsDataApi.Domain.Errors;
 using Defra.TradeImportsDataApi.Domain.Gvms;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
+using Defra.TradeImportsDataApi.Domain.Traces;
 using Trade.Gateway.Api.Contract.Certificate;
 
 namespace Defra.TradeImportsDataApi.Api.Client;
@@ -139,6 +140,36 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
         response.EnsureSuccessStatusCode();
 
         return await Deserialize<TracesChedsResponse>(response, cancellationToken);
+    }
+
+    public async Task<ChedReservationResponse?> GetChedReservation(
+        string chedId,
+        string mrn,
+        CancellationToken cancellationToken
+    )
+    {
+        var response = await Get(Endpoints.ChedReservation(chedId, mrn), cancellationToken);
+        if (response.StatusCode == HttpStatusCode.NotFound)
+            return null;
+
+        response.EnsureSuccessStatusCode();
+
+        var result = await Deserialize<ChedReservationResponse>(response, cancellationToken);
+
+        return result with
+        {
+            ETag = response.Headers.ETag?.Tag,
+        };
+    }
+
+    public Task PutChedReservation(string chedId, Reservation data, string? etag, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task DeleteChedReservation(string chedId, Reservation data, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
     }
 
     public async Task<CustomsDeclarationResponse?> GetCustomsDeclaration(

@@ -18,6 +18,8 @@ internal static class Endpoints
 
     public static string Gmrs(string gmrId) => $"/gmrs/{gmrId}";
 
+    public static string ChedReservation(string chedId, string mrn) => $"/traces-cheds/{chedId}/reservation/{mrn}";
+
     public static string CustomsDeclarations(string mrn) => $"/customs-declarations/{mrn}";
 
     public static string ImportPreNotificationsByMrn(string mrn) =>

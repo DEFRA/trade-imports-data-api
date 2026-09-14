@@ -16,6 +16,214 @@
     }
   ],
   "paths": {
+    "/traces-cheds/{chedId}/reservation/{mrn}": {
+      "get": {
+        "tags": [
+          "ChedReservations"
+        ],
+        "summary": "Get Ched Reservation",
+        "description": "Get a Ched Reservation by Ched Reservation ID",
+        "operationId": "GetChedReservationByMrn",
+        "parameters": [
+          {
+            "name": "chedId",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "mrn",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Defra.TradeImportsDataApi.ChedReservationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "ChedReservations"
+        ],
+        "summary": "Put Ched Reservation",
+        "description": "Put a Ched Reservation",
+        "operationId": "PutChedReservation",
+        "parameters": [
+          {
+            "name": "chedId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "mrn",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Reservation"
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "ChedReservations"
+        ],
+        "summary": "Delete Ched Reservation",
+        "description": "Delete a Ched Reservation",
+        "operationId": "DeleteChedReservation",
+        "parameters": [
+          {
+            "name": "chedId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "mrn",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/customs-declarations/{mrn}": {
       "get": {
         "tags": [
@@ -1693,6 +1901,27 @@
             "description": "The planned date and time of arrival, in local time of the arrival port. Must not include seconds, time zone or UTC marker",
             "format": "date-time",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Defra.TradeImportsDataApi.ChedReservationResponse": {
+        "type": "object",
+        "properties": {
+          "reservation": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.Reservation"
+              }
+            ]
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated": {
+            "type": "string",
+            "format": "date-time"
           }
         },
         "additionalProperties": false
@@ -5391,6 +5620,12 @@
             "items": {
               "$ref": "#/components/schemas/Defra.TradeImportsDataApi.TracesChedResponse"
             }
+          },
+          "chedReservations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.ChedReservationResponse"
+            }
           }
         },
         "additionalProperties": false
@@ -5414,6 +5649,68 @@
         },
         "additionalProperties": false,
         "description": "Information about an inspection that is required"
+      },
+      "Defra.TradeImportsDataApi.Reservation": {
+        "required": [
+          "chedId",
+          "commodities",
+          "mrn",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "chedId": {
+            "type": "string"
+          },
+          "mrn": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "commodities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.ReservationCommodity"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "Defra.TradeImportsDataApi.ReservationCommodity": {
+        "required": [
+          "certificateLineNumber",
+          "commodityCode",
+          "goodsItemNumber",
+          "quantity",
+          "unitOfMeasure"
+        ],
+        "type": "object",
+        "properties": {
+          "goodsItemNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "commodityCode": {
+            "type": "string"
+          },
+          "certificateLineNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "unitOfMeasure": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
       },
       "Defra.TradeImportsDataApi.RiskAssessmentResult": {
         "type": "object",
