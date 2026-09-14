@@ -170,6 +170,16 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
     public Task DeleteChedReservation(string chedId, Reservation data, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
+    public async Task<TracesChedUpdatesResponse> GetTracesChedUpdates(
+        TracesChedUpdatesRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        var response = await Get(Endpoints.TracesChedUpdates(request), cancellationToken);
+
+        response.EnsureSuccessStatusCode();
+
+        return await Deserialize<TracesChedUpdatesResponse>(response, cancellationToken);
     }
 
     public async Task<CustomsDeclarationResponse?> GetCustomsDeclaration(

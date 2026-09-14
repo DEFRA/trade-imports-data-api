@@ -167,6 +167,24 @@ public class TracesChedServiceTests
     }
 
     [Fact]
+    public async Task GetUpdates_ShouldReturn()
+    {
+        var query = new TracesChedUpdateQuery(
+            new DateTime(2025, 5, 21, 8, 0, 0, DateTimeKind.Utc),
+            new DateTime(2025, 5, 21, 9, 0, 0, DateTimeKind.Utc)
+        );
+        var updates = new TracesChedUpdates(
+            [new TracesChedUpdate("CHEDA.GB.2026.1234567", new DateTime(2025, 5, 21, 8, 51, 0, DateTimeKind.Utc))],
+            Total: 1
+        );
+        TracesChedRepository.GetUpdates(query, CancellationToken.None).Returns(updates);
+
+        var result = await Subject.GetUpdates(query, CancellationToken.None);
+
+        result.Should().BeSameAs(updates);
+    }
+
+    [Fact]
     public async Task GetChedByMrn_ShouldReturn()
     {
         const string id = "id";
