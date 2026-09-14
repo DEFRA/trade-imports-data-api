@@ -2,6 +2,7 @@ using Defra.TradeImportsDataApi.Api.Exceptions;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Data.Extensions;
+using MongoDB.Driver;
 
 namespace Defra.TradeImportsDataApi.Api.Data;
 
@@ -47,5 +48,16 @@ public class TracesChedRepository(IDbContext dbContext) : ITracesChedRepository
         dbContext.TracesCheds.Update(entity, etag);
 
         return (existing, entity);
+    }
+
+    public async Task<string?> GetMaxId(CancellationToken cancellationToken)
+    {
+        var entity = await dbContext
+            .TracesCheds.Collection.Find(_ => true)
+            .SortByDescending(x => x.CustomsDeclarationIdentifier)
+            .Limit(1)
+            .FirstOrDefaultAsync(cancellationToken: cancellationToken);
+
+        return entity?.Id;
     }
 }
