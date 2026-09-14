@@ -65,6 +65,7 @@ public class MongoDbContext : IDbContext
             await ProcessingErrors.Save(cancellationToken);
             await ResourceEvents.Save(cancellationToken);
             await TracesCheds.Save(cancellationToken);
+            await ChedReservations.Save(cancellationToken);
 
             // Keep this last as upserts above will impact those below
             await ImportPreNotificationUpdates.Save(cancellationToken);

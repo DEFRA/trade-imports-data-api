@@ -1,6 +1,11 @@
 using Defra.TradeImportsDataApi.Domain.Traces;
 using Defra.TradeImportsDataApi.Testing;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
+using WireMock.Matchers;
+using WireMock.RequestBuilders;
+using WireMock.ResponseBuilders;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Defra.TradeImportsDataApi.Api.Client.Tests.Endpoints.ChedReservations;
 
@@ -8,23 +13,79 @@ public class PutTests(WireMockContext context) : WireMockTestBase<WireMockContex
 {
     private TradeImportsDataApiClient Subject { get; } = new(context.HttpClient);
 
-    // PutChedReservation is not yet implemented on TradeImportsDataApiClient - update this test
-    // to exercise the real HTTP call (see TracesCheds/PutTests.cs for the pattern) once it is.
-    [Fact]
-    public async Task PutChedReservation_WhenCalled_ShouldThrowNotImplemented()
-    {
-        const string chedId = "CHED";
-        var data = new Reservation
+    private static Reservation CreateReservation(string chedId, string mrn) =>
+        new()
         {
             ChedId = chedId,
-            Mrn = "MRN",
+            Mrn = mrn,
             Status = "Reserved",
             Timestamp = DateTime.UtcNow,
             Commodities = [],
         };
 
-        var act = async () => await Subject.PutChedReservation(chedId, "MRN", data, etag: null, CancellationToken.None);
+    [Fact]
+    public async Task PutChedReservation_WhenNoEtag_ShouldNotThrow()
+    {
+        const string chedId = "CHED";
+        const string mrn = "MRN";
+        var data = CreateReservation(chedId, mrn);
+        WireMock
+            .Given(
+                Request
+                    .Create()
+                    .WithPath($"/traces-cheds/{chedId}/reservation/{mrn}")
+                    .WithBody(JsonSerializer.Serialize(data))
+                    .WithHeader("If-Match", "", MatchBehaviour.RejectOnMatch)
+                    .UsingPut()
+            )
+            .RespondWith(Response.Create().WithStatusCode(StatusCodes.Status200OK));
 
-        await act.Should().ThrowAsync<NotImplementedException>();
+        var act = async () => await Subject.PutChedReservation(chedId, mrn, data, etag: null, CancellationToken.None);
+
+        await act.Should().NotThrowAsync();
+    }
+
+    [Fact]
+    public async Task PutChedReservation_WhenHasEtag_ShouldNotThrow()
+    {
+        const string chedId = "CHED";
+        const string mrn = "MRN";
+        var data = CreateReservation(chedId, mrn);
+        WireMock
+            .Given(
+                Request
+                    .Create()
+                    .WithPath($"/traces-cheds/{chedId}/reservation/{mrn}")
+                    .WithBody(JsonSerializer.Serialize(data))
+                    .WithHeader("If-Match", "\"etag\"")
+                    .UsingPut()
+            )
+            .RespondWith(Response.Create().WithStatusCode(StatusCodes.Status200OK));
+
+        var act = async () =>
+            await Subject.PutChedReservation(chedId, mrn, data, etag: "\"etag\"", CancellationToken.None);
+
+        await act.Should().NotThrowAsync();
+    }
+
+    [Fact]
+    public async Task PutChedReservation_WhenBadRequest_ShouldThrow()
+    {
+        const string chedId = "CHED";
+        const string mrn = "MRN";
+        var data = CreateReservation(chedId, mrn);
+        WireMock
+            .Given(
+                Request
+                    .Create()
+                    .WithPath($"/traces-cheds/{chedId}/reservation/{mrn}")
+                    .WithBody(JsonSerializer.Serialize(data))
+                    .UsingPut()
+            )
+            .RespondWith(Response.Create().WithStatusCode(StatusCodes.Status400BadRequest));
+
+        var act = async () => await Subject.PutChedReservation(chedId, mrn, data, etag: null, CancellationToken.None);
+
+        await act.Should().ThrowAsync<HttpRequestException>();
     }
 }

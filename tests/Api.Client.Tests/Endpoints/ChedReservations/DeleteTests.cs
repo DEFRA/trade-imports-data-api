@@ -1,6 +1,9 @@
 using Defra.TradeImportsDataApi.Domain.Traces;
 using Defra.TradeImportsDataApi.Testing;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
+using WireMock.RequestBuilders;
+using WireMock.ResponseBuilders;
 
 namespace Defra.TradeImportsDataApi.Api.Client.Tests.Endpoints.ChedReservations;
 
@@ -8,23 +11,43 @@ public class DeleteTests(WireMockContext context) : WireMockTestBase<WireMockCon
 {
     private TradeImportsDataApiClient Subject { get; } = new(context.HttpClient);
 
-    // DeleteChedReservation is not yet implemented on TradeImportsDataApiClient - update this test
-    // to exercise the real HTTP call once it is.
-    [Fact]
-    public async Task DeleteChedReservation_WhenCalled_ShouldThrowNotImplemented()
-    {
-        const string chedId = "CHED";
-        var data = new Reservation
+    private static Reservation CreateReservation(string chedId, string mrn) =>
+        new()
         {
             ChedId = chedId,
-            Mrn = "MRN",
+            Mrn = mrn,
             Status = "Reserved",
             Timestamp = DateTime.UtcNow,
             Commodities = [],
         };
 
-        var act = async () => await Subject.DeleteChedReservation(chedId, "MRN", data, CancellationToken.None);
+    [Fact]
+    public async Task DeleteChedReservation_WhenSuccessful_ShouldNotThrow()
+    {
+        const string chedId = "CHED";
+        const string mrn = "MRN";
+        WireMock
+            .Given(Request.Create().WithPath($"/traces-cheds/{chedId}/reservation/{mrn}").UsingDelete())
+            .RespondWith(Response.Create().WithStatusCode(StatusCodes.Status204NoContent));
 
-        await act.Should().ThrowAsync<NotImplementedException>();
+        var act = async () =>
+            await Subject.DeleteChedReservation(chedId, mrn, CreateReservation(chedId, mrn), CancellationToken.None);
+
+        await act.Should().NotThrowAsync();
+    }
+
+    [Fact]
+    public async Task DeleteChedReservation_WhenBadRequest_ShouldThrow()
+    {
+        const string chedId = "CHED";
+        const string mrn = "MRN";
+        WireMock
+            .Given(Request.Create().WithPath($"/traces-cheds/{chedId}/reservation/{mrn}").UsingDelete())
+            .RespondWith(Response.Create().WithStatusCode(StatusCodes.Status400BadRequest));
+
+        var act = async () =>
+            await Subject.DeleteChedReservation(chedId, mrn, CreateReservation(chedId, mrn), CancellationToken.None);
+
+        await act.Should().ThrowAsync<HttpRequestException>();
     }
 }

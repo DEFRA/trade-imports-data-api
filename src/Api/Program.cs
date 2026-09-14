@@ -107,6 +107,7 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
     builder.Services.AddSingleton<IResourceEventPublisher, ResourceEventPublisher>();
     builder.Services.AddTransient<IResourceEventService, ResourceEventService>();
     builder.Services.AddTransient<ITracesChedService, TracesChedService>();
+    builder.Services.AddTransient<IChedReservationService, ChedReservationService>();
     builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
     builder.Services.AddAWSService<IAmazonSimpleNotificationService>();
 
