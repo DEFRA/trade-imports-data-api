@@ -23,7 +23,7 @@ public class DeleteTests(WireMockContext context) : WireMockTestBase<WireMockCon
             Commodities = [],
         };
 
-        var act = async () => await Subject.DeleteChedReservation(chedId, data, CancellationToken.None);
+        var act = async () => await Subject.DeleteChedReservation(chedId, "MRN", data, CancellationToken.None);
 
         await act.Should().ThrowAsync<NotImplementedException>();
     }

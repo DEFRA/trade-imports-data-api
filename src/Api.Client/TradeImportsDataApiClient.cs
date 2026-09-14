@@ -162,14 +162,33 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
         };
     }
 
-    public Task PutChedReservation(string chedId, Reservation data, string? etag, CancellationToken cancellationToken)
+    public async Task PutChedReservation(
+        string chedId,
+        string mrn,
+        Reservation data,
+        string? etag,
+        CancellationToken cancellationToken
+    )
     {
-        throw new NotImplementedException();
+        var requestUri = Endpoints.ChedReservation(chedId, mrn);
+        var response = await Put(data, etag, requestUri, cancellationToken);
+
+        response.EnsureSuccessStatusCode();
     }
 
-    public Task DeleteChedReservation(string chedId, Reservation data, CancellationToken cancellationToken)
+    public async Task DeleteChedReservation(
+        string chedId,
+        string mrn,
+        Reservation data,
+        CancellationToken cancellationToken
+    )
     {
-        throw new NotImplementedException();
+        var requestUri = Endpoints.ChedReservation(chedId, mrn);
+        var response = await Delete(null, requestUri, cancellationToken);
+
+        response.EnsureSuccessStatusCode();
+    }
+
     public async Task<TracesChedUpdatesResponse> GetTracesChedUpdates(
         TracesChedUpdatesRequest request,
         CancellationToken cancellationToken
@@ -291,6 +310,16 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
     {
         var message = CreateMessage(HttpMethod.Put, requestUri);
         message.Content = JsonContent.Create(data, options: s_options);
+
+        if (!string.IsNullOrEmpty(etag))
+            message.Headers.IfMatch.Add(new EntityTagHeaderValue(etag));
+
+        return await httpClient.SendAsync(message, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+    }
+
+    private async Task<HttpResponseMessage> Delete(string? etag, string requestUri, CancellationToken cancellationToken)
+    {
+        var message = CreateMessage(HttpMethod.Delete, requestUri);
 
         if (!string.IsNullOrEmpty(etag))
             message.Headers.IfMatch.Add(new EntityTagHeaderValue(etag));

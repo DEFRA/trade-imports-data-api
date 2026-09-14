@@ -66,9 +66,15 @@ public interface ITradeImportsDataApiClient
 
     Task<ChedReservationResponse?> GetChedReservation(string chedId, string mrn, CancellationToken cancellationToken);
 
-    Task PutChedReservation(string chedId, Reservation data, string? etag, CancellationToken cancellationToken);
+    Task PutChedReservation(
+        string chedId,
+        string mrn,
+        Reservation data,
+        string? etag,
+        CancellationToken cancellationToken
+    );
 
-    Task DeleteChedReservation(string chedId, Reservation data, CancellationToken cancellationToken);
+    Task DeleteChedReservation(string chedId, string mrn, Reservation data, CancellationToken cancellationToken);
     Task<TracesChedUpdatesResponse> GetTracesChedUpdates(
         TracesChedUpdatesRequest request,
         CancellationToken cancellationToken

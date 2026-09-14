@@ -23,7 +23,7 @@ public class PutTests(WireMockContext context) : WireMockTestBase<WireMockContex
             Commodities = [],
         };
 
-        var act = async () => await Subject.PutChedReservation(chedId, data, etag: null, CancellationToken.None);
+        var act = async () => await Subject.PutChedReservation(chedId, "MRN", data, etag: null, CancellationToken.None);
 
         await act.Should().ThrowAsync<NotImplementedException>();
     }
