@@ -27,9 +27,26 @@ public class ChedReservationService(
         return string.IsNullOrEmpty(etag) ? Insert(entity, cancellationToken) : Update(entity, etag, cancellationToken);
     }
 
-    public Task Delete(string chedId, string mrn, CancellationToken cancellationToken)
+    public async Task Delete(string chedId, string mrn, CancellationToken cancellationToken)
     {
-        return chedReservationRepository.DeleteById($"{chedId}_{mrn}", cancellationToken);
+        await dbContext.StartTransaction(cancellationToken);
+
+        await chedReservationRepository.DeleteById($"{chedId}_{mrn}", cancellationToken);
+
+        var resourceEvent = new ResourceEvent<ChedReservationEvent>
+        {
+            ResourceId = $"{chedId}_{mrn}",
+            ResourceType = ResourceEventResourceTypes.ChedReservation,
+            Operation = ResourceEventOperations.Deleted,
+            ChangeSet = [],
+        };
+
+        var resourceEventEntity = resourceEventRepository.Insert(resourceEvent);
+
+        await dbContext.SaveChanges(cancellationToken);
+        await dbContext.CommitTransaction(cancellationToken);
+
+        await resourceEventService.Publish(resourceEventEntity, cancellationToken);
     }
 
     private async Task<ChedReservationEntity> Insert(ChedReservationEntity entity, CancellationToken cancellationToken)
