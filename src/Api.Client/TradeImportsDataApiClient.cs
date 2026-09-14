@@ -141,6 +141,18 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
         return await Deserialize<TracesChedsResponse>(response, cancellationToken);
     }
 
+    public async Task<TracesChedUpdatesResponse> GetTracesChedUpdates(
+        TracesChedUpdatesRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        var response = await Get(Endpoints.TracesChedUpdates(request), cancellationToken);
+
+        response.EnsureSuccessStatusCode();
+
+        return await Deserialize<TracesChedUpdatesResponse>(response, cancellationToken);
+    }
+
     public async Task<CustomsDeclarationResponse?> GetCustomsDeclaration(
         string mrn,
         CancellationToken cancellationToken

@@ -1255,6 +1255,92 @@
           }
         }
       }
+    },
+    "/traces-ched-updates": {
+      "get": {
+        "tags": [
+          "TracesCheds"
+        ],
+        "summary": "Get TracesChedUpdates",
+        "description": "Get TRACES CHEDs updated between a period of time",
+        "operationId": "GetTracesChedUpdates",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "description": "Filter TRACES CHEDs updated at this date and time or after this date and time.  Expected value is UTC using format ISO 8601-1:2019",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Filter TRACES CHEDs updated at this date and time or after this date and time.  Expected value is UTC using format ISO 8601-1:2019",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "description": "Filter TRACES CHEDs updated before this date and time. Expected value is UTC using format ISO 8601-1:2019. Cannot be more than 1 hour of From",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Filter TRACES CHEDs updated before this date and time. Expected value is UTC using format ISO 8601-1:2019. Cannot be more than 1 hour of From",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number (1-based). Defaults to 1 if not specified.",
+            "schema": {
+              "type": "integer",
+              "description": "Page number (1-based). Defaults to 1 if not specified.",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Number of items per page. Defaults to 100 if not specified. Max of 1000.",
+            "schema": {
+              "type": "integer",
+              "description": "Number of items per page. Defaults to 100 if not specified. Max of 1000.",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Defra.TradeImportsDataApi.TracesChedUpdatesResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -5586,6 +5672,43 @@
           "updated": {
             "type": "string",
             "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Defra.TradeImportsDataApi.TracesChedUpdateResponse": {
+        "type": "object",
+        "properties": {
+          "referenceNumber": {
+            "type": "string"
+          },
+          "updated": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Defra.TradeImportsDataApi.TracesChedUpdatesResponse": {
+        "type": "object",
+        "properties": {
+          "tracesChedUpdates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.TracesChedUpdateResponse"
+            }
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false

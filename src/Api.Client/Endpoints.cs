@@ -25,6 +25,20 @@ internal static class Endpoints
 
     public static string TracesChedsByMrn(string mrn) => $"/customs-declarations/{mrn}/traces-cheds";
 
+    public static string TracesChedUpdates(TracesChedUpdatesRequest request)
+    {
+        // Dates must be ISO 8601 UTC, which the reflection based query string builder below cannot produce
+        var query = new List<string> { $"from={request.From:O}", $"to={request.To:O}" };
+
+        if (request.Page is not null)
+            query.Add($"page={request.Page}");
+
+        if (request.PageSize is not null)
+            query.Add($"pageSize={request.PageSize}");
+
+        return $"/traces-ched-updates?{string.Join("&", query)}";
+    }
+
     public static string ProcessingErrors(string mrn) => $"/processing-errors/{mrn}";
 
     public static string RelatedImportDeclarations(RelatedImportDeclarationsRequest request) =>
