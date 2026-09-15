@@ -9,4 +9,6 @@ public static class ResourceEventResourceTypes
     public const string ProcessingError = nameof(ProcessingError);
 
     public const string TracesChed = nameof(TracesChed);
+
+    public const string ChedReservation = nameof(ChedReservation);
 }

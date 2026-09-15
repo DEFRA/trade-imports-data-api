@@ -10,6 +10,7 @@ public interface IRelatedImportDeclarationsService
         ImportPreNotificationEntity[] ImportPreNotifications,
         GmrEntity[] Gmrs,
         ImportPreNotificationEntity[] TransientNotifications,
-        TracesChedEntity[] Cheds
+        TracesChedEntity[] Cheds,
+        ChedReservationEntity[] Reservations
     )> Search(RelatedImportDeclarationsRequest request, CancellationToken cancellationToken);
 }

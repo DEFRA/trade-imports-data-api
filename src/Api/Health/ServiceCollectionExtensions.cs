@@ -22,6 +22,18 @@ public static class ServiceCollectionExtensions
                 sp => sp.GetRequiredService<IOptions<ResourceEventOptions>>().Value.TopicArn,
                 tags: [WebApplicationExtensions.Extended],
                 timeout: TimeSpan.FromSeconds(10)
+            )
+            .AddSns(
+                "Traces Ched Upserts topic",
+                sp => sp.GetRequiredService<IOptions<ResourceEventOptions>>().Value.TracesChedTopicArn,
+                tags: [WebApplicationExtensions.Extended],
+                timeout: TimeSpan.FromSeconds(10)
+            )
+            .AddSns(
+                "Ched Reservation Upserts topic",
+                sp => sp.GetRequiredService<IOptions<ResourceEventOptions>>().Value.ChedReservationTopicArn,
+                tags: [WebApplicationExtensions.Extended],
+                timeout: TimeSpan.FromSeconds(10)
             );
 
         return services;
