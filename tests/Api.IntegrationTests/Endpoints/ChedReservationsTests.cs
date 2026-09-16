@@ -105,7 +105,7 @@ public class ChedReservationsTests(ITestOutputHelper testOutputHelper) : SqsTest
         var result = await client.GetChedReservation(chedRef, mrn, CancellationToken.None);
         result.Should().NotBeNull();
 
-        await client.DeleteChedReservation(chedRef, mrn, CreateReservation(chedRef, mrn), CancellationToken.None);
+        await client.DeleteChedReservation(chedRef, mrn, CancellationToken.None);
 
         result = await client.GetChedReservation(chedRef, mrn, CancellationToken.None);
         result.Should().BeNull();

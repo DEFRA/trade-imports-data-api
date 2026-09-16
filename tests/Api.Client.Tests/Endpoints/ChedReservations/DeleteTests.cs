@@ -11,16 +11,6 @@ public class DeleteTests(WireMockContext context) : WireMockTestBase<WireMockCon
 {
     private TradeImportsDataApiClient Subject { get; } = new(context.HttpClient);
 
-    private static Reservation CreateReservation(string chedId, string mrn) =>
-        new()
-        {
-            ChedId = chedId,
-            Mrn = mrn,
-            Status = "Reserved",
-            Timestamp = DateTime.UtcNow,
-            Commodities = [],
-        };
-
     [Fact]
     public async Task DeleteChedReservation_WhenSuccessful_ShouldNotThrow()
     {
@@ -30,8 +20,7 @@ public class DeleteTests(WireMockContext context) : WireMockTestBase<WireMockCon
             .Given(Request.Create().WithPath($"/traces-cheds/{chedId}/reservation/{mrn}").UsingDelete())
             .RespondWith(Response.Create().WithStatusCode(StatusCodes.Status204NoContent));
 
-        var act = async () =>
-            await Subject.DeleteChedReservation(chedId, mrn, CreateReservation(chedId, mrn), CancellationToken.None);
+        var act = async () => await Subject.DeleteChedReservation(chedId, mrn, CancellationToken.None);
 
         await act.Should().NotThrowAsync();
     }
@@ -45,8 +34,7 @@ public class DeleteTests(WireMockContext context) : WireMockTestBase<WireMockCon
             .Given(Request.Create().WithPath($"/traces-cheds/{chedId}/reservation/{mrn}").UsingDelete())
             .RespondWith(Response.Create().WithStatusCode(StatusCodes.Status400BadRequest));
 
-        var act = async () =>
-            await Subject.DeleteChedReservation(chedId, mrn, CreateReservation(chedId, mrn), CancellationToken.None);
+        var act = async () => await Subject.DeleteChedReservation(chedId, mrn, CancellationToken.None);
 
         await act.Should().ThrowAsync<HttpRequestException>();
     }
