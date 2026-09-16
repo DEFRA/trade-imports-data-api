@@ -176,12 +176,7 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
         response.EnsureSuccessStatusCode();
     }
 
-    public async Task DeleteChedReservation(
-        string chedId,
-        string mrn,
-        Reservation data,
-        CancellationToken cancellationToken
-    )
+    public async Task DeleteChedReservation(string chedId, string mrn, CancellationToken cancellationToken)
     {
         var requestUri = Endpoints.ChedReservation(chedId, mrn);
         var response = await Delete(null, requestUri, cancellationToken);

@@ -74,7 +74,7 @@ public interface ITradeImportsDataApiClient
         CancellationToken cancellationToken
     );
 
-    Task DeleteChedReservation(string chedId, string mrn, Reservation data, CancellationToken cancellationToken);
+    Task DeleteChedReservation(string chedId, string mrn, CancellationToken cancellationToken);
     Task<TracesChedUpdatesResponse> GetTracesChedUpdates(
         TracesChedUpdatesRequest request,
         CancellationToken cancellationToken
