@@ -5,7 +5,7 @@ using Version = AdaskoTheBeAsT.MongoDbMigrations.Abstractions.Version;
 
 namespace Defra.TradeImportsDataApi.Data.Mongo.Migrations;
 
-public class AddTracesChedIndexes() : BtmsMigration("Add indexes to traces ched collection", new Version(1, 0, 10))
+public class AddTracesChedIndexes() : BtmsMigration("Add indexes to traces ched collection", new Version(1, 0, 9))
 {
     public override async Task UpAsync(MigrationContext context)
     {

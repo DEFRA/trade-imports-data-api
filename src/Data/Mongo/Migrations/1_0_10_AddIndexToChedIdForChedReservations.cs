@@ -6,7 +6,7 @@ using Version = AdaskoTheBeAsT.MongoDbMigrations.Abstractions.Version;
 namespace Defra.TradeImportsDataApi.Data.Mongo.Migrations;
 
 public class AddIndexToChedIdForChedReservations()
-    : BtmsMigration("Add ChedId index for reservations", new Version(1, 0, 9))
+    : BtmsMigration("Add ChedId index for reservations", new Version(1, 0, 10))
 {
     public override async Task UpAsync(MigrationContext context)
     {
