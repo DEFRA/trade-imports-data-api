@@ -144,6 +144,8 @@ public class ResourceEventPublisher(
                             typeof(ResourceEvent<ProcessingErrorEvent>).AssemblyQualifiedName,
                         ResourceEventResourceTypes.TracesChed =>
                             typeof(ResourceEvent<TracesChedEvent>).AssemblyQualifiedName,
+                        ResourceEventResourceTypes.ChedReservation =>
+                            typeof(ResourceEvent<ChedReservationEvent>).AssemblyQualifiedName,
                         _ => throw new InvalidOperationException(
                             $"AssemblyQualifiedName is null for type {resourceType}"
                         ),

@@ -46,6 +46,17 @@ public static class Endpoints
         public static string GetUpdates(EndpointQuery? query = null) => $"/traces-ched-updates{query}";
     }
 
+    public static class ChedReservations
+    {
+        private const string Root = "/traces-cheds";
+
+        public static string Get(string chedId, string mrn) => $"{Root}/{chedId}/reservation/{mrn}/";
+
+        public static string Put(string chedId, string mrn) => $"{Root}/{chedId}/reservation/{mrn}/";
+
+        public static string Delete(string chedId, string mrn) => $"{Root}/{chedId}/reservation/{mrn}/";
+    }
+
     public static class CustomsDeclarations
     {
         private const string Root = "/customs-declarations";

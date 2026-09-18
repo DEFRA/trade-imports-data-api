@@ -23,6 +23,8 @@ public class MemoryDbContext : IDbContext
         new MemoryCollectionSet<ResourceEventEntity>();
 
     public IMongoCollectionSet<TracesChedEntity> TracesCheds { get; } = new MemoryCollectionSet<TracesChedEntity>();
+    public IMongoCollectionSet<ChedReservationEntity> ChedReservations { get; } =
+        new MemoryCollectionSet<ChedReservationEntity>();
 
     public Task SaveChanges(CancellationToken cancellationToken) => throw new NotImplementedException();
 

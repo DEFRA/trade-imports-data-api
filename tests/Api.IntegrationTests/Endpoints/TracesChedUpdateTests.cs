@@ -23,7 +23,7 @@ public class TracesChedUpdateTests : IntegrationTestBase, IAsyncLifetime
         DataApiClient = CreateDataApiClient();
 
         // Records are stamped with UtcNow on write, so anchor the window just before the test writes anything
-        _from = DateTime.UtcNow.AddSeconds(-1);
+        _from = DateTime.UtcNow.AddMinutes(-1);
     }
 
     public Task DisposeAsync() => Task.CompletedTask;

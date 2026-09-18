@@ -94,5 +94,6 @@
     }
   ],
   TransitImportPreNotifications: null,
-  Cheds: null
+  Cheds: null,
+  ChedReservations: null
 }

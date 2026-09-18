@@ -958,7 +958,8 @@ public class RelatedImportDeclarationsServiceTests
             new CustomsDeclarationRepository(memoryDbContext),
             new ImportPreNotificationRepository(memoryDbContext),
             new GmrRepository(memoryDbContext),
-            new TracesChedRepository(memoryDbContext)
+            new TracesChedRepository(memoryDbContext),
+            new ChedReservationRepository(memoryDbContext)
         );
     }
 }

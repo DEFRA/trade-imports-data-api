@@ -1,0 +1,19 @@
+﻿{
+  reservation: {
+    chedId: chedId,
+    mrn: mrn,
+    status: Reserved,
+    timestamp: 2025-04-03T10:00:00Z,
+    commodities: [
+      {
+        goodsItemNumber: 1,
+        commodityCode: 123,
+        certificateLineNumber: 1,
+        unitOfMeasure: KGM,
+        quantity: 100
+      }
+    ]
+  },
+  created: 2025-04-03T10:00:00Z,
+  updated: 2025-04-03T10:15:00Z
+}
