@@ -8,5 +8,6 @@ public record RelatedImportDeclarationsResponse(
     [property: JsonPropertyName("goodsVehicleMovements")] GmrResponse[] GoodsMovements,
     [property: JsonPropertyName("transitImportPreNotifications")]
         ImportPreNotificationResponse[] TransitImportPreNotifications,
-    [property: JsonPropertyName("cheds")] TracesChedResponse[] Cheds
+    [property: JsonPropertyName("cheds")] TracesChedResponse[] Cheds,
+    [property: JsonPropertyName("chedReservations")] ChedReservationResponse[] ChedReservations
 );
