@@ -32,6 +32,7 @@ public class ResourceEventPublisherTests
                     ArnPrefix = "arn",
                     TopicName = "topic-name",
                     TracesChedTopicName = "traces-topic-name",
+                    ChedReservationTopicName = "ched-reservation-topic-name",
                 }
             ),
             NullLogger<ResourceEventPublisher>.Instance
@@ -78,6 +79,7 @@ public class ResourceEventPublisherTests
                     ArnPrefix = "arn",
                     TopicName = "topic-name",
                     TracesChedTopicName = "traces-topic-name",
+                    ChedReservationTopicName = "ched-reservation-topic-name",
                 }
             ),
             NullLogger<ResourceEventPublisher>.Instance
@@ -113,6 +115,7 @@ public class ResourceEventPublisherTests
                     ArnPrefix = "arn",
                     TopicName = "topic-name",
                     TracesChedTopicName = "traces-topic-name",
+                    ChedReservationTopicName = "ched-reservation-topic-name",
                 }
             ),
             NullLogger<ResourceEventPublisher>.Instance
@@ -178,6 +181,7 @@ public class ResourceEventPublisherTests
                     ArnPrefix = "arn",
                     TopicName = "topic-name",
                     TracesChedTopicName = "traces-topic-name",
+                    ChedReservationTopicName = "ched-reservation-topic-name",
                 }
             ),
             NullLogger<ResourceEventPublisher>.Instance
@@ -222,6 +226,7 @@ public class ResourceEventPublisherTests
                     ArnPrefix = "arn",
                     TopicName = "topic-name",
                     TracesChedTopicName = "traces-topic-name",
+                    ChedReservationTopicName = "ched-reservation-topic-name",
                 }
             ),
             NullLogger<ResourceEventPublisher>.Instance

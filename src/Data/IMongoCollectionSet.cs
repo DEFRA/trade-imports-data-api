@@ -15,6 +15,8 @@ public interface IMongoCollectionSet<T> : IQueryable<T>
 
     void Insert(T item);
 
+    void Delete(string id);
+
     void Update(T item, string etag);
 
     void Update(T item, Action<IFieldUpdateBuilder<T>> patch, string etag);

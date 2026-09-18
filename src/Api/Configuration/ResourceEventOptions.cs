@@ -14,15 +14,25 @@ public class ResourceEventOptions
     [Required]
     public required string TracesChedTopicName { get; init; }
 
+    [Required]
+    public required string ChedReservationTopicName { get; init; }
+
     public string TopicArn => $"{ArnPrefix}:{TopicName}";
 
     public string TracesChedTopicArn => $"{ArnPrefix}:{TracesChedTopicName}";
+
+    public string ChedReservationTopicArn => $"{ArnPrefix}:{ChedReservationTopicName}";
 
     [Range(1, 180)]
     public int TtlDays { get; init; } = 30;
 
     public string GetTopicArn(string resourceType)
     {
-        return ResourceEventResourceTypes.TracesChed == resourceType ? TracesChedTopicArn : TopicArn;
+        return resourceType switch
+        {
+            ResourceEventResourceTypes.TracesChed => TracesChedTopicArn,
+            ResourceEventResourceTypes.ChedReservation => ChedReservationTopicArn,
+            _ => TopicArn,
+        };
     }
 }

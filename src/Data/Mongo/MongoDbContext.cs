@@ -22,6 +22,7 @@ public class MongoDbContext : IDbContext
         ProcessingErrors = new MongoCollectionSet<ProcessingErrorEntity>(this);
         ResourceEvents = new MongoCollectionSet<ResourceEventEntity>(this);
         TracesCheds = new MongoCollectionSet<TracesChedEntity>(this);
+        ChedReservations = new MongoCollectionSet<ChedReservationEntity>(this);
     }
 
     internal IMongoDatabase Database { get; }
@@ -34,6 +35,7 @@ public class MongoDbContext : IDbContext
     public IMongoCollectionSet<ProcessingErrorEntity> ProcessingErrors { get; }
     public IMongoCollectionSet<ResourceEventEntity> ResourceEvents { get; }
     public IMongoCollectionSet<TracesChedEntity> TracesCheds { get; }
+    public IMongoCollectionSet<ChedReservationEntity> ChedReservations { get; }
 
     public async Task StartTransaction(CancellationToken cancellationToken)
     {
@@ -63,6 +65,7 @@ public class MongoDbContext : IDbContext
             await ProcessingErrors.Save(cancellationToken);
             await ResourceEvents.Save(cancellationToken);
             await TracesCheds.Save(cancellationToken);
+            await ChedReservations.Save(cancellationToken);
 
             // Keep this last as upserts above will impact those below
             await ImportPreNotificationUpdates.Save(cancellationToken);
