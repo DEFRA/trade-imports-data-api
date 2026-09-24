@@ -5,7 +5,7 @@ using Defra.TradeImportsDataApi.Domain.Ipaffs;
 namespace Defra.TradeImportsDataApi.Data.Entities;
 
 [DbCollection("ImportPreNotification")]
-public class ImportPreNotificationEntity : IDataEntity
+public class ImportPreNotificationEntity : ICustomsDeclarationIdentifierEntity
 {
     public required string Id { get; set; }
 
