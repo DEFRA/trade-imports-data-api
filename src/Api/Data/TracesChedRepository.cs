@@ -87,4 +87,15 @@ public class TracesChedRepository(IDbContext dbContext) : ITracesChedRepository
 
         return (existing, entity);
     }
+
+    public async Task<string?> GetMaxId(CancellationToken cancellationToken)
+    {
+        var entity = await dbContext
+            .TracesCheds.Collection.Find(_ => true)
+            .SortByDescending(x => x.CustomsDeclarationIdentifier)
+            .Limit(1)
+            .FirstOrDefaultAsync(cancellationToken: cancellationToken);
+
+        return entity?.Id;
+    }
 }

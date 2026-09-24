@@ -17,4 +17,6 @@ public interface ITracesChedRepository
         string etag,
         CancellationToken cancellationToken
     );
+
+    Task<string?> GetMaxId(CancellationToken cancellationToken);
 }
