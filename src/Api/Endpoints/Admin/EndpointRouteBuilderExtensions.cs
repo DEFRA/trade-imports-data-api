@@ -38,9 +38,12 @@ public static class EndpointRouteBuilderExtensions
         if (string.IsNullOrEmpty(second))
             return first;
 
-        var firstIdentifier = new ChedIdReference(first).GetIdentifier().PadLeft(MaxChedIdLength);
-        var secondIdentifier = new ChedIdReference(second).GetIdentifier().PadLeft(MaxChedIdLength);
+        var firstIdentifier = GetOrderingIdentifier(first);
+        var secondIdentifier = GetOrderingIdentifier(second);
 
         return string.CompareOrdinal(firstIdentifier, secondIdentifier) >= 0 ? first : second;
     }
+
+    private static string GetOrderingIdentifier(string chedId) =>
+        new ChedIdReference(chedId).GetIdentifier().TrimEnd('V', 'R', 'v', 'r').PadLeft(MaxChedIdLength);
 }

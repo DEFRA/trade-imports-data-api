@@ -119,6 +119,18 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
     }
 
     [Fact]
+    public async Task Get_WhenImportPreNotificationHasVersionSuffix_ShouldIgnoreSuffix()
+    {
+        var client = CreateClient();
+        MockImportPreNotificationRepository.GetMaxId(Arg.Any<CancellationToken>()).Returns("CHEDA.GB.2024.0000098V");
+        MockTracesChedRepository.GetMaxId(Arg.Any<CancellationToken>()).Returns("CHEDD.GB.2024.0000099");
+
+        var response = await client.GetAsync(TradeImportsDataApi.Testing.Endpoints.Admin.MaxId);
+
+        await VerifyJson(await response.Content.ReadAsStringAsync(), _settings);
+    }
+
+    [Fact]
     public async Task Get_WhenTracesChedMissing_ShouldReturnImportPreNotification()
     {
         var client = CreateClient();
