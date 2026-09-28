@@ -19,6 +19,6 @@
     <None Include="README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Defra.Trade.Gateway.Api.Contract" Version="0.7.0-pr-53.245" />
+    <PackageReference Include="Defra.Trade.Gateway.Api.Contract" Version="0.7.0-pr-53.246" />
   </ItemGroup>
 </Project>
