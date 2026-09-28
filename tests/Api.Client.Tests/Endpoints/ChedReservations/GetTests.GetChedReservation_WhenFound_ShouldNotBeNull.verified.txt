@@ -3,6 +3,7 @@
     ChedId: CHED,
     Mrn: MRN,
     Status: Reserved,
+    UnsuccessfulReason: null,
     Timestamp: 2025-04-07 11:00 Utc,
     Commodities: [
       {
