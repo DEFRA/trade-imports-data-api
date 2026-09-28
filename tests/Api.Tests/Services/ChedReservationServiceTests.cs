@@ -35,7 +35,7 @@ public class ChedReservationServiceTests
     private static Reservation CreateReservation(
         string chedId = "chedId",
         string mrn = "mrn",
-        string status = "Reserved"
+        string status = ReservationStatus.Reserved
     ) =>
         new()
         {
@@ -101,7 +101,11 @@ public class ChedReservationServiceTests
     public async Task Upsert_WhenEtagProvided_ShouldUpdateAndPublish()
     {
         const string id = "chedId_mrn";
-        var existing = new ChedReservationEntity { Id = id, Reservation = CreateReservation(status: "Reserved") };
+        var existing = new ChedReservationEntity
+        {
+            Id = id,
+            Reservation = CreateReservation(status: ReservationStatus.Reserved),
+        };
         var entity = new ChedReservationEntity { Id = id, Reservation = CreateReservation(status: "Cancelled") };
         ChedReservationRepository.Update(entity, "etag", CancellationToken.None).Returns((existing, entity));
 
