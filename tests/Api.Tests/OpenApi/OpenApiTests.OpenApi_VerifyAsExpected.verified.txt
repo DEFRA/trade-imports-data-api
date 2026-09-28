@@ -5754,6 +5754,10 @@
           "status": {
             "type": "string"
           },
+          "unsuccessfulReason": {
+            "type": "string",
+            "nullable": true
+          },
           "timestamp": {
             "type": "string",
             "format": "date-time"
