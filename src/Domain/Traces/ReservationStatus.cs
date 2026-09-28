@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Defra.TradeImportsDataApi.Domain.Traces;
 
+[ExcludeFromCodeCoverage]
 public static class ReservationStatus
 {
     public const string Unreserved = nameof(Unreserved);
