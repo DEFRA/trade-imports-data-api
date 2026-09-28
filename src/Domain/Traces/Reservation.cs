@@ -20,5 +20,5 @@ public class Reservation
     public DateTime Timestamp { get; set; }
 
     [JsonPropertyName("commodities")]
-    public required ReservationCommodity[] Commodities { get; set; } = [];
+    public ReservationCommodity[] Commodities { get; set; } = [];
 }
