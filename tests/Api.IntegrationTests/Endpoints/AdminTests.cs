@@ -22,8 +22,9 @@ public class AdminTests : IntegrationTestBase
         var client = CreateDataApiClient();
         await CreateNotification(client, 1);
         await CreateNotification(client, 2);
+        await CreateNotification(client, 2, 8);
         await CreateNotification(client, 10);
-        await CreateNotification(client, 3);
+        await CreateNotification(client, 3, suffix: "V");
         await CreateNotification(client, 8);
         await CreateNotification(client, 21);
 
@@ -31,7 +32,7 @@ public class AdminTests : IntegrationTestBase
         var dto = await httpClient.GetFromJsonAsync<MaxIdResponse>(Testing.Endpoints.Admin.MaxId);
 
         dto.Should().NotBeNull();
-        dto.ImportPreNotification.Should().Be("CHEDA.GB.2024.0000021");
+        dto.ImportPreNotification.Should().Be("CHEDA.GB.2024.00000002");
     }
 
     [Fact]
@@ -44,6 +45,7 @@ public class AdminTests : IntegrationTestBase
 
         var client = CreateDataApiClient();
         await CreateNotification(client, 21);
+        await CreateNotification(client, 98, suffix: "V");
         await CreateTracesChed(client, 99);
 
         var httpClient = CreateHttpClient();
@@ -53,9 +55,14 @@ public class AdminTests : IntegrationTestBase
         dto.ImportPreNotification.Should().Be("CHEDA.GB.2024.0000099");
     }
 
-    private static async Task CreateNotification(TradeImportsDataApiClient client, int id)
+    private static async Task CreateNotification(
+        TradeImportsDataApiClient client,
+        int id,
+        int totalLength = 7,
+        string? suffix = null
+    )
     {
-        var chedRef = $"CHEDA.GB.2024.{id.ToString().PadLeft(7, '0')}";
+        var chedRef = $"CHEDA.GB.2024.{id.ToString().PadLeft(totalLength, '0')}{suffix}";
 
         await client.PutImportPreNotification(
             chedRef,
