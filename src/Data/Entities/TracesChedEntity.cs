@@ -5,7 +5,7 @@ using Trade.Gateway.Api.Contract.Certificate;
 namespace Defra.TradeImportsDataApi.Data.Entities;
 
 [DbCollection("TracesChed")]
-public class TracesChedEntity : IDataEntity
+public class TracesChedEntity : ICustomsDeclarationIdentifierEntity
 {
     public required string Id { get; set; }
 
