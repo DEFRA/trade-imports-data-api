@@ -116,7 +116,7 @@ public class RelatedImportDeclarationsTests : EndpointTestBase, IClassFixture<Wi
                             {
                                 ChedId = "ChedId",
                                 Mrn = "Mrn1",
-                                Status = "Reserved",
+                                Status = ReservationStatus.Reserved,
                                 Timestamp = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
                                 Commodities =
                                 [

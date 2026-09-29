@@ -18,7 +18,7 @@ public class PutTests(WireMockContext context) : WireMockTestBase<WireMockContex
         {
             ChedId = chedId,
             Mrn = mrn,
-            Status = "Reserved",
+            Status = ReservationStatus.Reserved,
             Timestamp = DateTime.UtcNow,
             Commodities = [],
         };
