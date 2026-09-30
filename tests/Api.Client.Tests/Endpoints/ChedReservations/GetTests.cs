@@ -54,7 +54,7 @@ public class GetTests : WireMockTestBase<WireMockContext>
                                 {
                                     ChedId = chedId,
                                     Mrn = mrn,
-                                    Status = "Reserved",
+                                    Status = ReservationStatus.Reserved,
                                     Timestamp = created,
                                     Commodities =
                                     [

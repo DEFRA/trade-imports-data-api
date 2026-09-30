@@ -67,14 +67,14 @@ public class ChedReservationsTests(ITestOutputHelper testOutputHelper) : SqsTest
         await client.PutChedReservation(
             chedRef,
             mrn,
-            CreateReservation(chedRef, mrn, status: "Reserved"),
+            CreateReservation(chedRef, mrn, status: ReservationStatus.Reserved),
             null,
             CancellationToken.None
         );
 
         result = await client.GetChedReservation(chedRef, mrn, CancellationToken.None);
         result.Should().NotBeNull();
-        result.Reservation.Status.Should().Be("Reserved");
+        result.Reservation.Status.Should().Be(ReservationStatus.Reserved);
         result.Created.Should().BeAfter(DateTime.MinValue);
         result.Updated.Should().BeAfter(DateTime.MinValue);
 

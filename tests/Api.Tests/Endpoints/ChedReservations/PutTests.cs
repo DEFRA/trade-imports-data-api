@@ -27,12 +27,13 @@ public class PutTests(ApiWebApplicationFactory factory, ITestOutputHelper output
         services.AddTransient<IChedReservationService>(_ => MockChedReservationService);
     }
 
-    private static Reservation CreateReservation() =>
+    private static Reservation CreateReservation(string status = "Reserved", string? unsuccessfulReason = null) =>
         new()
         {
             ChedId = ChedId,
             Mrn = Mrn,
-            Status = "Reserved",
+            Status = status,
+            UnsuccessfulReason = unsuccessfulReason,
             Timestamp = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
             Commodities =
             [
@@ -127,5 +128,52 @@ public class PutTests(ApiWebApplicationFactory factory, ITestOutputHelper output
         );
 
         response.StatusCode.Should().Be(HttpStatusCode.Conflict);
+    }
+
+    [Fact]
+    public async Task Put_WhenUnsuccessfulAndNoReason_ShouldBeBadRequest()
+    {
+        var client = CreateClient();
+
+        var response = await client.PutAsJsonAsync(
+            Testing.Endpoints.ChedReservations.Put(ChedId, Mrn),
+            CreateReservation(status: ReservationStatus.Unsuccessful)
+        );
+
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        await VerifyJson(await response.Content.ReadAsStringAsync()).ScrubMember("traceId");
+        await MockChedReservationService
+            .DidNotReceive()
+            .Upsert(Arg.Any<ChedReservationEntity>(), Arg.Any<string?>(), Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task Put_WhenUnsuccessfulAndHasReason_ShouldReturnOk()
+    {
+        var client = CreateClient();
+        var reservation = CreateReservation(status: ReservationStatus.Unsuccessful, unsuccessfulReason: "reason");
+        MockChedReservationService
+            .Upsert(Arg.Any<ChedReservationEntity>(), null, Arg.Any<CancellationToken>())
+            .Returns(
+                new ChedReservationEntity
+                {
+                    Id = $"{ChedId}_{Mrn}",
+                    Reservation = reservation,
+                    Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                    Updated = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                    ETag = "etag",
+                }
+            );
+
+        var response = await client.PutAsJsonAsync(Testing.Endpoints.ChedReservations.Put(ChedId, Mrn), reservation);
+
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        await MockChedReservationService
+            .Received(1)
+            .Upsert(
+                Arg.Is<ChedReservationEntity>(x => x!.Reservation.UnsuccessfulReason == "reason"),
+                null,
+                Arg.Any<CancellationToken>()
+            );
     }
 }
