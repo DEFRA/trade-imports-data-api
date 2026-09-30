@@ -1,6 +1,5 @@
 using Defra.TradeImportsDataApi.Api.Authentication;
 using Defra.TradeImportsDataApi.Api.Data;
-using Defra.TradeImportsDataApi.Api.Endpoints.Gmrs;
 using Defra.TradeImportsDataApi.Api.Exceptions;
 using Defra.TradeImportsDataApi.Api.Extensions;
 using Defra.TradeImportsDataApi.Api.Services;
@@ -38,7 +37,8 @@ public static class EndpointRouteBuilderExtensions
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status409Conflict)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
-            .RequireAuthorization(PolicyNames.Write);
+            .RequireAuthorization(PolicyNames.Write)
+            .AddEndpointFilter<ReservationValidator>();
 
         app.MapDelete("traces-cheds/{chedId}/reservation/{mrn}/", Delete)
             .WithName("DeleteChedReservation")
@@ -79,10 +79,10 @@ public static class EndpointRouteBuilderExtensions
 
     [HttpPut]
     private static async Task<IResult> Put(
+        [FromBody] Domain.Traces.Reservation reservation,
         [FromRoute] string chedId,
         [FromRoute] string mrn,
         HttpContext context,
-        [FromBody] Domain.Traces.Reservation reservation,
         [FromHeader(Name = "If-Match")] string? ifMatch,
         [FromServices] IChedReservationService chedReservationService,
         CancellationToken cancellationToken

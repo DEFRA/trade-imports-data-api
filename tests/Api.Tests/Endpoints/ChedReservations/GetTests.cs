@@ -65,7 +65,7 @@ public class GetTests : EndpointTestBase, IClassFixture<WireMockContext>
                     {
                         ChedId = ChedId,
                         Mrn = Mrn,
-                        Status = "Reserved",
+                        Status = ReservationStatus.Reserved,
                         Timestamp = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
                         Commodities =
                         [

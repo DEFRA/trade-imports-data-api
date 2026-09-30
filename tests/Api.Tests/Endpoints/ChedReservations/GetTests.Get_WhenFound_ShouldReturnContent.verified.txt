@@ -3,6 +3,7 @@
     chedId: chedId,
     mrn: mrn,
     status: Reserved,
+    unsuccessfulReason: null,
     timestamp: 2025-04-03T10:00:00Z,
     commodities: [
       {
