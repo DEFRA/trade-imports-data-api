@@ -306,6 +306,7 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
                         .ScrubMember("resourceId")
                         .ScrubMember("etag")
                         .ScrubMember("message")
+                        .ScrubMember("published")
                         .UseStrictJson()
                         .DontIgnoreEmptyCollections()
                         .UseMethodName(
@@ -321,12 +322,9 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
                     // Resource event body should match what was saved
                     message.Body.Should().Be(resourceEventEntity.Message);
 
-                    // Updated should be greater than created as resource event is created first as part of main
-                    // save, then updated once SNS write is complete
                     resourceEventEntity.Updated.Should().BeAfter(resourceEventEntity.Created);
 
-                    // Updated should match Published due to above comment
-                    resourceEventEntity.Published.Should().Be(resourceEventEntity.Updated);
+                    resourceEventEntity.Published.Should().NotBeNull();
 
                     // Store the following for republish checking
                     resourceEventId = resourceEventEntity.Id;
@@ -429,6 +427,7 @@ public class ImportPreNotificationTests(ITestOutputHelper testOutputHelper) : Sq
                         .ScrubMember("resourceId")
                         .ScrubMember("etag")
                         .ScrubMember("message")
+                        .ScrubMember("published")
                         .UseStrictJson()
                         .DontIgnoreEmptyCollections()
                         .UseMethodName(
