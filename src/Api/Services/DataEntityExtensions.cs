@@ -18,6 +18,8 @@ public static class DataEntityExtensions
         Converters = { new JsonStringEnumConverter() },
     };
 
+    private const string OperationMustBeUpdatedOrCreated = "Operation must be either Updated or Created";
+
     public static ResourceEvent<CustomsDeclarationEvent> ToResourceEvent(
         this CustomsDeclarationEntity entity,
         string operation,
@@ -27,7 +29,7 @@ public static class DataEntityExtensions
     )
     {
         if (operation is not ResourceEventOperations.Updated and not ResourceEventOperations.Created)
-            throw new ArgumentException("Operation must be either Updated or Created", nameof(operation));
+            throw new ArgumentException(OperationMustBeUpdatedOrCreated, nameof(operation));
 
         var changeSet = CreateChangeSet(current, previous);
         var knownSubResourceTypes = changeSet
@@ -84,7 +86,7 @@ public static class DataEntityExtensions
     )
     {
         if (operation is not ResourceEventOperations.Updated and not ResourceEventOperations.Created)
-            throw new ArgumentException("Operation must be either Updated or Created", nameof(operation));
+            throw new ArgumentException(OperationMustBeUpdatedOrCreated, nameof(operation));
 
         var changeSet = CreateChangeSet(current, previous);
         var knownSubResourceTypes = changeSet
@@ -130,7 +132,7 @@ public static class DataEntityExtensions
     )
     {
         if (operation is not ResourceEventOperations.Updated and not ResourceEventOperations.Created)
-            throw new ArgumentException("Operation must be either Updated or Created", nameof(operation));
+            throw new ArgumentException(OperationMustBeUpdatedOrCreated, nameof(operation));
 
         var changeSet = CreateChangeSet(current, previous);
 
@@ -158,7 +160,7 @@ public static class DataEntityExtensions
     public static ResourceEvent<TracesChedEvent> ToResourceEvent(this TracesChedEntity entity, string operation)
     {
         if (operation is not ResourceEventOperations.Updated and not ResourceEventOperations.Created)
-            throw new ArgumentException("Operation must be either Updated or Created", nameof(operation));
+            throw new ArgumentException(OperationMustBeUpdatedOrCreated, nameof(operation));
 
         var entityEvent = new TracesChedEvent()
         {
@@ -187,7 +189,7 @@ public static class DataEntityExtensions
     )
     {
         if (operation is not ResourceEventOperations.Updated and not ResourceEventOperations.Created)
-            throw new ArgumentException("Operation must be either Updated or Created", nameof(operation));
+            throw new ArgumentException(OperationMustBeUpdatedOrCreated, nameof(operation));
 
         var entityEvent = new ChedReservationEvent()
         {

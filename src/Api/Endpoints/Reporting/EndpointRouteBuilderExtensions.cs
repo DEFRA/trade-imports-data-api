@@ -51,9 +51,9 @@ public static class EndpointRouteBuilderExtensions
         var query = dbContext
             .CustomsDeclarations.Where(x =>
                 x.Finalisation!.MessageSentAt >= from
-                && x.Finalisation!.MessageSentAt < to
-                && x.Finalisation!.FinalState != "1" // Is not cancelled
-                && x.Finalisation!.FinalState != "2" // Is not cancelled
+                && x.Finalisation.MessageSentAt < to
+                && x.Finalisation.FinalState != "1" // Is not cancelled
+                && x.Finalisation.FinalState != "2" // Is not cancelled
             )
             .Select(x => new { x.Id, x.Finalisation!.IsManualRelease });
 

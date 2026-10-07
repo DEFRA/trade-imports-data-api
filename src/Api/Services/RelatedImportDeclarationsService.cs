@@ -94,7 +94,7 @@ public class RelatedImportDeclarationsService(
     {
         var customsDeclarations = await customsDeclarationRepository.GetAll(predicate, cancellationToken);
 
-        if (customsDeclarations is null || !customsDeclarations.Any())
+        if (customsDeclarations is null || customsDeclarations.Count == 0)
         {
             return _empty;
         }
@@ -281,7 +281,7 @@ public class RelatedImportDeclarationsService(
     )> StartFromGmrVrnOrTrn(Expression<Func<GmrEntity, bool>> predicate, CancellationToken cancellationToken)
     {
         var gmrs = await gmrRepository.GetAll(predicate, cancellationToken);
-        if (!gmrs.Any())
+        if (gmrs.Count == 0)
         {
             return _empty;
         }

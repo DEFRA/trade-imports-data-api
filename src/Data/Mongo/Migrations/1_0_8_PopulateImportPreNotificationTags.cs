@@ -96,7 +96,8 @@ public class PopulateImportPreNotificationTagsWithExternalReference()
         // Lambda filter (strongly typed)
         await collection.UpdateManyAsync(
             Builders<ImportPreNotificationEntity>.Filter.Empty,
-            Builders<ImportPreNotificationEntity>.Update.Pipeline(updatePipeline)
+            Builders<ImportPreNotificationEntity>.Update.Pipeline(updatePipeline),
+            cancellationToken: context.CancellationToken
         );
 
         await CreateIndex(

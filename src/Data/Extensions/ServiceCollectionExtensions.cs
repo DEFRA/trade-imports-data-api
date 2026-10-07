@@ -97,7 +97,11 @@ public static class ServiceCollectionExtensions
                 Log(LogLevel.Warning, commandInfo);
         }
 
-        private void Log(LogLevel level, Command command) =>
+        private void Log(LogLevel level, Command command)
+        {
+            if (!logger.IsEnabled(level))
+                return;
+
             logger.Log(
                 level,
                 "Mongo query {Result} {CommandName} {Query} took {Duration}ms",
@@ -106,6 +110,7 @@ public static class ServiceCollectionExtensions
                 command.Query,
                 TimeProvider.System.GetElapsedTime(command.Timestamp).TotalMilliseconds
             );
+        }
 
         private static bool ShouldTrack(CommandStartedEvent @event) =>
             @event.CommandName is "find" or "aggregate" or "count" or "distinct";
