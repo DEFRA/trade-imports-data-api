@@ -4,6 +4,8 @@ using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 using Defra.TradeImportsDataApi.Domain.Errors;
 using Defra.TradeImportsDataApi.Domain.Events;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
+using Defra.TradeImportsDataApi.Domain.Traces;
+using Trade.Gateway.Api.Contract.Certificate;
 
 namespace Defra.TradeImportsDataApi.Api.Tests.Services;
 
@@ -151,6 +153,37 @@ public class DataEntityExtensionsTests
         Assert.Equal("TestId", result.ResourceId);
         Assert.Equal(operation, result.Operation);
         Assert.NotNull(result.Resource);
+    }
+
+    [Fact]
+    public void ChedReservation_ToResourceEvent_InvalidOperation_ThrowsArgumentException()
+    {
+        var entity = new ChedReservationEntity
+        {
+            Id = "123",
+            Reservation = new Reservation
+            {
+                ChedId = "ched",
+                Mrn = "mrn",
+                Status = "status",
+            },
+        };
+        Assert.Throws<ArgumentException>(() => entity.ToResourceEvent("InvalidOperation"));
+    }
+
+    [Fact]
+    public void TracesChed_ToResourceEvent_InvalidOperation_ThrowsArgumentException()
+    {
+        var entity = new TracesChedEntity
+        {
+            Id = "123",
+            Ched = new DefraUNVTDCHEDProfile
+            {
+                ExchangedDocument = new ExchangedDocument { Identifier = "Test" },
+                SpecifiedConsignment = new Consignment(),
+            },
+        };
+        Assert.Throws<ArgumentException>(() => entity.ToResourceEvent("InvalidOperation"));
     }
 
     [Fact]
