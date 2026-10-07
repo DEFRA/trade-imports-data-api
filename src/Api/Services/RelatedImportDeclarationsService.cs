@@ -100,7 +100,10 @@ public class RelatedImportDeclarationsService(
         }
 
         var identifiers = customsDeclarations.SelectMany(x => x.ImportPreNotificationIdentifiers).ToArray();
-        var fullCheds = identifiers.Where(x => new ChedIdReference(x).IsValid()).ToArray();
+        var fullCheds = identifiers
+            .Where(x => new ChedIdReference(x).IsValid())
+            .SelectMany(x => new[] { x, $"{x}V", $"{x}R" })
+            .ToArray();
         var shortCheds = identifiers.Where(x => !new ChedIdReference(x).IsValid()).ToArray();
         var notifications = await importPreNotificationRepository.GetAll(shortCheds, cancellationToken);
         var cheds = await tracesChedRepository.GetAll(fullCheds, cancellationToken);
@@ -167,20 +170,17 @@ public class RelatedImportDeclarationsService(
     )> StartFromImportPreNotification(string chedId, int maxDepth, CancellationToken cancellationToken)
     {
         var chedRef = new ChedIdReference(chedId);
-        TracesChedEntity[] cheds = [];
+        List<TracesChedEntity> cheds = [];
+
         ImportPreNotificationEntity[] preNotifications = [];
         string cdLookup = chedId;
 
         if (chedRef.IsValid())
         {
-            var ched = await tracesChedRepository.Get(chedId, cancellationToken);
-            if (ched is not null)
-            {
-                cheds = [ched];
-            }
+            cheds = await tracesChedRepository.GetAll([chedId, $"{chedId}V", $"{chedId}R"], cancellationToken);
         }
 
-        if (cheds.Length == 0)
+        if (cheds.Count == 0)
         {
             var identifier = chedRef.GetIdentifier();
             cdLookup = identifier;
@@ -339,7 +339,10 @@ public class RelatedImportDeclarationsService(
             .Distinct()
             .ToList();
 
-        var fullCheds = identifiers.Where(x => new ChedIdReference(x).IsValid()).ToList();
+        var fullCheds = identifiers
+            .Where(x => new ChedIdReference(x).IsValid())
+            .SelectMany(x => new[] { x, $"{x}V", $"{x}R" })
+            .ToList();
         var shortCheds = identifiers.Where(x => !new ChedIdReference(x).IsValid()).ToList();
 
         if (fullCheds.Count != 0)
