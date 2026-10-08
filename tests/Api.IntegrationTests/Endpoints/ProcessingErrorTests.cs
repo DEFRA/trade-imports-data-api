@@ -115,6 +115,7 @@ public class ProcessingErrorTests(ITestOutputHelper testOutputHelper) : SqsTestB
                         .ScrubMember("resourceId")
                         .ScrubMember("etag")
                         .ScrubMember("message")
+                        .ScrubMember("published")
                         .UseStrictJson()
                         .DontIgnoreEmptyCollections()
                         .UseMethodName(
@@ -182,6 +183,7 @@ public class ProcessingErrorTests(ITestOutputHelper testOutputHelper) : SqsTestB
                         .ScrubMember("resourceId")
                         .ScrubMember("etag")
                         .ScrubMember("message")
+                        .ScrubMember("published")
                         .UseStrictJson()
                         .DontIgnoreEmptyCollections()
                         .UseMethodName(

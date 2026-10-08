@@ -77,13 +77,16 @@ public class ResourceEventPublisher(
 
         await simpleNotificationService.PublishAsync(request, cancellationToken);
 
-        logger.LogInformation(
-            "Published resource event {ResourceType} {Operation} {SubResourceType} (compressed {Compressed})",
-            entity.ResourceType,
-            entity.Operation,
-            entity.SubResourceType,
-            compressed
-        );
+        if (logger.IsEnabled(LogLevel.Information))
+        {
+            logger.LogInformation(
+                "Published resource event {ResourceType} {Operation} {SubResourceType} (compressed {Compressed})",
+                entity.ResourceType,
+                entity.Operation,
+                entity.SubResourceType,
+                compressed
+            );
+        }
     }
 
     internal static (string message, bool compressed) SerializeEvent(ResourceEventEntity entity)
@@ -127,8 +130,7 @@ public class ResourceEventPublisher(
 
         public string ToName(string resourceType)
         {
-            if (resourceType is null)
-                throw new ArgumentNullException(nameof(resourceType));
+            ArgumentNullException.ThrowIfNull(resourceType);
 
             return _toNameCache.GetOrAdd(
                 resourceType,
@@ -151,7 +153,7 @@ public class ResourceEventPublisher(
                         ),
                     };
 
-                    return RedundantAssemblyTokens.Replace(name!, string.Empty)!;
+                    return RedundantAssemblyTokens.Replace(name!, string.Empty);
                 },
                 this
             );

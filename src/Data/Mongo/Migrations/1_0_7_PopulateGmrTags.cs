@@ -87,7 +87,8 @@ public class PopulateGmrTagsWithTrnAndVrn() : BtmsMigration("Populate GMR tags f
         // Lambda filter (strongly typed)
         await collection.UpdateManyAsync(
             Builders<GmrEntity>.Filter.Empty,
-            Builders<GmrEntity>.Update.Pipeline(pipeline)
+            Builders<GmrEntity>.Update.Pipeline(pipeline),
+            cancellationToken: context.CancellationToken
         );
     }
 

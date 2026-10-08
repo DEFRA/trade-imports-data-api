@@ -22,7 +22,7 @@ public class UnknownTimeZoneDateTimeJsonConverter(string propertyName) : JsonCon
         if (typeToConvert != typeof(DateTime))
             throw new FormatException($"Invalid typeToConvert {typeToConvert.FullName} in {propertyName}");
 
-        var dateTimeFromJson = reader.GetDateTime()!;
+        var dateTimeFromJson = reader.GetDateTime();
 
         if (dateTimeFromJson.Kind != DateTimeKind.Unspecified)
         {

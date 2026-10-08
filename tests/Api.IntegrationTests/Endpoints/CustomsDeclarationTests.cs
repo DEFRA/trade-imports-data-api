@@ -182,6 +182,7 @@ public class CustomsDeclarationTests(ITestOutputHelper testOutputHelper) : SqsTe
                         .ScrubMember("resourceId")
                         .ScrubMember("etag")
                         .ScrubMember("message")
+                        .ScrubMember("published")
                         .UseStrictJson()
                         .DontIgnoreEmptyCollections()
                         .UseMethodName(
@@ -254,6 +255,7 @@ public class CustomsDeclarationTests(ITestOutputHelper testOutputHelper) : SqsTe
                         .ScrubMember("resourceId")
                         .ScrubMember("etag")
                         .ScrubMember("message")
+                        .ScrubMember("published")
                         .UseStrictJson()
                         .DontIgnoreEmptyCollections()
                         .UseMethodName(

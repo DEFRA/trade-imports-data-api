@@ -9,6 +9,7 @@ using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.Events;
 using FluentAssertions;
 using Microsoft.AspNetCore.HeaderPropagation;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
@@ -63,6 +64,43 @@ public class ResourceEventPublisherTests
                 ),
                 CancellationToken.None
             );
+    }
+
+    [Fact]
+    public async Task Publish_WhenLoggingEnabled_ShouldLog()
+    {
+        var mockSimpleNotificationService = Substitute.For<IAmazonSimpleNotificationService>();
+        var mockLogger = Substitute.For<ILogger<ResourceEventPublisher>>();
+        mockLogger.IsEnabled(Arg.Any<LogLevel>()).Returns(true);
+        var subject = new ResourceEventPublisher(
+            mockSimpleNotificationService,
+            new OptionsWrapper<TraceHeader>(new TraceHeader { Name = "trace-id" }),
+            new HeaderPropagationValues(),
+            new OptionsWrapper<ResourceEventOptions>(
+                new ResourceEventOptions
+                {
+                    ArnPrefix = "arn",
+                    TopicName = "topic-name",
+                    TracesChedTopicName = "traces-topic-name",
+                    ChedReservationTopicName = "ched-reservation-topic-name",
+                }
+            ),
+            mockLogger
+        );
+
+        await subject.Publish(
+            new ResourceEventEntity
+            {
+                Id = "id",
+                ResourceId = "resourceId",
+                ResourceType = ResourceEventResourceTypes.CustomsDeclaration,
+                Operation = "operation",
+                Message = "message",
+            },
+            CancellationToken.None
+        );
+
+        mockLogger.ReceivedCalls().Should().Contain(c => c.GetMethodInfo().Name == nameof(ILogger.Log));
     }
 
     [Fact]
