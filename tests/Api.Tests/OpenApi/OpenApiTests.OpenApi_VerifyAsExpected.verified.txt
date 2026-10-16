@@ -1017,6 +1017,161 @@
         }
       }
     },
+    "/iuu-notifications/{iuuReference}": {
+      "get": {
+        "tags": [
+          "IuuNotifications"
+        ],
+        "summary": "Get IUU Notification",
+        "description": "Get an IUU Notification by Reference",
+        "operationId": "GetIuuNotificationByIuuReference",
+        "parameters": [
+          {
+            "name": "iuuReference",
+            "in": "path",
+            "description": "IUU Reference",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "IUU.FR.2026.0000001"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Defra.TradeImportsDataApi.IuuNotificationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "IuuNotifications"
+        ],
+        "summary": "Put IUU Notification",
+        "description": "Put an IUU Notification",
+        "operationId": "PutIuuNotification",
+        "parameters": [
+          {
+            "name": "iuuReference",
+            "in": "path",
+            "description": "IUU Reference",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "IUU.FR.2026.0000001"
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "description": "",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Defra.TradeImportsDataApi.IuuNotification"
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/processing-errors/{mrn}": {
       "get": {
         "tags": [
@@ -4425,6 +4580,54 @@
         },
         "additionalProperties": false,
         "description": "International phone number"
+      },
+      "Defra.TradeImportsDataApi.IuuNotification": {
+        "required": [
+          "lastUpdated",
+          "reference"
+        ],
+        "type": "object",
+        "properties": {
+          "reference": {
+            "type": "string"
+          },
+          "lastUpdated": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "iuuOption": {
+            "enum": [
+              "IUUOK",
+              "IUUNA",
+              "IUUNotCompliant"
+            ],
+            "type": "string",
+            "description": "Possible values taken from IuuNotification schema version v1.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Defra.TradeImportsDataApi.IuuNotificationResponse": {
+        "type": "object",
+        "properties": {
+          "iuuNotification": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Defra.TradeImportsDataApi.IuuNotification"
+              }
+            ]
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
       },
       "Defra.TradeImportsDataApi.JourneyRiskCategorisationResult": {
         "type": "object",

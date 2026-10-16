@@ -1,3 +1,4 @@
+using Defra.TradeImportsDataApi.Domain.Iuu;
 using Defra.TradeImportsDataApi.Domain.Traces;
 using Trade.Gateway.Api.Contract.Certificate;
 
@@ -77,6 +78,15 @@ public interface ITradeImportsDataApiClient
     Task DeleteChedReservation(string chedId, string mrn, CancellationToken cancellationToken);
     Task<TracesChedUpdatesResponse> GetTracesChedUpdates(
         TracesChedUpdatesRequest request,
+        CancellationToken cancellationToken
+    );
+
+    Task<IuuNotificationResponse?> GetIuuNotification(string iuuReference, CancellationToken cancellationToken);
+
+    Task PutIuuNotification(
+        string iuuReference,
+        IuuNotification data,
+        string? etag,
         CancellationToken cancellationToken
     );
 }

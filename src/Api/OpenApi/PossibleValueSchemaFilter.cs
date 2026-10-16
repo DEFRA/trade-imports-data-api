@@ -13,6 +13,7 @@ public class PossibleValueSchemaFilter : ISchemaFilter
         { "IPAFFS", "17.5" },
         { "Finalisation", "v1" },
         { "GVMS", "v1.0 (private beta)" },
+        { "IuuNotification", "v1" },
     };
 
     public void Apply(OpenApiSchema schema, SchemaFilterContext context)

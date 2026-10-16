@@ -33,4 +33,17 @@ public class ImportDocument
 
         return string.Empty;
     }
+
+    public bool HasValidIuuDocumentReference()
+    {
+        return !string.IsNullOrEmpty(DocumentCode) && ImportDocumentReference.IsValidIuu(DocumentCode);
+    }
+
+    public string GetIuuDocumentReferenceIdentifier()
+    {
+        if (!string.IsNullOrEmpty(DocumentCode) && DocumentReference != null)
+            return DocumentReference.GetIuuIdentifier(DocumentCode);
+
+        return string.Empty;
+    }
 }
