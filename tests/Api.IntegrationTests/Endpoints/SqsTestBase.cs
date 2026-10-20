@@ -5,10 +5,13 @@ using Xunit.Abstractions;
 
 namespace Defra.TradeImportsDataApi.Api.IntegrationTests.Endpoints;
 
-public class SqsTestBase(ITestOutputHelper testOutputHelper) : IntegrationTestBase
+public class SqsTestBase(ITestOutputHelper testOutputHelper, string queueName = SqsTestBase.DataUpsertedQueueName)
+    : IntegrationTestBase
 {
-    private const string QueueUrl =
-        "http://sqs.eu-west-2.127.0.0.1:4566/000000000000/trade_imports_data_upserted_queue";
+    protected const string DataUpsertedQueueName = "trade_imports_data_upserted_queue";
+    protected const string IuuNotificationUpsertedQueueName = "trade_imports_iuunotification_upserted_queue";
+
+    private readonly string _queueUrl = $"http://sqs.eu-west-2.127.0.0.1:4566/000000000000/{queueName}";
 
     private readonly AmazonSQSClient _sqsClient = new(
         new BasicAWSCredentials("test", "test"),
@@ -26,7 +29,7 @@ public class SqsTestBase(ITestOutputHelper testOutputHelper) : IntegrationTestBa
         return _sqsClient.ReceiveMessageAsync(
             new ReceiveMessageRequest
             {
-                QueueUrl = QueueUrl,
+                QueueUrl = _queueUrl,
                 MaxNumberOfMessages = 10,
                 WaitTimeSeconds = 0,
                 MessageAttributeNames = ["*"],
@@ -38,7 +41,7 @@ public class SqsTestBase(ITestOutputHelper testOutputHelper) : IntegrationTestBa
     protected Task<GetQueueAttributesResponse> GetQueueAttributes()
     {
         return _sqsClient.GetQueueAttributesAsync(
-            new GetQueueAttributesRequest { AttributeNames = ["ApproximateNumberOfMessages"], QueueUrl = QueueUrl },
+            new GetQueueAttributesRequest { AttributeNames = ["ApproximateNumberOfMessages"], QueueUrl = _queueUrl },
             CancellationToken.None
         );
     }
@@ -55,7 +58,7 @@ public class SqsTestBase(ITestOutputHelper testOutputHelper) : IntegrationTestBa
                     testOutputHelper?.WriteLine("Drain message: {0} {1}", message.MessageId, message.Body);
 
                     await _sqsClient.DeleteMessageAsync(
-                        new DeleteMessageRequest { QueueUrl = QueueUrl, ReceiptHandle = message.ReceiptHandle },
+                        new DeleteMessageRequest { QueueUrl = _queueUrl, ReceiptHandle = message.ReceiptHandle },
                         CancellationToken.None
                     );
                 }
