@@ -162,5 +162,16 @@
       created: 2025-04-03T10:00:00Z,
       updated: 2025-04-03T10:15:00Z
     }
+  ],
+  iuus: [
+    {
+      iuuNotification: {
+        reference: IUU.FR.2026.0000001,
+        lastUpdated: 2025-04-03T10:00:00Z,
+        iuuOption: IUUOK
+      },
+      created: 2025-04-03T10:00:00Z,
+      updated: 2025-04-03T10:15:00Z
+    }
   ]
 }

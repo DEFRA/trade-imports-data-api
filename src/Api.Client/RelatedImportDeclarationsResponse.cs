@@ -9,5 +9,6 @@ public record RelatedImportDeclarationsResponse(
     [property: JsonPropertyName("transitImportPreNotifications")]
         ImportPreNotificationResponse[] TransitImportPreNotifications,
     [property: JsonPropertyName("cheds")] TracesChedResponse[] Cheds,
-    [property: JsonPropertyName("chedReservations")] ChedReservationResponse[] ChedReservations
+    [property: JsonPropertyName("chedReservations")] ChedReservationResponse[] ChedReservations,
+    [property: JsonPropertyName("iuus")] IuuNotificationResponse[] Iuus
 );

@@ -5915,6 +5915,12 @@
             "items": {
               "$ref": "#/components/schemas/Defra.TradeImportsDataApi.ChedReservationResponse"
             }
+          },
+          "iuus": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Defra.TradeImportsDataApi.IuuNotificationResponse"
+            }
           }
         },
         "additionalProperties": false
