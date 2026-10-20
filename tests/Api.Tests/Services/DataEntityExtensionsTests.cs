@@ -4,6 +4,7 @@ using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 using Defra.TradeImportsDataApi.Domain.Errors;
 using Defra.TradeImportsDataApi.Domain.Events;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
+using Defra.TradeImportsDataApi.Domain.Iuu;
 using Defra.TradeImportsDataApi.Domain.Traces;
 using Trade.Gateway.Api.Contract.Certificate;
 
@@ -169,6 +170,57 @@ public class DataEntityExtensionsTests
             },
         };
         Assert.Throws<ArgumentException>(() => entity.ToResourceEvent("InvalidOperation"));
+    }
+
+    [Fact]
+    public void IuuNotification_ToResourceEvent_InvalidOperation_ThrowsArgumentException()
+    {
+        var entity = new IuuNotificationEntity
+        {
+            Id = "IUU.Reference",
+            IuuNotification = new IuuNotification
+            {
+                Reference = "IUU.Reference",
+                LastUpdated = DateTime.UtcNow,
+                IuuOption = "IUUOK",
+            },
+        };
+        Assert.Throws<ArgumentException>(() => entity.ToResourceEvent("InvalidOperation"));
+    }
+
+    [Theory]
+    [InlineData(ResourceEventOperations.Created)]
+    [InlineData(ResourceEventOperations.Updated)]
+    public void IuuNotification_ToResourceEvent_ValidOperation_ReturnsExpectedResourceEvent(string operation)
+    {
+        var entity = new IuuNotificationEntity
+        {
+            Id = "IUU.Reference",
+            ETag = "etag",
+            Created = DateTime.UtcNow,
+            Updated = DateTime.UtcNow,
+            IuuNotification = new IuuNotification
+            {
+                Reference = "IUU.Reference",
+                LastUpdated = DateTime.UtcNow,
+                IuuOption = "IUUOK",
+            },
+        };
+
+        var result = entity.ToResourceEvent(operation);
+
+        Assert.Equal(entity.Id, result.ResourceId);
+        Assert.Equal(ResourceEventResourceTypes.IuuNotification, result.ResourceType);
+        Assert.Equal(operation, result.Operation);
+        Assert.Equal(entity.ETag, result.Etag);
+        Assert.Empty(result.ChangeSet);
+        Assert.Null(result.SubResourceType);
+        Assert.NotNull(result.Resource);
+        Assert.Equal(entity.Id, result.Resource.Id);
+        Assert.Equal(entity.ETag, result.Resource.Etag);
+        Assert.Equal(entity.Created, result.Resource.Created);
+        Assert.Equal(entity.Updated, result.Resource.Updated);
+        Assert.Same(entity.IuuNotification, result.Resource.IuuNotification);
     }
 
     [Fact]

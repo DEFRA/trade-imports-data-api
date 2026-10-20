@@ -34,6 +34,7 @@ public class ResourceEventPublisherTests
                     TopicName = "topic-name",
                     TracesChedTopicName = "traces-topic-name",
                     ChedReservationTopicName = "ched-reservation-topic-name",
+                    IuuNotificationTopicName = "iuu-notification-topic-name",
                 }
             ),
             NullLogger<ResourceEventPublisher>.Instance
@@ -83,6 +84,7 @@ public class ResourceEventPublisherTests
                     TopicName = "topic-name",
                     TracesChedTopicName = "traces-topic-name",
                     ChedReservationTopicName = "ched-reservation-topic-name",
+                    IuuNotificationTopicName = "iuu-notification-topic-name",
                 }
             ),
             mockLogger
@@ -118,6 +120,7 @@ public class ResourceEventPublisherTests
                     TopicName = "topic-name",
                     TracesChedTopicName = "traces-topic-name",
                     ChedReservationTopicName = "ched-reservation-topic-name",
+                    IuuNotificationTopicName = "iuu-notification-topic-name",
                 }
             ),
             NullLogger<ResourceEventPublisher>.Instance
@@ -154,6 +157,7 @@ public class ResourceEventPublisherTests
                     TopicName = "topic-name",
                     TracesChedTopicName = "traces-topic-name",
                     ChedReservationTopicName = "ched-reservation-topic-name",
+                    IuuNotificationTopicName = "iuu-notification-topic-name",
                 }
             ),
             NullLogger<ResourceEventPublisher>.Instance
@@ -220,6 +224,7 @@ public class ResourceEventPublisherTests
                     TopicName = "topic-name",
                     TracesChedTopicName = "traces-topic-name",
                     ChedReservationTopicName = "ched-reservation-topic-name",
+                    IuuNotificationTopicName = "iuu-notification-topic-name",
                 }
             ),
             NullLogger<ResourceEventPublisher>.Instance
@@ -265,6 +270,7 @@ public class ResourceEventPublisherTests
                     TopicName = "topic-name",
                     TracesChedTopicName = "traces-topic-name",
                     ChedReservationTopicName = "ched-reservation-topic-name",
+                    IuuNotificationTopicName = "iuu-notification-topic-name",
                 }
             ),
             NullLogger<ResourceEventPublisher>.Instance
@@ -289,6 +295,51 @@ public class ResourceEventPublisherTests
                 Arg.Is<PublishRequest>(x =>
                     x!.MessageAttributes.ContainsKey("SubResourceType")
                     && x.MessageAttributes["SubResourceType"].StringValue == "subResourceType"
+                ),
+                CancellationToken.None
+            );
+    }
+
+    [Fact]
+    public async Task Publish_WhenIuuNotification_ShouldPublishToIuuNotificationTopic()
+    {
+        var mockSimpleNotificationService = Substitute.For<IAmazonSimpleNotificationService>();
+        var subject = new ResourceEventPublisher(
+            mockSimpleNotificationService,
+            new OptionsWrapper<TraceHeader>(new TraceHeader { Name = "trace-id" }),
+            new HeaderPropagationValues(),
+            new OptionsWrapper<ResourceEventOptions>(
+                new ResourceEventOptions
+                {
+                    ArnPrefix = "arn",
+                    TopicName = "topic-name",
+                    TracesChedTopicName = "traces-topic-name",
+                    ChedReservationTopicName = "ched-reservation-topic-name",
+                    IuuNotificationTopicName = "iuu-notification-topic-name",
+                }
+            ),
+            NullLogger<ResourceEventPublisher>.Instance
+        );
+
+        await subject.Publish(
+            new ResourceEventEntity
+            {
+                Id = "id",
+                ResourceId = "resourceId",
+                ResourceType = ResourceEventResourceTypes.IuuNotification,
+                Operation = "operation",
+                Message = "message",
+            },
+            CancellationToken.None
+        );
+
+        await mockSimpleNotificationService
+            .Received()
+            .PublishAsync(
+                Arg.Is<PublishRequest>(x =>
+                    x!.TopicArn == "arn:iuu-notification-topic-name"
+                    && x.MessageAttributes["ResourceType"].StringValue == ResourceEventResourceTypes.IuuNotification
+                    && x.Message == "message"
                 ),
                 CancellationToken.None
             );
