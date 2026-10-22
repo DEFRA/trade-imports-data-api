@@ -1376,6 +1376,15 @@
             }
           },
           {
+            "name": "iuu",
+            "in": "query",
+            "description": "Search by IUU Certificate Id",
+            "schema": {
+              "type": "string",
+              "description": "Search by IUU Certificate Id"
+            }
+          },
+          {
             "name": "maxLinkDepth",
             "in": "query",
             "description": "Max link depth to follow. Default is 3.",

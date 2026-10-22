@@ -79,6 +79,11 @@ public class RelatedImportDeclarationsService(
             return await StartFromGmrVrnOrTrn(x => x.Tags.Contains(search), cancellationToken);
         }
 
+        if (!string.IsNullOrEmpty(request.Iuu))
+        {
+            return await StartFromIuu(request.Iuu, maxDepth, cancellationToken);
+        }
+
         return _empty;
     }
 
@@ -335,6 +340,29 @@ public class RelatedImportDeclarationsService(
         var iuuNotifications = await iuuNotificationRepository.GetAll(identifiers, cancellationToken);
 
         return iuuNotifications.DistinctBy(x => x.Id).ToArray();
+    }
+
+    private async Task<(
+        CustomsDeclarationEntity[] CustomsDeclarations,
+        ImportPreNotificationEntity[] ImportPreNotifications,
+        GmrEntity[] Gmrs,
+        ImportPreNotificationEntity[] TransientNotifications,
+        TracesChedEntity[] Cheds,
+        ChedReservationEntity[] Reservations,
+        IuuNotificationEntity[] IuuNotifications
+    )> StartFromIuu(string iuuId, int maxDepth, CancellationToken cancellationToken)
+    {
+        var iuu = await iuuNotificationRepository.Get(iuuId, cancellationToken);
+        if (iuu is null)
+        {
+            return _empty;
+        }
+
+        return await StartFromCustomsDeclaration(
+            x => x.IuuNotificationIdentifiers.Contains(iuuId),
+            maxDepth,
+            cancellationToken
+        );
     }
 
     private async Task<(

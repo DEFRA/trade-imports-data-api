@@ -1006,6 +1006,99 @@ public class RelatedImportDeclarationsServiceTests
         response.IuuNotifications.Length.Should().Be(0);
     }
 
+    [Fact]
+    public async Task GivenSearchByIuu_WhenIuuNotificationLinked_ThenShouldReturn()
+    {
+        var memoryDbContext = new MemoryDbContext();
+        InsertIuuTestData(memoryDbContext);
+
+        var subject = CreateSubject(memoryDbContext);
+
+        var response = await subject.Search(
+            new RelatedImportDeclarationsRequest { Iuu = IuuReference3 },
+            CancellationToken.None
+        );
+
+        response.CustomsDeclarations.Select(x => x.Id).Should().BeEquivalentTo("mrn3");
+        response.ImportPreNotifications.Length.Should().Be(0);
+        response.Gmrs.Select(x => x.Id).Should().BeEquivalentTo("gmr1");
+        response.IuuNotifications.Select(x => x.Id).Should().BeEquivalentTo(IuuReference3);
+    }
+
+    [Fact]
+    public async Task GivenSearchByIuu_WhenIuuNotificationLinkedToRelatedMrn_ThenRelatedShouldBeReturned()
+    {
+        var memoryDbContext = new MemoryDbContext();
+        InsertIuuTestData(memoryDbContext);
+
+        var subject = CreateSubject(memoryDbContext);
+
+        var response = await subject.Search(
+            new RelatedImportDeclarationsRequest { Iuu = IuuReference1 },
+            CancellationToken.None
+        );
+
+        response.CustomsDeclarations.Select(x => x.Id).Should().BeEquivalentTo("mrn1", "mrn2");
+        response.ImportPreNotifications.Select(x => x.Id).Should().BeEquivalentTo("CHEDA.GB.2025.1234567");
+        response.Gmrs.Select(x => x.Id).Should().BeEquivalentTo("gmr1");
+        response.IuuNotifications.Select(x => x.Id).Should().BeEquivalentTo(IuuReference1, IuuReference2);
+    }
+
+    [Fact]
+    public async Task GivenSearchByIuu_WhenIuuNotificationLinkedToRelatedMrn_AndMaxDepthIsZero_ThenRelatedShouldNotBeReturned()
+    {
+        var memoryDbContext = new MemoryDbContext();
+        InsertIuuTestData(memoryDbContext);
+
+        var subject = CreateSubject(memoryDbContext);
+
+        var response = await subject.Search(
+            new RelatedImportDeclarationsRequest { Iuu = IuuReference1, MaxLinkDepth = 0 },
+            CancellationToken.None
+        );
+
+        response.CustomsDeclarations.Select(x => x.Id).Should().BeEquivalentTo("mrn1");
+        response.IuuNotifications.Select(x => x.Id).Should().BeEquivalentTo(IuuReference1);
+    }
+
+    [Fact]
+    public async Task GivenSearchByIuu_WhenIuuNotificationExists_AndNoCustomsDeclarationsLinked_ThenShouldReturnEmpty()
+    {
+        var memoryDbContext = new MemoryDbContext();
+        InsertIuuTestData(memoryDbContext);
+
+        var subject = CreateSubject(memoryDbContext);
+
+        var response = await subject.Search(
+            new RelatedImportDeclarationsRequest { Iuu = "IUU.FR.2026.9999999" },
+            CancellationToken.None
+        );
+
+        response.CustomsDeclarations.Length.Should().Be(0);
+        response.ImportPreNotifications.Length.Should().Be(0);
+        response.Gmrs.Length.Should().Be(0);
+        response.IuuNotifications.Length.Should().Be(0);
+    }
+
+    [Fact]
+    public async Task GivenSearchByIuu_WhenIuuNotificationNotExists_ThenShouldReturnEmpty()
+    {
+        var memoryDbContext = new MemoryDbContext();
+        memoryDbContext.CustomsDeclarations.AddTestData(CreateCustomsDeclaration("mrn1", [], [IuuReference1]));
+
+        var subject = CreateSubject(memoryDbContext);
+
+        var response = await subject.Search(
+            new RelatedImportDeclarationsRequest { Iuu = IuuReference1 },
+            CancellationToken.None
+        );
+
+        response.CustomsDeclarations.Length.Should().Be(0);
+        response.ImportPreNotifications.Length.Should().Be(0);
+        response.Gmrs.Length.Should().Be(0);
+        response.IuuNotifications.Length.Should().Be(0);
+    }
+
     private const string IuuReference1 = "IUU.FR.2026.0000001";
     private const string IuuReference2 = "IUU.FR.2026.0000002";
     private const string IuuReference3 = "IUU.FR.2026.0000003";
