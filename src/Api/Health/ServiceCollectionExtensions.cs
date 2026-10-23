@@ -34,6 +34,12 @@ public static class ServiceCollectionExtensions
                 sp => sp.GetRequiredService<IOptions<ResourceEventOptions>>().Value.ChedReservationTopicArn,
                 tags: [WebApplicationExtensions.Extended],
                 timeout: TimeSpan.FromSeconds(10)
+            )
+            .AddSns(
+                "IUU Notification Upserts topic",
+                sp => sp.GetRequiredService<IOptions<ResourceEventOptions>>().Value.IuuNotificationTopicArn,
+                tags: [WebApplicationExtensions.Extended],
+                timeout: TimeSpan.FromSeconds(10)
             );
 
         return services;

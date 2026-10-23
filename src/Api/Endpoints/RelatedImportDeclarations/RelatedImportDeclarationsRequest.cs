@@ -25,6 +25,10 @@ public class RelatedImportDeclarationsRequest
     [Description("Search by GMR Vehicle or Trailer Registration")]
     public string? VrnOrTrn { get; init; }
 
+    [FromQuery(Name = "iuu")]
+    [Description("Search by IUU Certificate Id")]
+    public string? Iuu { get; init; }
+
     [FromQuery(Name = "maxLinkDepth")]
     [Description("Max link depth to follow. Default is 3.")]
     public int? MaxLinkDepth { get; init; } = 3;

@@ -1,0 +1,20 @@
+﻿{
+  "resourceId": "{Scrubbed}",
+  "resourceType": "IuuNotification",
+  "subResourceType": null,
+  "operation": "Updated",
+  "resource": {
+    "id": "{Scrubbed}",
+    "etag": "{Scrubbed}",
+    "created": "DateTimeOffset_1",
+    "updated": "DateTimeOffset_2",
+    "iuuNotification": {
+      "reference": "{Scrubbed}",
+      "lastUpdated": "DateTimeOffset_3",
+      "iuuOption": "IUUNA"
+    }
+  },
+  "etag": "{Scrubbed}",
+  "timestamp": "DateTimeOffset_4",
+  "changeSet": []
+}

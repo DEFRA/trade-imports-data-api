@@ -46,6 +46,8 @@ internal static class Endpoints
     public static string RelatedImportDeclarations(RelatedImportDeclarationsRequest request) =>
         $"/related-import-declarations{BuildQueryString(request)}";
 
+    public static string IuuNotifications(string iuuReference) => $"/iuu-notifications/{iuuReference}";
+
     private static string BuildQueryString(object o)
     {
         var properties = (

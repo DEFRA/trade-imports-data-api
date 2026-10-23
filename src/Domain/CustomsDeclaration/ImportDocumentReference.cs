@@ -14,6 +14,8 @@ public class ImportDocumentReference(string value)
         "N002",
     ];
 
+    private static readonly string[] _validIuuDocumentCodes = ["C673", "C641"];
+
     public string Value { get; set; } = value;
 
     public static bool IsValid(string documentCode)
@@ -24,5 +26,15 @@ public class ImportDocumentReference(string value)
     public string GetIdentifier(string documentCode)
     {
         return !IsValid(documentCode) ? string.Empty : ChedAndClearanceRequestHelper.GetIdentifier(Value);
+    }
+
+    public static bool IsValidIuu(string documentCode)
+    {
+        return _validIuuDocumentCodes.Contains(documentCode);
+    }
+
+    public string GetIuuIdentifier(string documentCode)
+    {
+        return !IsValidIuu(documentCode) ? string.Empty : Value;
     }
 }

@@ -148,6 +148,8 @@ public class ResourceEventPublisher(
                             typeof(ResourceEvent<TracesChedEvent>).AssemblyQualifiedName,
                         ResourceEventResourceTypes.ChedReservation =>
                             typeof(ResourceEvent<ChedReservationEvent>).AssemblyQualifiedName,
+                        ResourceEventResourceTypes.IuuNotification =>
+                            typeof(ResourceEvent<IuuNotificationEvent>).AssemblyQualifiedName,
                         _ => throw new InvalidOperationException(
                             $"AssemblyQualifiedName is null for type {resourceType}"
                         ),
