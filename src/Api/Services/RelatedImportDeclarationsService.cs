@@ -12,7 +12,8 @@ public class RelatedImportDeclarationsService(
     IImportPreNotificationRepository importPreNotificationRepository,
     IGmrRepository gmrRepository,
     ITracesChedRepository tracesChedRepository,
-    IChedReservationRepository chedReservationRepository
+    IChedReservationRepository chedReservationRepository,
+    IIuuNotificationRepository iuuNotificationRepository
 ) : IRelatedImportDeclarationsService
 {
     private readonly ValueTuple<
@@ -21,15 +22,17 @@ public class RelatedImportDeclarationsService(
         GmrEntity[],
         ImportPreNotificationEntity[],
         TracesChedEntity[],
-        ChedReservationEntity[]
+        ChedReservationEntity[],
+        IuuNotificationEntity[]
     > _empty = new ValueTuple<
         CustomsDeclarationEntity[],
         ImportPreNotificationEntity[],
         GmrEntity[],
         ImportPreNotificationEntity[],
         TracesChedEntity[],
-        ChedReservationEntity[]
-    >([], [], [], [], [], []);
+        ChedReservationEntity[],
+        IuuNotificationEntity[]
+    >([], [], [], [], [], [], []);
 
     public async Task<(
         CustomsDeclarationEntity[] CustomsDeclarations,
@@ -37,7 +40,8 @@ public class RelatedImportDeclarationsService(
         GmrEntity[] Gmrs,
         ImportPreNotificationEntity[] TransientNotifications,
         TracesChedEntity[] Cheds,
-        ChedReservationEntity[] Reservations
+        ChedReservationEntity[] Reservations,
+        IuuNotificationEntity[] IuuNotifications
     )> Search(RelatedImportDeclarationsRequest request, CancellationToken cancellationToken)
     {
         var maxDepth = 3;
@@ -75,6 +79,11 @@ public class RelatedImportDeclarationsService(
             return await StartFromGmrVrnOrTrn(x => x.Tags.Contains(search), cancellationToken);
         }
 
+        if (!string.IsNullOrEmpty(request.Iuu))
+        {
+            return await StartFromIuu(request.Iuu, maxDepth, cancellationToken);
+        }
+
         return _empty;
     }
 
@@ -85,7 +94,8 @@ public class RelatedImportDeclarationsService(
         GmrEntity[] Gmrs,
         ImportPreNotificationEntity[] TransientNotifications,
         TracesChedEntity[] Cheds,
-        ChedReservationEntity[] Reservations
+        ChedReservationEntity[] Reservations,
+        IuuNotificationEntity[] IuuNotifications
     )> StartFromCustomsDeclaration(
         Expression<Func<CustomsDeclarationEntity, bool>> predicate,
         int maxDepth,
@@ -142,6 +152,7 @@ public class RelatedImportDeclarationsService(
 
         var allRelatedCustomsDeclarationIdentifiers = result.CustomsDeclarations.Select(x => x.Id);
         var gmrs = await gmrRepository.GetAll(allRelatedCustomsDeclarationIdentifiers.ToArray(), cancellationToken);
+        var iuuNotifications = await GetIuuNotifications(result.CustomsDeclarations, cancellationToken);
 
         return new ValueTuple<
             CustomsDeclarationEntity[],
@@ -149,14 +160,16 @@ public class RelatedImportDeclarationsService(
             GmrEntity[],
             ImportPreNotificationEntity[],
             TracesChedEntity[],
-            ChedReservationEntity[]
+            ChedReservationEntity[],
+            IuuNotificationEntity[]
         >(
             result.CustomsDeclarations,
             result.ImportPreNotifications,
             gmrs.ToArray(),
             transientNotifications.ToArray(),
             result.Cheds,
-            result.Reservations
+            result.Reservations,
+            iuuNotifications
         );
     }
 
@@ -166,7 +179,8 @@ public class RelatedImportDeclarationsService(
         GmrEntity[] Gmrs,
         ImportPreNotificationEntity[] TransientNotifications,
         TracesChedEntity[] Cheds,
-        ChedReservationEntity[] Reservations
+        ChedReservationEntity[] Reservations,
+        IuuNotificationEntity[] IuuNotifications
     )> StartFromImportPreNotification(string chedId, int maxDepth, CancellationToken cancellationToken)
     {
         var chedRef = new ChedIdReference(chedId);
@@ -223,6 +237,7 @@ public class RelatedImportDeclarationsService(
 
         var allRelatedCustomsDeclarationIdentifiers = result.CustomsDeclarations.Select(x => x.Id);
         var gmrs = await gmrRepository.GetAll(allRelatedCustomsDeclarationIdentifiers.ToArray(), cancellationToken);
+        var iuuNotifications = await GetIuuNotifications(result.CustomsDeclarations, cancellationToken);
 
         return new ValueTuple<
             CustomsDeclarationEntity[],
@@ -230,14 +245,16 @@ public class RelatedImportDeclarationsService(
             GmrEntity[],
             ImportPreNotificationEntity[],
             TracesChedEntity[],
-            ChedReservationEntity[]
+            ChedReservationEntity[],
+            IuuNotificationEntity[]
         >(
             result.CustomsDeclarations,
             result.ImportPreNotifications,
             gmrs.ToArray(),
             [],
             result.Cheds,
-            result.Reservations
+            result.Reservations,
+            iuuNotifications
         );
     }
 
@@ -247,7 +264,8 @@ public class RelatedImportDeclarationsService(
         GmrEntity[] Gmrs,
         ImportPreNotificationEntity[] TransientNotifications,
         TracesChedEntity[] Cheds,
-        ChedReservationEntity[] Reservations
+        ChedReservationEntity[] Reservations,
+        IuuNotificationEntity[] IuuNotifications
     )> StartFromGmrId(Expression<Func<GmrEntity, bool>> predicate, CancellationToken cancellationToken)
     {
         var gmr = await gmrRepository.Get(predicate, cancellationToken);
@@ -260,6 +278,7 @@ public class RelatedImportDeclarationsService(
             x => gmr.CustomsDeclarationIdentifiers.Contains(x.Id),
             cancellationToken
         );
+        var iuuNotifications = await GetIuuNotifications(customsDeclarations, cancellationToken);
 
         return new ValueTuple<
             CustomsDeclarationEntity[],
@@ -267,8 +286,9 @@ public class RelatedImportDeclarationsService(
             GmrEntity[],
             ImportPreNotificationEntity[],
             TracesChedEntity[],
-            ChedReservationEntity[]
-        >([.. customsDeclarations], [], [gmr], [], [], []);
+            ChedReservationEntity[],
+            IuuNotificationEntity[]
+        >([.. customsDeclarations], [], [gmr], [], [], [], iuuNotifications);
     }
 
     private async Task<(
@@ -277,7 +297,8 @@ public class RelatedImportDeclarationsService(
         GmrEntity[] Gmrs,
         ImportPreNotificationEntity[] TransientNotifications,
         TracesChedEntity[] Cheds,
-        ChedReservationEntity[] Reservations
+        ChedReservationEntity[] Reservations,
+        IuuNotificationEntity[] IuuNotifications
     )> StartFromGmrVrnOrTrn(Expression<Func<GmrEntity, bool>> predicate, CancellationToken cancellationToken)
     {
         var gmrs = await gmrRepository.GetAll(predicate, cancellationToken);
@@ -292,6 +313,7 @@ public class RelatedImportDeclarationsService(
             x => customsDeclarationIdentifiers.Contains(x.Id),
             cancellationToken
         );
+        var iuuNotifications = await GetIuuNotifications(customsDeclarations, cancellationToken);
 
         return new ValueTuple<
             CustomsDeclarationEntity[],
@@ -299,8 +321,48 @@ public class RelatedImportDeclarationsService(
             GmrEntity[],
             ImportPreNotificationEntity[],
             TracesChedEntity[],
-            ChedReservationEntity[]
-        >([.. customsDeclarations], [], [.. gmrs], [], [], []);
+            ChedReservationEntity[],
+            IuuNotificationEntity[]
+        >([.. customsDeclarations], [], [.. gmrs], [], [], [], iuuNotifications);
+    }
+
+    private async Task<IuuNotificationEntity[]> GetIuuNotifications(
+        IEnumerable<CustomsDeclarationEntity> customsDeclarations,
+        CancellationToken cancellationToken
+    )
+    {
+        var identifiers = customsDeclarations
+            .SelectMany(x => x.IuuNotificationIdentifiers)
+            .Where(x => !string.IsNullOrEmpty(x))
+            .Distinct()
+            .ToArray();
+
+        var iuuNotifications = await iuuNotificationRepository.GetAll(identifiers, cancellationToken);
+
+        return iuuNotifications.DistinctBy(x => x.Id).ToArray();
+    }
+
+    private async Task<(
+        CustomsDeclarationEntity[] CustomsDeclarations,
+        ImportPreNotificationEntity[] ImportPreNotifications,
+        GmrEntity[] Gmrs,
+        ImportPreNotificationEntity[] TransientNotifications,
+        TracesChedEntity[] Cheds,
+        ChedReservationEntity[] Reservations,
+        IuuNotificationEntity[] IuuNotifications
+    )> StartFromIuu(string iuuId, int maxDepth, CancellationToken cancellationToken)
+    {
+        var iuu = await iuuNotificationRepository.Get(iuuId, cancellationToken);
+        if (iuu is null)
+        {
+            return _empty;
+        }
+
+        return await StartFromCustomsDeclaration(
+            x => x.IuuNotificationIdentifiers.Contains(iuuId),
+            maxDepth,
+            cancellationToken
+        );
     }
 
     private async Task<(

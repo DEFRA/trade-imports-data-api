@@ -2,6 +2,7 @@ using Defra.TradeImportsDataApi.Api.Client;
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 using Defra.TradeImportsDataApi.Domain.Gvms;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
+using Defra.TradeImportsDataApi.Domain.Iuu;
 using Defra.TradeImportsDataApi.Testing;
 using FluentAssertions;
 using Trade.Gateway.Api.Contract.Certificate;
@@ -95,6 +96,34 @@ public class RelatedImportDeclarationsTests : IntegrationTestBase
         response.GoodsMovements.Length.Should().Be(1);
     }
 
+    [Fact]
+    public async Task GivenSearchByMrn_WhenIuuNotificationLinked_ThenIuuNotificationShouldBeReturned()
+    {
+        var client = CreateDataApiClient();
+        var random = Guid.NewGuid().ToString("N");
+        var chedRef = ImportPreNotificationIdGenerator.Generate();
+        var iuuReference1 = IuuReferenceGenerator.Generate();
+        var iuuReference2 = IuuReferenceGenerator.Generate();
+        var unrelatedIuuReference = IuuReferenceGenerator.Generate();
+
+        await CreateImportPreNotification(client, chedRef);
+        await CreateIuuNotification(client, iuuReference1);
+        await CreateIuuNotification(client, iuuReference2);
+        await CreateIuuNotification(client, unrelatedIuuReference);
+
+        await CreateCustomsDeclaration(client, $"{random}-mrn1", $"{random}-ducr1", [chedRef], [iuuReference1]);
+        await CreateCustomsDeclaration(client, $"{random}-mrn2", $"{random}-ducr2", [chedRef], [iuuReference2]);
+
+        var response = await client.RelatedImportDeclarations(
+            new RelatedImportDeclarationsRequest { Mrn = $"{random}-mrn1" },
+            CancellationToken.None
+        );
+
+        response.Should().NotBeNull();
+        response.CustomsDeclarations.Length.Should().Be(2);
+        response.Iuus.Select(x => x.IuuNotification.Reference).Should().BeEquivalentTo(iuuReference1, iuuReference2);
+    }
+
     private static async Task<(string ChedRef, string Random)> InsertTestData(TradeImportsDataApiClient client)
     {
         var chedRef1 = ImportPreNotificationIdGenerator.Generate();
@@ -133,7 +162,8 @@ public class RelatedImportDeclarationsTests : IntegrationTestBase
         TradeImportsDataApiClient client,
         string mrn,
         string ducr,
-        List<string> links
+        List<string> links,
+        List<string>? iuuLinks = null
     )
     {
         var documents = links
@@ -142,6 +172,13 @@ public class RelatedImportDeclarationsTests : IntegrationTestBase
                 DocumentReference = new ImportDocumentReference(x),
                 DocumentCode = "C640",
             })
+            .Concat(
+                (iuuLinks ?? []).Select(x => new ImportDocument
+                {
+                    DocumentReference = new ImportDocumentReference(x),
+                    DocumentCode = "C673",
+                })
+            )
             .ToArray();
 
         var cd = new CustomsDeclaration
@@ -161,6 +198,21 @@ public class RelatedImportDeclarationsTests : IntegrationTestBase
         await client.PutImportPreNotification(
             chedId,
             new ImportPreNotification { ReferenceNumber = chedId, Version = 1 },
+            null,
+            CancellationToken.None
+        );
+    }
+
+    private static async Task CreateIuuNotification(TradeImportsDataApiClient client, string iuuReference)
+    {
+        await client.PutIuuNotification(
+            iuuReference,
+            new IuuNotification
+            {
+                Reference = iuuReference,
+                LastUpdated = DateTime.UtcNow,
+                IuuOption = "IUUOK",
+            },
             null,
             CancellationToken.None
         );
