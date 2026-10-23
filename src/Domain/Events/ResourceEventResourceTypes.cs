@@ -11,4 +11,6 @@ public static class ResourceEventResourceTypes
     public const string TracesChed = nameof(TracesChed);
 
     public const string ChedReservation = nameof(ChedReservation);
+
+    public const string IuuNotification = nameof(IuuNotification);
 }

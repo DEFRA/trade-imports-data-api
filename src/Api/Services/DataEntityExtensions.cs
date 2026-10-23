@@ -212,6 +212,35 @@ public static class DataEntityExtensions
         };
     }
 
+    public static ResourceEvent<IuuNotificationEvent> ToResourceEvent(
+        this IuuNotificationEntity entity,
+        string operation
+    )
+    {
+        if (operation is not ResourceEventOperations.Updated and not ResourceEventOperations.Created)
+            throw new ArgumentException(OperationMustBeUpdatedOrCreated, nameof(operation));
+
+        var entityEvent = new IuuNotificationEvent()
+        {
+            Id = entity.Id,
+            IuuNotification = entity.IuuNotification,
+            Created = entity.Created,
+            Etag = entity.ETag,
+            Updated = entity.Updated,
+        };
+
+        return new ResourceEvent<IuuNotificationEvent>
+        {
+            ResourceId = entity.Id,
+            ResourceType = ResourceTypeName<IuuNotificationEntity>(),
+            Operation = operation,
+            Etag = entity.ETag,
+            Resource = entityEvent,
+            ChangeSet = [],
+            SubResourceType = null,
+        };
+    }
+
     private static string ResourceTypeName<TDataEntity>()
         where TDataEntity : IDataEntity
     {
@@ -224,6 +253,7 @@ public static class DataEntityExtensions
             ResourceEventResourceTypes.ProcessingError => ResourceEventResourceTypes.ProcessingError,
             ResourceEventResourceTypes.TracesChed => ResourceEventResourceTypes.TracesChed,
             ResourceEventResourceTypes.ChedReservation => ResourceEventResourceTypes.ChedReservation,
+            ResourceEventResourceTypes.IuuNotification => ResourceEventResourceTypes.IuuNotification,
             _ => name,
         };
     }
