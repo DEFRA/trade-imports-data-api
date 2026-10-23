@@ -6,6 +6,7 @@ using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 using Defra.TradeImportsDataApi.Domain.Errors;
 using Defra.TradeImportsDataApi.Domain.Gvms;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
+using Defra.TradeImportsDataApi.Domain.Iuu;
 using Defra.TradeImportsDataApi.Domain.Traces;
 using Trade.Gateway.Api.Contract.Certificate;
 
@@ -279,6 +280,38 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
         response.EnsureSuccessStatusCode();
 
         return await Deserialize<RelatedImportDeclarationsResponse>(response, cancellationToken);
+    }
+
+    public async Task<IuuNotificationResponse?> GetIuuNotification(
+        string iuuReference,
+        CancellationToken cancellationToken
+    )
+    {
+        var response = await Get(Endpoints.IuuNotifications(iuuReference), cancellationToken);
+        if (response.StatusCode == HttpStatusCode.NotFound)
+            return null;
+
+        response.EnsureSuccessStatusCode();
+
+        var result = await Deserialize<IuuNotificationResponse>(response, cancellationToken);
+
+        return result with
+        {
+            ETag = response.Headers.ETag?.Tag,
+        };
+    }
+
+    public async Task PutIuuNotification(
+        string iuuReference,
+        IuuNotification data,
+        string? etag,
+        CancellationToken cancellationToken
+    )
+    {
+        var requestUri = Endpoints.IuuNotifications(iuuReference);
+        var response = await Put(data, etag, requestUri, cancellationToken);
+
+        response.EnsureSuccessStatusCode();
     }
 
     private static async Task<T> Deserialize<T>(HttpResponseMessage response, CancellationToken cancellationToken)

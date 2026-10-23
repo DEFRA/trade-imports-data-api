@@ -105,4 +105,13 @@ public static class Endpoints
             return $"/reporting/manual-release?from={fromString}&to={toString}";
         }
     }
+
+    public static class IuuNotifications
+    {
+        private const string Root = "/iuu-notifications";
+
+        public static string Get(string iuuReference) => $"{Root}/{iuuReference}";
+
+        public static string Put(string iuuReference) => $"{Root}/{iuuReference}";
+    }
 }

@@ -8,6 +8,7 @@ using Defra.TradeImportsDataApi.Api.Endpoints.ChedReservation;
 using Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations;
 using Defra.TradeImportsDataApi.Api.Endpoints.Gmrs;
 using Defra.TradeImportsDataApi.Api.Endpoints.ImportPreNotifications;
+using Defra.TradeImportsDataApi.Api.Endpoints.IuuNotifications;
 using Defra.TradeImportsDataApi.Api.Endpoints.ProcessingErrors;
 using Defra.TradeImportsDataApi.Api.Endpoints.RelatedImportDeclarations;
 using Defra.TradeImportsDataApi.Api.Endpoints.Reporting;
@@ -108,6 +109,7 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
     builder.Services.AddTransient<IResourceEventService, ResourceEventService>();
     builder.Services.AddTransient<ITracesChedService, TracesChedService>();
     builder.Services.AddTransient<IChedReservationService, ChedReservationService>();
+    builder.Services.AddTransient<IIuuNotificationService, IuuNotificationService>();
     builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
     builder.Services.AddAWSService<IAmazonSimpleNotificationService>();
 
@@ -119,6 +121,7 @@ static void ConfigureWebApplication(WebApplicationBuilder builder, string[] args
     builder.Services.AddTransient<IResourceEventRepository, ResourceEventRepository>();
     builder.Services.AddTransient<ITracesChedRepository, TracesChedRepository>();
     builder.Services.AddTransient<IChedReservationRepository, ChedReservationRepository>();
+    builder.Services.AddTransient<IIuuNotificationRepository, IuuNotificationRepository>();
 
     builder.Services.AddAuthenticationAuthorization();
 
@@ -148,6 +151,7 @@ static WebApplication BuildWebApplication(WebApplicationBuilder builder, bool ge
     app.MapResourceEventEndpoints();
     app.MapTracesChedsEndpoints();
     app.MapChedReservationsEndpoints();
+    app.MapIuuNotificationEndpoints();
     app.UseOpenApi();
     app.UseStatusCodePages();
     app.UseExceptionHandler(

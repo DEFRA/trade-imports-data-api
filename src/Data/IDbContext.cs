@@ -16,6 +16,7 @@ public interface IDbContext
     IMongoCollectionSet<ResourceEventEntity> ResourceEvents { get; }
     IMongoCollectionSet<TracesChedEntity> TracesCheds { get; }
     IMongoCollectionSet<ChedReservationEntity> ChedReservations { get; }
+    IMongoCollectionSet<IuuNotificationEntity> IuuNotifications { get; }
 
     Task SaveChanges(CancellationToken cancellationToken);
 

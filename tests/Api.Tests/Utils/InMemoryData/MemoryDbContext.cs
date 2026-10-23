@@ -26,6 +26,9 @@ public class MemoryDbContext : IDbContext
     public IMongoCollectionSet<ChedReservationEntity> ChedReservations { get; } =
         new MemoryCollectionSet<ChedReservationEntity>();
 
+    public IMongoCollectionSet<IuuNotificationEntity> IuuNotifications { get; } =
+        new MemoryCollectionSet<IuuNotificationEntity>();
+
     public Task SaveChanges(CancellationToken cancellationToken) => throw new NotImplementedException();
 
     public Task StartTransaction(CancellationToken cancellationToken) => throw new NotImplementedException();
