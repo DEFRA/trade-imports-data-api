@@ -5,6 +5,7 @@ using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 using Defra.TradeImportsDataApi.Domain.Gvms;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
+using Defra.TradeImportsDataApi.Domain.Iuu;
 using Defra.TradeImportsDataApi.Domain.Traces;
 using Defra.TradeImportsDataApi.Testing;
 using FluentAssertions;
@@ -60,7 +61,8 @@ public class RelatedImportDeclarationsTests : EndpointTestBase, IClassFixture<Wi
                     GmrEntity[],
                     ImportPreNotificationEntity[],
                     TracesChedEntity[],
-                    ChedReservationEntity[]
+                    ChedReservationEntity[],
+                    IuuNotificationEntity[]
                 >(
                     [
                         new CustomsDeclarationEntity
@@ -129,6 +131,21 @@ public class RelatedImportDeclarationsTests : EndpointTestBase, IClassFixture<Wi
                                         Quantity = 100,
                                     },
                                 ],
+                            },
+                            Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                            Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+                            ETag = "etag",
+                        },
+                    ],
+                    [
+                        new IuuNotificationEntity
+                        {
+                            Id = "IUU.FR.2026.0000001",
+                            IuuNotification = new IuuNotification
+                            {
+                                Reference = "IUU.FR.2026.0000001",
+                                LastUpdated = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                                IuuOption = "IUUOK",
                             },
                             Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
                             Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),

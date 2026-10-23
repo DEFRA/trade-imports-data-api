@@ -1,6 +1,7 @@
 using Defra.TradeImportsDataApi.Api.Exceptions;
 using Defra.TradeImportsDataApi.Data;
 using Defra.TradeImportsDataApi.Data.Entities;
+using Defra.TradeImportsDataApi.Data.Extensions;
 
 namespace Defra.TradeImportsDataApi.Api.Data;
 
@@ -12,6 +13,16 @@ public class IuuNotificationRepository(IDbContext dbContext) : IIuuNotificationR
             return null;
 
         return await dbContext.IuuNotifications.Find(id, cancellationToken);
+    }
+
+    public async Task<List<IuuNotificationEntity>> GetAll(string[] ids, CancellationToken cancellationToken)
+    {
+        if (ids.Length == 0)
+            return [];
+
+        return await dbContext
+            .IuuNotifications.Where(x => ids.Contains(x.Id))
+            .ToListWithFallbackAsync(cancellationToken);
     }
 
     public IuuNotificationEntity Insert(IuuNotificationEntity entity)
