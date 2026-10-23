@@ -9,6 +9,7 @@ using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.Events;
 using FluentAssertions;
 using Microsoft.AspNetCore.HeaderPropagation;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
@@ -27,7 +28,14 @@ public class ResourceEventPublisherTests
             new OptionsWrapper<TraceHeader>(new TraceHeader { Name = "trace-id" }),
             new HeaderPropagationValues(),
             new OptionsWrapper<ResourceEventOptions>(
-                new ResourceEventOptions { ArnPrefix = "arn", TopicName = "topic-name" }
+                new ResourceEventOptions
+                {
+                    ArnPrefix = "arn",
+                    TopicName = "topic-name",
+                    TracesChedTopicName = "traces-topic-name",
+                    ChedReservationTopicName = "ched-reservation-topic-name",
+                    IuuNotificationTopicName = "iuu-notification-topic-name",
+                }
             ),
             NullLogger<ResourceEventPublisher>.Instance
         );
@@ -60,6 +68,44 @@ public class ResourceEventPublisherTests
     }
 
     [Fact]
+    public async Task Publish_WhenLoggingEnabled_ShouldLog()
+    {
+        var mockSimpleNotificationService = Substitute.For<IAmazonSimpleNotificationService>();
+        var mockLogger = Substitute.For<ILogger<ResourceEventPublisher>>();
+        mockLogger.IsEnabled(Arg.Any<LogLevel>()).Returns(true);
+        var subject = new ResourceEventPublisher(
+            mockSimpleNotificationService,
+            new OptionsWrapper<TraceHeader>(new TraceHeader { Name = "trace-id" }),
+            new HeaderPropagationValues(),
+            new OptionsWrapper<ResourceEventOptions>(
+                new ResourceEventOptions
+                {
+                    ArnPrefix = "arn",
+                    TopicName = "topic-name",
+                    TracesChedTopicName = "traces-topic-name",
+                    ChedReservationTopicName = "ched-reservation-topic-name",
+                    IuuNotificationTopicName = "iuu-notification-topic-name",
+                }
+            ),
+            mockLogger
+        );
+
+        await subject.Publish(
+            new ResourceEventEntity
+            {
+                Id = "id",
+                ResourceId = "resourceId",
+                ResourceType = ResourceEventResourceTypes.CustomsDeclaration,
+                Operation = "operation",
+                Message = "message",
+            },
+            CancellationToken.None
+        );
+
+        mockLogger.ReceivedCalls().Should().Contain(c => c.GetMethodInfo().Name == nameof(ILogger.Log));
+    }
+
+    [Fact]
     public async Task Publish_WhenNoResourceType_ShouldFail()
     {
         var mockSimpleNotificationService = Substitute.For<IAmazonSimpleNotificationService>();
@@ -68,7 +114,14 @@ public class ResourceEventPublisherTests
             new OptionsWrapper<TraceHeader>(new TraceHeader { Name = "trace-id" }),
             new HeaderPropagationValues(),
             new OptionsWrapper<ResourceEventOptions>(
-                new ResourceEventOptions { ArnPrefix = "arn", TopicName = "topic-name" }
+                new ResourceEventOptions
+                {
+                    ArnPrefix = "arn",
+                    TopicName = "topic-name",
+                    TracesChedTopicName = "traces-topic-name",
+                    ChedReservationTopicName = "ched-reservation-topic-name",
+                    IuuNotificationTopicName = "iuu-notification-topic-name",
+                }
             ),
             NullLogger<ResourceEventPublisher>.Instance
         );
@@ -98,7 +151,14 @@ public class ResourceEventPublisherTests
             new OptionsWrapper<TraceHeader>(new TraceHeader { Name = "trace-id" }),
             new HeaderPropagationValues(),
             new OptionsWrapper<ResourceEventOptions>(
-                new ResourceEventOptions { ArnPrefix = "arn", TopicName = "topic-name" }
+                new ResourceEventOptions
+                {
+                    ArnPrefix = "arn",
+                    TopicName = "topic-name",
+                    TracesChedTopicName = "traces-topic-name",
+                    ChedReservationTopicName = "ched-reservation-topic-name",
+                    IuuNotificationTopicName = "iuu-notification-topic-name",
+                }
             ),
             NullLogger<ResourceEventPublisher>.Instance
         );
@@ -158,7 +218,14 @@ public class ResourceEventPublisherTests
             new OptionsWrapper<TraceHeader>(new TraceHeader { Name = "trace-id" }),
             headerPropagationValues,
             new OptionsWrapper<ResourceEventOptions>(
-                new ResourceEventOptions { ArnPrefix = "arn", TopicName = "topic-name" }
+                new ResourceEventOptions
+                {
+                    ArnPrefix = "arn",
+                    TopicName = "topic-name",
+                    TracesChedTopicName = "traces-topic-name",
+                    ChedReservationTopicName = "ched-reservation-topic-name",
+                    IuuNotificationTopicName = "iuu-notification-topic-name",
+                }
             ),
             NullLogger<ResourceEventPublisher>.Instance
         );
@@ -170,7 +237,7 @@ public class ResourceEventPublisherTests
             {
                 Id = "id",
                 ResourceId = "resourceId",
-                ResourceType = ResourceEventResourceTypes.ProcessingError,
+                ResourceType = ResourceEventResourceTypes.TracesChed,
                 Operation = "operation",
                 Message = "message",
             },
@@ -197,7 +264,14 @@ public class ResourceEventPublisherTests
             new OptionsWrapper<TraceHeader>(new TraceHeader { Name = "trace-id" }),
             new HeaderPropagationValues(),
             new OptionsWrapper<ResourceEventOptions>(
-                new ResourceEventOptions { ArnPrefix = "arn", TopicName = "topic-name" }
+                new ResourceEventOptions
+                {
+                    ArnPrefix = "arn",
+                    TopicName = "topic-name",
+                    TracesChedTopicName = "traces-topic-name",
+                    ChedReservationTopicName = "ched-reservation-topic-name",
+                    IuuNotificationTopicName = "iuu-notification-topic-name",
+                }
             ),
             NullLogger<ResourceEventPublisher>.Instance
         );
@@ -224,5 +298,75 @@ public class ResourceEventPublisherTests
                 ),
                 CancellationToken.None
             );
+    }
+
+    [Fact]
+    public async Task Publish_WhenIuuNotification_ShouldPublishToIuuNotificationTopic()
+    {
+        var mockSimpleNotificationService = Substitute.For<IAmazonSimpleNotificationService>();
+        var subject = new ResourceEventPublisher(
+            mockSimpleNotificationService,
+            new OptionsWrapper<TraceHeader>(new TraceHeader { Name = "trace-id" }),
+            new HeaderPropagationValues(),
+            new OptionsWrapper<ResourceEventOptions>(
+                new ResourceEventOptions
+                {
+                    ArnPrefix = "arn",
+                    TopicName = "topic-name",
+                    TracesChedTopicName = "traces-topic-name",
+                    ChedReservationTopicName = "ched-reservation-topic-name",
+                    IuuNotificationTopicName = "iuu-notification-topic-name",
+                }
+            ),
+            NullLogger<ResourceEventPublisher>.Instance
+        );
+
+        await subject.Publish(
+            new ResourceEventEntity
+            {
+                Id = "id",
+                ResourceId = "resourceId",
+                ResourceType = ResourceEventResourceTypes.IuuNotification,
+                Operation = "operation",
+                Message = "message",
+            },
+            CancellationToken.None
+        );
+
+        await mockSimpleNotificationService
+            .Received()
+            .PublishAsync(
+                Arg.Is<PublishRequest>(x =>
+                    x!.TopicArn == "arn:iuu-notification-topic-name"
+                    && x.MessageAttributes["ResourceType"].StringValue == ResourceEventResourceTypes.IuuNotification
+                    && x.Message == "message"
+                ),
+                CancellationToken.None
+            );
+    }
+
+    [Fact]
+    public void SerializeEvent_ShouldProduceValidGzipStream()
+    {
+        var entity = new ResourceEventEntity
+        {
+            Id = "id",
+            ResourceId = "resourceId",
+            ResourceType = ResourceEventResourceTypes.CustomsDeclaration,
+            Operation = "operation",
+            Message = new string('A', 256_001),
+        };
+
+        var (message, compressed) = ResourceEventPublisher.SerializeEvent(entity);
+        compressed.Should().BeTrue();
+
+        var bytes = Convert.FromBase64String(message);
+
+        // Verify the stream ends with a valid GZip footer (CRC32 + ISIZE)
+        // RFC 1952: last 8 bytes are CRC32 (4 bytes LE) + ISIZE (4 bytes LE)
+        bytes.Length.Should().BeGreaterThanOrEqualTo(8);
+
+        var footerCrc32 = BitConverter.ToUInt32(bytes, bytes.Length - 8);
+        footerCrc32.Should().NotBe(0, "CRC32 should be computed for non-empty input");
     }
 }

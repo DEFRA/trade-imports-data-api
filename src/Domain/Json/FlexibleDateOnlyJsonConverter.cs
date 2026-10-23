@@ -34,7 +34,7 @@ public class FlexibleDateOnlyJsonConverter : JsonConverter<DateOnly?>
     {
         if (value.HasValue)
         {
-            writer.WriteStringValue(value!.Value.ToString("o", CultureInfo.InvariantCulture));
+            writer.WriteStringValue(value.Value.ToString("o", CultureInfo.InvariantCulture));
         }
     }
 }

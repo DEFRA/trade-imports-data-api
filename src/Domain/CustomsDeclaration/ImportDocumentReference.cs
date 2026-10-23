@@ -14,6 +14,8 @@ public class ImportDocumentReference(string value)
         "N002",
     ];
 
+    private static readonly string[] _validIuuDocumentCodes = ["C673", "C641"];
+
     public string Value { get; set; } = value;
 
     public static bool IsValid(string documentCode)
@@ -23,40 +25,16 @@ public class ImportDocumentReference(string value)
 
     public string GetIdentifier(string documentCode)
     {
-        return !IsValid(documentCode) ? string.Empty : GetLast7Digits();
+        return !IsValid(documentCode) ? string.Empty : ChedAndClearanceRequestHelper.GetIdentifier(Value);
     }
 
-    private string GetLast7Digits()
+    public static bool IsValidIuu(string documentCode)
     {
-        var input = Value;
-        if (string.IsNullOrEmpty(input))
-            return string.Empty;
+        return _validIuuDocumentCodes.Contains(documentCode);
+    }
 
-        ReadOnlySpan<char> span = input.AsSpan();
-        int i = span.Length - 1;
-
-        // Optional suffix
-        char suffix = '\0';
-        bool hasSuffix = false;
-
-        if ((uint)i < (uint)span.Length && char.IsLetter(span[i]))
-        {
-            suffix = span[i];
-            hasSuffix = suffix is 'R' or 'V';
-            i--;
-        }
-
-        // Count trailing digits
-        int digitEnd = i;
-        while (i >= 0 && char.IsDigit(span[i]))
-            i--;
-
-        int digitCount = digitEnd - i;
-        if (digitCount < 7)
-            return string.Empty;
-
-        ReadOnlySpan<char> last7 = span.Slice(digitEnd - 6, 7);
-
-        return hasSuffix ? last7.ToString() + suffix : last7.ToString();
+    public string GetIuuIdentifier(string documentCode)
+    {
+        return !IsValidIuu(documentCode) ? string.Empty : Value;
     }
 }

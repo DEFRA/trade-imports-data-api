@@ -13,6 +13,7 @@ public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionNa
     private readonly List<T> _entitiesToInsert = [];
     private readonly List<(T Item, string Etag)> _entitiesToUpdate = [];
     private readonly List<(string Id, UpdateDefinition<T> Patch, string Etag)> _entitiesToPatch = [];
+    private readonly List<string> _entitiesToDelete = [];
 
     private IQueryable<T> EntityQueryable => Collection.AsQueryable();
 
@@ -39,6 +40,18 @@ public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionNa
     {
         await Insert(cancellationToken);
         await Update(cancellationToken);
+        await Delete(cancellationToken);
+    }
+
+    private async Task Delete(CancellationToken cancellationToken)
+    {
+        if (_entitiesToDelete.Count != 0)
+        {
+            var session = GetSession();
+            var filter = Builders<T>.Filter.In(x => x.Id, _entitiesToDelete);
+            await Collection.DeleteManyAsync(session, filter, cancellationToken: cancellationToken);
+            _entitiesToDelete.Clear();
+        }
     }
 
     private async Task Update(CancellationToken cancellationToken)
@@ -121,6 +134,11 @@ public class MongoCollectionSet<T>(MongoDbContext dbContext, string collectionNa
         item.OnSave();
 
         _entitiesToInsert.Add(item);
+    }
+
+    public void Delete(string id)
+    {
+        _entitiesToDelete.Add(id);
     }
 
     public void Update(T item, string etag)

@@ -15,7 +15,7 @@ public abstract class BtmsMigration(string name, Version version) : IMigration
     public Version Version { get; } = version;
     public string Name { get; } = name;
 
-    protected async Task CreateIndex<T>(
+    protected static async Task CreateIndex<T>(
         IMongoCollection<T> collection,
         string name,
         IndexKeysDefinition<T> keys,
@@ -35,7 +35,7 @@ public abstract class BtmsMigration(string name, Version version) : IMigration
         await collection.Indexes.CreateOneAsync(indexModel, cancellationToken: cancellationToken);
     }
 
-    protected async Task CreateTtlIndex<T>(
+    protected static async Task CreateTtlIndex<T>(
         IMongoCollection<T> collection,
         string name,
         IndexKeysDefinition<T> keys,

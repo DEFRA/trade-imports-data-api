@@ -1,0 +1,11 @@
+﻿{
+  TracesChedUpdates: [
+    {
+      ReferenceNumber: CHEDA.GB.2026.1234567,
+      Updated: 2025-05-21 08:15 Utc
+    }
+  ],
+  Total: 1,
+  Page: 1,
+  PageSize: 10
+}

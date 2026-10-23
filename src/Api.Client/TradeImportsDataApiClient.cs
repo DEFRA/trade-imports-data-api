@@ -6,6 +6,9 @@ using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 using Defra.TradeImportsDataApi.Domain.Errors;
 using Defra.TradeImportsDataApi.Domain.Gvms;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
+using Defra.TradeImportsDataApi.Domain.Iuu;
+using Defra.TradeImportsDataApi.Domain.Traces;
+using Trade.Gateway.Api.Contract.Certificate;
 
 namespace Defra.TradeImportsDataApi.Api.Client;
 
@@ -53,6 +56,22 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
         return await Deserialize<GmrsResponse>(response, cancellationToken);
     }
 
+    public async Task<TracesChedResponse?> GetTracesChed(string chedId, CancellationToken cancellationToken)
+    {
+        var response = await Get(Endpoints.TracesCheds(chedId), cancellationToken);
+        if (response.StatusCode == HttpStatusCode.NotFound)
+            return null;
+
+        response.EnsureSuccessStatusCode();
+
+        var result = await Deserialize<TracesChedResponse>(response, cancellationToken);
+
+        return result with
+        {
+            ETag = response.Headers.ETag?.Tag,
+        };
+    }
+
     public async Task PutImportPreNotification(
         string chedId,
         ImportPreNotification data,
@@ -88,6 +107,94 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
         var response = await Put(data, etag, requestUri, cancellationToken);
 
         response.EnsureSuccessStatusCode();
+    }
+
+    public async Task PutTracesChed(
+        string chedId,
+        DefraUNVTDCHEDProfile data,
+        string? etag,
+        CancellationToken cancellationToken
+    )
+    {
+        var requestUri = Endpoints.TracesCheds(chedId);
+        var response = await Put(data, etag, requestUri, cancellationToken);
+
+        response.EnsureSuccessStatusCode();
+    }
+
+    public async Task<CustomsDeclarationsResponse> GetCustomsDeclarationsByTracesChedId(
+        string chedId,
+        CancellationToken cancellationToken
+    )
+    {
+        var response = await Get(Endpoints.CustomsDeclarationsByTracesChed(chedId), cancellationToken);
+
+        response.EnsureSuccessStatusCode();
+
+        return await Deserialize<CustomsDeclarationsResponse>(response, cancellationToken);
+    }
+
+    public async Task<TracesChedsResponse> GetTracesChedsByMrn(string mrn, CancellationToken cancellationToken)
+    {
+        var response = await Get(Endpoints.TracesChedsByMrn(mrn), cancellationToken);
+
+        response.EnsureSuccessStatusCode();
+
+        return await Deserialize<TracesChedsResponse>(response, cancellationToken);
+    }
+
+    public async Task<ChedReservationResponse?> GetChedReservation(
+        string chedId,
+        string mrn,
+        CancellationToken cancellationToken
+    )
+    {
+        var response = await Get(Endpoints.ChedReservation(chedId, mrn), cancellationToken);
+        if (response.StatusCode == HttpStatusCode.NotFound)
+            return null;
+
+        response.EnsureSuccessStatusCode();
+
+        var result = await Deserialize<ChedReservationResponse>(response, cancellationToken);
+
+        return result with
+        {
+            ETag = response.Headers.ETag?.Tag,
+        };
+    }
+
+    public async Task PutChedReservation(
+        string chedId,
+        string mrn,
+        Reservation data,
+        string? etag,
+        CancellationToken cancellationToken
+    )
+    {
+        var requestUri = Endpoints.ChedReservation(chedId, mrn);
+        var response = await Put(data, etag, requestUri, cancellationToken);
+
+        response.EnsureSuccessStatusCode();
+    }
+
+    public async Task DeleteChedReservation(string chedId, string mrn, CancellationToken cancellationToken)
+    {
+        var requestUri = Endpoints.ChedReservation(chedId, mrn);
+        var response = await Delete(null, requestUri, cancellationToken);
+
+        response.EnsureSuccessStatusCode();
+    }
+
+    public async Task<TracesChedUpdatesResponse> GetTracesChedUpdates(
+        TracesChedUpdatesRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        var response = await Get(Endpoints.TracesChedUpdates(request), cancellationToken);
+
+        response.EnsureSuccessStatusCode();
+
+        return await Deserialize<TracesChedUpdatesResponse>(response, cancellationToken);
     }
 
     public async Task<CustomsDeclarationResponse?> GetCustomsDeclaration(
@@ -175,6 +282,38 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
         return await Deserialize<RelatedImportDeclarationsResponse>(response, cancellationToken);
     }
 
+    public async Task<IuuNotificationResponse?> GetIuuNotification(
+        string iuuReference,
+        CancellationToken cancellationToken
+    )
+    {
+        var response = await Get(Endpoints.IuuNotifications(iuuReference), cancellationToken);
+        if (response.StatusCode == HttpStatusCode.NotFound)
+            return null;
+
+        response.EnsureSuccessStatusCode();
+
+        var result = await Deserialize<IuuNotificationResponse>(response, cancellationToken);
+
+        return result with
+        {
+            ETag = response.Headers.ETag?.Tag,
+        };
+    }
+
+    public async Task PutIuuNotification(
+        string iuuReference,
+        IuuNotification data,
+        string? etag,
+        CancellationToken cancellationToken
+    )
+    {
+        var requestUri = Endpoints.IuuNotifications(iuuReference);
+        var response = await Put(data, etag, requestUri, cancellationToken);
+
+        response.EnsureSuccessStatusCode();
+    }
+
     private static async Task<T> Deserialize<T>(HttpResponseMessage response, CancellationToken cancellationToken)
     {
         await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
@@ -199,6 +338,16 @@ public class TradeImportsDataApiClient(HttpClient httpClient) : ITradeImportsDat
     {
         var message = CreateMessage(HttpMethod.Put, requestUri);
         message.Content = JsonContent.Create(data, options: s_options);
+
+        if (!string.IsNullOrEmpty(etag))
+            message.Headers.IfMatch.Add(new EntityTagHeaderValue(etag));
+
+        return await httpClient.SendAsync(message, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+    }
+
+    private async Task<HttpResponseMessage> Delete(string? etag, string requestUri, CancellationToken cancellationToken)
+    {
+        var message = CreateMessage(HttpMethod.Delete, requestUri);
 
         if (!string.IsNullOrEmpty(etag))
             message.Headers.IfMatch.Add(new EntityTagHeaderValue(etag));

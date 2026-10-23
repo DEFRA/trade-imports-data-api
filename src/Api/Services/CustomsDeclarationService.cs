@@ -63,6 +63,21 @@ public class CustomsDeclarationService(
         return await customsDeclarationRepository.GetAll(identifier, cancellationToken);
     }
 
+    public async Task<List<CustomsDeclarationEntity>> GetCustomsDeclarationsByFullChedId(
+        string chedId,
+        CancellationToken cancellationToken
+    )
+    {
+        var isChedId = new ChedIdReference(chedId).IsValid();
+
+        if (isChedId)
+        {
+            return await customsDeclarationRepository.GetAll(chedId, cancellationToken);
+        }
+
+        return [];
+    }
+
     public async Task<CustomsDeclarationEntity> Update(
         CustomsDeclarationEntity entity,
         string etag,

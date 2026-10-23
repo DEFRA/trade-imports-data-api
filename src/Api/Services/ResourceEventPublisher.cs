@@ -70,23 +70,26 @@ public class ResourceEventPublisher(
 
         var request = new PublishRequest
         {
-            TopicArn = resourceEventOptions.Value.TopicArn,
+            TopicArn = resourceEventOptions.Value.GetTopicArn(entity.ResourceType),
             MessageAttributes = messageAttributes,
             Message = message,
         };
 
         await simpleNotificationService.PublishAsync(request, cancellationToken);
 
-        logger.LogInformation(
-            "Published resource event {ResourceType} {Operation} {SubResourceType} (compressed {Compressed})",
-            entity.ResourceType,
-            entity.Operation,
-            entity.SubResourceType,
-            compressed
-        );
+        if (logger.IsEnabled(LogLevel.Information))
+        {
+            logger.LogInformation(
+                "Published resource event {ResourceType} {Operation} {SubResourceType} (compressed {Compressed})",
+                entity.ResourceType,
+                entity.Operation,
+                entity.SubResourceType,
+                compressed
+            );
+        }
     }
 
-    private static (string message, bool compressed) SerializeEvent(ResourceEventEntity entity)
+    internal static (string message, bool compressed) SerializeEvent(ResourceEventEntity entity)
     {
         var message = entity.Message;
         if (message.Length <= CompressionThreshold)
@@ -94,9 +97,10 @@ public class ResourceEventPublisher(
 
         var buffer = Encoding.UTF8.GetBytes(message);
         var memoryStream = new MemoryStream();
-        using var gzipStream = new GZipStream(memoryStream, CompressionLevel.Optimal);
-        gzipStream.Write(buffer, 0, buffer.Length);
-        gzipStream.Flush();
+        using (var gzipStream = new GZipStream(memoryStream, CompressionLevel.Optimal))
+        {
+            gzipStream.Write(buffer, 0, buffer.Length);
+        }
 
         return (Convert.ToBase64String(memoryStream.ToArray()), true);
     }
@@ -126,8 +130,7 @@ public class ResourceEventPublisher(
 
         public string ToName(string resourceType)
         {
-            if (resourceType is null)
-                throw new ArgumentNullException(nameof(resourceType));
+            ArgumentNullException.ThrowIfNull(resourceType);
 
             return _toNameCache.GetOrAdd(
                 resourceType,
@@ -141,12 +144,18 @@ public class ResourceEventPublisher(
                             typeof(ResourceEvent<ImportPreNotificationEvent>).AssemblyQualifiedName,
                         ResourceEventResourceTypes.ProcessingError =>
                             typeof(ResourceEvent<ProcessingErrorEvent>).AssemblyQualifiedName,
+                        ResourceEventResourceTypes.TracesChed =>
+                            typeof(ResourceEvent<TracesChedEvent>).AssemblyQualifiedName,
+                        ResourceEventResourceTypes.ChedReservation =>
+                            typeof(ResourceEvent<ChedReservationEvent>).AssemblyQualifiedName,
+                        ResourceEventResourceTypes.IuuNotification =>
+                            typeof(ResourceEvent<IuuNotificationEvent>).AssemblyQualifiedName,
                         _ => throw new InvalidOperationException(
                             $"AssemblyQualifiedName is null for type {resourceType}"
                         ),
                     };
 
-                    return RedundantAssemblyTokens.Replace(name!, string.Empty)!;
+                    return RedundantAssemblyTokens.Replace(name!, string.Empty);
                 },
                 this
             );

@@ -45,7 +45,8 @@ public class PopulateGmrTags() : BtmsMigration("Populate GMR tags field", new Ve
         // Lambda filter (strongly typed)
         await collection.UpdateManyAsync(
             Builders<GmrEntity>.Filter.Empty,
-            Builders<GmrEntity>.Update.Pipeline(pipeline)
+            Builders<GmrEntity>.Update.Pipeline(pipeline),
+            cancellationToken: context.CancellationToken
         );
     }
 

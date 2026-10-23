@@ -109,7 +109,8 @@ public class PopulateCustomsDeclarationsTags()
         // Lambda filter (strongly typed)
         await collection.UpdateManyAsync(
             Builders<CustomsDeclarationEntity>.Filter.Empty,
-            Builders<CustomsDeclarationEntity>.Update.Pipeline(pipeline)
+            Builders<CustomsDeclarationEntity>.Update.Pipeline(pipeline),
+            cancellationToken: context.CancellationToken
         );
     }
 

@@ -1,7 +1,10 @@
 using System.Text.Json.Serialization;
+using Defra.TradeImportsDataApi.Api.Endpoints.ChedReservation;
 using Defra.TradeImportsDataApi.Api.Endpoints.CustomsDeclarations;
 using Defra.TradeImportsDataApi.Api.Endpoints.Gmrs;
 using Defra.TradeImportsDataApi.Api.Endpoints.ImportPreNotifications;
+using Defra.TradeImportsDataApi.Api.Endpoints.IuuNotifications;
+using Defra.TradeImportsDataApi.Api.Endpoints.TracesChed;
 
 namespace Defra.TradeImportsDataApi.Api.Endpoints.RelatedImportDeclarations;
 
@@ -10,5 +13,8 @@ public record RelatedImportDeclarationsResponse(
     [property: JsonPropertyName("importPreNotifications")] ImportPreNotificationResponse[] ImportPreNotifications,
     [property: JsonPropertyName("goodsVehicleMovements")] GmrResponse[] GoodsMovements,
     [property: JsonPropertyName("transitImportPreNotifications")]
-        ImportPreNotificationResponse[] TransitImportPreNotifications
+        ImportPreNotificationResponse[] TransitImportPreNotifications,
+    [property: JsonPropertyName("cheds")] TracesChedResponse[] Cheds,
+    [property: JsonPropertyName("chedReservations")] ChedReservationResponse[] ChedReservations,
+    [property: JsonPropertyName("iuus")] IuuNotificationResponse[] Iuus
 );

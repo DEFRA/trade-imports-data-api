@@ -1,5 +1,6 @@
 using Defra.TradeImportsDataApi.Data.Configuration;
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
+using Defra.TradeImportsDataApi.Domain.Ipaffs;
 
 namespace Defra.TradeImportsDataApi.Data.Entities;
 
@@ -9,6 +10,8 @@ public class CustomsDeclarationEntity : IDataEntity
     public required string Id { get; set; }
 
     public List<string> ImportPreNotificationIdentifiers { get; set; } = [];
+
+    public List<string> IuuNotificationIdentifiers { get; set; } = [];
 
     public string ETag { get; set; } = null!;
 
@@ -45,6 +48,7 @@ public class CustomsDeclarationEntity : IDataEntity
             }
         }
         ImportPreNotificationIdentifiers.Clear();
+        IuuNotificationIdentifiers.Clear();
 
         if (ClearanceRequest?.Commodities == null)
             return;
@@ -57,5 +61,22 @@ public class CustomsDeclarationEntity : IDataEntity
             .Distinct();
 
         ImportPreNotificationIdentifiers.AddRange(references);
+
+        var fullChedIds = documents
+            .Where(x => x.HasValidDocumentReference())
+            .Where(x => x.DocumentReference?.Value != null && new ChedIdReference(x.DocumentReference.Value).IsValid())
+            .Select(x => x.DocumentReference?.Value)
+            .Where(x => !string.IsNullOrEmpty(x))
+            .Distinct();
+
+        ImportPreNotificationIdentifiers.AddRange(fullChedIds!);
+
+        var iuuReferences = documents
+            .Where(x => x.HasValidIuuDocumentReference())
+            .Select(x => x.GetIuuDocumentReferenceIdentifier())
+            .Where(x => !string.IsNullOrEmpty(x))
+            .Distinct();
+
+        IuuNotificationIdentifiers.AddRange(iuuReferences);
     }
 }

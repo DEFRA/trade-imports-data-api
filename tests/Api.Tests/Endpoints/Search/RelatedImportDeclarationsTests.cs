@@ -5,10 +5,13 @@ using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 using Defra.TradeImportsDataApi.Domain.Gvms;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
+using Defra.TradeImportsDataApi.Domain.Iuu;
+using Defra.TradeImportsDataApi.Domain.Traces;
 using Defra.TradeImportsDataApi.Testing;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
+using Trade.Gateway.Api.Contract.Certificate;
 using WireMock.Server;
 using Xunit.Abstractions;
 
@@ -56,7 +59,10 @@ public class RelatedImportDeclarationsTests : EndpointTestBase, IClassFixture<Wi
                     CustomsDeclarationEntity[],
                     ImportPreNotificationEntity[],
                     GmrEntity[],
-                    ImportPreNotificationEntity[]
+                    ImportPreNotificationEntity[],
+                    TracesChedEntity[],
+                    ChedReservationEntity[],
+                    IuuNotificationEntity[]
                 >(
                     [
                         new CustomsDeclarationEntity
@@ -89,7 +95,63 @@ public class RelatedImportDeclarationsTests : EndpointTestBase, IClassFixture<Wi
                             ETag = "etag",
                         },
                     ],
-                    []
+                    [],
+                    [
+                        new TracesChedEntity
+                        {
+                            Id = "ChedId",
+                            Ched = new DefraUNVTDCHEDProfile()
+                            {
+                                ExchangedDocument = new ExchangedDocument() { Identifier = "ChedId" },
+                                SpecifiedConsignment = new Consignment(),
+                            },
+                            Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                            Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+                            ETag = "etag",
+                        },
+                    ],
+                    [
+                        new ChedReservationEntity
+                        {
+                            Id = "ChedId_Mrn1",
+                            Reservation = new Reservation
+                            {
+                                ChedId = "ChedId",
+                                Mrn = "Mrn1",
+                                Status = ReservationStatus.Reserved,
+                                Timestamp = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                                Commodities =
+                                [
+                                    new ReservationCommodity
+                                    {
+                                        CertificateLineNumber = 1,
+                                        GoodsItemNumber = 1,
+                                        CommodityCode = "123",
+                                        UnitOfMeasure = "KGM",
+                                        Quantity = 100,
+                                    },
+                                ],
+                            },
+                            Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                            Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+                            ETag = "etag",
+                        },
+                    ],
+                    [
+                        new IuuNotificationEntity
+                        {
+                            Id = "IUU.FR.2026.0000001",
+                            IuuNotification = new IuuNotification
+                            {
+                                Reference = "IUU.FR.2026.0000001",
+                                LastUpdated = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                                IuuOption = "IUUOK",
+                            },
+                            Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                            Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+                            ETag = "etag",
+                        },
+                    ]
                 )
             );
 

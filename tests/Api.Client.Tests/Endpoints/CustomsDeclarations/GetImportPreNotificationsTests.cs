@@ -2,6 +2,7 @@ using Argon;
 using Defra.TradeImportsDataApi.Testing;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
+using Trade.Gateway.Api.Contract.Certificate;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
 using JsonSerializer = System.Text.Json.JsonSerializer;
@@ -54,6 +55,48 @@ public class GetImportPreNotificationsTests : WireMockTestBase<WireMockContext>
             );
 
         var result = await Subject.GetImportPreNotificationsByMrn(mrn, CancellationToken.None);
+
+        result.Should().NotBeNull();
+        await Verify(result, _settings);
+    }
+
+    [Fact]
+    public async Task GetCustomsDeclarationByTracesMrn_WhenFound_ShouldNotBeNull()
+    {
+        const string mrn = "mrn";
+        var created = new DateTime(2025, 4, 7, 11, 0, 0, DateTimeKind.Utc);
+        var updated = created.AddMinutes(15);
+        WireMock
+            .Given(Request.Create().WithPath($"/customs-declarations/{mrn}/traces-cheds").UsingGet())
+            .RespondWith(
+                Response
+                    .Create()
+                    .WithBody(
+                        JsonSerializer.Serialize(
+                            new TracesChedsResponse(
+                                new List<TracesChedResponse>
+                                {
+                                    new(
+                                        new DefraUNVTDCHEDProfile()
+                                        {
+                                            ExchangedDocument = new ExchangedDocument()
+                                            {
+                                                Identifier = "CHEDP.GB.2026.1234567",
+                                            },
+                                            SpecifiedConsignment = new Consignment(),
+                                            Model = "Test",
+                                        },
+                                        created,
+                                        updated
+                                    ),
+                                }
+                            )
+                        )
+                    )
+                    .WithStatusCode(StatusCodes.Status200OK)
+            );
+
+        var result = await Subject.GetTracesChedsByMrn(mrn, CancellationToken.None);
 
         result.Should().NotBeNull();
         await Verify(result, _settings);

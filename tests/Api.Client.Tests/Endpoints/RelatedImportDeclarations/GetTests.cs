@@ -2,6 +2,7 @@ using Argon;
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 using Defra.TradeImportsDataApi.Domain.Gvms;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
+using Defra.TradeImportsDataApi.Domain.Iuu;
 using Defra.TradeImportsDataApi.Testing;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
@@ -36,7 +37,9 @@ public class GetTests : WireMockTestBase<WireMockContext>
             .RespondWith(
                 Response
                     .Create()
-                    .WithBody(JsonSerializer.Serialize(new RelatedImportDeclarationsResponse([], [], [])))
+                    .WithBody(
+                        JsonSerializer.Serialize(new RelatedImportDeclarationsResponse([], [], [], [], [], [], []))
+                    )
                     .WithStatusCode(StatusCodes.Status200OK)
             );
 
@@ -48,6 +51,7 @@ public class GetTests : WireMockTestBase<WireMockContext>
         result.Should().NotBeNull();
         result.CustomsDeclarations.Length.Should().Be(0);
         result.ImportPreNotifications.Length.Should().Be(0);
+        result.Iuus.Length.Should().Be(0);
     }
 
     [Fact]
@@ -77,7 +81,22 @@ public class GetTests : WireMockTestBase<WireMockContext>
                                     ),
                                 ],
                                 [new ImportPreNotificationResponse(new ImportPreNotification(), created, updated)],
-                                [new GmrResponse(new Gmr(), created, updated)]
+                                [new GmrResponse(new Gmr(), created, updated)],
+                                [],
+                                [],
+                                [],
+                                [
+                                    new IuuNotificationResponse(
+                                        new IuuNotification
+                                        {
+                                            Reference = "IUU.FR.2026.0000001",
+                                            LastUpdated = created,
+                                            IuuOption = "IUUOK",
+                                        },
+                                        created,
+                                        updated
+                                    ),
+                                ]
                             )
                         )
                     )

@@ -6,7 +6,9 @@ using Defra.TradeImportsDataApi.Data.Entities;
 using Defra.TradeImportsDataApi.Domain.CustomsDeclaration;
 using Defra.TradeImportsDataApi.Domain.Gvms;
 using Defra.TradeImportsDataApi.Domain.Ipaffs;
+using Defra.TradeImportsDataApi.Domain.Iuu;
 using FluentAssertions;
+using Trade.Gateway.Api.Contract.Certificate;
 
 namespace Defra.TradeImportsDataApi.Api.Tests.Services;
 
@@ -23,6 +25,7 @@ public class RelatedImportDeclarationsServiceTests
         response.ImportPreNotifications.Length.Should().Be(0);
         response.CustomsDeclarations.Length.Should().Be(0);
         response.Gmrs.Length.Should().Be(0);
+        response.IuuNotifications.Length.Should().Be(0);
     }
 
     [Fact]
@@ -281,6 +284,102 @@ public class RelatedImportDeclarationsServiceTests
     }
 
     [Fact]
+    public async Task GivenSearchByMrn_WhenMrnExists_And_RelatedTracesChedExists_ThenShouldReturn()
+    {
+        const string mrn1 = "mrn1";
+        const string mrn2 = "mrn2";
+        var memoryDbContext = new MemoryDbContext();
+
+        memoryDbContext.CustomsDeclarations.AddTestData(
+            new CustomsDeclarationEntity
+            {
+                Id = mrn1,
+                ImportPreNotificationIdentifiers = ["1234567"],
+                ClearanceRequest = new ClearanceRequest
+                {
+                    DeclarationUcr = "ducr123",
+                    Commodities =
+                    [
+                        new Commodity
+                        {
+                            Documents =
+                            [
+                                new ImportDocument
+                                {
+                                    DocumentCode = "C640",
+                                    DocumentReference = new ImportDocumentReference("CHEDA.GB.2025.1234567"),
+                                },
+                            ],
+                        },
+                    ],
+                },
+                Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+                ETag = "etag",
+            }
+        );
+
+        memoryDbContext.CustomsDeclarations.AddTestData(
+            new CustomsDeclarationEntity
+            {
+                Id = mrn2,
+                ImportPreNotificationIdentifiers = ["1234567"],
+                ClearanceRequest = new ClearanceRequest
+                {
+                    DeclarationUcr = "ducr123",
+                    Commodities =
+                    [
+                        new Commodity
+                        {
+                            Documents =
+                            [
+                                new ImportDocument
+                                {
+                                    DocumentCode = "C640",
+                                    DocumentReference = new ImportDocumentReference("CHEDA.GB.2025.1234567"),
+                                },
+                            ],
+                        },
+                    ],
+                },
+                Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+                ETag = "etag",
+            }
+        );
+
+        memoryDbContext.TracesCheds.AddTestData(
+            new TracesChedEntity
+            {
+                Id = "CHEDA.GB.2025.1234567",
+                Ched = new DefraUNVTDCHEDProfile()
+                {
+                    ExchangedDocument = new ExchangedDocument() { Identifier = "CHEDA.GB.2025.1234567" },
+                    SpecifiedConsignment = new Consignment(),
+                },
+                Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+                ETag = "etag",
+            }
+        );
+
+        memoryDbContext.Gmrs.AddTestData(CreateGmr("gmr1", ["mrn2"]));
+
+        var subject = CreateSubject(memoryDbContext);
+
+        var response = await subject.Search(
+            new RelatedImportDeclarationsRequest { Mrn = mrn1 },
+            CancellationToken.None
+        );
+
+        response.Should().NotBeNull();
+        response.CustomsDeclarations.Length.Should().Be(2);
+        response.ImportPreNotifications.Length.Should().Be(0);
+        response.Cheds.Length.Should().Be(1);
+        response.Gmrs.Length.Should().Be(1);
+    }
+
+    [Fact]
     public async Task GivenSearchByDucr_WhenDucrExists_AndNoNotificationsExist_ThenShouldReturn()
     {
         var memoryDbContext = new MemoryDbContext();
@@ -526,6 +625,43 @@ public class RelatedImportDeclarationsServiceTests
     }
 
     [Theory]
+    [InlineData("CHEDP.GB.2025.1234567")]
+    public async Task GivenSearchByTracesChedId_WhenExists_AndNoCustomDeclarationsExist_ThenShouldReturn(
+        string searchChedId
+    )
+    {
+        var memoryDbContext = new MemoryDbContext();
+
+        memoryDbContext.TracesCheds.AddTestData(
+            new TracesChedEntity
+            {
+                Id = searchChedId,
+                Ched = new DefraUNVTDCHEDProfile()
+                {
+                    ExchangedDocument = new ExchangedDocument() { Identifier = searchChedId },
+                    SpecifiedConsignment = new Consignment(),
+                },
+                Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+                ETag = "etag",
+            }
+        );
+
+        var subject = CreateSubject(memoryDbContext);
+
+        var response = await subject.Search(
+            new RelatedImportDeclarationsRequest { ChedId = searchChedId },
+            CancellationToken.None
+        );
+
+        response.Should().NotBeNull();
+        response.CustomsDeclarations.Length.Should().Be(0);
+        response.ImportPreNotifications.Length.Should().Be(0);
+        response.Cheds.Length.Should().Be(1);
+        response.Gmrs.Length.Should().Be(0);
+    }
+
+    [Theory]
     [InlineData("CHEDA.GB.2025.1234567R")]
     [InlineData("2025.1234567R")]
     [InlineData("20251234567R")]
@@ -733,6 +869,274 @@ public class RelatedImportDeclarationsServiceTests
         response.ImportPreNotifications.Length.Should().Be(0);
     }
 
+    [Fact]
+    public async Task GivenSearchByMrn_WhenIuuNotificationLinked_ThenIuuNotificationShouldBeReturned()
+    {
+        var memoryDbContext = new MemoryDbContext();
+        InsertIuuTestData(memoryDbContext);
+
+        var subject = CreateSubject(memoryDbContext);
+
+        var response = await subject.Search(
+            new RelatedImportDeclarationsRequest { Mrn = "mrn3" },
+            CancellationToken.None
+        );
+
+        response.CustomsDeclarations.Select(x => x.Id).Should().BeEquivalentTo("mrn3");
+        response.IuuNotifications.Select(x => x.Id).Should().BeEquivalentTo(IuuReference3);
+    }
+
+    [Fact]
+    public async Task GivenSearchByMrn_WhenIuuNotificationLinkedToRelatedMrn_ThenIuuNotificationsShouldBeReturned()
+    {
+        var memoryDbContext = new MemoryDbContext();
+        InsertIuuTestData(memoryDbContext);
+
+        var subject = CreateSubject(memoryDbContext);
+
+        var response = await subject.Search(
+            new RelatedImportDeclarationsRequest { Mrn = "mrn1" },
+            CancellationToken.None
+        );
+
+        response.CustomsDeclarations.Select(x => x.Id).Should().BeEquivalentTo("mrn1", "mrn2");
+        response.IuuNotifications.Select(x => x.Id).Should().BeEquivalentTo(IuuReference1, IuuReference2);
+    }
+
+    [Fact]
+    public async Task GivenSearchByDucr_WhenIuuNotificationLinked_ThenIuuNotificationShouldBeReturned()
+    {
+        var memoryDbContext = new MemoryDbContext();
+        InsertIuuTestData(memoryDbContext);
+
+        var subject = CreateSubject(memoryDbContext);
+
+        var response = await subject.Search(
+            new RelatedImportDeclarationsRequest { Ducr = "ducr3" },
+            CancellationToken.None
+        );
+
+        response.IuuNotifications.Select(x => x.Id).Should().BeEquivalentTo(IuuReference3);
+    }
+
+    [Fact]
+    public async Task GivenSearchByChedId_WhenIuuNotificationLinkedToCustomsDeclaration_ThenIuuNotificationsShouldBeReturned()
+    {
+        var memoryDbContext = new MemoryDbContext();
+        InsertIuuTestData(memoryDbContext);
+
+        var subject = CreateSubject(memoryDbContext);
+
+        var response = await subject.Search(
+            new RelatedImportDeclarationsRequest { ChedId = "CHEDA.GB.2025.1234567" },
+            CancellationToken.None
+        );
+
+        response.CustomsDeclarations.Select(x => x.Id).Should().BeEquivalentTo("mrn1", "mrn2");
+        response.IuuNotifications.Select(x => x.Id).Should().BeEquivalentTo(IuuReference1, IuuReference2);
+    }
+
+    [Fact]
+    public async Task GivenSearchByGmrId_WhenIuuNotificationLinkedToCustomsDeclaration_ThenIuuNotificationsShouldBeReturned()
+    {
+        var memoryDbContext = new MemoryDbContext();
+        InsertIuuTestData(memoryDbContext);
+
+        var subject = CreateSubject(memoryDbContext);
+
+        var response = await subject.Search(
+            new RelatedImportDeclarationsRequest { GmrId = "gmr1" },
+            CancellationToken.None
+        );
+
+        response.IuuNotifications.Select(x => x.Id).Should().BeEquivalentTo(IuuReference1, IuuReference3);
+    }
+
+    [Fact]
+    public async Task GivenSearchByVrn_WhenIuuNotificationLinkedToCustomsDeclaration_ThenIuuNotificationsShouldBeReturned()
+    {
+        var memoryDbContext = new MemoryDbContext();
+        InsertIuuTestData(memoryDbContext);
+
+        var subject = CreateSubject(memoryDbContext);
+
+        var response = await subject.Search(
+            new RelatedImportDeclarationsRequest { VrnOrTrn = "TEST 123" },
+            CancellationToken.None
+        );
+
+        response.IuuNotifications.Select(x => x.Id).Should().BeEquivalentTo(IuuReference1, IuuReference3);
+    }
+
+    [Fact]
+    public async Task GivenSearchByMrn_WhenIuuNotificationSharedByCustomsDeclarations_ThenIuuNotificationReturnedOnce()
+    {
+        var memoryDbContext = new MemoryDbContext();
+        memoryDbContext.ImportPreNotifications.AddTestData(CreateImportPreNotification("CHEDA.GB.2025.1234567"));
+        memoryDbContext.CustomsDeclarations.AddTestData(CreateCustomsDeclaration("mrn1", ["1234567"], [IuuReference1]));
+        memoryDbContext.CustomsDeclarations.AddTestData(CreateCustomsDeclaration("mrn2", ["1234567"], [IuuReference1]));
+        memoryDbContext.IuuNotifications.AddTestData(CreateIuuNotification(IuuReference1));
+
+        var subject = CreateSubject(memoryDbContext);
+
+        var response = await subject.Search(
+            new RelatedImportDeclarationsRequest { Mrn = "mrn1" },
+            CancellationToken.None
+        );
+
+        response.CustomsDeclarations.Length.Should().Be(2);
+        response.IuuNotifications.Select(x => x.Id).Should().BeEquivalentTo(IuuReference1);
+    }
+
+    [Fact]
+    public async Task GivenSearchByMrn_WhenIuuNotificationIdentifierHasNoIuuNotification_ThenNoIuuNotificationsReturned()
+    {
+        var memoryDbContext = new MemoryDbContext();
+        memoryDbContext.CustomsDeclarations.AddTestData(CreateCustomsDeclaration("mrn1", [], [IuuReference1]));
+        memoryDbContext.IuuNotifications.AddTestData(CreateIuuNotification(IuuReference2));
+
+        var subject = CreateSubject(memoryDbContext);
+
+        var response = await subject.Search(
+            new RelatedImportDeclarationsRequest { Mrn = "mrn1" },
+            CancellationToken.None
+        );
+
+        response.CustomsDeclarations.Length.Should().Be(1);
+        response.IuuNotifications.Length.Should().Be(0);
+    }
+
+    [Fact]
+    public async Task GivenSearchByIuu_WhenIuuNotificationLinked_ThenShouldReturn()
+    {
+        var memoryDbContext = new MemoryDbContext();
+        InsertIuuTestData(memoryDbContext);
+
+        var subject = CreateSubject(memoryDbContext);
+
+        var response = await subject.Search(
+            new RelatedImportDeclarationsRequest { Iuu = IuuReference3 },
+            CancellationToken.None
+        );
+
+        response.CustomsDeclarations.Select(x => x.Id).Should().BeEquivalentTo("mrn3");
+        response.ImportPreNotifications.Length.Should().Be(0);
+        response.Gmrs.Select(x => x.Id).Should().BeEquivalentTo("gmr1");
+        response.IuuNotifications.Select(x => x.Id).Should().BeEquivalentTo(IuuReference3);
+    }
+
+    [Fact]
+    public async Task GivenSearchByIuu_WhenIuuNotificationLinkedToRelatedMrn_ThenRelatedShouldBeReturned()
+    {
+        var memoryDbContext = new MemoryDbContext();
+        InsertIuuTestData(memoryDbContext);
+
+        var subject = CreateSubject(memoryDbContext);
+
+        var response = await subject.Search(
+            new RelatedImportDeclarationsRequest { Iuu = IuuReference1 },
+            CancellationToken.None
+        );
+
+        response.CustomsDeclarations.Select(x => x.Id).Should().BeEquivalentTo("mrn1", "mrn2");
+        response.ImportPreNotifications.Select(x => x.Id).Should().BeEquivalentTo("CHEDA.GB.2025.1234567");
+        response.Gmrs.Select(x => x.Id).Should().BeEquivalentTo("gmr1");
+        response.IuuNotifications.Select(x => x.Id).Should().BeEquivalentTo(IuuReference1, IuuReference2);
+    }
+
+    [Fact]
+    public async Task GivenSearchByIuu_WhenIuuNotificationLinkedToRelatedMrn_AndMaxDepthIsZero_ThenRelatedShouldNotBeReturned()
+    {
+        var memoryDbContext = new MemoryDbContext();
+        InsertIuuTestData(memoryDbContext);
+
+        var subject = CreateSubject(memoryDbContext);
+
+        var response = await subject.Search(
+            new RelatedImportDeclarationsRequest { Iuu = IuuReference1, MaxLinkDepth = 0 },
+            CancellationToken.None
+        );
+
+        response.CustomsDeclarations.Select(x => x.Id).Should().BeEquivalentTo("mrn1");
+        response.IuuNotifications.Select(x => x.Id).Should().BeEquivalentTo(IuuReference1);
+    }
+
+    [Fact]
+    public async Task GivenSearchByIuu_WhenIuuNotificationExists_AndNoCustomsDeclarationsLinked_ThenShouldReturnEmpty()
+    {
+        var memoryDbContext = new MemoryDbContext();
+        InsertIuuTestData(memoryDbContext);
+
+        var subject = CreateSubject(memoryDbContext);
+
+        var response = await subject.Search(
+            new RelatedImportDeclarationsRequest { Iuu = "IUU.FR.2026.9999999" },
+            CancellationToken.None
+        );
+
+        response.CustomsDeclarations.Length.Should().Be(0);
+        response.ImportPreNotifications.Length.Should().Be(0);
+        response.Gmrs.Length.Should().Be(0);
+        response.IuuNotifications.Length.Should().Be(0);
+    }
+
+    [Fact]
+    public async Task GivenSearchByIuu_WhenIuuNotificationNotExists_ThenShouldReturnEmpty()
+    {
+        var memoryDbContext = new MemoryDbContext();
+        memoryDbContext.CustomsDeclarations.AddTestData(CreateCustomsDeclaration("mrn1", [], [IuuReference1]));
+
+        var subject = CreateSubject(memoryDbContext);
+
+        var response = await subject.Search(
+            new RelatedImportDeclarationsRequest { Iuu = IuuReference1 },
+            CancellationToken.None
+        );
+
+        response.CustomsDeclarations.Length.Should().Be(0);
+        response.ImportPreNotifications.Length.Should().Be(0);
+        response.Gmrs.Length.Should().Be(0);
+        response.IuuNotifications.Length.Should().Be(0);
+    }
+
+    private const string IuuReference1 = "IUU.FR.2026.0000001";
+    private const string IuuReference2 = "IUU.FR.2026.0000002";
+    private const string IuuReference3 = "IUU.FR.2026.0000003";
+
+    private static void InsertIuuTestData(MemoryDbContext memoryDbContext)
+    {
+        memoryDbContext.ImportPreNotifications.AddTestData(CreateImportPreNotification("CHEDA.GB.2025.1234567"));
+
+        // mrn1 and mrn2 are related via the same CHED, mrn3 is unrelated
+        memoryDbContext.CustomsDeclarations.AddTestData(CreateCustomsDeclaration("mrn1", ["1234567"], [IuuReference1]));
+        memoryDbContext.CustomsDeclarations.AddTestData(CreateCustomsDeclaration("mrn2", ["1234567"], [IuuReference2]));
+        memoryDbContext.CustomsDeclarations.AddTestData(CreateCustomsDeclaration("mrn3", [], [IuuReference3]));
+
+        memoryDbContext.Gmrs.AddTestData(CreateGmr("gmr1", ["mrn1", "mrn3"]));
+
+        memoryDbContext.IuuNotifications.AddTestData(CreateIuuNotification(IuuReference1));
+        memoryDbContext.IuuNotifications.AddTestData(CreateIuuNotification(IuuReference2));
+        memoryDbContext.IuuNotifications.AddTestData(CreateIuuNotification(IuuReference3));
+        memoryDbContext.IuuNotifications.AddTestData(CreateIuuNotification("IUU.FR.2026.9999999"));
+    }
+
+    private static IuuNotificationEntity CreateIuuNotification(string iuuReference)
+    {
+        return new IuuNotificationEntity
+        {
+            Id = iuuReference,
+            IuuNotification = new IuuNotification
+            {
+                Reference = iuuReference,
+                LastUpdated = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                IuuOption = "IUUOK",
+            },
+            Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+            Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+            ETag = "etag",
+        };
+    }
+
     private static void InsertTestData(MemoryDbContext memoryDbContext)
     {
         memoryDbContext.ImportPreNotifications.AddTestData(CreateImportPreNotification("CHEDA.GB.2025.1234567"));
@@ -747,6 +1151,8 @@ public class RelatedImportDeclarationsServiceTests
         memoryDbContext.Gmrs.AddTestData(CreateGmr("gmr1", ["mrn1", "mrn2"]));
         memoryDbContext.Gmrs.AddTestData(CreateGmr("gmr2", ["mrn2", "mrn3"]));
         memoryDbContext.Gmrs.AddTestData(CreateGmr("gmr3", ["mrn1"]));
+
+        memoryDbContext.TracesCheds.AddTestData(CreateTracesChed("CHEDP.GB.2025.1234567"));
     }
 
     private static ImportPreNotificationEntity CreateImportPreNotification(string chedId)
@@ -762,21 +1168,54 @@ public class RelatedImportDeclarationsServiceTests
         };
     }
 
-    private static CustomsDeclarationEntity CreateCustomsDeclaration(string mrn, List<string> links)
+    private static TracesChedEntity CreateTracesChed(string chedId)
     {
+        return new TracesChedEntity
+        {
+            Id = chedId,
+            Ched = new DefraUNVTDCHEDProfile()
+            {
+                ExchangedDocument = new ExchangedDocument() { Identifier = chedId },
+                SpecifiedConsignment = new Consignment(),
+            },
+            Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+            Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
+            ETag = "etag",
+        };
+    }
+
+    private static CustomsDeclarationEntity CreateCustomsDeclaration(
+        string mrn,
+        List<string> links,
+        List<string>? iuuLinks = null
+    )
+    {
+        iuuLinks ??= [];
+
         var documents = links
             .Select(x => new ImportDocument
             {
                 DocumentReference = new ImportDocumentReference(x),
                 DocumentCode = "C640",
             })
+            .Concat(
+                iuuLinks.Select(x => new ImportDocument
+                {
+                    DocumentReference = new ImportDocumentReference(x),
+                    DocumentCode = "C673",
+                })
+            )
             .ToArray();
 
         return new CustomsDeclarationEntity
         {
             Id = mrn,
             ImportPreNotificationIdentifiers = links,
-            ClearanceRequest = new ClearanceRequest { Commodities = [new Commodity { Documents = documents }] },
+            ClearanceRequest = new ClearanceRequest
+            {
+                DeclarationUcr = mrn.Replace("mrn", "ducr"),
+                Commodities = [new Commodity { Documents = documents }],
+            },
             Created = new DateTime(2025, 4, 3, 10, 0, 0, DateTimeKind.Utc),
             Updated = new DateTime(2025, 4, 3, 10, 15, 0, DateTimeKind.Utc),
             ETag = "etag",
@@ -805,7 +1244,10 @@ public class RelatedImportDeclarationsServiceTests
         return new RelatedImportDeclarationsService(
             new CustomsDeclarationRepository(memoryDbContext),
             new ImportPreNotificationRepository(memoryDbContext),
-            new GmrRepository(memoryDbContext)
+            new GmrRepository(memoryDbContext),
+            new TracesChedRepository(memoryDbContext),
+            new ChedReservationRepository(memoryDbContext),
+            new IuuNotificationRepository(memoryDbContext)
         );
     }
 }

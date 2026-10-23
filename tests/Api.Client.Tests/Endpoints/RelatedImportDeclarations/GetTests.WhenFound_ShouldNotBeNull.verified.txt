@@ -92,5 +92,20 @@
       Updated: 2025-04-07 11:15 Utc,
       ETag: null
     }
+  ],
+  TransitImportPreNotifications: null,
+  Cheds: null,
+  ChedReservations: null,
+  Iuus: [
+    {
+      IuuNotification: {
+        Reference: IUU.FR.2026.0000001,
+        LastUpdated: 2025-04-07 11:00 Utc,
+        IuuOption: IUUOK
+      },
+      Created: 2025-04-07 11:00 Utc,
+      Updated: 2025-04-07 11:15 Utc,
+      ETag: null
+    }
   ]
 }

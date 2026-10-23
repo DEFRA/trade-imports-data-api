@@ -1,3 +1,7 @@
+using Defra.TradeImportsDataApi.Domain.Iuu;
+using Defra.TradeImportsDataApi.Domain.Traces;
+using Trade.Gateway.Api.Contract.Certificate;
+
 namespace Defra.TradeImportsDataApi.Api.Client;
 
 public interface ITradeImportsDataApiClient
@@ -47,6 +51,42 @@ public interface ITradeImportsDataApiClient
 
     Task<RelatedImportDeclarationsResponse> RelatedImportDeclarations(
         RelatedImportDeclarationsRequest request,
+        CancellationToken cancellationToken
+    );
+
+    Task<TracesChedResponse?> GetTracesChed(string chedId, CancellationToken cancellationToken);
+
+    Task PutTracesChed(string chedId, DefraUNVTDCHEDProfile data, string? etag, CancellationToken cancellationToken);
+
+    Task<CustomsDeclarationsResponse> GetCustomsDeclarationsByTracesChedId(
+        string chedId,
+        CancellationToken cancellationToken
+    );
+
+    Task<TracesChedsResponse> GetTracesChedsByMrn(string mrn, CancellationToken cancellationToken);
+
+    Task<ChedReservationResponse?> GetChedReservation(string chedId, string mrn, CancellationToken cancellationToken);
+
+    Task PutChedReservation(
+        string chedId,
+        string mrn,
+        Reservation data,
+        string? etag,
+        CancellationToken cancellationToken
+    );
+
+    Task DeleteChedReservation(string chedId, string mrn, CancellationToken cancellationToken);
+    Task<TracesChedUpdatesResponse> GetTracesChedUpdates(
+        TracesChedUpdatesRequest request,
+        CancellationToken cancellationToken
+    );
+
+    Task<IuuNotificationResponse?> GetIuuNotification(string iuuReference, CancellationToken cancellationToken);
+
+    Task PutIuuNotification(
+        string iuuReference,
+        IuuNotification data,
+        string? etag,
         CancellationToken cancellationToken
     );
 }

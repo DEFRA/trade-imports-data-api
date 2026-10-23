@@ -9,7 +9,7 @@
     "subResourceType": null,
     "operation": "Created",
     "message": "{Scrubbed}",
-    "published": "DateTimeOffset_2",
+    "published": "{Scrubbed}",
     "expiresAt": "DateTimeOffset_3"
   },
   {
@@ -22,7 +22,7 @@
     "subResourceType": null,
     "operation": "Updated",
     "message": "{Scrubbed}",
-    "published": "DateTimeOffset_5",
+    "published": "{Scrubbed}",
     "expiresAt": "DateTimeOffset_6"
   }
 ]

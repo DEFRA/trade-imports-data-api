@@ -9,7 +9,7 @@
     "subResourceType": "ClearanceRequest",
     "operation": "Created",
     "message": "{Scrubbed}",
-    "published": "DateTimeOffset_2",
+    "published": "{Scrubbed}",
     "expiresAt": "DateTimeOffset_3"
   }
 ]

@@ -1,0 +1,9 @@
+﻿{
+  iuuNotification: {
+    reference: IUU.FR.2026.0000001,
+    lastUpdated: 2026-10-16T09:00:00Z,
+    iuuOption: IUUOK
+  },
+  created: 2026-10-16T09:00:00Z,
+  updated: 2026-10-16T09:15:00Z
+}

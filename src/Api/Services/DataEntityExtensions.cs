@@ -18,6 +18,8 @@ public static class DataEntityExtensions
         Converters = { new JsonStringEnumConverter() },
     };
 
+    private const string OperationMustBeUpdatedOrCreated = "Operation must be either Updated or Created";
+
     public static ResourceEvent<CustomsDeclarationEvent> ToResourceEvent(
         this CustomsDeclarationEntity entity,
         string operation,
@@ -27,7 +29,7 @@ public static class DataEntityExtensions
     )
     {
         if (operation is not ResourceEventOperations.Updated and not ResourceEventOperations.Created)
-            throw new ArgumentException("Operation must be either Updated or Created", nameof(operation));
+            throw new ArgumentException(OperationMustBeUpdatedOrCreated, nameof(operation));
 
         var changeSet = CreateChangeSet(current, previous);
         var knownSubResourceTypes = changeSet
@@ -84,7 +86,7 @@ public static class DataEntityExtensions
     )
     {
         if (operation is not ResourceEventOperations.Updated and not ResourceEventOperations.Created)
-            throw new ArgumentException("Operation must be either Updated or Created", nameof(operation));
+            throw new ArgumentException(OperationMustBeUpdatedOrCreated, nameof(operation));
 
         var changeSet = CreateChangeSet(current, previous);
         var knownSubResourceTypes = changeSet
@@ -130,7 +132,7 @@ public static class DataEntityExtensions
     )
     {
         if (operation is not ResourceEventOperations.Updated and not ResourceEventOperations.Created)
-            throw new ArgumentException("Operation must be either Updated or Created", nameof(operation));
+            throw new ArgumentException(OperationMustBeUpdatedOrCreated, nameof(operation));
 
         var changeSet = CreateChangeSet(current, previous);
 
@@ -155,6 +157,90 @@ public static class DataEntityExtensions
         };
     }
 
+    public static ResourceEvent<TracesChedEvent> ToResourceEvent(this TracesChedEntity entity, string operation)
+    {
+        if (operation is not ResourceEventOperations.Updated and not ResourceEventOperations.Created)
+            throw new ArgumentException(OperationMustBeUpdatedOrCreated, nameof(operation));
+
+        var entityEvent = new TracesChedEvent()
+        {
+            Id = entity.Id,
+            Ched = entity.Ched,
+            Created = entity.Created,
+            Etag = entity.ETag,
+            Updated = entity.Updated,
+        };
+
+        return new ResourceEvent<TracesChedEvent>
+        {
+            ResourceId = entity.Id,
+            ResourceType = ResourceTypeName<TracesChedEntity>(),
+            Operation = operation,
+            Etag = entity.ETag,
+            Resource = entityEvent,
+            ChangeSet = [],
+            SubResourceType = null,
+        };
+    }
+
+    public static ResourceEvent<ChedReservationEvent> ToResourceEvent(
+        this ChedReservationEntity entity,
+        string operation
+    )
+    {
+        if (operation is not ResourceEventOperations.Updated and not ResourceEventOperations.Created)
+            throw new ArgumentException(OperationMustBeUpdatedOrCreated, nameof(operation));
+
+        var entityEvent = new ChedReservationEvent()
+        {
+            Id = entity.Id,
+            Reservation = entity.Reservation,
+            Created = entity.Created,
+            Etag = entity.ETag,
+            Updated = entity.Updated,
+        };
+
+        return new ResourceEvent<ChedReservationEvent>
+        {
+            ResourceId = entity.Id,
+            ResourceType = ResourceTypeName<ChedReservationEntity>(),
+            Operation = operation,
+            Etag = entity.ETag,
+            Resource = entityEvent,
+            ChangeSet = [],
+            SubResourceType = null,
+        };
+    }
+
+    public static ResourceEvent<IuuNotificationEvent> ToResourceEvent(
+        this IuuNotificationEntity entity,
+        string operation
+    )
+    {
+        if (operation is not ResourceEventOperations.Updated and not ResourceEventOperations.Created)
+            throw new ArgumentException(OperationMustBeUpdatedOrCreated, nameof(operation));
+
+        var entityEvent = new IuuNotificationEvent()
+        {
+            Id = entity.Id,
+            IuuNotification = entity.IuuNotification,
+            Created = entity.Created,
+            Etag = entity.ETag,
+            Updated = entity.Updated,
+        };
+
+        return new ResourceEvent<IuuNotificationEvent>
+        {
+            ResourceId = entity.Id,
+            ResourceType = ResourceTypeName<IuuNotificationEntity>(),
+            Operation = operation,
+            Etag = entity.ETag,
+            Resource = entityEvent,
+            ChangeSet = [],
+            SubResourceType = null,
+        };
+    }
+
     private static string ResourceTypeName<TDataEntity>()
         where TDataEntity : IDataEntity
     {
@@ -165,6 +251,9 @@ public static class DataEntityExtensions
             ResourceEventResourceTypes.ImportPreNotification => ResourceEventResourceTypes.ImportPreNotification,
             ResourceEventResourceTypes.CustomsDeclaration => ResourceEventResourceTypes.CustomsDeclaration,
             ResourceEventResourceTypes.ProcessingError => ResourceEventResourceTypes.ProcessingError,
+            ResourceEventResourceTypes.TracesChed => ResourceEventResourceTypes.TracesChed,
+            ResourceEventResourceTypes.ChedReservation => ResourceEventResourceTypes.ChedReservation,
+            ResourceEventResourceTypes.IuuNotification => ResourceEventResourceTypes.IuuNotification,
             _ => name,
         };
     }

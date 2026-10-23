@@ -33,6 +33,30 @@ public static class Endpoints
         public static string GetUpdates(EndpointQuery? query = null) => $"/import-pre-notification-updates{query}";
     }
 
+    public static class TracesCheds
+    {
+        private const string Root = "/traces-cheds";
+
+        public static string Get(string chedId) => $"{Root}/{chedId}";
+
+        public static string Put(string chedId) => $"{Root}/{chedId}";
+
+        public static string GetCustomsDeclarations(string chedId) => $"{Root}/{chedId}/customs-declarations";
+
+        public static string GetUpdates(EndpointQuery? query = null) => $"/traces-ched-updates{query}";
+    }
+
+    public static class ChedReservations
+    {
+        private const string Root = "/traces-cheds";
+
+        public static string Get(string chedId, string mrn) => $"{Root}/{chedId}/reservation/{mrn}/";
+
+        public static string Put(string chedId, string mrn) => $"{Root}/{chedId}/reservation/{mrn}/";
+
+        public static string Delete(string chedId, string mrn) => $"{Root}/{chedId}/reservation/{mrn}/";
+    }
+
     public static class CustomsDeclarations
     {
         private const string Root = "/customs-declarations";
@@ -40,6 +64,8 @@ public static class Endpoints
         public static string Get(string mrn) => $"{Root}/{mrn}";
 
         public static string GetImportPreNotifications(string mrn) => $"{Root}/{mrn}/import-pre-notifications";
+
+        public static string GetTracesCheds(string mrn) => $"{Root}/{mrn}/traces-cheds";
 
         public static string Put(string mrn) => $"{Root}/{mrn}";
     }
@@ -78,5 +104,14 @@ public static class Endpoints
             var toString = from.Kind == DateTimeKind.Utc ? $"{to:u}" : $"{to:s}";
             return $"/reporting/manual-release?from={fromString}&to={toString}";
         }
+    }
+
+    public static class IuuNotifications
+    {
+        private const string Root = "/iuu-notifications";
+
+        public static string Get(string iuuReference) => $"{Root}/{iuuReference}";
+
+        public static string Put(string iuuReference) => $"{Root}/{iuuReference}";
     }
 }

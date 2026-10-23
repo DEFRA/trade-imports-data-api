@@ -34,7 +34,7 @@ public class DocumentReferenceJsonConverter : JsonConverter<ImportDocumentRefere
     {
         if (value is not null)
         {
-            writer.WriteStringValue(value!.Value);
+            writer.WriteStringValue(value.Value);
         }
     }
 }

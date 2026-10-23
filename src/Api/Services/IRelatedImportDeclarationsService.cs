@@ -9,6 +9,9 @@ public interface IRelatedImportDeclarationsService
         CustomsDeclarationEntity[] CustomsDeclarations,
         ImportPreNotificationEntity[] ImportPreNotifications,
         GmrEntity[] Gmrs,
-        ImportPreNotificationEntity[] TransientNotifications
+        ImportPreNotificationEntity[] TransientNotifications,
+        TracesChedEntity[] Cheds,
+        ChedReservationEntity[] Reservations,
+        IuuNotificationEntity[] IuuNotifications
     )> Search(RelatedImportDeclarationsRequest request, CancellationToken cancellationToken);
 }

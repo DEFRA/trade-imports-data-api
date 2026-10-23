@@ -1,0 +1,10 @@
+﻿{
+  IuuNotification: {
+    Reference: IUU.FR.2026.0000001,
+    LastUpdated: 2026-10-16 09:15 Utc,
+    IuuOption: IUUOK
+  },
+  Created: 2026-10-16 09:00 Utc,
+  Updated: 2026-10-16 09:15 Utc,
+  ETag: "etag"
+}
