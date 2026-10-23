@@ -10,5 +10,7 @@ public class RelatedImportDeclarationsRequest
 
     public string? GmrId { get; set; }
 
+    public string? Iuu { get; init; }
+
     public int? MaxLinkDepth { get; set; }
 }
