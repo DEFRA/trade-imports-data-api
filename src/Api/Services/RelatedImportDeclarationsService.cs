@@ -358,11 +358,18 @@ public class RelatedImportDeclarationsService(
             return _empty;
         }
 
-        return await StartFromCustomsDeclaration(
+        var result = await StartFromCustomsDeclaration(
             x => x.IuuNotificationIdentifiers.Contains(iuuId),
             maxDepth,
             cancellationToken
         );
+
+        if (result.CustomsDeclarations.Length == 0)
+        {
+            return _empty with { Item7 = [iuu] };
+        }
+
+        return result;
     }
 
     private async Task<(
