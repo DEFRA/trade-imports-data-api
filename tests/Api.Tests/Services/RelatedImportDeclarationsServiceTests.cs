@@ -1062,7 +1062,7 @@ public class RelatedImportDeclarationsServiceTests
     }
 
     [Fact]
-    public async Task GivenSearchByIuu_WhenIuuNotificationExists_AndNoCustomsDeclarationsLinked_ThenShouldReturnEmpty()
+    public async Task GivenSearchByIuu_WhenIuuNotificationExists_AndNoCustomsDeclarationsLinked_ThenShouldReturnOnlyIuu()
     {
         var memoryDbContext = new MemoryDbContext();
         InsertIuuTestData(memoryDbContext);
@@ -1077,7 +1077,49 @@ public class RelatedImportDeclarationsServiceTests
         response.CustomsDeclarations.Length.Should().Be(0);
         response.ImportPreNotifications.Length.Should().Be(0);
         response.Gmrs.Length.Should().Be(0);
-        response.IuuNotifications.Length.Should().Be(0);
+        response.TransientNotifications.Length.Should().Be(0);
+        response.Cheds.Length.Should().Be(0);
+        response.Reservations.Length.Should().Be(0);
+        response.IuuNotifications.Select(x => x.Id).Should().BeEquivalentTo("IUU.FR.2026.9999999");
+    }
+
+    [Fact]
+    public async Task GivenSearchByIuu_WhenOnlyIuuNotificationExists_ThenShouldReturnOnlyIuu()
+    {
+        var memoryDbContext = new MemoryDbContext();
+        memoryDbContext.IuuNotifications.AddTestData(CreateIuuNotification(IuuReference1));
+
+        var subject = CreateSubject(memoryDbContext);
+
+        var response = await subject.Search(
+            new RelatedImportDeclarationsRequest { Iuu = IuuReference1 },
+            CancellationToken.None
+        );
+
+        response.CustomsDeclarations.Length.Should().Be(0);
+        response.ImportPreNotifications.Length.Should().Be(0);
+        response.Gmrs.Length.Should().Be(0);
+        response.TransientNotifications.Length.Should().Be(0);
+        response.Cheds.Length.Should().Be(0);
+        response.Reservations.Length.Should().Be(0);
+        response.IuuNotifications.Should().ContainSingle().Which.Id.Should().Be(IuuReference1);
+    }
+
+    [Fact]
+    public async Task GivenSearchByIuu_WhenOnlyIuuNotificationExists_ThenOtherIuuNotificationsShouldNotBeReturned()
+    {
+        var memoryDbContext = new MemoryDbContext();
+        memoryDbContext.IuuNotifications.AddTestData(CreateIuuNotification(IuuReference1));
+        memoryDbContext.IuuNotifications.AddTestData(CreateIuuNotification(IuuReference2));
+
+        var subject = CreateSubject(memoryDbContext);
+
+        var response = await subject.Search(
+            new RelatedImportDeclarationsRequest { Iuu = IuuReference2 },
+            CancellationToken.None
+        );
+
+        response.IuuNotifications.Select(x => x.Id).Should().BeEquivalentTo(IuuReference2);
     }
 
     [Fact]
