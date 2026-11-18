@@ -418,7 +418,12 @@ public class ImportPreNotificationUpdateTests : IntegrationTestBase, IAsyncLifet
             PointOfEntry = "BCP1",
             ImportNotificationType = "CHEDA",
             Status = "SUBMITTED",
-            Source = new Source { Id = id, Type = nameof(ImportPreNotificationEntity), Updated = sourceUpdated, },
+            Source = new Source
+            {
+                Id = id,
+                Type = nameof(ImportPreNotificationEntity),
+                Updated = sourceUpdated,
+            },
         };
 
     private static void AssertResult(
