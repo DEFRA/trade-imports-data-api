@@ -166,6 +166,24 @@ public class ImportPreNotificationUpdateTests : IntegrationTestBase, IAsyncLifet
     }
 
     [Fact]
+    public async Task WhenImportPreNotificationStatusAndExcludeStatus_ThenNotificationIdAndUpdateAsExpected()
+    {
+        var (chedRef, _) = ImportPreNotificationIdGenerator.GenerateReturnId();
+        var (chedRefExcluded, _) = ImportPreNotificationIdGenerator.GenerateReturnId();
+        var (chedRefNoMatch, _) = ImportPreNotificationIdGenerator.GenerateReturnId();
+
+        await CreateNotification(chedRef, status: "SUBMITTED");
+        await CreateNotification(chedRefExcluded, status: "VALIDATED");
+        await CreateNotification(chedRefNoMatch, status: "DRAFT");
+
+        var chedRefResponse = await DataApiClient.GetImportPreNotification(chedRef, CancellationToken.None);
+
+        var result = await GetUpdates(status: ["SUBMITTED", "VALIDATED"], excludeStatus: ["VALIDATED"]);
+
+        AssertResult(expectResult: true, result, chedRef, chedRefResponse?.Updated);
+    }
+
+    [Fact]
     public async Task WhenImportPreNotificationAllFilters_ThenNotificationIdAndUpdateAsExpected()
     {
         var (chedRef, _) = ImportPreNotificationIdGenerator.GenerateReturnId();
