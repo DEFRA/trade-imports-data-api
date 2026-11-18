@@ -382,6 +382,45 @@ public class ImportPreNotificationUpdateTests : IntegrationTestBase, IAsyncLifet
         result.ImportPreNotificationUpdates.Should().HaveCount(1);
     }
 
+    [Fact]
+    public async Task WhenTwoUpdatesForSameNotification_ThenTheRecordWithTheLatestSourceUpdatedIsReturned()
+    {
+        var (chedRef, _) = ImportPreNotificationIdGenerator.GenerateReturnId();
+
+        var now = DateTime.UtcNow;
+        now = now.AddTicks(-(now.Ticks % TimeSpan.TicksPerSecond));
+
+        // Two updates for the same CHED but the older one is written after
+        await NotificationUpdates.InsertManyAsync([
+            Update("first", chedRef, updated: now.AddMinutes(-5), sourceUpdated: now.AddMinutes(-1)),
+            Update("second", chedRef, updated: now.AddMinutes(-4), sourceUpdated: now.AddMinutes(-3)),
+        ]);
+
+        var result = await GetUpdates();
+
+        result.ImportPreNotificationUpdates.Should().HaveCount(1);
+        result.ImportPreNotificationUpdates[0].Updated.Should().Be(now.AddMinutes(-1));
+    }
+
+    private static ImportPreNotificationUpdateEntity Update(
+        string id,
+        string importPreNotificationId,
+        DateTime updated,
+        DateTime sourceUpdated
+    ) =>
+        new()
+        {
+            Id = id,
+            ETag = id,
+            Created = updated,
+            Updated = updated,
+            ImportPreNotificationId = importPreNotificationId,
+            PointOfEntry = "BCP1",
+            ImportNotificationType = "CHEDA",
+            Status = "SUBMITTED",
+            Source = new Source { Id = id, Type = nameof(ImportPreNotificationEntity), Updated = sourceUpdated, },
+        };
+
     private static void AssertResult(
         bool expectResult,
         ImportPreNotificationUpdatesResponse result,
