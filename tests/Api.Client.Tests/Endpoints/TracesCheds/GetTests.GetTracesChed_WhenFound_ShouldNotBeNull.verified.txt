@@ -13,6 +13,7 @@
       VersionId: null,
       FunctionCode: null,
       IssueDateTime: null,
+      RevisionDateTime: null,
       Issuer: null,
       IncludedNote: null,
       ReferenceDocument: null,
@@ -35,10 +36,12 @@
       ImportCountry: null,
       ReExportCountry: null,
       TransitCountry: null,
+      LoadingBaseportLocation: null,
       UnloadingBaseportLocation: null,
+      ExaminationEvent: null,
+      UtilizedLogisticsTransportEquipment: null,
       MainCarriageLogisticsTransportMovement: null,
       TransitTradeCountry: null,
-      PackageQuantity: null,
       IncludedConsignmentItem: null
     },
     LaboratoryObservationResult: null
