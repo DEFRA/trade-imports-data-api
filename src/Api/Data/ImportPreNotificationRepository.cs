@@ -105,11 +105,18 @@ public class ImportPreNotificationRepository(IDbContext dbContext) : IImportPreN
         if (query.Type is { Length: > 0 })
             where.Add("importNotificationType", new BsonDocument { { "$in", new BsonArray(query.Type) } });
 
+        // Status and ExcludeStatus share a single "status" condition, as duplicate
+        // field names are not permitted in a BsonDocument
+        var status = new BsonDocument();
+
         if (query.Status is { Length: > 0 })
-            where.Add("status", new BsonDocument { { "$in", new BsonArray(query.Status) } });
+            status.Add("$in", new BsonArray(query.Status));
 
         if (query.ExcludeStatus is { Length: > 0 })
-            where.Add("status", new BsonDocument { { "$nin", new BsonArray(query.ExcludeStatus) } });
+            status.Add("$nin", new BsonArray(query.ExcludeStatus));
+
+        if (status.ElementCount > 0)
+            where.Add("status", status);
 
         var aggregatePipeline = new[]
         {
