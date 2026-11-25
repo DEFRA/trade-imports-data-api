@@ -89,7 +89,9 @@ public class ImportPreNotificationRepository(IDbContext dbContext) : IImportPreN
 
         // See UpdatesIdx index and field order - any changes should check the query plan used
         // We can expect multiple update entities for the same CHED, which is why we group
-        // and then take the last updated value from the source reference
+        // and then take the latest (max) updated value from the source reference. Note that
+        // $last would return the value from the last document in pipeline order, which is not
+        // necessarily the latest if an older source update was written after a newer one
 
         var where = new BsonDocument
         {
@@ -114,13 +116,13 @@ public class ImportPreNotificationRepository(IDbContext dbContext) : IImportPreN
         var aggregatePipeline = new[]
         {
             new BsonDocument("$match", where),
-            // Group by importPreNotificationId, then take the last updated value
+            // Group by importPreNotificationId, then take the latest source updated value
             new BsonDocument(
                 "$group",
                 new BsonDocument
                 {
                     { "_id", "$importPreNotificationId" },
-                    { "updated", new BsonDocument("$last", "$source.updated") },
+                    { "updated", new BsonDocument("$max", "$source.updated") },
                 }
             ),
             // Sort to ensure same order on each query execution
